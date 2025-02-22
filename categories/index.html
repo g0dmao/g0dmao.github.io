@@ -335,7 +335,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1]]);
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -458,7 +458,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,1],
+                            data: [7,2],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -495,7 +495,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"博客","value":1},{"name":"影调控制","value":1},{"name":"STM32","value":1},{"name":"CubeMX","value":1},{"name":"Timer","value":1},{"name":"嵌入式","value":1}],
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -509,7 +509,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"博客","value":1},{"name":"影调控制","value":1},{"name":"STM32","value":1},{"name":"CubeMX","value":1},{"name":"Timer","value":1},{"name":"嵌入式","value":1}].map(tag => tag.name),
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -531,13 +531,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"摄影学习","value":5},{"name":"其他","value":1},{"name":"STM32","value":1},{"name":"CubeMX配置功能学习","value":1}].map(category => category.name).reverse(), 
+                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"其他","value":1}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"摄影学习","value":5},{"name":"其他","value":1},{"name":"STM32","value":1},{"name":"CubeMX配置功能学习","value":1}].map(category => category.value).reverse(),
+                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"其他","value":1}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -586,7 +586,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":1,"path":"STM32/CubeMX配置功能学习"}],"count":1,"path":"STM32"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
