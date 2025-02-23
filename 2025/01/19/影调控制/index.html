@@ -259,6 +259,19 @@
   </div>
   
 <div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  </head>
+
+  <button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <div id="overlay" class="overlay">
+    <div class="content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BD%B1%E8%B0%83"><span class="toc-text"> 什么是影调</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E8%B0%83%E7%9A%84%E9%87%8F%E5%8C%96"><span class="toc-text"> 影调的量化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%A0%81%E6%97%B6%E4%BB%A3%E7%9A%84%E6%9C%80%E4%BD%B3%E6%9B%9D%E5%85%89%E6%96%B9%E5%BC%8F"><span class="toc-text"> 数码时代的最佳曝光方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E5%85%89%E6%AF%94%E6%83%85%E5%86%B5%E4%B8%8B%E5%B9%B3%E8%A1%A1%E5%85%89%E6%AF%94%E7%9A%84%E5%A4%9A%E7%A7%8D%E5%BA%94%E5%AF%B9%E6%96%B9%E5%BC%8F"><span class="toc-text"> 大光比情况下，平衡光比的多种应对方式</span></a></li></ol>
+      <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    </div>
+  </div>
+
   <main class="page-content" aria-label="Content">
       <header class="header">
         
@@ -350,7 +363,7 @@
 </ol>
 </li>
 </ul>
-</div>
+</div>          
           <nav class="post-nav">
     
     <a class="post-nav-item post-nav-prev" href="/2025/01/19/%E6%9E%84%E5%9B%BE/">
@@ -578,7 +591,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"影调控制","value":1},{"name":"曝光三要素","value":1}],
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"相机控色","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -592,7 +605,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"影调控制","value":1},{"name":"曝光三要素","value":1}].map(tag => tag.name),
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"相机控色","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -669,7 +682,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"其他","children":[],"count":1,"path":"其他"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

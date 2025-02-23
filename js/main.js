@@ -35,5 +35,23 @@
       ? area.classList.add("blurry")
       : area.classList.remove("blurry");
   });
+
+  // 获取元素
+const toggleButton = document.getElementById('toggleButton');
+const overlay = document.getElementById('overlay');
+const closeButton = document.getElementById('closeButton');
+
+// 切换显示和隐藏
+toggleButton.addEventListener('click', function() {
+  overlay.style.display = overlay.style.display === 'none' || overlay.style.display === '' ? 'flex' : 'none';
+  toggleButton.style.display = 'none';  // 隐藏返回顶部按钮
+});
+
+// 点击关闭按钮
+closeButton.addEventListener('click', function() {
+  overlay.style.display = 'none';
+  toggleButton.style.display = 'flex';
+  
+});
 })();
 
