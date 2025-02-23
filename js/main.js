@@ -53,5 +53,6 @@ closeButton.addEventListener('click', function() {
   toggleButton.style.display = 'flex';
   
 });
+
 })();
 
