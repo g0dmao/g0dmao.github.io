@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
-<meta name="generator" content="Hexo 7.3.0"></head>
 <script>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -269,7 +268,9 @@
   <head>
     <!-- 引入 Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  </head>
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
 
   <button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
   <div id="overlay" class="overlay">
@@ -480,15 +481,15 @@
 </div>          
           <nav class="post-nav">
     
-    <a class="post-nav-item post-nav-prev" href="/2025/01/19/%E6%9C%BA%E4%BD%8D%E6%8E%8C%E6%8E%A7/">
+    <a class="post-nav-item post-nav-prev" href="/2025/01/18/%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF/">
       <div class="nav-arrow">&lt;&nbsp;NEWER</div>
-      <span class="post-title">机位掌控</span>
+      <span class="post-title">博客文章模板</span>
     </a>
     
     
-    <a class="post-nav-item post-nav-next" href="/2025/01/18/%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E6%A8%A1%E6%9D%BF/">
+    <a class="post-nav-item post-nav-next" href="/2025/01/10/hello-world/">
       <div class="nav-arrow">OLDER&nbsp;&gt;</div>
-      <span class="post-title">博客文章模板</span>
+      <span class="post-title">Hello World</span>
     </a>
     
   </nav>
@@ -705,7 +706,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"曝光三要素","value":1},{"name":"机位掌控","value":1}],
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -719,7 +720,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"曝光三要素","value":1},{"name":"机位掌控","value":1}].map(tag => tag.name),
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -796,7 +797,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"其他","children":[],"count":1,"path":"其他"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

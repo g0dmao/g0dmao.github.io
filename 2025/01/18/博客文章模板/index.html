@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
-<meta name="generator" content="Hexo 7.3.0"></head>
 <script>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -269,7 +268,9 @@
   <head>
     <!-- 引入 Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  </head>
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
 
   <button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
   <div id="overlay" class="overlay">
@@ -288,11 +289,11 @@
         
         <h1 class="header-title" itemprop="headline">博客文章模板</h1>
           <div class="post-meta">
-            最后更新: <time>2月 22, 2025</time>
+            最后更新: <time>2月 24, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
             </span>&emsp;
-            字数: <span class="post-count">171</span>&emsp;
+            字数: <span class="post-count">194</span>&emsp;
             预计阅读时间: <span class="post-count">1</span> min
           </div>       
         </header>
@@ -327,9 +328,15 @@
 </ul>
 <h3 id="有序列表"><a class="markdownIt-Anchor" href="#有序列表"></a> 有序列表</h3>
 <ol>
-<li>第一项</li>
-<li>第二项</li>
-<li>第三项</li>
+<li>
+<p>第一项</p>
+</li>
+<li>
+<p>第二项</p>
+</li>
+<li>
+<p>第三项</p>
+</li>
 </ol>
 <h3 id="链接"><a class="markdownIt-Anchor" href="#链接"></a> 链接</h3>
 <p><a target="_blank" rel="noopener" href="https://www.openai.com">点击这里访问OpenAI</a></p>
@@ -369,26 +376,38 @@
 </tbody>
 </table>
 <h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
-<p><mark>inserted mark</mark></p>
+<p><mark>划重点，标记</mark></p>
 <details>
-<summary>隐藏文本</summary>
-这是隐藏文本. 可以包含任意元素, 比如 **粗体**, *斜体*,代码块
+<summary>可收起文本</summary>
+这是可收起文本. 可以包含任意元素, 比如 **粗体**, *斜体*,代码块
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Hello, World!&quot;</span>)</span><br></pre></td></tr></table></figure>
 </details> 
-<p>!!wowo!!<br />
-nih</p>
+<p>!!防剧透!!</p>
+<ul>
+<li>[ ] TODO List</li>
+</ul>
+<p>H<sub>2</sub>0<br />
+x<sup>2</sup></p>
+<p>脚注测试<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>这是一个脚注解释 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 </div>          
           <nav class="post-nav">
     
-    <a class="post-nav-item post-nav-prev" href="/2025/01/18/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/">
+    <a class="post-nav-item post-nav-prev" href="/2025/01/19/%E6%9C%BA%E4%BD%8D%E6%8E%8C%E6%8E%A7/">
       <div class="nav-arrow">&lt;&nbsp;NEWER</div>
-      <span class="post-title">曝光三要素</span>
+      <span class="post-title">机位掌控</span>
     </a>
     
     
-    <a class="post-nav-item post-nav-next" href="/2025/01/10/hello-world/">
+    <a class="post-nav-item post-nav-next" href="/2025/01/18/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/">
       <div class="nav-arrow">OLDER&nbsp;&gt;</div>
-      <span class="post-title">Hello World</span>
+      <span class="post-title">曝光三要素</span>
     </a>
     
   </nav>
@@ -605,7 +624,7 @@ nih</p>
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"曝光三要素","value":1},{"name":"机位掌控","value":1}],
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -619,7 +638,7 @@ nih</p>
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"曝光三要素","value":1},{"name":"机位掌控","value":1}].map(tag => tag.name),
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"嵌入式","value":2},{"name":"博客","value":1},{"name":"影调控制","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -696,7 +715,7 @@ nih</p>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"其他","children":[],"count":1,"path":"其他"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

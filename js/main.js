@@ -54,5 +54,22 @@ closeButton.addEventListener('click', function() {
   
 });
 
+// 获取按钮
+let toTopBtn = document.getElementById("toTopBtn");
+
+// 当用户向下滚动20px时，显示按钮
+window.onscroll = function () {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    toTopBtn.style.display = "flex";
+  } else {
+    toTopBtn.style.display = "none";
+  }
+};
+
+toTopBtn.addEventListener('click',function(){
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+})
+
+
 })();
 
