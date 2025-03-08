@@ -7,7 +7,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tag: Timer [ g0dMa0&#39;s Blog ]</title>
+<title>单片机（伪）多任务处理：时间片轮询法 [ g0dMa0&#39;s Blog ]</title>
 
   <link rel="icon" href="/img/apple-touch-icon.png">
 
@@ -274,27 +274,97 @@
     </nav>
   </div>
   
-<div class="wrapper">
-  <div class="page-content">
-      <header class="header">
-        <h1 class="header-title center">含有标签“Timer”的文章</h1>
-      </header>
-      
-      
-        <div class="post-item">
-          <a class="post-item-title"  href="/2025/02/22/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%EF%BC%9ATimer%EF%BC%88%E4%B8%8B%EF%BC%89/">
-            CubeMX配置功能学习系列：Timer（下）
-          </a>
-        </div>
-      
-        <div class="post-item">
-          <a class="post-item-title"  href="/2025/02/06/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%EF%BC%9ATimer%EF%BC%88%E4%B8%8A%EF%BC%89/">
-            CubeMX配置功能学习系列：Timer（上）
-          </a>
-        </div>
-      
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="generator" content="Hexo 7.3.0"></head>
+
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+
+  <button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <div id="overlay" class="overlay">
+    <div class="content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-text"> 引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2%E6%B3%95"><span class="toc-text"> 时间片轮询法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#talk-is-cheapshow-me-the-code"><span class="toc-text"> Talk is cheap，Show me the code.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="toc-text"> 什么意思</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3"><span class="toc-text"> 这样的方法有什么不足？</span></a></li></ol>
+      <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
     </div>
+  </div>
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/%E5%8D%95%E7%89%87%E6%9C%BA/" class="tag"># 单片机</a><a href="/Tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1/" class="tag"># 多任务</a><a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">单片机（伪）多任务处理：时间片轮询法</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 08, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">1.6k</span>&emsp;
+            预计阅读时间: <span class="post-count">6</span> min
+          </div>       
+        </header>
+          <div class="page-content"><h2 id="引入"><a class="markdownIt-Anchor" href="#引入"></a> 引入</h2>
+<p>在新手刚刚入门时，通常使用的程序架构为裸机、顺序执行。也就是说把所有的功能放在一个<code>while(1)</code>死循环中然后单片机不断循环执行。有必要的话会加上一些中断用来处理一些紧急事件或者外部的信号，构成经典的前后台系统。但是这样做有什么弊端呢？这是我在我踩过坑后意识到的：</p>
+<ol>
+<li>有些程序完全不需要频繁执行，比如LED的刷新，按键的检测等。放在死循环中执行对CPU比较浪费。</li>
+<li>随着功能的增多或者代码变得复杂你会感觉到程序越写越困难，循环中的功能模块有时需要和中断联动，各个模块之间也有可能需要联动起来。即使使用状态机也力不从心…</li>
+<li>勉勉强强完成了任务，后期的维护也变得相当的麻烦。</li>
+</ol>
+<p>踩过坑后的我痛定思痛：准备以后写程序都请出RTOS这个大手子。但是后来我又发现 有时你想要实现的功能刚好介于复杂与不复杂之间…咋理解呢，就是说用顺序执行，复杂了点，用RTOS吧好像也没必要…毕竟移植还是挺麻烦的。当然还有就是RTOS体量过大，有些单片机吃不下，或者吃下了但是也撑的吃不下自己写的代码了<s>属于是小鸟胃这一块，不过目前我还没遇到过，我用的单片机基本上属于大卫戴这一块。</s></p>
+<h2 id="时间片轮询法"><a class="markdownIt-Anchor" href="#时间片轮询法"></a> 时间片轮询法</h2>
+<p>为了优化上面这些问题，大佬们于是提出了一种基于时间片的裸机开发架构，我们可以利用一个定时器提供心跳，不断的进行计数。然后当定时时间一到，那么就可以开始执行相应的任务了。</p>
+<h3 id="talk-is-cheapshow-me-the-code"><a class="markdownIt-Anchor" href="#talk-is-cheapshow-me-the-code"></a> Talk is cheap，Show me the code.</h3>
+<p>首先是.h头文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __OS_H__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __OS_H__</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//任务状态</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> <span class="title">TaskStatus</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    wait,run,stop</span><br><span class="line"></span><br><span class="line">&#125;TaskStatus;<span class="comment">//等待运行、正在运行、停止运行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//任务信息块</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="type">uint16_t</span>    TaskTimer;    <span class="comment">//用于计时</span></span><br><span class="line"></span><br><span class="line">    <span class="type">uint16_t</span>    TaskRunTime;  <span class="comment">//每隔多少时间运行一次</span></span><br><span class="line"></span><br><span class="line">    TaskStatus  Status;       <span class="comment">//任务状态</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> (*FC)();             <span class="comment">//任务函数指针</span></span><br><span class="line"></span><br><span class="line">&#125;TaskStruct;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"><span class="type">void</span> <span class="title function_">OSInit</span><span class="params">(TIM_HandleTypeDef htim)</span>;<span class="comment">//初始化设置，这里是用的STM32hal库</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_IT_RUN</span><span class="params">(<span class="type">void</span>)</span>;<span class="comment">//放在提供心跳的定时器中断里运行</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_Run</span><span class="params">(<span class="type">void</span>)</span>;<span class="comment">//主函数里运行的</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>然后是.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  * @file           : OS.c</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  * @brief          : 任务函数、OS内核</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  ******************************************************************************</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;OS.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 任务声明------------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">A</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">B</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">C</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 任务清单配置---------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> TaskCount = <span class="number">0</span>;<span class="comment">//记录任务数量  </span></span><br><span class="line"></span><br><span class="line">TaskStruct TaskList[] = &#123;</span><br><span class="line"></span><br><span class="line">    &#123;<span class="number">0</span>,<span class="number">5</span>,run,A&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;<span class="number">0</span>,<span class="number">10</span>,wait,B&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;<span class="number">0</span>,<span class="number">3</span>,wait,C&#125;,</span><br><span class="line"></span><br><span class="line">&#125;;<span class="comment">//任务清单</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* 任务同步所需公共变量--------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* OS 主功能代码--------------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">OSInit</span><span class="params">(TIM_HandleTypeDef htim)</span>&#123;<span class="comment">//可以根据自己的需求重新写</span></span><br><span class="line"></span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim);                       <span class="comment">//打开定时器</span></span><br><span class="line"></span><br><span class="line">    TaskCount = <span class="keyword">sizeof</span>(TaskList)/<span class="keyword">sizeof</span>(TaskList[<span class="number">0</span>]);   <span class="comment">//利用sizeof计算数组长度的方法可得到任务数量</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"><span class="comment">//放在中断中执行</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_IT_RUN</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">uint8_t</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;TaskCount;i++)&#123;              <span class="comment">//遍历所有循环</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(TaskList[i].Status == wait)&#123;    <span class="comment">//当任务wait状态，执行以下步骤</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(++TaskList[i].TaskTimer &gt;= TaskList[i].TaskRunTime)&#123;</span><br><span class="line">            <span class="comment">//计时，并判断是否到达定时时间                 </span></span><br><span class="line">            <span class="comment">//如果到了定时时间，则将任务挂起，并复位计时（也可以执行完后复位，效果一样）</span></span><br><span class="line">                TaskList[i].TaskTimer = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">                TaskList[i].Status = run;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">//放在main函数中执行，自带死循环，用于执行任务</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_Run</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">uint8_t</span> j=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(TaskList[j].Status == run)&#123;                  <span class="comment">//判断一个任务是否为run状态</span></span><br><span class="line"></span><br><span class="line">            TaskList[j].FC();                           <span class="comment">//执行该任务函数</span></span><br><span class="line"></span><br><span class="line">            TaskList[j].Status = wait ;                 <span class="comment">//取消任务的run状态</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(++j&gt;=TaskCount)j=<span class="number">0</span>;                          <span class="comment">//不断循环遍历所有任务</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* 这里可以定义空闲任务 */</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* -------------------------------------------------------------------------*/</span></span><br></pre></td></tr></table></figure>
+<p><strong>按照分而治之的思想，完全可以把任务函数重新写在一个task.c文件中，这样更加简洁美观</strong>。<br />
+采用上面的代码，个人认为比为每个功能函数提供一个flag，时间到达后将任务标志为置位。然后在main函数的循环中检查标志位状态（类似状态机）那种方法要方便。避免了一些重复的工作。</p>
+<h3 id="什么意思"><a class="markdownIt-Anchor" href="#什么意思"></a> 什么意思</h3>
+<p>比如我有三个功能：</p>
+<ul>
+<li>A：5ms执行一次</li>
+<li>B：10ms执行一次</li>
+<li>C：3ms执行一次</li>
+</ul>
+<p>我们随机提拔一个定时器作为心跳时钟，说白了就是掐表的嘛。这个定时器一般使用基本定时器性价比高一点。这个定时器每隔1ms就叫一下，我们可以决定ABC在上电时候时是否执行，或者上电后延迟一个自己的任务周期再执行。比如我们设定上电时：仅A执行。如果我们忽略代码的执行时间，那么程序就是这么运行的：</p>
+<p><code>A-1ms-1ms-1ms(C)-1ms-1ms(A)-1ms(C)-1ms-1ms-1ms(C)-1ms(A、B)--------</code></p>
+<p>如果上一个功能模块已经执行完了，但下一个功能模块的定时时间还没到，便会产生空闲时间，这那些1ms后没有括号的就是CPU的空闲段。同样可以像RTOS那样把空闲时间给空闲任务。<br />
+注意当前延时了多少时间是一个函数执行完就直接开始计算的，我之前就理解为了一个时间片只有一个函数执行。实际上不是的。</p>
+<h2 id="这样的方法有什么不足"><a class="markdownIt-Anchor" href="#这样的方法有什么不足"></a> 这样的方法有什么不足？</h2>
+<ol>
+<li>首先，像这样的丐版RTOS，实时性并没有真正的RTOS高，不是说执行就执行，会有一些延迟。</li>
+<li><strong>如果某个任务运行时间超过一个时间片，它可能会一直占用CPU，导致后面的任务无法及时执行，从而影响系统的响应时间。然后一整个就乱了。</strong> <s>但是个人感觉如果实时性要求不高，也无伤大雅🤔</s></li>
+</ol>
+<p>比如时间片为1ms。A运行时间为2ms，每隔4ms执行一次。B运行时间不计，每隔3ms运行一次。</p>
+<p>（A1ms-1ms）-1ms(B)-1ms(A1ms-1ms)(B)-1ms-1ms(A1ms(<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>)-1ms)(B<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>)-----</p>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>这里该执行B了，但由于A抢占CPU，无法执行。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>这次B实际上隔了4ms才执行 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</div>          
+          <nav class="post-nav">
+    
+    
+    <a class="post-nav-item post-nav-next" href="/2025/03/01/%E5%B1%9E%E4%BA%8E%E8%87%AA%E5%B7%B1%E7%9A%84%E5%BC%95%E5%AF%BC%E9%A1%B5/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">属于自己的引导页</span>
+    </a>
+    
+  </nav>
+
+   </main>
 </div>
+
   <footer class="footer">
     <small class="footer_copyright">
       <div id="bottom-inner">
