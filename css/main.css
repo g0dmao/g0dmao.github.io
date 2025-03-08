@@ -65,8 +65,8 @@ body {
   
   background: 
     /* 使用 linear-gradient 和背景图结合 */
-    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
-    url('/img/swim.png');
+    linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
+    url('/img/god.png');
     /* 背景图像居中 */
     background-position: center center;
     /* 背景图不平铺 */
@@ -854,7 +854,8 @@ pre .xml .cdata {
 .post code {
   font-family: "Roboto Mono", "Menlo", "Consolas", monospace;
   font-size: 13px;
-  background-color: #f6f6f6;
+  background-color: #ffffff6b;
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
   padding: 3px 10px;
   margin: 0 5px;
   border-radius: 2px;
@@ -866,7 +867,6 @@ pre .xml .cdata {
   overflow-x: auto;
   text-align: left;
   padding: 15px 25px;
-  background-color: #f6f6f6;
   line-height: 1.5em;
 }
 
@@ -1200,7 +1200,7 @@ body[data-theme=dark] {
   background: 
     /* 使用 linear-gradient 和背景图结合 */
     linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
-    url('/img/swim.png');
+    url('/img/god.png');
     /* 背景图像居中 */
     background-position: center center;
     /* 背景图不平铺 */
@@ -1378,7 +1378,8 @@ body[data-theme=dark] .search-article input[type=search]::-webkit-input-placehol
 body[data-theme=dark] .post code {
   font-family: "Roboto Mono", "Menlo", "Consolas", monospace;
   font-size: 13px;
-  background-color: #02123d;
+  background-color: #0000006b;
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
   padding: 3px 10px;
   margin: 0 5px;
   border-radius: 2px;
@@ -1515,13 +1516,22 @@ body[data-theme=dark] span.comment {
 }
 
 body[data-theme=dark] table tbody tr pre{
-  background-color: #000000;
+  background-color: #0000006b;
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
 }
-
+.post pre{
+  background-color: #ffffff6b;
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
+}
 span.type{
-  color: #0092db;
+  color: #0049db;
 }
-
+span.title{
+  color: #ff5277;
+}
+span.comment {
+  color: #939393;
+}
 #loading {
   position: fixed;
   top: 0;
@@ -1579,4 +1589,9 @@ body[data-theme=dark] #loading {
   align-items: center;
   justify-content: center;
   z-index: 9999;
+}
+
+.wrapper.post{
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
+  
 }

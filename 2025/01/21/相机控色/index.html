@@ -273,22 +273,21 @@
       </div>
     </nav>
   </div>
-  
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%89%B2%E6%B8%A9k"><span class="toc-text"> 色温（K）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E5%B9%B3%E8%A1%A1wb"><span class="toc-text"> 白平衡（WB）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E4%B8%BB%E5%AF%BC%E8%89%B2%E7%A1%AE%E5%AE%9A%E7%94%BB%E9%9D%A2%E8%89%B2%E6%B8%A9"><span class="toc-text"> 根据主导色确定画面色温</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E5%B9%B3%E8%A1%A1%E5%81%8F%E7%A7%BB"><span class="toc-text"> 白平衡偏移</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
+</div>
 <div class="wrapper post">
   <head>
     <!-- 引入 Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <meta name="generator" content="Hexo 7.3.0"></head>
 
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
 
-  <button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
-  <div id="overlay" class="overlay">
-    <div class="content">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%89%B2%E6%B8%A9k"><span class="toc-text"> 色温（K）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E5%B9%B3%E8%A1%A1wb"><span class="toc-text"> 白平衡（WB）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E4%B8%BB%E5%AF%BC%E8%89%B2%E7%A1%AE%E5%AE%9A%E7%94%BB%E9%9D%A2%E8%89%B2%E6%B8%A9"><span class="toc-text"> 根据主导色确定画面色温</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BD%E5%B9%B3%E8%A1%A1%E5%81%8F%E7%A7%BB"><span class="toc-text"> 白平衡偏移</span></a></li></ol>
-      <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
-    </div>
-  </div>
 
   <main class="page-content" aria-label="Content">
       <header class="header">
@@ -576,7 +575,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"嵌入式","value":3},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1},{"name":"多任务","value":1}],
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"嵌入式","value":3},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"博客","value":1},{"name":"单片机","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -590,7 +589,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"嵌入式","value":3},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1},{"name":"多任务","value":1}].map(tag => tag.name),
+                            data: [{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"嵌入式","value":3},{"name":"STM32","value":2},{"name":"CubeMX","value":2},{"name":"Timer","value":2},{"name":"博客","value":1},{"name":"单片机","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -612,13 +611,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"程序架构","value":1},{"name":"其他","value":1}].map(category => category.name).reverse(), 
+                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"其他","value":1},{"name":"程序架构","value":1}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"程序架构","value":1},{"name":"其他","value":1}].map(category => category.value).reverse(),
+                            data: [{"name":"摄影学习","value":5},{"name":"STM32","value":2},{"name":"CubeMX配置功能学习","value":2},{"name":"其他","value":1},{"name":"程序架构","value":1}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -667,7 +666,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"程序架构","children":[],"count":1,"path":"程序架构"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"web","children":[],"count":1,"path":"web"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"STM32","children":[{"name":"CubeMX配置功能学习","children":[],"count":2,"path":"STM32/CubeMX配置功能学习"}],"count":2,"path":"STM32"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"程序架构","children":[],"count":1,"path":"程序架构"},{"name":"web","children":[],"count":1,"path":"web"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
