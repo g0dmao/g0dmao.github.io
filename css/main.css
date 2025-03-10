@@ -689,6 +689,7 @@ mark,
   padding: 10px 10px 10px 35px;
   color: #434648;
   -webkit-appearance: none;
+  appearance: none;
   font-size: 16px;
   background-color: rgba(128, 128, 128, 0.1);
   border: 1px solid rgba(128, 128, 128, 0.1);
@@ -1064,23 +1065,52 @@ pre .xml .cdata {
   font-weight: 700;
 }
 .post h1 {
-  font-size: 24px;
+  font-size: 35px;
 }
 .post h2 {
-  font-size: 22px;
+  font-size: 30px;
+  color: orange;
 }
 .post h3 {
-  font-size: 20px;
+  font-size: 23px;
   border-bottom: 1px solid #ececec;
   padding-bottom: 4px;
+  color: rgb(128, 171, 42);
 }
 .post h4 {
   font-size: 20px;
+  color: rgb(0, 123, 255);
 }
 .post h5 {
   font-size: 16px;
+  color: palevioletred;
 }
 .post h6 {
+  font-size: 14px;
+}
+
+body[data-theme=dark] .post h1 {
+  font-size: 2em;
+}
+body[data-theme=dark] .post h2 {
+  font-size: 30px;
+  color: orange;
+}
+body[data-theme=dark] .post h3 {
+  font-size: 23px;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 4px;
+  color: rgb(128, 171, 42);
+}
+body[data-theme=dark] .post h4 {
+  font-size: 20px;
+  color: rgb(0, 123, 255);
+}
+body[data-theme=dark] .post h5 {
+  font-size: 16px;
+  color: palevioletred;
+}
+body[data-theme=dark] .post h6 {
   font-size: 14px;
 }
 
@@ -1213,6 +1243,7 @@ body[data-theme=dark] {
     background-color: #464646;
 
 }
+
 body[data-theme=dark] h1,
 body[data-theme=dark] h2,
 body[data-theme=dark] h3,
@@ -1221,6 +1252,7 @@ body[data-theme=dark] h5,
 body[data-theme=dark] h6 {
   color: #eaeaea;
 }
+
 body[data-theme=dark] table thead {
   color: #eaeaea;
   border-color: #1b1d25;
@@ -1483,6 +1515,11 @@ body[data-theme=dark] .post code {
   font-size: 40px;
 }
 
+span.toc-text{
+  color: #0098b3;
+}
+
+
 #toTopBtn {
   width: 10px; /* 设置宽度 */
   height: 10px; /* 设置高度，确保是方形 */
@@ -1593,5 +1630,51 @@ body[data-theme=dark] #loading {
 
 .wrapper.post{
   backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
-  
+}
+
+span.spoiler{
+  background-color: #d4d9db;
+  color: #d4d9db;
+}
+span.spoiler:hover{
+  color: black !important
+}
+body[data-theme=dark] span.spoiler{
+  background-color: #040c60;
+  color: #040c60;
+}
+
+body[data-theme=dark] span.spoiler:hover{
+  color: #c7bebe !important
+}
+.pagination { margin-top: 20px; text-align: center; height: 50px;}
+.pagination a, .pagination span { 
+    margin: 5px; padding: 8px 12px; cursor: pointer; 
+    border: none; background-color: transparent; 
+    font-size: 16px; font-weight: normal;
+    transition: all 0.3s ease;
+}
+
+span.page-number.current{
+  color: #3498db;
+}
+
+.hexo-tips-layout p{
+  color: #000;
+}
+
+.footnote-item{
+  font-size: 13px;
+}
+.footnotes ol li::before{
+  content: counter(list-counter);
+  counter-increment: list-counter;
+  font-weight:lighter;
+  font-size: 13px;
+  margin-right: 5px;
+
+}
+
+.post h4{
+  font-size: 18px;
 }

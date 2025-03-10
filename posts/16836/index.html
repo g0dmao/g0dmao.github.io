@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CubeMX配置功能系列：Timer（上） [ g0dMa0&#39;s Blog ]</title>
+
+  <link rel="icon" href="/img/apple-touch-icon.png">
+
+
+    <meta name="author" content="茂神·g0dma0">
+
+
+    <meta name="subtitle" content="欢迎。Welcome.">
+
+
+
+
+  <link rel="alternate" href="/atom.xml " title="g0dMa0&#39;s Blog" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+<script defer>
+  document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState == 'hidden') {
+      normal_title = document.title;
+      document.title = '点一下';
+  } else document.title = normal_title;
+});
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+    </script>
+    <div id="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+       
+  <div class="navbar" role="navigation">
+    <nav class="menu">
+      <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+      <label for="menu-trigger">
+        <span class="menu-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
+        </span>
+      </label>
+      <a id="mode">
+        <svg
+          class="mode-sunny"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>LIGHT</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+        <svg
+          class="mode-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>DARK</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+      </a>
+      <div class="trigger">
+        <div class="trigger-container">
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/"> 主页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/Tags/"> 标签</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/categories/"> 类别</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/archives/"> 档案馆</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/about/"> 关于</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AF%B4%E6%98%8E"><span class="toc-text"> 1. 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%95%8C%E9%9D%A2%E6%80%BB%E8%A7%88"><span class="toc-text"> 2. 界面总览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-lptim%E6%B2%A1%E7%94%A8%E8%BF%87%E7%94%A8%E8%BF%87%E5%90%8E%E8%A1%A5%E5%85%85"><span class="toc-text"> 3. LPTIM：没用过，用过后补充</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 3.1. 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E6%94%AF%E6%8C%81%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 3.2. 支持的模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E5%8F%82%E8%80%83"><span class="toc-text"> 3.3. 参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-rtc%E4%B9%9F%E4%B8%8D%E5%92%8B%E7%94%A8%E7%94%A8%E6%97%B6%E8%A1%A5%E5%85%85"><span class="toc-text"> 4. RTC：也不咋用，用时补充</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BB%80%E4%B9%88%E6%98%AFrtc"><span class="toc-text"> 4.1. 什么是RTC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%8A%9F%E8%83%BD%E7%AE%80%E4%BB%8B"><span class="toc-text"> 4.2. 功能简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-a%E5%8F%82%E8%80%83"><span class="toc-text"> 4.3. 参考</span></a></li></ol></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+/* 1. 手动暗色模式优先 */
+html.dark [class^="hexo-tips-"] {
+    background-color: var(--tips-dark-bg);
+}
+
+/* 2. 系统暗色模式其次 */
+@media (prefers-color-scheme: dark) {
+    html:not(.light) [class^="hexo-tips-"] {
+        background-color: var(--tips-dark-bg);
+    }
+}
+
+/* 3. 亮色模式最后 */
+html:not(.dark) [class^="hexo-tips-"],
+html.light [class^="hexo-tips-"] {
+    background-color: var(--tips-light-bg);
+}
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/STM32/" class="tag"># STM32</a><a href="/Tags/CubeMX/" class="tag"># CubeMX</a><a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/Timer/" class="tag"># Timer</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">CubeMX配置功能系列：Timer（上）</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 09, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">1.4k</span>&emsp;
+            预计阅读时间: <span class="post-count">5</span> min
+          </div>       
+        </header>
+          <div class="page-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<h2 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h2>
+<ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="#1-%E8%AF%B4%E6%98%8E">1. 说明</a></li>
+<li><a href="#2-%E7%95%8C%E9%9D%A2%E6%80%BB%E8%A7%88">2. 界面总览</a></li>
+<li><a href="#3-lptim%E6%B2%A1%E7%94%A8%E8%BF%87%E7%94%A8%E8%BF%87%E5%90%8E%E8%A1%A5%E5%85%85">3. LPTIM：没用过，用过后补充</a>
+<ul>
+<li><a href="#31-%E4%BB%8B%E7%BB%8D">3.1. 介绍</a></li>
+<li><a href="#32-%E6%94%AF%E6%8C%81%E7%9A%84%E6%A8%A1%E5%BC%8F">3.2. 支持的模式</a></li>
+<li><a href="#33-%E5%8F%82%E8%80%83">3.3. 参考</a></li>
+</ul>
+</li>
+<li><a href="#4-rtc%E4%B9%9F%E4%B8%8D%E5%92%8B%E7%94%A8%E7%94%A8%E6%97%B6%E8%A1%A5%E5%85%85">4. RTC：也不咋用，用时补充</a>
+<ul>
+<li><a href="#41-%E4%BB%80%E4%B9%88%E6%98%AFrtc">4.1. 什么是RTC</a></li>
+<li><a href="#42-%E5%8A%9F%E8%83%BD%E7%AE%80%E4%BB%8B">4.2. 功能简介</a></li>
+<li><a href="#43-%E5%8F%82%E8%80%83">4.3. 参考</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1-说明"><a class="markdownIt-Anchor" href="#1-说明"></a> 1. 说明</h2>
+<p>本文以STM32G4系列为例。供自己学习与记录且只做简单介绍。有一定基础的朋友可参考。</p>
+<hr />
+<h2 id="2-界面总览"><a class="markdownIt-Anchor" href="#2-界面总览"></a> 2. 界面总览</h2>
+<p>打开Timer的配置界面如图：<br />
+<img src="Snipaste_2025-02-06_18-21-03.png" alt="" /></p>
+<h2 id="3-lptim没用过用过后补充"><a class="markdownIt-Anchor" href="#3-lptim没用过用过后补充"></a> 3. LPTIM：没用过，用过后补充</h2>
+<h3 id="31-介绍"><a class="markdownIt-Anchor" href="#31-介绍"></a> 3.1. 介绍</h3>
+<p>LPTIM 是一个 16 位定时器，顾名思义他就是可以实现低功耗应用的一个特殊定时器。由于时钟源的多样性，LPTIM 能够在除待机模式以外的所有电源模式下保持运行。 即使没有内部时钟源， LPTIM 也能运行，鉴于这一点，可将其用作“脉冲计数器”，这种脉冲计数器在某些应用中十分有用。此外， LPTIM还能将系统从低功耗模式唤醒，因此非常适合实现“超时功能”，而且功耗极低。</p>
+<p>LPTIM 引入了一个灵活的时钟方案，该方案能够提供所需的功能和性能，同时还能最大程度地降低功耗。</p>
+<p>LPTIM时基单元包含一个16位自动重载计数器ARR，一个16位的递增计数器CNT，一个3位可编程预分频器可以采用8种分频系数（1、2、4、8、16、32、64、128）， 预分频器时钟源有多种可选，有内部时钟源： LSE、 LSI、 HSI 或 APB 时钟、外部时钟ULPTIM输入的外部时钟源（在没有 LP 振荡器运行的情况下工作，由脉冲计数器应用使用）。</p>
+<h3 id="32-支持的模式"><a class="markdownIt-Anchor" href="#32-支持的模式"></a> 3.2. 支持的模式</h3>
+<p><img src="Snipaste_2025-02-06_18-22-29.png" alt="" /><br />
+<img src="Snipaste_2025-02-06_18-23-44.png" alt="" /></p>
+<ul>
+<li>计数器模式：计数器可用于计算来自 Input1 的外部事件或用于计算内部时钟周期</li>
+<li>单次模式：在此模式下，当满足匹配条件时，输出可以切换高低电平（如果输出极性配置为高，则为低电平至高电平变化，反之亦然）</li>
+<li>编码器模式<br />
+此外还有</li>
+<li>单脉冲模式</li>
+<li>PWM 模式</li>
+<li>超时模式：有效的边沿触发输入可复位定时器。第一个触发事件将启动计时器，任何连续触发事件将重置计数器并重新开始。</li>
+</ul>
+<h3 id="33-参考"><a class="markdownIt-Anchor" href="#33-参考"></a> 3.3. 参考</h3>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42965739/article/details/113532039">【玩转STM32】：低功耗定时器LPTIM应用_stm32 lptim-CSDN博客</a><br />
+<a target="_blank" rel="noopener" href="https://doc.embedfire.com/mcu/stm32/h743prov/hal/zh/latest/book/LPTIM.html">32. LPTIM—低功耗定时器 — [野火]STM32 HAL库开发实战指南——基于H743_Pro_V 文档</a></p>
+<h2 id="4-rtc也不咋用用时补充"><a class="markdownIt-Anchor" href="#4-rtc也不咋用用时补充"></a> 4. RTC：也不咋用，用时补充</h2>
+<h3 id="41-什么是rtc"><a class="markdownIt-Anchor" href="#41-什么是rtc"></a> 4.1. 什么是RTC</h3>
+<p><strong>RTC (Real Time Clock)</strong>：实时时钟</p>
+<p><strong>RTC是个独立的定时器</strong>。RTC模块拥有一个连续计数的计数器，在相应的软件配置下，可以提供时钟日历的功能。修改计数器的值可以重新设置当前时间和日期 RTC还包含用于管理低功耗模式的自动唤醒单元。</p>
+<p>在断电情况下 RTC仍可以独立运行 只要芯片的备用电源一直供电,RTC上的时间会一直走。</p>
+<p>RTC实质是一个掉电后还继续运行的定时器,从定时器的角度来看,相对于通用定时器TIM外设,它的功能十分简单,只有计时功能(也可以触发中断)。但其高级指出也就在于掉电之后还可以正常运行。</p>
+<p>两个 32 位寄存器包含二进码十进数格式 (BCD) 的秒、分钟、小时（ 12 或 24 小时制）、星期几、日期、月份和年份。此外，还可提供二进制格式的亚秒值。系统可以自动将月份的天数补偿为 28、29（闰年）、30 和 31 天。</p>
+<p>上电复位后，所有RTC寄存器都会受到保护，以防止可能的非正常写访问。</p>
+<p>无论器件状态如何（运行模式、低功耗模式或处于复位状态），只要电源电压保持在工作范围内，RTC使不会停止工作。</p>
+<h3 id="42-功能简介"><a class="markdownIt-Anchor" href="#42-功能简介"></a> 4.2. 功能简介</h3>
+<p><img src="Snipaste_2025-02-06_18-46-47.png" alt="" /></p>
+<ul>
+<li><strong>激活时钟源</strong>：<strong>一般选用LSE</strong>，RTC设备因为其独特的运行方式（即掉电依旧运行）使用HSE分频时钟或者LSI的时候,在主电源VDD掉电的情况下,这两个时钟来源都会受到影响，资源消耗太大，小小的纽扣电池根本吃不消。没法保证RTC正常工作.所以RTC一般都时钟低速外部时钟LSE</li>
+<li><strong>使能RTC日历</strong></li>
+<li><strong>可编程的闹钟A/B</strong>，如果设置了闹钟A/B的时间，则闹钟A/B设定时间会和当前日历时间对比，如果时间相等，会产生ALRA/BF事件</li>
+<li><strong>周期唤醒</strong>：可以使用RTC内部一个16位唤醒自动重载寄存器来实现，周期唤醒的时钟信号可以来自于更新日历的1Hz（ck_spre）信号，也可以使用RTC时钟的2/4/8/16分频后的时钟，设置该自动重载寄存器的值，<strong>根据时钟频率向上计数，当计数溢出时发生周期唤醒事件</strong></li>
+<li><strong>时间戳</strong></li>
+<li><strong>Tamper</strong>：入侵检测</li>
+<li><strong>时钟校准</strong></li>
+<li><strong>参考时钟检测？？？</strong></li>
+</ul>
+<h3 id="43-a参考"><a class="markdownIt-Anchor" href="#43-a参考"></a> 4.3. </a>参考</h3>
+<p><a target="_blank" rel="noopener" href="https://community.st.com/t5/stm32-mcus/how-to-calibrate-the-stm32-s-real-time-clock-rtc/ta-p/744958">How to calibrate the STM32’s real-time clock (RTC) - STMicroelectronics Community</a><br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/lc_guo/article/details/135225854">STM32CubeMX教程10 RTC 实时时钟 - 周期唤醒、闹钟A/B事件和备份寄存器_stm32cubemx rtc-CSDN博客</a><br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/as480133937/article/details/105026033">【STM32】RTC实时时钟，步骤超细详解，一文看懂RTC_rtc模块-CSDN博客</a></p>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/posts/48581/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">CubeMX配置功能系列：Timer（下）</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/50403/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">相机控色</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+    <small class="footer_copyright">
+      <div id="bottom-inner">
+        © Site by 茂神·g0dma0 
+        <br>
+        <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
+        <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        始于2025.
+        
+      </div>
+    </small>
+  </footer>
+  
+  
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,4],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影学习","value":5},{"name":"CubeMX配置功能","value":4},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影学习","value":5},{"name":"CubeMX配置功能","value":4},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":4,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":1,"path":"嵌入式/程序架构"}],"count":5,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+</html>

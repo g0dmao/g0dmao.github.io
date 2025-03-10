@@ -1,0 +1,1045 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>曝光三要素 [ g0dMa0&#39;s Blog ]</title>
+
+  <link rel="icon" href="/img/apple-touch-icon.png">
+
+
+    <meta name="author" content="茂神·g0dma0">
+
+
+    <meta name="subtitle" content="欢迎。Welcome.">
+
+
+
+
+  <link rel="alternate" href="/atom.xml " title="g0dMa0&#39;s Blog" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+<script defer>
+  document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState == 'hidden') {
+      normal_title = document.title;
+      document.title = '点一下';
+  } else document.title = normal_title;
+});
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+    </script>
+    <div id="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+       
+  <div class="navbar" role="navigation">
+    <nav class="menu">
+      <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+      <label for="menu-trigger">
+        <span class="menu-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
+        </span>
+      </label>
+      <a id="mode">
+        <svg
+          class="mode-sunny"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>LIGHT</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+        <svg
+          class="mode-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>DARK</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+      </a>
+      <div class="trigger">
+        <div class="trigger-container">
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/"> 主页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/Tags/"> 标签</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/categories/"> 类别</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/archives/"> 档案馆</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/about/"> 关于</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E5%BF%AB%E9%97%A8"><span class="toc-text"> 认识快门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%BF%AB%E9%97%A8"><span class="toc-text"> 安全快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%80%9F%E5%BF%AB%E9%97%A8"><span class="toc-text"> 高速快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8E%E9%80%9F%E5%BF%AB%E9%97%A8"><span class="toc-text"> 低速快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%97%A8%E4%BC%98%E5%85%88tvs"><span class="toc-text"> 快门优先（TV&#x2F;S）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-text"> 练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E5%85%89%E5%9C%88"><span class="toc-text"> 认识光圈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E5%BD%B1%E5%93%8D%E8%BF%9B%E5%85%89%E9%87%8F"><span class="toc-text"> 光圈影响进光量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E5%BD%B1%E5%93%8D%E6%99%AF%E6%B7%B1"><span class="toc-text"> 光圈影响景深</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E7%94%BB%E8%B4%A8%E5%85%89%E5%9C%88"><span class="toc-text"> 最佳画质光圈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E4%BC%98%E5%85%88ava"><span class="toc-text"> 光圈优先（AV&#x2F;A）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-2"><span class="toc-text"> 练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E6%84%9F%E5%85%89%E5%BA%A6iso"><span class="toc-text"> 认识感光度（ISO）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iso%E5%BD%B1%E5%93%8D%E7%94%BB%E8%B4%A8%E5%99%AA%E7%82%B9"><span class="toc-text"> ISO影响画质（噪点）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0%E7%9A%84%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8"><span class="toc-text"> 曝光三要素的结合使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%98%B3%E5%85%89%E7%81%BF%E7%83%82%E7%9A%84%E4%B8%AD%E5%8D%88%E6%8B%8D%E6%91%84%E6%9C%89%E8%99%9A%E5%8C%96%E6%95%88%E6%9E%9C%E7%9A%84%E5%B0%8F%E8%8A%B1"><span class="toc-text"> 在一个阳光灿烂的中午拍摄有虚化效果的小花</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%8D%E6%91%84%E4%BA%BA%E5%9C%A8%E5%A4%9C%E6%99%9A%E8%B7%91%E6%AD%A5"><span class="toc-text"> 拍摄人在夜晚跑步</span></a></li></ol></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+/* 1. 手动暗色模式优先 */
+html.dark [class^="hexo-tips-"] {
+    background-color: var(--tips-dark-bg);
+}
+
+/* 2. 系统暗色模式其次 */
+@media (prefers-color-scheme: dark) {
+    html:not(.light) [class^="hexo-tips-"] {
+        background-color: var(--tips-dark-bg);
+    }
+}
+
+/* 3. 亮色模式最后 */
+html:not(.dark) [class^="hexo-tips-"],
+html.light [class^="hexo-tips-"] {
+    background-color: var(--tips-light-bg);
+}
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" class="tag"># 摄影基础</a><a href="/Tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="tag"># 学习笔记</a><a href="/Tags/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/" class="tag"># 曝光三要素</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">曝光三要素</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 09, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">1.1k</span>&emsp;
+            预计阅读时间: <span class="post-count">3</span> min
+          </div>       
+        </header>
+          <div class="page-content"><p>教程及截图来自b站： <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1DQiyYkEJC/">https://www.bilibili.com/video/BV1DQiyYkEJC/</a></p>
+<h2 id="认识快门"><a class="markdownIt-Anchor" href="#认识快门"></a> 认识快门</h2>
+<ul>
+<li>快门：控制接收光线的时间 时间长，进光量大，画面亮。</li>
+<li>在M档、快门优先档（S档）控制。</li>
+<li><strong>快门影响物体的动态模糊。</strong>
+<ul>
+<li>在快门打开关闭时间内，所拍摄物体没有足够时间移动，那么所拍摄物体时静止的</li>
+<li>相反，若物体是运动的，则会把运动轨迹记录起来。<br />
+<img src="Snipaste_2025-01-19_11-59-54.png" alt="" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="安全快门"><a class="markdownIt-Anchor" href="#安全快门"></a> 安全快门</h3>
+<ul>
+<li>
+<p>能保证画面清晰所使用的最低快门速度（手持拍摄）</p>
+</li>
+<li>
+<p>具体数值为焦距的倒数，例如50mm焦距，安全快门为：1/50s</p>
+</li>
+<li>
+<p>一些常规题材快门速度推荐（常用调整值）： #拍摄技巧</p>
+<ul>
+<li>人文题材 新闻报道  <strong>快门常用 1/125s</strong></li>
+<li>行人，跑动的小孩   <strong>快门常用 1/500s</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="高速快门"><a class="markdownIt-Anchor" href="#高速快门"></a> 高速快门</h3>
+<ul>
+<li>
+<p>画面亮度会降低，可以清晰的拍摄高速运动的物体</p>
+</li>
+<li>
+<p>限制：场景光线强，否则画面非常暗</p>
+</li>
+<li>
+<p>使用高速快门拍摄的题材 #拍摄技巧</p>
+<ul>
+<li>
+<p><img src="Snipaste_2025-01-19_12-16-50.png" alt="" /></p>
+</li>
+<li>
+<p><img src="Snipaste_2025-01-19_12-27-34.png" alt="" /></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="低速快门"><a class="markdownIt-Anchor" href="#低速快门"></a> 低速快门</h3>
+<ul>
+<li>
+<p>曝光的时间较长，画面中运动的物体的主题会留下运行的轨迹，会变得模糊，<strong>同时画面的亮度会被提高。</strong></p>
+</li>
+<li>
+<p>一般需要稳定拍摄，手持的抖动对画面影响大</p>
+</li>
+<li>
+<p>使用低速快门的题材 #拍摄技巧</p>
+<ul>
+<li><img src="Snipaste_2025-01-19_13-32-09.png" alt="" />
+<ul>
+<li>对于摇拍的补充：利用相对静止的原理，跟随运动物体进行平行移动，可以实现拍摄物体清晰，而其他背景模糊，同样也可以使用相机连拍功能实现该效果</li>
+</ul>
+</li>
+<li>瀑布水流拉丝效果： <strong>快门常用 5~10s</strong> 配合减光镜稳定拍摄（三脚架）。或者调整光圈f/22左右</li>
+<li>车轨 烟花：<strong>快门常用 5~10s</strong> 稳定拍摄（三脚架）。调整光圈f/16配合。</li>
+</ul>
+</li>
+</ul>
+<h3 id="快门优先tvs"><a class="markdownIt-Anchor" href="#快门优先tvs"></a> 快门优先（TV/S）</h3>
+<ul>
+<li>只需调整快门速度</li>
+<li>为满足日常的 风光拍摄 和 运动摄影</li>
+</ul>
+<h3 id="练习"><a class="markdownIt-Anchor" href="#练习"></a> 练习</h3>
+<ol>
+<li>高速运动的物体</li>
+<li>追焦拍摄（摇拍）</li>
+<li>车轨</li>
+</ol>
+<p><img src="Snipaste_2025-01-19_17-05-08.png" alt="快门的选择" /></p>
+<hr />
+<h2 id="认识光圈"><a class="markdownIt-Anchor" href="#认识光圈"></a> 认识光圈</h2>
+<ul>
+<li>控制进光量的装置</li>
+</ul>
+<h3 id="光圈影响进光量"><a class="markdownIt-Anchor" href="#光圈影响进光量"></a> 光圈影响进光量</h3>
+<ul>
+<li><img src="Snipaste_2025-01-19_15-49-45.png" alt="" /></li>
+<li>不同的曝光状态：欠曝、过曝</li>
+<li><strong>光圈会和快门速度一起影响进光量</strong></li>
+</ul>
+<h3 id="光圈影响景深"><a class="markdownIt-Anchor" href="#光圈影响景深"></a> 光圈影响景深</h3>
+<ul>
+<li><img src="Snipaste_2025-01-19_15-55-04.png" alt="" /></li>
+<li>光圈的运用： #拍摄技巧
+<ul>
+<li><strong>大光圈的跑焦问题</strong>。使用超大光圈镜头时，最好不要使用最大光圈去拍，降低一个挡位。</li>
+<li>有时<strong>主题突出</strong>使用大光圈
+<ul>
+<li><img src="Snipaste_2025-01-19_16-00-53.png" alt="" /></li>
+</ul>
+</li>
+<li>拍人像时<strong>不要一味的使用景深效果</strong>（为了突出主题而突出主体）：需要结合环境，有些情况需要环境配合或交代环境
+<ul>
+<li><img src="Snipaste_2025-01-19_16-04-53.png" alt="" /></li>
+</ul>
+</li>
+<li>有时需要<strong>全局清晰</strong>使用小光圈 表现大环境
+<ul>
+<li><img src="Snipaste_2025-01-19_16-06-22.png" alt="" /></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="最佳画质光圈"><a class="markdownIt-Anchor" href="#最佳画质光圈"></a> 最佳画质光圈</h3>
+<ul>
+<li>一般在最大光圈缩小2~3档位</li>
+</ul>
+<h3 id="光圈优先ava"><a class="markdownIt-Anchor" href="#光圈优先ava"></a> 光圈优先（AV/A）</h3>
+<ul>
+<li>手动调整光圈</li>
+<li>满足于日常的人像拍摄、静物拍摄</li>
+</ul>
+<h3 id="练习-2"><a class="markdownIt-Anchor" href="#练习-2"></a> 练习</h3>
+<ul>
+<li>虚化效果的小花</li>
+</ul>
+<hr />
+<h2 id="认识感光度iso"><a class="markdownIt-Anchor" href="#认识感光度iso"></a> 认识感光度（ISO）</h2>
+<ul>
+<li>感光器件对光的敏感程度</li>
+<li>控制亮度和成片质量</li>
+<li>数值越大，感光度高，那么画面亮</li>
+</ul>
+<h3 id="iso影响画质噪点"><a class="markdownIt-Anchor" href="#iso影响画质噪点"></a> ISO影响画质（噪点）</h3>
+<ul>
+<li>
+<p><img src="Snipaste_2025-01-19_16-38-20.png" alt="" /></p>
+</li>
+<li>
+<p>感光度的运用 #拍摄技巧</p>
+<ul>
+<li><strong>对于ISO，其作用相当于给你一盏灯，在黑暗环境下我们需要打开灯看清画面，灯的功率有不同的瓦数。</strong></li>
+<li>通常情况
+<ul>
+<li><img src="Snipaste_2025-01-19_16-41-30.png" alt="" /></li>
+</ul>
+</li>
+<li>过暗环境 ISO太高导致噪点
+<ul>
+<li>兼顾画质和画面：<strong>补光</strong> 闪光灯、常亮灯</li>
+<li>画面优先：提高ISO</li>
+</ul>
+</li>
+<li>想要复古感，想要噪点：主动提高ISO</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="曝光三要素的结合使用"><a class="markdownIt-Anchor" href="#曝光三要素的结合使用"></a> 曝光三要素的结合使用</h2>
+<p><img src="Snipaste_2025-01-19_17-03-48.png" alt="" /></p>
+<h3 id="在一个阳光灿烂的中午拍摄有虚化效果的小花"><a class="markdownIt-Anchor" href="#在一个阳光灿烂的中午拍摄有虚化效果的小花"></a> 在一个阳光灿烂的中午拍摄有虚化效果的小花</h3>
+<ul>
+<li>首先光圈要大一点，才有虚化效果，静止物体，不需要高速或低速快门，室外阳光天气光线充足，ISO调到最小</li>
+<li>f/1.8 1/500 100</li>
+<li>没有大光圈，怎么办 #拍摄技巧
+<ul>
+<li>主体离背景足够远，也会有虚化效果</li>
+</ul>
+</li>
+<li>感觉可以使用光圈A优先。。</li>
+</ul>
+<h3 id="拍摄人在夜晚跑步"><a class="markdownIt-Anchor" href="#拍摄人在夜晚跑步"></a> 拍摄人在夜晚跑步</h3>
+<ul>
+<li>夜晚环境较暗，使用较大光圈提高进光量，但是太大会跑焦，拍摄运动的物体，快门spee的快一点，但是快门太快画面太暗，于是调高感光度</li>
+<li>f/2.8 1/250 800</li>
+<li>个人感觉可以使用快门S优先。。</li>
+</ul>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/posts/50034/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">markdown渲染器测试</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/16107/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">Hello World</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+    <small class="footer_copyright">
+      <div id="bottom-inner">
+        © Site by 茂神·g0dma0 
+        <br>
+        <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
+        <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        始于2025.
+        
+      </div>
+    </small>
+  </footer>
+  
+  
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,4],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"单片机","value":1}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影学习","value":5},{"name":"CubeMX配置功能","value":4},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":5},{"name":"摄影学习","value":5},{"name":"CubeMX配置功能","value":4},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":4,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":1,"path":"嵌入式/程序架构"}],"count":5,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+</html>
