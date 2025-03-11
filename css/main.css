@@ -1069,50 +1069,27 @@ pre .xml .cdata {
 }
 .post h2 {
   font-size: 30px;
-  color: orange;
+
 }
 .post h3 {
   font-size: 23px;
   border-bottom: 1px solid #ececec;
   padding-bottom: 4px;
-  color: rgb(128, 171, 42);
+
 }
 .post h4 {
   font-size: 20px;
-  color: rgb(0, 123, 255);
+
 }
 .post h5 {
   font-size: 16px;
-  color: palevioletred;
+
 }
 .post h6 {
   font-size: 14px;
 }
 
-body[data-theme=dark] .post h1 {
-  font-size: 2em;
-}
-body[data-theme=dark] .post h2 {
-  font-size: 30px;
-  color: orange;
-}
-body[data-theme=dark] .post h3 {
-  font-size: 23px;
-  border-bottom: 1px solid #ececec;
-  padding-bottom: 4px;
-  color: rgb(128, 171, 42);
-}
-body[data-theme=dark] .post h4 {
-  font-size: 20px;
-  color: rgb(0, 123, 255);
-}
-body[data-theme=dark] .post h5 {
-  font-size: 16px;
-  color: palevioletred;
-}
-body[data-theme=dark] .post h6 {
-  font-size: 14px;
-}
+
 
 .post-nav {
   display: flex;
@@ -1675,6 +1652,3 @@ span.page-number.current{
 
 }
 
-.post h4{
-  font-size: 18px;
-}
