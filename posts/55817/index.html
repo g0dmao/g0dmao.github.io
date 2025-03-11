@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
   
 
 
@@ -53,17 +55,17 @@
       
       setTimeout(() => body.classList.remove("notransition"), 75);
     </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
-    </script>
+    
     <div id="loading">
       <span></span>
       <span></span>
       <span></span>
     </div>
-    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+    </script>
        
   <div class="navbar" role="navigation">
     <nav class="menu">
@@ -595,6 +597,8 @@ html.light [class^="hexo-tips-"] {
         <br>
         <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
         <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/fonts/jhlst/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002">京華老宋体</a> & <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/">中文网字支持计划</a>
+        <br>
         始于2025.
         
       </div>
@@ -797,7 +801,7 @@ html.light [class^="hexo-tips-"] {
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"嵌入式","value":6},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"博客","value":1}],
+                            data: [{"name":"嵌入式","value":6},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"网页","value":1}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -811,7 +815,7 @@ html.light [class^="hexo-tips-"] {
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"嵌入式","value":6},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"博客","value":1}].map(tag => tag.name),
+                            data: [{"name":"嵌入式","value":6},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"STM32","value":4},{"name":"CubeMX","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"网页","value":1}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
