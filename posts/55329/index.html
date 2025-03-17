@@ -497,7 +497,7 @@ html.light [class^="hexo-tips-"] {
         
         <h1 class="header-title" itemprop="headline">通信协议：iic</h1>
           <div class="post-meta">
-            最后更新: <time>3月 12, 2025</time>
+            最后更新: <time>3月 14, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
             </span>&emsp;
@@ -606,7 +606,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 <p>没错前7位是地址，发完地址发送读/写命令，然后发送端交出sda控制权，等待接收端的应答信号。如果从机没有给出ACK应答，则说明接收设备可能没有收到数据（如寻址的设备不存在或是设备正在忙碌）或无法解析收到的数据，如果是这样，则由master来决定如何处理（STOP或ReSTART）。</p>
 <h3 id="从机发主机收的情况"><a class="markdownIt-Anchor" href="#从机发主机收的情况"></a> 从机发，主机收的情况</h3>
 <p>主机对向从机读取数据时，方式同发送数据有所不同，要多一次通信过程。<br />
-主机需要先向从机发送一次信号，告诉从机”我要读取数据“，然后<strong>重开一次通信</strong>，等待从机主动返回数据。<br />
+主机需要先向从机发送一次信号，告诉从机”我要读取数据“，然后<strong>重开一次通信</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，等待从机主动返回数据。<br />
 <img src="Snipaste_2025-03-11_20-50-32.png" alt="" /></p>
 <h3 id="10bit传输"><a class="markdownIt-Anchor" href="#10bit传输"></a> 10bit传输</h3>
 <p>随着IIC设备日益增多，7位的从机地址逐渐不能满足使用，于是从机地址从7位扩充到了10位。7位和10位地址的设备可以共存于同一个I2C总线系统互不冲突，展现了良好的兼容性。<br />
@@ -623,6 +623,13 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yuanqiangfei/p/15781416.html">二十、I2C总线仲裁机制 - 轻轻的吻 - 博客园</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/638360051">GPIO推挽与开漏输出的“线与“特性 - 知乎</a></li>
 </ul>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>重复启动信号（Repeated Start）是一种特殊的操作，<strong>它允许在不释放总线的情况下从写模式切换到读模式</strong>。这种方式可以避免总线被其他设备占用，或者防止主设备发送 STOP 信号后，其他设备试图接管总线。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 </div>          
           <nav class="post-nav">
     
@@ -693,7 +700,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1]]);
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -816,7 +823,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,6],
+                            data: [7,2,7],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -853,7 +860,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"嵌入式","value":7},{"name":"STM32","value":5},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"iic","value":2}],
+                            data: [{"name":"嵌入式","value":8},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"程序架构","value":2}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -867,7 +874,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"嵌入式","value":7},{"name":"STM32","value":5},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"iic","value":2}].map(tag => tag.name),
+                            data: [{"name":"嵌入式","value":8},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"程序架构","value":2}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -889,13 +896,13 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"嵌入式","value":7},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.name).reverse(), 
+                            data: [{"name":"嵌入式","value":8},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":2},{"name":"其他","value":2}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"嵌入式","value":7},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.value).reverse(),
+                            data: [{"name":"嵌入式","value":8},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":2},{"name":"其他","value":2}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -944,7 +951,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":1,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":7,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":2,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":8,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

@@ -9,7 +9,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tag: 影调控制 [ g0dMa0&#39;s Blog ]</title>
+<title>串口重定向的非阻塞方法 [ g0dMa0&#39;s Blog ]</title>
 
   <link rel="icon" href="/img/apple-touch-icon.png">
 
@@ -283,22 +283,280 @@
       </div>
     </nav>
   </div>
-  
-<div class="wrapper">
-  <div class="page-content">
-      <header class="header">
-        <h1 class="header-title center">含有标签“影调控制”的文章</h1>
-      </header>
-      
-      
-        <div class="post-item">
-          <a class="post-item-title"  href="/posts/55817/">
-            影调控制
-          </a>
-        </div>
-      
-    </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text"> 常用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%81%9A%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text"> 这样做的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%9A%84%E6%96%B9%E5%BC%8F%E7%81%B5%E6%B4%BB%E8%BF%90%E7%94%A8dma"><span class="toc-text"> 使用非阻塞的方式：灵活运用DMA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 1. 定义缓冲区。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E5%AE%9A%E5%90%91-fputc%E4%BD%BF%E7%94%A8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 2. 重定向 fputc()，使用缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89dma-%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-text"> 3. 定义DMA 发送函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-dma-%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83"><span class="toc-text"> 4. DMA 传输完成回调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E6%83%91%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="toc-text"> 一些疑惑的解答</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
 </div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+/* 1. 手动暗色模式优先 */
+html.dark [class^="hexo-tips-"] {
+    background-color: var(--tips-dark-bg);
+}
+
+/* 2. 系统暗色模式其次 */
+@media (prefers-color-scheme: dark) {
+    html:not(.light) [class^="hexo-tips-"] {
+        background-color: var(--tips-dark-bg);
+    }
+}
+
+/* 3. 亮色模式最后 */
+html:not(.dark) [class^="hexo-tips-"],
+html.light [class^="hexo-tips-"] {
+    background-color: var(--tips-light-bg);
+}
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/STM32/" class="tag"># STM32</a><a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/Tags/%E4%B8%B2%E5%8F%A3/" class="tag"># 串口</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">串口重定向的非阻塞方法</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 17, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">761</span>&emsp;
+            预计阅读时间: <span class="post-count">3</span> min
+          </div>       
+        </header>
+          <div class="page-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<h2 id="常用方式"><a class="markdownIt-Anchor" href="#常用方式"></a> 常用方式</h2>
+<p>有时我们需要串口打印信息到上位机，最便捷的方法是重定向 <code>printf()</code>，网上的常用方法如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *f)</span>&#123;    </span><br><span class="line">	HAL_UART_Transmit(&amp;huart1, (<span class="type">uint8_t</span> *)&amp;ch, <span class="number">1</span>, <span class="number">0xffff</span>);</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">return</span> ch;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fgetc</span><span class="params">(FILE *f)</span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="type">uint8_t</span> ch = <span class="number">0</span>;</span><br><span class="line">	    </span><br><span class="line">	HAL_UART_Receive(&amp;huart1, &amp;ch, <span class="number">1</span>, <span class="number">0xffff</span>);</span><br><span class="line">	    </span><br><span class="line">	<span class="keyword">return</span> ch;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="这样做的缺点"><a class="markdownIt-Anchor" href="#这样做的缺点"></a> 这样做的缺点</h3>
+<ul>
+<li>这是 <strong>阻塞模式</strong>，每次 <code>printf()</code> 都要等待数据发送完毕，影响 CPU 执行效率。</li>
+<li>如果数据较多，会降低实时性，阻塞主循环。</li>
+</ul>
+<h2 id="使用非阻塞的方式灵活运用dma"><a class="markdownIt-Anchor" href="#使用非阻塞的方式灵活运用dma"></a> 使用非阻塞的方式：灵活运用DMA</h2>
+<p>我们使用DMA非阻塞发送。具体步骤如下：</p>
+<h3 id="1-定义缓冲区"><a class="markdownIt-Anchor" href="#1-定义缓冲区"></a> 1. 定义缓冲区。</h3>
+<p>根据fputc()的特性（这里先按下不表），使用 DMA 发送时，<code>printf()</code> 需要先把数据存到 <strong>一个缓冲区</strong>，然后一次性使用 DMA 发送出去。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TX_BUFFER_SIZE 256  <span class="comment">// 发送缓冲区大小</span></span></span><br><span class="line"><span class="type">uint8_t</span> uart_tx_buffer[TX_BUFFER_SIZE];  <span class="comment">// 串口发送缓冲区</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">uint16_t</span> tx_len = <span class="number">0</span>;  <span class="comment">// 当前缓冲区数据长度</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="type">uint8_t</span> tx_busy = <span class="number">0</span>;  <span class="comment">// 发送状态标志</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="2-重定向-fputc使用缓冲区"><a class="markdownIt-Anchor" href="#2-重定向-fputc使用缓冲区"></a> 2. 重定向 <code>fputc()</code>，使用缓冲区</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *f)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 确保缓冲区不会溢出</span></span><br><span class="line">    <span class="keyword">if</span> (tx_len &lt; TX_BUFFER_SIZE - <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        uart_tx_buffer[tx_len++] = (<span class="type">uint8_t</span>)ch;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span></span><br><span class="line">    <span class="comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span></span><br><span class="line">    <span class="comment">// 冲区没满的情况下，如果你想要发送字符串&quot;abc&quot;，printf(&quot;abc&quot;)是没用的，</span></span><br><span class="line">    <span class="comment">// printf(&quot;abc\n&quot;)才有用哦。</span></span><br><span class="line">    <span class="keyword">if</span> (ch == <span class="string">&#x27;\n&#x27;</span> || tx_len &gt;= TX_BUFFER_SIZE - <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        uart_dma_transmit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="3-定义dma-发送函数"><a class="markdownIt-Anchor" href="#3-定义dma-发送函数"></a> 3. 定义DMA 发送函数</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">uart_dma_transmit</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 如果 DMA 还在忙，则不启动新的传输</span></span><br><span class="line">    <span class="keyword">if</span> (tx_busy) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    tx_busy = <span class="number">1</span>;  <span class="comment">// 标记为发送中</span></span><br><span class="line">    HAL_UART_Transmit_DMA(&amp;huart1, uart_tx_buffer, tx_len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="4-dma-传输完成回调"><a class="markdownIt-Anchor" href="#4-dma-传输完成回调"></a> 4. DMA 传输完成回调</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_TxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (huart-&gt;Instance == USART1)  <span class="comment">// 确保是目标串口</span></span><br><span class="line">    &#123;</span><br><span class="line">        tx_len = <span class="number">0</span>;  <span class="comment">// 清空缓冲区</span></span><br><span class="line">        tx_busy = <span class="number">0</span>; <span class="comment">// 标记为可用</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="一些疑惑的解答"><a class="markdownIt-Anchor" href="#一些疑惑的解答"></a> 一些疑惑的解答</h2>
+<p>Q: 茂神茂神，你的说的非阻塞方式的确很不错，但是还是太吃操作了，我就不能直接在 <code>fputc()</code>里写 <code>HAL_UART_Transmit_DMA</code>吗？<br />
+<br />
+A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧，理论上我们只需要把DMA传输的字节数改为1就行了对吧？nonono，首先DMA是非阻塞的对吧，也就是激活了它，他就只管发，不管你完没完成，你都可以再次激活它，如果像你这样做，当发送字符流时大概率是这种情况：</p>
+<blockquote>
+<p><code>fputc()</code>打电话给DMA的秘书说我要发这个字符，然后他就认为我已经给DMA说了叫它发送这个字符啦，所以这个字符就发出去啦，剩下就不关我的事啦。结果DMA秘书看到DMA此时还在忙于上次发送，于是判断DMA为<code>HAL_BUSY</code>没有办法把字符交给DMA。这个字符信息就丢失了。。。。</p>
+</blockquote>
+</div>          
+          <nav class="post-nav">
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/58129/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">CubeMX配置功能系列：iic</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
   <footer class="footer">
     <small class="footer_copyright">
       <div id="bottom-inner">

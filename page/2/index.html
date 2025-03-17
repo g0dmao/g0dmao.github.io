@@ -304,6 +304,13 @@
     <h3 class="posts-item-note" aria-label="Recent Posts">Recent Posts</h3>
     
       <article class="post-item">
+        <span class="post-item-date" datetime="2025-01-19T13:28:28.000Z">1月 19, 2025</span>
+        <h4 class="post-item-title">
+          <a href="/posts/40301/">构图</a>
+        </h4>
+      </article>
+    
+      <article class="post-item">
         <span class="post-item-date" datetime="2025-01-19T13:22:10.000Z">1月 19, 2025</span>
         <h4 class="post-item-title">
           <a href="/posts/55817/">影调控制</a>
@@ -320,14 +327,14 @@
       <article class="post-item">
         <span class="post-item-date" datetime="2025-01-18T11:24:13.000Z">1月 18, 2025</span>
         <h4 class="post-item-title">
-          <a href="/posts/50034/">markdown渲染器测试</a>
+          <a href="/posts/27350/">曝光三要素</a>
         </h4>
       </article>
     
       <article class="post-item">
         <span class="post-item-date" datetime="2025-01-18T11:24:13.000Z">1月 18, 2025</span>
         <h4 class="post-item-title">
-          <a href="/posts/27350/">曝光三要素</a>
+          <a href="/posts/50034/">markdown渲染器测试</a>
         </h4>
       </article>
     
@@ -398,7 +405,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1]]);
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -521,7 +528,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,6],
+                            data: [7,2,7],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -558,7 +565,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"嵌入式","value":7},{"name":"STM32","value":5},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"iic","value":2}],
+                            data: [{"name":"嵌入式","value":8},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"程序架构","value":2}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -572,7 +579,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"嵌入式","value":7},{"name":"STM32","value":5},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"iic","value":2}].map(tag => tag.name),
+                            data: [{"name":"嵌入式","value":8},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"ADC","value":2},{"name":"Timer","value":2},{"name":"程序架构","value":2}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });
@@ -594,13 +601,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"嵌入式","value":7},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.name).reverse(), 
+                            data: [{"name":"嵌入式","value":8},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":2},{"name":"其他","value":2}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"嵌入式","value":7},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"其他","value":2},{"name":"程序架构","value":1}].map(category => category.value).reverse(),
+                            data: [{"name":"嵌入式","value":8},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":2},{"name":"其他","value":2}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -649,7 +656,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":1,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":7,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":2,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":8,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
