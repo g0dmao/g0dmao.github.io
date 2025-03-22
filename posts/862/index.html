@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三行代码实现按键的长短按检测 [ g0dMa0&#39;s Blog ]</title>
+
+  <link rel="icon" href="/img/apple-touch-icon.png">
+
+
+    <meta name="author" content="茂神·g0dma0">
+
+
+    <meta name="subtitle" content="欢迎。Welcome.">
+
+
+
+
+  <link rel="alternate" href="/atom.xml " title="g0dMa0&#39;s Blog" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+<script defer>
+  document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState == 'hidden') {
+      normal_title = document.title;
+      document.title = '点一下';
+  } else document.title = normal_title;
+});
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+    
+    <div id="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+    </script>
+       
+  <div class="navbar" role="navigation">
+    <nav class="menu">
+      <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+      <label for="menu-trigger">
+        <span class="menu-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
+        </span>
+      </label>
+      <a id="mode">
+        <svg
+          class="mode-sunny"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>LIGHT</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+        <svg
+          class="mode-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>DARK</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+      </a>
+      <div class="trigger">
+        <div class="trigger-container">
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/"> 主页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/Tags/"> 标签</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/categories/"> 类别</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/archives/"> 档案馆</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/LandingPage/"> 引导页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/about/"> 关于</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81"><span class="toc-text"> 话不多说直接上代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3"><span class="toc-text"> 尝试理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-text"> 取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%87%BB%E6%8C%89%E4%B8%8B"><span class="toc-text"> 单击按下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E5%90%8E%E8%BF%98%E6%B2%A1%E6%9C%89%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80%E5%BC%95%E7%94%B3%E5%88%B0%E9%95%BF%E6%8C%89"><span class="toc-text"> 按下后还没有完全松开（引申到长按）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80"><span class="toc-text"> 完全松开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%80%85%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-text"> 笔者的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text"> 在STM32中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B6%88%E6%8A%96%E9%97%AE%E9%A2%98"><span class="toc-text"> 关于消抖问题</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" class="tag"># 按键检测</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">三行代码实现按键的长短按检测</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 22, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">1.3k</span>&emsp;
+            预计阅读时间: <span class="post-count">5</span> min
+          </div>       
+        </header>
+          <div class="page-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<h2 id="话不多说直接上代码"><a class="markdownIt-Anchor" href="#话不多说直接上代码"></a> 话不多说直接上代码</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">uchar cont,trg;    <span class="comment">//triger触发 continue连续</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">KeyScan</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	uchar ReadData =  PINB^<span class="number">0xff</span>;</span><br><span class="line">	trg = ReadData &amp; (ReadData^cont);</span><br><span class="line">	cont = ReadData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就完事了，灰常的amzing啊。</p>
+<h2 id="尝试理解"><a class="markdownIt-Anchor" href="#尝试理解"></a> 尝试理解</h2>
+<p>首先我们要理解<code>PINB</code>，这里的<code>PINB</code>指的是我们的单片机GPIOB的所有Pin的端口数据，而每个端口的数据（高/低——1/0）对应1个bit位。例如某单片机有八个端口只有端口0为高，其余皆为低，则PINB=0000 0001。在STM32Hal库中，我们可以这样实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint8_t</span> <span class="title function_">KeyBit</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="type">uint8_t</span> keybit = <span class="number">0x00</span>;</span><br><span class="line">    <span class="comment">//读取B1的电平状态并把他左移到bit0位</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//同上</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="number">2</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">return</span> keybit; </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="取反"><a class="markdownIt-Anchor" href="#取反"></a> 取反</h3>
+<p>第一行代码就相当于是取反操作，使没有按键按下时data始终为0x00。</p>
+<p>注意，不一定就是异或0xff，按照上面的hal库方法，你的PINB变量实际上只有四位有效位，为了让没有按键按下时data为0x00，我们异或0x0f即可，或者将keybit初始化为0xf0然后异或0xff；而有时GPIO输入接了下拉，没有输入的情况本来就是0，这时就不需要再取反。反正就是要让它没有按键按下时等于0x00。</p>
+<details>
+<summary>点击即看异或真值表</summary>
+<p>与0异或不变，与1异或取反</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>A ⊕ B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h3 id="单击按下"><a class="markdownIt-Anchor" href="#单击按下"></a> 单击按下</h3>
+<p>第一次PB0按下的情况<br />
+端口数据原本为0xfe，ReadData读端口并且取反，变为 0x01 （第一行）。<br />
+因为这是第一次按下，所以Cont是上次的值，应为为0。与0异或不改变原有值，那么第二行执行的实际是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Trg = 0x01 &amp; (0x01^0x00) = 0x01  </span><br></pre></td></tr></table></figure>
+<p>将cont赋值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cont = ReadData = 0x01</span><br></pre></td></tr></table></figure>
+<p>结果就是：</p>
+<ul>
+<li>ReadData ＝ 0x01</li>
+<li>Trg ＝ 0x01</li>
+<li>Cont ＝ 0x01</li>
+</ul>
+<h3 id="按下后还没有完全松开引申到长按"><a class="markdownIt-Anchor" href="#按下后还没有完全松开引申到长按"></a> 按下后还没有完全松开（引申到长按）</h3>
+<p>此时程序依然在执行。</p>
+<ul>
+<li>第一行：不变，依然为0x01。</li>
+<li>第二行：操作为——把检测到的按下按钮对应的bit为给置0了，让Trg等于0了</li>
+<li>第三行：不变，依然为0x01。</li>
+</ul>
+<p>我们可以看到唯一变了的地方就是Trg被置0了。</p>
+<h3 id="完全松开"><a class="markdownIt-Anchor" href="#完全松开"></a> 完全松开</h3>
+<p>很好理解，肯定全为0x00了。</p>
+<h3 id="笔者的思考"><a class="markdownIt-Anchor" href="#笔者的思考"></a> 笔者的思考</h3>
+<p>该代码的核心思路我认为是用三种不同的数据内容代表不同的三种情况（未按下、单按、长按）按照这种思路，我们甚至还可以扩展。</p>
+<p><code>ReadData</code>存储原始的端口电平数据，不能改变。后续的两个数据都会基于这个原始数据。<br />
+<code>Trg</code> 用于按键触发。<code>ReadData</code>中有bit位有上升沿时，Trg会记录这个上升沿：只有bit从0变为1，Trg才会置1。按下判断的条件是：<code>Trg</code>、<code>Cont</code>均为1。<br />
+<code>Cont</code> 用于长按。长按的判断条件是：<code>Trg</code>为0的情况下<code>Cont</code>依然为1。</p>
+<p>这样的思路让我联想到了3-8译码器的巧妙设计，通过3个值的输入，可以得到8个值的输出，用3个值就可以为8个不同的情况进行处理。</p>
+<h2 id="在stm32中使用"><a class="markdownIt-Anchor" href="#在stm32中使用"></a> 在STM32中使用</h2>
+<p>附上我的使用方法，我使用的是<a href="http://im.godmao.top/posts/39448/">时间片轮询架构</a>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B1 0x01</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B2 0x02</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B3 0x04</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> B4 0x08</span></span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">KeyBit</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">uint8_t</span> keybit = <span class="number">0x00</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//读取B1的电平状态并把他左移到bit0位</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//同上</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="number">2</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> keybit;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">KeyFuc</span><span class="params">(<span class="type">void</span>)</span>&#123;<span class="comment">//按键逻辑</span></span><br><span class="line"></span><br><span class="line">    <span class="type">static</span> <span class="type">uint8_t</span> i = <span class="number">0</span>;                           <span class="comment">//长按时间计数器</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//核心代码：三行代码完成按键单、长按检测</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> ReadData = KeyBit() ^ <span class="number">0x0f</span>;       <span class="comment">// 取反：在没有按键按下的情况下，其始终为0x00</span></span><br><span class="line"></span><br><span class="line">    Trg = ReadData &amp; (ReadData ^ Cont);             <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line">    Cont = ReadData;                                <span class="comment">// 3                        </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(Trg &amp;&amp; Cont)&#123;<span class="comment">//单击逻辑      </span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span>(Trg)&#123;                            </span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> B4: Key4_Fuc();<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> B3: Key3_Fuc();<span class="keyword">break</span>;          </span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> B2: Key2_Fuc();<span class="keyword">break</span>;          </span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> B1: Key1_Fuc();<span class="keyword">break</span>;  </span><br><span class="line"></span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(Cont &amp;&amp; <span class="number">0</span> == Trg) i++;<span class="comment">//以下为长按逻辑</span></span><br><span class="line">    <span class="keyword">else</span> i = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(i &gt;= <span class="number">20</span>)&#123;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span>(Cont)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> B3: Key3_Fuc_Preesed();<span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="关于消抖问题"><a class="markdownIt-Anchor" href="#关于消抖问题"></a> 关于消抖问题</h2>
+<p>不知道为什么，按理来说是需要消抖的，但是实际跑起来的时候没有消抖也非常稳，，，可能是我的程序执行时间比较长？？？只够执行一次就调度了？</p>
+<p>关于消抖我还没有实际上机跑过，但是也写一下，Deepseek写的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> DEBOUNCE_TIME 1 <span class="comment">//消抖时间参数，根据时间片的时间来设定</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">    KEY_STATE_IDLE,<span class="comment">//空闲</span></span><br><span class="line">    KEY_STATE_PRESSED,<span class="comment">//按下</span></span><br><span class="line">    KEY_STATE_RELEASED<span class="comment">//松开</span></span><br><span class="line">&#125; KeyState;</span><br><span class="line"></span><br><span class="line">KeyState key_state = KEY_STATE_IDLE;</span><br><span class="line"></span><br><span class="line"><span class="type">uint16_t</span> debounce_timer = ?;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">KeyScan</span><span class="params">()</span> &#123;</span><br><span class="line">    uchar ReadData = PINB ^ <span class="number">0xff</span>;</span><br><span class="line">    uchar new_trg = ReadData &amp; (ReadData ^ cont);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (key_state) &#123;</span><br><span class="line">        <span class="keyword">case</span> KEY_STATE_IDLE:</span><br><span class="line">            <span class="keyword">if</span> (new_trg != <span class="number">0</span>) &#123; <span class="comment">// 检测到按键变化</span></span><br><span class="line">                key_state = KEY_STATE_PRESSED;</span><br><span class="line">                debounce_timer = DEBOUNCE_TIME;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> KEY_STATE_PRESSED:</span><br><span class="line">            <span class="keyword">if</span> (debounce_timer &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                debounce_timer --;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (ReadData == (PINB ^ <span class="number">0xff</span>)) &#123; <span class="comment">// 确认按键状态</span></span><br><span class="line">                    trg = new_trg;</span><br><span class="line">                    cont = ReadData;</span><br><span class="line">		    <span class="keyword">if</span>(trg &amp;&amp; cont)&#123;</span><br><span class="line">			<span class="comment">/*写单击逻辑*/</span></span><br><span class="line">		    &#125;</span><br><span class="line">                    key_state = KEY_STATE_RELEASED;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    key_state = KEY_STATE_IDLE;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> KEY_STATE_RELEASED:</span><br><span class="line">            <span class="keyword">if</span> (new_trg == <span class="number">0</span>) &#123; <span class="comment">// 等待按键释放</span></span><br><span class="line">                key_state = KEY_STATE_IDLE;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div>          
+          <nav class="post-nav">
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/58440/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">嵌入式模块化设计中的数据共享优化方案</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+    <small class="footer_copyright">
+      <div id="bottom-inner">
+        © Site by 茂神·g0dma0 
+        <br>
+        <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
+        <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/fonts/jhlst/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002">京華老宋体</a> & <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/">中文网字支持计划</a>
+        <br>
+        始于2025.
+        
+      </div>
+    </small>
+  </footer>
+  
+  
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":10},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"其他","value":2}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":10},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"其他","value":2}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":4,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":10,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+</html>

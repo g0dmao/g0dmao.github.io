@@ -66,7 +66,7 @@ body {
   background: 
     /* 使用 linear-gradient 和背景图结合 */
     linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
-    url('/img/god.png');
+    url('/img/girlkni.png');
     /* 背景图像居中 */
     background-position: center center;
     /* 背景图不平铺 */
@@ -1207,7 +1207,7 @@ body[data-theme=dark] {
   background: 
     /* 使用 linear-gradient 和背景图结合 */
     linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
-    url('/img/god.png');
+    url('/img/girlkni.png');
     /* 背景图像居中 */
     background-position: center center;
     /* 背景图不平铺 */
@@ -1636,12 +1636,16 @@ span.page-number.current{
   color: #3498db;
 }
 
-.hexo-tips-layout p{
-  color: #000;
+.hexo-tips-layout{
+  background-color: var(--tips-light-bg);
+}
+body[data-theme=dark] .hexo-tips-layout{
+  background-color: var(--tips-dark-bg);
 }
 
 .footnote-item{
   font-size: 13px;
+  margin-top: 23px;
 }
 .footnotes ol li::before{
   content: counter(list-counter);

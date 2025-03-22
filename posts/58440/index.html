@@ -1,0 +1,953 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>嵌入式模块化设计中的数据共享优化方案 [ g0dMa0&#39;s Blog ]</title>
+
+  <link rel="icon" href="/img/apple-touch-icon.png">
+
+
+    <meta name="author" content="茂神·g0dma0">
+
+
+    <meta name="subtitle" content="欢迎。Welcome.">
+
+
+
+
+  <link rel="alternate" href="/atom.xml " title="g0dMa0&#39;s Blog" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+<script defer>
+  document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState == 'hidden') {
+      normal_title = document.title;
+      document.title = '点一下';
+  } else document.title = normal_title;
+});
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+    
+    <div id="loading">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+    </script>
+       
+  <div class="navbar" role="navigation">
+    <nav class="menu">
+      <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+      <label for="menu-trigger">
+        <span class="menu-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
+        </span>
+      </label>
+      <a id="mode">
+        <svg
+          class="mode-sunny"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>LIGHT</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+        <svg
+          class="mode-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>DARK</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+      </a>
+      <div class="trigger">
+        <div class="trigger-container">
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/"> 主页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/Tags/"> 标签</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/categories/"> 类别</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/archives/"> 档案馆</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/LandingPage/"> 引导页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/about/"> 关于</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%90%E5%87%BA"><span class="toc-text"> 问题的提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E4%BB%80%E4%B9%88%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88%E5%90%97"><span class="toc-text"> 有什么更好的方案吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%B0%81%E8%A3%85%E6%8C%87%E9%92%88%E4%BC%A0%E9%80%92"><span class="toc-text"> 结构体封装+指针传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h%E6%96%87%E4%BB%B6"><span class="toc-text"> .h文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c%E6%96%87%E4%BB%B6"><span class="toc-text"> .c文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%85%B6%E4%BB%96%E6%A8%A1%E5%9D%97%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text"> 在其他模块中使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%87%BD%E6%95%B0%E6%8F%90%E4%BE%9B%E8%AF%BB%E5%8F%96%E5%92%8C%E4%BF%AE%E6%94%B9%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="toc-text"> 通过函数提供读取和修改的接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h%E6%96%87%E4%BB%B6-2"><span class="toc-text"> .h文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c%E6%96%87%E4%BB%B6-2"><span class="toc-text"> .c文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%85%B6%E4%BB%96%E6%A8%A1%E5%9D%97%E4%B8%AD%E4%BD%BF%E7%94%A8-2"><span class="toc-text"> 在其他模块中使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%94%E5%90%88%E8%B5%B7%E6%9D%A5"><span class="toc-text"> 联合起来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%96%E5%9D%91"><span class="toc-text"> 挖坑</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/Tags/%E9%99%8D%E4%BD%8E%E8%80%A6%E5%90%88/" class="tag"># 降低耦合</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">嵌入式模块化设计中的数据共享优化方案</h1>
+          <div class="post-meta">
+            最后更新: <time>3月 22, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>&emsp;
+            字数: <span class="post-count">985</span>&emsp;
+            预计阅读时间: <span class="post-count">3</span> min
+          </div>       
+        </header>
+          <div class="page-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<h2 id="问题的提出"><a class="markdownIt-Anchor" href="#问题的提出"></a> 问题的提出</h2>
+<p>在嵌入式项目中，模块化每个功能有利于管理和理清开发思路，但是，当我们需要将模块联动起来的时候，需要一些必要的变量以实现两个模块之间的互相配合，最常见的方法是使用全局变量，但这样做使模块间耦合性<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>大大提高了。</p>
+<h2 id="有什么更好的方案吗"><a class="markdownIt-Anchor" href="#有什么更好的方案吗"></a> 有什么更好的方案吗</h2>
+<p>有的兄弟有的。只不过要牺牲一些效率（需要通过接口访问）。我们可以为共享变量建立一个专门的.c/.h文件，例如<code>SharedData.c/.h</code>。<br />
+这个文件集中管理模块间的共享变量。这样做结构清晰，每个模块<strong>只依赖 <code>SharedData.h</code>，而不是彼此依赖</strong>\ <br />
+同时我们通过两种方法使需要访问变量的模块成功读取或修改变量：</p>
+<ul>
+<li>结构体封装+指针传递</li>
+<li>通过函数提供读取和修改的接口</li>
+</ul>
+<h2 id="结构体封装指针传递"><a class="markdownIt-Anchor" href="#结构体封装指针传递"></a> 结构体封装+指针传递</h2>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-recommend tips-style-recommend">
+                        <div class="icon">👍</div>
+                        <div class="content"></p>
+<ul>
+<li>共享变量较多时非常好用。</li>
+<li><strong>隐藏全局变量</strong>，外部模块无法直接访问共享数据而是通过指针，安全性高。</li>
+<li>更好扩展。</li>
+<li>方便，无需为每个变量都写函数接口以提供修改与读取。</li>
+<li><strong>访问速度快</strong>。</li>
+</ul>
+<p></div>
+                    </div>
+                </p>
+<h3 id="h文件"><a class="markdownIt-Anchor" href="#h文件"></a> .h文件</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SHARED_DATA_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SHARED_DATA_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> sensor_value;</span><br><span class="line">    <span class="type">int</span> motor_speed;</span><br><span class="line">&#125; SharedData;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只提供获取指针的接口，而不是直接暴露变量</span></span><br><span class="line">SharedData* <span class="title function_">get_shared_data</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="c文件"><a class="markdownIt-Anchor" href="#c文件"></a> .c文件</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;shared_data.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> SharedData system_data = &#123;<span class="number">0</span>, <span class="number">0</span>&#125;; <span class="comment">// 只在本文件可见</span></span><br><span class="line"></span><br><span class="line">SharedData* <span class="title function_">get_shared_data</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;system_data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在其他模块中使用"><a class="markdownIt-Anchor" href="#在其他模块中使用"></a> 在其他模块中使用</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;shared_data.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">moduleA_update</span><span class="params">()</span> &#123;</span><br><span class="line">    SharedData *data = get_shared_data();</span><br><span class="line">    data-&gt;sensor_value += <span class="number">10</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>不推荐将<strong>接收共享变量的指针的变量</strong>定义为全局变量。尽管这样会方便一些。<strong>指针可能被多个模块修改</strong>，导致指向无效地址（增加 bug 风险）。推荐在每个函数内部通过接口访问变量。如果一定要这样做，请一定避免空指针（记住初始化指针）</p>
+<p></div>
+                    </div>
+                </p>
+<p>使用全局指针示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> SharedData *data;  <span class="comment">// 仅限当前文件访问</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">moduleA_init</span><span class="params">()</span> &#123;</span><br><span class="line">    data = get_shared_data();<span class="comment">//避免空指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="通过函数提供读取和修改的接口"><a class="markdownIt-Anchor" href="#通过函数提供读取和修改的接口"></a> 通过函数提供读取和修改的接口</h2>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-recommend tips-style-recommend">
+                        <div class="icon">👍</div>
+                        <div class="content"></p>
+<ul>
+<li><strong>灵活访问变量。你可以严格控制对数据的访问，如只读、避免非法值写入等；同时也可以自定义访问方法，如按位读取。非常的好用。</strong></li>
+<li>可扩展性强。</li>
+</ul>
+<p></div>
+                    </div>
+                </p>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-error tips-style-error">
+                        <div class="icon">❌</div>
+                        <div class="content"></p>
+<ul>
+<li>代码冗长，调用花销稍大。</li>
+<li>变量太多时需要为每个变量都写接口，太麻烦。所以才要和上面的方法联合起来使用，只为必要的变量编写接口，其余通过第一种方法访问。</li>
+</ul>
+<p></div>
+                    </div>
+                </p>
+<h3 id="h文件-2"><a class="markdownIt-Anchor" href="#h文件-2"></a> .h文件</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> SHARED_DATA_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SHARED_DATA_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setSensorValue</span><span class="params">(<span class="type">int</span> value)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">getSensorValue</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setMotorSpeed</span><span class="params">(<span class="type">int</span> speed)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">getMotorSpeed</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="c文件-2"><a class="markdownIt-Anchor" href="#c文件-2"></a> .c文件</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;shared_data.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> sensor_value = <span class="number">0</span>;</span><br><span class="line"><span class="type">static</span> <span class="type">int</span> motor_speed = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setSensorValue</span><span class="params">(<span class="type">int</span> value)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (value &gt;= <span class="number">0</span>) &#123;  <span class="comment">// 限制非法值</span></span><br><span class="line">        sensor_value = value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getSensorValue</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> sensor_value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setMotorSpeed</span><span class="params">(<span class="type">int</span> speed)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (speed &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        motor_speed = speed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">getMotorSpeed</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> motor_speed;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="在其他模块中使用-2"><a class="markdownIt-Anchor" href="#在其他模块中使用-2"></a> 在其他模块中使用</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;shared_data.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">moduleA_update</span><span class="params">()</span> &#123;</span><br><span class="line">    setSensorValue(getSensorValue() + <span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="联合起来"><a class="markdownIt-Anchor" href="#联合起来"></a> 联合起来</h2>
+<p>将两种方式联合起来使用——大部分变量，我们使用指针接口访问即可；如果有些变量需要一些个性化要求，我们为这些变量编写定制的接口就好。</p>
+<h2 id="挖坑"><a class="markdownIt-Anchor" href="#挖坑"></a> 挖坑</h2>
+<p>降低耦合性的方法还有使用单例模式，以及RTOS中的消息/事件机制。后续研究。</p>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>代码耦合性（Coupling）是指模块或组件之间的依赖程度。如果代码耦合性很高，模块之间会紧密依赖，导致代码难以维护、扩展和测试。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</div>          
+          <nav class="post-nav">
+    
+    <a class="post-nav-item post-nav-prev" href="/posts/862/">
+      <div class="nav-arrow">&lt;&nbsp;NEWER</div>
+      <span class="post-title">三行代码实现按键的长短按检测</span>
+    </a>
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/18285/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">串口重定向的非阻塞方法</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+    <small class="footer_copyright">
+      <div id="bottom-inner">
+        © Site by 茂神·g0dma0 
+        <br>
+        <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
+        <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/fonts/jhlst/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002">京華老宋体</a> & <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/">中文网字支持计划</a>
+        <br>
+        始于2025.
+        
+      </div>
+    </small>
+  </footer>
+  
+  
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":10},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"其他","value":2}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":10},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"其他","value":2}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":4,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":10,"path":"嵌入式"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+</html>
