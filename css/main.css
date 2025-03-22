@@ -334,6 +334,7 @@ table th,
 table td,
 table tr {
   padding: 2px 7px;
+  text-align: center;
 }
 
 .post-item:after, .navbar:after, .wrapper:after {
