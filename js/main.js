@@ -1,4 +1,6 @@
+
 (() => {
+  
   // Theme switch
   const body = document.body;
   const lamp = document.getElementById("mode");
@@ -69,6 +71,8 @@ window.onscroll = function () {
 toTopBtn.addEventListener('click',function(){
   window.scrollTo({ top: 0, behavior: 'smooth' });
 })
+
+
 
 
 

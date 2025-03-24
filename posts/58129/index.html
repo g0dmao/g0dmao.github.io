@@ -57,7 +57,6 @@
       
       setTimeout(() => body.classList.remove("notransition"), 75);
     </script>
-       
   <div class="navbar" role="navigation">
     <nav class="menu">
       <input type="checkbox" id="menu-trigger" class="menu-trigger" />
@@ -639,6 +638,12 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+  document.body.classList.add('loaded');
+  });
+
+  </script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
         
         <script>
@@ -820,7 +825,7 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"iic","value":2}],
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -834,7 +839,7 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"iic","value":2}].map(tag => tag.name),
+                            data: [{"name":"嵌入式","value":9},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         }
                     });

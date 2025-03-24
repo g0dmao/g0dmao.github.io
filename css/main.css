@@ -1564,6 +1564,7 @@ span.comment {
 
 .wrapper.post{
   backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
+  
 }
 
 /* 防剧透插件 */
@@ -1575,8 +1576,8 @@ span.spoiler:hover{
   color: black !important
 }
 body[data-theme=dark] span.spoiler{
-  background-color: #040c60;
-  color: #040c60;
+  background-color: #1b1d25;
+  color: #1b1d25;
 }
 
 body[data-theme=dark] span.spoiler:hover{
@@ -1637,4 +1638,176 @@ a:hover::after {
 }
 
 
+
+/* 归档容器 */
+.archive-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0rem 1rem;
+}
+
+.archive-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+/* 按月归档 */
+.monthly-archives {
+  margin-top: 2rem;
+}
+
+.archive-month-group {
+  margin-bottom: 2.5rem;
+}
+
+.archive-month-title {
+  font-size: 1.5rem;
+  color: #444;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-count {
+  font-size: 1rem;
+  color: #999;
+  font-weight: normal;
+}
+
+/* 文章列表 */
+.archive-post-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.archive-post-item {
+  margin-bottom: 1.2rem;
+  padding: 0.8rem 1rem;
+  background: #fafafa;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+body[data-theme=dark] .archive-post-item{
+  background:#1b1d25;
+}
+
+.archive-post-item:hover {
+  background: #f5f5f5;
+  transform: translateX(5px);
+}
+
+.post-date {
+  display: inline-block;
+  width: 5rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.post-title {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.post-title:hover {
+  color: #2196F3;
+}
+
+/* 标签样式 */
+.post-tags {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.post-tags .tag {
+  font-size: 0.8rem;
+  color: #888;
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+
+.post-tags .tag:hover {
+  color: #2196F3;
+}
+
+.archive-month-group {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 为每个月份添加延迟动画 */
+.archive-month-group:nth-child(1) { animation-delay: 0.1s; }
+.archive-month-group:nth-child(2) { animation-delay: 0.2s; }
+.archive-month-group:nth-child(3) { animation-delay: 0.3s; }
+/* 以此类推... */
+
+/* 年份折叠样式 */
+.archive-year-group {
+  margin-bottom: 2rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.year-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.archive-year-title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.year-toggle {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.year-toggle:hover {
+  background: #0d8bf2;
+}
+
+.year-content {
+  padding: 0 1rem;
+  transition: all 0.3s ease;
+}
+
+.year-content.collapsed {
+  display: none;
+}
+
+
+/* 设置页面的初始透明度 */
+body {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* 页面加载完成时，淡入显示 */
+body.loaded {
+  opacity: 1;
+}
 
