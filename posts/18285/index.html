@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text"> 常用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%81%9A%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text"> 这样做的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%9A%84%E6%96%B9%E5%BC%8F%E7%81%B5%E6%B4%BB%E8%BF%90%E7%94%A8dma"><span class="toc-text"> 使用非阻塞的方式：灵活运用DMA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 1. 定义缓冲区。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E5%AE%9A%E5%90%91-fputc%E4%BD%BF%E7%94%A8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 2. 重定向 fputc()，使用缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89dma-%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-text"> 3. 定义DMA 发送函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-dma-%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83"><span class="toc-text"> 4. DMA 传输完成回调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E6%83%91%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="toc-text"> 一些疑惑的解答</span></a></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/STM32/" class="tag"># STM32</a><a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/Tags/%E4%B8%B2%E5%8F%A3/" class="tag"># 串口</a>
+            <a href="/tags/STM32/" class="tag"># STM32</a><a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/tags/%E4%B8%B2%E5%8F%A3/" class="tag"># 串口</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">串口重定向的非阻塞方法</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 17, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">761</span>&emsp;
-            预计阅读时间: <span class="post-count">3</span> min
+            </span>
+            字数: <span class="post-count">761</span>
+            预计阅读时间: <span class="post-count">3min</span> 
           </div>       
         </header>
           <div class="page-content"><details>

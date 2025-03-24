@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -284,16 +275,13 @@
     </nav>
   </div>
   
- 
-
 <div class="wrapper">
   <header class="header">
     <h1 class="header-title center">about</h1>
   </header>
   
-    
     <main class="page-content" aria-label="Content">
-      <div class="post">        
+    <div class="post">        
         <h2 id="这个人很神秘什么也不愿意说"><a class="markdownIt-Anchor" href="#这个人很神秘什么也不愿意说"></a> 这个人很神秘,什么也不愿意说…</h2>
 <p><em><strong>可公开情报</strong></em></p>
 <ul>
@@ -317,7 +305,7 @@
 <li>[x] 为添加加载动画</li>
 </ul>
 
-      </div>
+    </div>
          <div class="dis">
     
      
@@ -325,8 +313,6 @@
   </div>
     </main>
     
-  
-  
 </div>
 
 

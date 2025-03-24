@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E6%88%AA%E5%9B%BE"><span class="toc-text"> 网站截图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%84%9F%E8%B0%A2"><span class="toc-text"> 感谢</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-text"> 后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#to-do"><span class="toc-text"> TO DO</span></a></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/%E7%BD%91%E9%A1%B5/" class="tag"># 网页</a><a href="/Tags/web/" class="tag"># web</a>
+            <a href="/tags/%E7%BD%91%E9%A1%B5/" class="tag"># 网页</a><a href="/tags/web/" class="tag"># web</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">属于自己的引导页</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 09, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">280</span>&emsp;
-            预计阅读时间: <span class="post-count">1</span> min
+            </span>
+            字数: <span class="post-count">280</span>
+            预计阅读时间: <span class="post-count">1min</span> 
           </div>       
         </header>
           <div class="page-content"><h2 id="网站截图"><a class="markdownIt-Anchor" href="#网站截图"></a> 网站截图</h2>

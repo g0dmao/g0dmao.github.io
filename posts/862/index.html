@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81"><span class="toc-text"> 话不多说直接上代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3"><span class="toc-text"> 尝试理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-text"> 取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%87%BB%E6%8C%89%E4%B8%8B"><span class="toc-text"> 单击按下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E5%90%8E%E8%BF%98%E6%B2%A1%E6%9C%89%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80%E5%BC%95%E7%94%B3%E5%88%B0%E9%95%BF%E6%8C%89"><span class="toc-text"> 按下后还没有完全松开（引申到长按）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80"><span class="toc-text"> 完全松开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%80%85%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-text"> 笔者的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text"> 在STM32中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B6%88%E6%8A%96%E9%97%AE%E9%A2%98"><span class="toc-text"> 关于消抖问题</span></a></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" class="tag"># 按键检测</a>
+            <a href="/tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" class="tag"># 按键检测</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">三行代码实现按键的长短按检测</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 22, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">1.3k</span>&emsp;
-            预计阅读时间: <span class="post-count">5</span> min
+            </span>
+            字数: <span class="post-count">1.3k</span>
+            预计阅读时间: <span class="post-count">5min</span> 
           </div>       
         </header>
           <div class="page-content"><details>

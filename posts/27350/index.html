@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E5%BF%AB%E9%97%A8"><span class="toc-text"> 认识快门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%BF%AB%E9%97%A8"><span class="toc-text"> 安全快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%80%9F%E5%BF%AB%E9%97%A8"><span class="toc-text"> 高速快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8E%E9%80%9F%E5%BF%AB%E9%97%A8"><span class="toc-text"> 低速快门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%97%A8%E4%BC%98%E5%85%88tvs"><span class="toc-text"> 快门优先（TV&#x2F;S）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-text"> 练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E5%85%89%E5%9C%88"><span class="toc-text"> 认识光圈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E5%BD%B1%E5%93%8D%E8%BF%9B%E5%85%89%E9%87%8F"><span class="toc-text"> 光圈影响进光量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E5%BD%B1%E5%93%8D%E6%99%AF%E6%B7%B1"><span class="toc-text"> 光圈影响景深</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E7%94%BB%E8%B4%A8%E5%85%89%E5%9C%88"><span class="toc-text"> 最佳画质光圈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E5%9C%88%E4%BC%98%E5%85%88ava"><span class="toc-text"> 光圈优先（AV&#x2F;A）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0-2"><span class="toc-text"> 练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86%E6%84%9F%E5%85%89%E5%BA%A6iso"><span class="toc-text"> 认识感光度（ISO）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iso%E5%BD%B1%E5%93%8D%E7%94%BB%E8%B4%A8%E5%99%AA%E7%82%B9"><span class="toc-text"> ISO影响画质（噪点）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0%E7%9A%84%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8"><span class="toc-text"> 曝光三要素的结合使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%98%B3%E5%85%89%E7%81%BF%E7%83%82%E7%9A%84%E4%B8%AD%E5%8D%88%E6%8B%8D%E6%91%84%E6%9C%89%E8%99%9A%E5%8C%96%E6%95%88%E6%9E%9C%E7%9A%84%E5%B0%8F%E8%8A%B1"><span class="toc-text"> 在一个阳光灿烂的中午拍摄有虚化效果的小花</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%8D%E6%91%84%E4%BA%BA%E5%9C%A8%E5%A4%9C%E6%99%9A%E8%B7%91%E6%AD%A5"><span class="toc-text"> 拍摄人在夜晚跑步</span></a></li></ol></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" class="tag"># 摄影基础</a><a href="/Tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="tag"># 学习笔记</a><a href="/Tags/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/" class="tag"># 曝光三要素</a>
+            <a href="/tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" class="tag"># 摄影基础</a><a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="tag"># 学习笔记</a><a href="/tags/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/" class="tag"># 曝光三要素</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">曝光三要素</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 09, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">1.1k</span>&emsp;
-            预计阅读时间: <span class="post-count">3</span> min
+            </span>
+            字数: <span class="post-count">1.1k</span>
+            预计阅读时间: <span class="post-count">3min</span> 
           </div>       
         </header>
           <div class="page-content"><p>教程及截图来自b站： <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1DQiyYkEJC/">https://www.bilibili.com/video/BV1DQiyYkEJC/</a></p>

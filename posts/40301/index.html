@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%95%99%E7%A8%8B"><span class="toc-text"> 第一个教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%9B%BE%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="toc-text"> 构图的核心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%8F%96%E6%99%AF%E8%8C%83%E5%9B%B4"><span class="toc-text"> 如何选择合适的取景范围？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E7%94%BB%E9%9D%A2%E6%9B%B4%E5%8A%A0%E5%90%B8%E5%BC%95%E4%BA%BA%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text"> 让画面更加吸引人的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%9E%84%E5%9B%BE%E6%8A%80%E5%B7%A7%E8%A6%81%E5%92%8C%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%8A%80%E5%B7%A7%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8"><span class="toc-text"> 常用的构图技巧（要和上面的技巧综合运用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%BB%E9%9D%A2%E7%9A%84%E5%B9%B3%E8%A1%A1"><span class="toc-text"> 画面的平衡</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%95%99%E7%A8%8B"><span class="toc-text"> 第二个教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%9E%84%E5%9B%BE"><span class="toc-text"> 第一阶段：形式的构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%E7%BB%93%E6%9E%84%E6%9E%84%E5%9B%BE"><span class="toc-text"> 第二阶段：结构构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%E5%BF%98%E6%8E%89%E6%9E%84%E5%9B%BE%E4%B8%93%E6%B3%A8%E4%BA%8E%E7%94%BB%E9%9D%A2%E5%86%85%E5%AE%B9%E4%B8%8E%E4%B8%BB%E9%A2%98%E8%BF%94%E7%92%9E%E5%BD%92%E7%9C%9F"><span class="toc-text"> 第三阶段：忘掉构图，专注于画面内容与主题，返璞归真</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text"> 总结</span></a></li></ol></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" class="tag"># 摄影基础</a><a href="/Tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="tag"># 学习笔记</a><a href="/Tags/%E6%9E%84%E5%9B%BE/" class="tag"># 构图</a>
+            <a href="/tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" class="tag"># 摄影基础</a><a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="tag"># 学习笔记</a><a href="/tags/%E6%9E%84%E5%9B%BE/" class="tag"># 构图</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">构图</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 09, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">607</span>&emsp;
-            预计阅读时间: <span class="post-count">2</span> min
+            </span>
+            字数: <span class="post-count">607</span>
+            预计阅读时间: <span class="post-count">2min</span> 
           </div>       
         </header>
           <div class="page-content"><h1 id="第一个教程"><a class="markdownIt-Anchor" href="#第一个教程"></a> 第一个教程</h1>

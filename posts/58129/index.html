@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E8%AE%BE%E7%BD%AE"><span class="toc-text"> 通道设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%A8%A1%E5%BC%8F%E8%AE%BE%E7%BD%AE"><span class="toc-text"> 主模式设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#custom-timing"><span class="toc-text"> Custom Timing</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text"> 使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4"><span class="toc-text"> 配置步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text"> 注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9C%8B%E5%AE%8C%E4%BB%A5%E5%90%8E%E5%8F%91%E7%8E%B0%E6%88%91%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8%E5%95%8A"><span class="toc-text"> 看完以后发现我还是不会用啊，，，，，</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#timing"><span class="toc-text"> Timing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#risetimefalltimecoefficient-of-digital-filter"><span class="toc-text"> RiseTime&#x2F;FallTime&#x2F;Coefficient of Digital Filter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#analog-filter"><span class="toc-text"> Analog Filter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E6%A8%A1%E5%BC%8F%E8%AE%BE%E7%BD%AE"><span class="toc-text"> 从模式设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clock-no-stretch-mode"><span class="toc-text"> Clock No Stretch Mode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#primary-address-length-selection"><span class="toc-text"> Primary Address Length selection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#general-call-address"><span class="toc-text"> General call address</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dual-address-acknowledged"><span class="toc-text"> Dual Address Acknowledged</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#primary-slave-address"><span class="toc-text"> Primary slave address</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 参考资料</span></a></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/STM32/" class="tag"># STM32</a><a href="/Tags/CubeMX/" class="tag"># CubeMX</a><a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/iic/" class="tag"># iic</a>
+            <a href="/tags/STM32/" class="tag"># STM32</a><a href="/tags/CubeMX/" class="tag"># CubeMX</a><a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/tags/iic/" class="tag"># iic</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">CubeMX配置功能系列：iic</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 12, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">2.5k</span>&emsp;
-            预计阅读时间: <span class="post-count">8</span> min
+            </span>
+            字数: <span class="post-count">2.5k</span>
+            预计阅读时间: <span class="post-count">8min</span> 
           </div>       
         </header>
           <div class="page-content"><details>

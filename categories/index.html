@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -284,19 +275,16 @@
     </nav>
   </div>
   
- 
-
 <div class="wrapper">
   <header class="header">
     <h1 class="header-title center">Categories</h1>
   </header>
   
-    
     <main class="page-content" aria-label="Content">
-      <div class="post">        
+    <div class="post">        
         <div id="categoriesTreeChart" style="width: 100%; height: 400px; overflow-x: auto; overflow-y: hidden;"></div>
 
-      </div>
+    </div>
          <div class="dis">
     
      
@@ -304,8 +292,6 @@
   </div>
     </main>
     
-  
-  
 </div>
 
 

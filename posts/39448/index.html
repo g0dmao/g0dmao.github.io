@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="/css/main.css">
   
 
+
 <script defer>
   document.addEventListener('visibilitychange', function () {
   if (document.visibilityState == 'hidden') {
@@ -36,6 +37,7 @@
       document.title = '点一下';
   } else document.title = normal_title;
 });
+
 </script>
   <body data-theme="light" class="notransition">
     <script defer>
@@ -54,17 +56,6 @@
       initTheme(localStorage.getItem("theme"));
       
       setTimeout(() => body.classList.remove("notransition"), 75);
-    </script>
-    
-    <div id="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("loading").style.display = "none";
-    });
     </script>
        
   <div class="navbar" role="navigation">
@@ -283,12 +274,12 @@
       </div>
     </nav>
   </div>
-  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up fa-fade" style="color: #B197FC;"></i></button>
-<button id="toggleButton"><i class="fa-solid fa-chart-bar fa-beat-fade" style="color: #74C0FC;"></i></button>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
 <div id="overlay" class="overlay">
   <div class="content">
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5"><span class="toc-text"> 引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2%E6%B3%95"><span class="toc-text"> 时间片轮询法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#talk-is-cheapshow-me-the-code"><span class="toc-text"> Talk is cheap，Show me the code.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D"><span class="toc-text"> 什么意思</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E8%B6%B3"><span class="toc-text"> 这样的方法有什么不足？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text"> 参考文章</span></a></li></ol>
-    <button id="closeButton"><i class="fa-solid fa-circle-xmark fa-spin" style="color: #FFD43B;"></i></button>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
   </div>
 </div>
 <div class="wrapper post">
@@ -476,7 +467,7 @@
       <header class="header">
         
           <div class="tags">
-            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/Tags/%E5%8D%95%E7%89%87%E6%9C%BA/" class="tag"># 单片机</a><a href="/Tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1/" class="tag"># 多任务</a><a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a>
+            <a href="/tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" class="tag"># 嵌入式</a><a href="/tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" class="tag"># 程序架构</a><a href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" class="tag"># 单片机</a><a href="/tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1/" class="tag"># 多任务</a>
           </div>
         
         <h1 class="header-title" itemprop="headline">单片机（伪）多任务处理：时间片轮询法</h1>
@@ -484,9 +475,9 @@
             最后更新: <time>3月 09, 2025</time>
             作者: <span itemprop="author">
               <span itemprop="name">茂神·g0dma0</span>
-            </span>&emsp;
-            字数: <span class="post-count">1.7k</span>&emsp;
-            预计阅读时间: <span class="post-count">6</span> min
+            </span>
+            字数: <span class="post-count">1.7k</span>
+            预计阅读时间: <span class="post-count">6min</span> 
           </div>       
         </header>
           <div class="page-content"><details>
