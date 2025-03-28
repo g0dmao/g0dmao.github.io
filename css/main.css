@@ -1562,11 +1562,6 @@ span.comment {
   color: #939393;
 }
 
-.wrapper.post{
-  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
-  
-}
-
 /* 防剧透插件 */
 span.spoiler{
   background-color: #d4d9db;
@@ -1811,3 +1806,8 @@ body.loaded {
   opacity: 1;
 }
 
+.wrapper.post{
+  backdrop-filter: blur(15px); /* 毛玻璃效果：背景模糊 */
+  transition: all 1s ease-in-out;
+  
+}
