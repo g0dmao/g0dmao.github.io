@@ -130,45 +130,25 @@ figcaption {
   text-align: center;
 }
 
-ul {
-  list-style: none;
-}
+
 ul li {
   display: list-item;
   text-align: -webkit-match-parent;
 }
-ul li::before {
-  content: "•";
-  display: inline-block;
-  top: -1px;
-  width: 1.2em;
-  position: relative;
-  margin-left: -1.3em;
-  font-weight: 700;
-}
+
 
 ol {
-  list-style: none; /* 去掉默认的序号 */
-  padding-left: 0; /* 去除内边距 */
+/* 去掉默认的序号 */
+ padding-left: 0; /* 去除内边距 */
 }
 
-ol li {
-  display: flex; /* 使用 flexbox 布局 */
-  align-items: center; /* 垂直居中对齐内容 */
-  margin-bottom: 10px; /* 为每个列表项添加下边距 */
+.content .toc li {
+ display: flex; /* 使用 flexbox 布局 */
+ align-items: center; /* 垂直居中对齐内容 */
+ margin-bottom: 10px; /* 为每个列表项添加下边距 */
 }
 
-ol li::before {
-  content: counter(list-counter) ; /* 显示计数器的值，格式为 "1 " */
-  counter-increment: list-counter; /* 增加计数器 */
-  font-weight: bold; /* 设置序号加粗 */
-  font-size: 16px; /* 设置序号字体大小 */
-  margin-right: 10px; /* 为序号和内容之间添加间距 */
-}
 
-ol {
-  counter-reset: list-counter; /* 初始化计数器 */
-}
 
 ul,
 ol {
@@ -1605,14 +1585,7 @@ body[data-theme=dark] .hexo-tips-layout{
   font-size: 13px;
   margin-top: 23px;
 }
-.footnotes ol li::before{
-  content: counter(list-counter);
-  counter-increment: list-counter;
-  font-weight:lighter;
-  font-size: 13px;
-  margin-right: 5px;
 
-}
 
 a {
   position: relative;
