@@ -1,0 +1,887 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Bold/result.css' />
+  <link rel='stylesheet' href='https://chinese-fonts-cdn.deno.dev/packages/jhlst/dist/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002/result.css' />  
+  
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[自用]16届烂桥杯嵌入式赛道模块代码整理 [ g0dMa0&#39;s Blog ]</title>
+
+  <link rel="icon" href="/img/apple-touch-icon.png">
+
+
+    <meta name="author" content="茂神·g0dma0">
+
+
+    <meta name="subtitle" content="欢迎。Welcome.">
+
+
+
+
+  <link rel="alternate" href="/atom.xml " title="g0dMa0&#39;s Blog" type="application/atom+xml">
+
+
+  
+    <link rel="stylesheet" href="/css/main.css">
+  
+
+
+<script defer>
+  document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState == 'hidden') {
+      normal_title = document.title;
+      document.title = '点一下';
+  } else document.title = normal_title;
+});
+
+</script>
+  <body data-theme="light" class="notransition">
+    <script defer>
+      const body = document.body;
+      const data = body.getAttribute("data-theme");
+      const initTheme = (state) => {
+        if (state === "dark") {
+          body.setAttribute("data-theme", "dark");
+        } else if (state === "light") {
+          body.removeAttribute("data-theme");
+        } else {
+          localStorage.setItem("theme", data);
+        }
+      };
+   
+      initTheme(localStorage.getItem("theme"));
+      
+      setTimeout(() => body.classList.remove("notransition"), 75);
+    </script>
+  <div class="navbar" role="navigation">
+    <nav class="menu">
+      <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+      <label for="menu-trigger">
+        <span class="menu-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 512 512"
+          >
+            <path
+              d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
+            />
+          </svg>
+        </span>
+      </label>
+      <a id="mode">
+        <svg
+          class="mode-sunny"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>LIGHT</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+        <svg
+          class="mode-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 512 512"
+        >
+          <title>DARK</title>
+          <line
+            x1="256"
+            y1="48"
+            x2="256"
+            y2="96"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="256"
+            y1="416"
+            x2="256"
+            y2="464"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="108.92"
+            x2="369.14"
+            y2="142.86"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="369.14"
+            x2="108.92"
+            y2="403.08"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="464"
+            y1="256"
+            x2="416"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="96"
+            y1="256"
+            x2="48"
+            y2="256"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="403.08"
+            y1="403.08"
+            x2="369.14"
+            y2="369.14"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <line
+            x1="142.86"
+            y1="142.86"
+            x2="108.92"
+            y2="108.92"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+          <circle
+            cx="256"
+            cy="256"
+            r="80"
+            style="stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+          />
+        </svg>
+      </a>
+      <div class="trigger">
+        <div class="trigger-container">
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/"> 主页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/Tags/"> 标签</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/categories/"> 类别</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/archives/"> 档案馆</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/LandingPage/"> 引导页</a>
+          
+            
+            
+            
+            
+            
+            
+            <a class="menu-link " href="/about/"> 关于</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+  <button id="toTopBtn"><i class="fa-solid fa-hand-point-up " ></i></button>
+<button id="toggleButton"><i class="fa-solid fa-chart-bar " ></i></button>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2%E8%B0%83%E5%BA%A6"><span class="toc-text"> 时间片轮询调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%91%E7%8E%87%E6%B5%8B%E9%87%8F"><span class="toc-text"> 频率测量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F"><span class="toc-text"> 共享变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%94%AE"><span class="toc-text"> 按键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lcd"><span class="toc-text"> LCD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#led"><span class="toc-text"> LED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text"> 串口重定向与数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adc%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8trgo%E4%BF%A1%E5%8F%B7%E8%A7%A6%E5%8F%91adc%E8%BD%AC%E6%8D%A2"><span class="toc-text"> ADC：使用定时器TRGO信号触发ADC转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at24c02"><span class="toc-text"> at24c02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%B9%B2%E5%98%9B%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%81%B7%E5%A1%94%E8%83%BD%E5%81%9A%E5%88%B0%E5%90%97%E5%93%87%E4%BB%96%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%90%8D%E5%88%80%E5%8F%B8%E5%91%BD%E7%8C%AB%E9%9B%B7"><span class="toc-text"> 韩信在干嘛？韩信在偷塔！能做到吗？哇他出了一个名刀·司命！猫雷！</span></a></li></ol>
+    <button id="closeButton"><i class="fa-solid fa-circle-xmark"></i></button>
+  </div>
+</div>
+<div class="wrapper post">
+  <head>
+    <!-- 引入 Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <main class="page-content" aria-label="Content">
+      <header class="header">
+        
+          <div class="tags">
+            <a href="/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" class="tag"># 蓝桥杯</a>
+          </div>
+        
+        <h1 class="header-title" itemprop="headline">[自用]16届烂桥杯嵌入式赛道模块代码整理</h1>
+          <div class="post-meta">
+            最后更新: <time>4月 10, 2025</time>
+            作者: <span itemprop="author">
+              <span itemprop="name">茂神·g0dma0</span>
+            </span>
+            字数: <span class="post-count">1.6k</span>
+            预计阅读时间: <span class="post-count">8min</span> 
+          </div>       
+        </header>
+          <div class="page-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<h2 id="时间片轮询调度"><a class="markdownIt-Anchor" href="#时间片轮询调度"></a> 时间片轮询调度</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> TaskCount = <span class="number">0</span>;<span class="comment">//用于记录任务数量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">	run,wait,stop</span><br><span class="line">&#125;TaskStatus;<span class="comment">//任务状态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	<span class="type">uint8_t</span> TaskRunTime;</span><br><span class="line">	<span class="type">uint8_t</span> TaskTimer;</span><br><span class="line">	TaskStatus Status;</span><br><span class="line">	<span class="type">void</span> (*FC)();</span><br><span class="line">&#125;TaskStrust;<span class="comment">//任务信息块：注意两点1.注意Timer和runtime的数据类型为uchar，最大为255 2.时间片为2ms</span></span><br><span class="line">TaskStrust TaskList[]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_Init</span><span class="params">(TIM_HandleTypeDef* htim)</span>&#123;</span><br><span class="line">	HAL_TIM_Base_Start_IT(htim);</span><br><span class="line">	TaskCount = <span class="keyword">sizeof</span>(TaskList)/<span class="keyword">sizeof</span>(TaskList[<span class="number">1</span>]);</span><br><span class="line">	<span class="keyword">if</span>(TaskCount &gt; MAX_TASK) <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_IT_Run</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">	<span class="type">uint8_t</span> i;</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; TaskCount;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(TaskList[i].Status == wait)&#123;</span><br><span class="line">			<span class="keyword">if</span>(++TaskList[i].TaskTimer &gt;= TaskList[i].TaskRunTime)&#123;</span><br><span class="line">				TaskList[i].TaskTimer = <span class="number">0</span>;</span><br><span class="line">				TaskList[i].Status = run;</span><br><span class="line">			&#125;		</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//自带死循环，主函数里运行</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">OS_Run</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">	<span class="type">uint8_t</span> j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(TaskList[j].Status == run)&#123;</span><br><span class="line">			TaskList[j].FC();</span><br><span class="line">			TaskList[j].Status = wait;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(++j &gt;= TaskCount) j = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="频率测量"><a class="markdownIt-Anchor" href="#频率测量"></a> 频率测量</h2>
+<p>核心思路：</p>
+<p>1/（（这一次的计数值-上一次记录的计数值）x （1/时钟频率））= 时钟频率/（记录差值）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">uint8_t</span> i;<span class="comment">//记录当前是第几次。</span></span><br><span class="line">    <span class="type">int</span> former;<span class="comment">//前一次记录的计数值</span></span><br><span class="line">    <span class="type">int</span> now;<span class="comment">//现在记录的计数值</span></span><br><span class="line">    <span class="type">int</span> result;<span class="comment">//频率结果</span></span><br><span class="line">    <span class="type">uint8_t</span> ElapsedTime;<span class="comment">//定时器溢出次数</span></span><br><span class="line">&#125;FreqInfo;</span><br><span class="line"></span><br><span class="line">reqInfo F1 = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">FreqInfo F2 = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//启动频率测量</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Freq_Start</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim3);<span class="comment">//对应F1</span></span><br><span class="line">    HAL_TIM_IC_Start_IT(&amp;htim3,TIM_CHANNEL_1);</span><br><span class="line">    HAL_TIM_Base_Start_IT(&amp;htim8);<span class="comment">//对应F2</span></span><br><span class="line">    HAL_TIM_IC_Start_IT(&amp;htim8,TIM_CHANNEL_1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">Freq_Measure</span><span class="params">(FreqInfo* Fx,TIM_HandleTypeDef *htim)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(Fx-&gt;i == <span class="number">0</span>)&#123;</span><br><span class="line">        Fx-&gt;result = <span class="number">1000000</span>/(Fx-&gt;now - Fx-&gt;former);</span><br><span class="line">        __HAL_TIM_ENABLE(htim);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Freq_Fuc</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    Freq_Measure(&amp;F1,&amp;htim3);</span><br><span class="line">	Freq_Measure(&amp;F2,&amp;htim8);</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line"><span class="comment">//中断</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_IC_CaptureCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(htim-&gt;Instance == TIM3)&#123;</span><br><span class="line">        <span class="keyword">switch</span>(F1.i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: </span><br><span class="line">                F1.former = HAL_TIM_ReadCapturedValue(&amp;htim3,TIM_CHANNEL_1) + <span class="number">65535</span> * F1.ElapsedTime;</span><br><span class="line">                F1.i = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                F1.now = HAL_TIM_ReadCapturedValue(&amp;htim3,TIM_CHANNEL_1) + <span class="number">65535</span> * F1.ElapsedTime;</span><br><span class="line">                __HAL_TIM_DISABLE(&amp;htim3);</span><br><span class="line">                F1.ElapsedTime = <span class="number">0</span>;</span><br><span class="line">                F1.i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(htim-&gt;Instance == TIM8)&#123;</span><br><span class="line">        <span class="keyword">switch</span>(F2.i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                F2.former = HAL_TIM_ReadCapturedValue(&amp;htim8,TIM_CHANNEL_1) + <span class="number">65535</span> * F2.ElapsedTime;</span><br><span class="line">                F2.i = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                F2.now = HAL_TIM_ReadCapturedValue(&amp;htim8,TIM_CHANNEL_1) + <span class="number">65535</span> * F2.ElapsedTime;</span><br><span class="line">                __HAL_TIM_DISABLE(&amp;htim8);</span><br><span class="line">                F2.ElapsedTime = <span class="number">0</span>;</span><br><span class="line">                F2.i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在溢出中断中记录溢出次数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="共享变量"><a class="markdownIt-Anchor" href="#共享变量"></a> 共享变量</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;SharedData.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//初始化</span></span><br><span class="line"><span class="type">static</span> Data1 shareddata1 = &#123;<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取Data1指针的接口</span></span><br><span class="line">Data1* <span class="title function_">get_shared_data</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;shareddata1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="按键"><a class="markdownIt-Anchor" href="#按键"></a> 按键</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint8_t</span> <span class="title function_">KeyBit</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="type">uint8_t</span> keybit = <span class="number">0x00</span>;</span><br><span class="line">    <span class="comment">//读取B1的电平状态并把他左移到bit0位</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//同上</span></span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="number">2</span>;</span><br><span class="line">    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">return</span> keybit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">task_Key</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">	<span class="type">static</span> <span class="type">uint8_t</span> Trg,Cont;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> ReadData = KeyBit() ^ <span class="number">0x0f</span>;   	<span class="comment">// 取反：在没有按键按下的情况下，其始终为0x00</span></span><br><span class="line">    Trg = ReadData &amp; (ReadData ^ Cont);             <span class="comment">// 2</span></span><br><span class="line">    Cont = ReadData; </span><br><span class="line">    <span class="keyword">if</span>(Trg &amp;&amp; Cont)&#123;&#125;;</span><br><span class="line">    <span class="keyword">if</span>(Trg &amp;&amp; Cont == <span class="number">0</span>)&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="lcd"><a class="markdownIt-Anchor" href="#lcd"></a> LCD</h2>
+<p>引脚初始化为全低就行</p>
+<h2 id="led"><a class="markdownIt-Anchor" href="#led"></a> LED</h2>
+<p>LD口 为 PD2 低电平不允许写入，高电平允许写入。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;LED.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;SharedData.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">uint16_t</span> LD_state = <span class="number">0</span>;  <span class="comment">//记录LD各位状态</span></span><br><span class="line"><span class="type">uint16_t</span> LD_state_before = <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">LED_init</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">	HAL_GPIO_WritePin(LD1_GPIO_Port,GPIO_PIN_All,GPIO_PIN_SET);</span><br><span class="line">	HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_SET);</span><br><span class="line">	HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_RESET);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">LED_lightLD</span><span class="params">(<span class="type">uint8_t</span> LDnum)</span>&#123;</span><br><span class="line">		</span><br><span class="line">	LD_state |= (LD1_Pin &lt;&lt; LDnum); <span class="comment">//其他位不变，需要改变的位变为1</span></span><br><span class="line">		</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">LED_closeLD</span><span class="params">(<span class="type">uint8_t</span> LDnum)</span>&#123; </span><br><span class="line"></span><br><span class="line">	LD_state &amp;= ~(LD1_Pin &lt;&lt; LDnum); <span class="comment">//其他位不变，需改变的位变为0</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Call_ChangeLD</span><span class="params">(<span class="type">void</span>(*fc)(<span class="type">uint8_t</span>),<span class="type">uint8_t</span> LDnum)</span>&#123;</span><br><span class="line">	</span><br><span class="line">	LDnum -= <span class="number">1</span>;</span><br><span class="line">	fc(LDnum);</span><br><span class="line">	<span class="keyword">if</span>(LD_state_before != LD_state)&#123;</span><br><span class="line">		HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_SET);</span><br><span class="line">		HAL_GPIO_WritePin(LD1_GPIO_Port,GPIO_PIN_All,GPIO_PIN_SET);</span><br><span class="line">		HAL_GPIO_WritePin(LD1_GPIO_Port,LD_state,GPIO_PIN_RESET);</span><br><span class="line">		HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_RESET);</span><br><span class="line">		LD_state_before = LD_state;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">LED_Fuc</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(Read_Show_index(<span class="number">0</span>)) &#123;</span><br><span class="line">		Call_ChangeLD(LED_closeLD,<span class="number">1</span>);</span><br><span class="line">		Call_ChangeLD(LED_lightLD,<span class="number">2</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;	</span><br><span class="line">		Call_ChangeLD(LED_closeLD,<span class="number">2</span>);</span><br><span class="line">		Call_ChangeLD(LED_lightLD,<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(Read_Show_index(<span class="number">1</span>))&#123;</span><br><span class="line">		Call_ChangeLD(LED_lightLD,<span class="number">8</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> Call_ChangeLD(LED_closeLD,<span class="number">8</span>);</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="串口重定向与数据处理"><a class="markdownIt-Anchor" href="#串口重定向与数据处理"></a> 串口重定向与数据处理</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BUFFER_SIZE 50</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CMDNUM 6</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">TF1</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">TF2</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">PF1</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">PF2</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">returnF1</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">returnF2</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> rx_DataBuffer[BUFFER_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="type">char</span> tx_DataBuffer[BUFFER_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="type">char</span> cmd[BUFFER_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">uint16_t</span> tx_len = <span class="number">0</span>;  <span class="comment">// 当前缓冲区数据长度</span></span><br><span class="line"><span class="type">uint8_t</span> tx_busy = <span class="number">0</span>;  <span class="comment">// 发送状态标志</span></span><br><span class="line"></span><br><span class="line"><span class="type">uint8_t</span> rx_handle = <span class="number">0</span>; <span class="comment">//处理接收数据标志</span></span><br><span class="line"><span class="type">uint8_t</span> rx_len = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="type">uint8_t</span>* cmd_str;</span><br><span class="line">    <span class="type">void</span> (*fc)();</span><br><span class="line">&#125;cmdinfo;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cmdinfo cmdlist[] = &#123;</span><br><span class="line">    &#123;<span class="string">&quot;TF1&quot;</span>,TF1&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;TF2&quot;</span>,TF2&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;PF1&quot;</span>,PF1&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;PF2&quot;</span>,PF2&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;F1&quot;</span>,returnF1&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;F2&quot;</span>,returnF2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">TheUART_start</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    HAL_UARTEx_ReceiveToIdle_DMA(&amp;huart1,(<span class="type">uint8_t</span>*)rx_DataBuffer,<span class="number">0x0f</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">TheUART_dma_transmit</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 如果 DMA 还在忙，则不启动新的传输</span></span><br><span class="line">    <span class="keyword">if</span> (tx_busy) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    tx_busy = <span class="number">1</span>;  <span class="comment">// 标记为发送中</span></span><br><span class="line">    HAL_UART_Transmit_DMA(&amp;huart1,(<span class="type">uint8_t</span>*)tx_DataBuffer,tx_len<span class="number">-1</span>);<span class="comment">//-1为了防止傻逼烂桥杯的验证程序不通过</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">fputc</span><span class="params">(<span class="type">int</span> ch, FILE *f)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 确保缓冲区不会溢出</span></span><br><span class="line">    <span class="keyword">if</span> (tx_len &lt; BUFFER_SIZE - <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        tx_DataBuffer[tx_len++] = (<span class="type">uint8_t</span>)ch;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span></span><br><span class="line">    <span class="comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span></span><br><span class="line">    <span class="comment">// 冲区没满的情况下，如果你想要发送字符串&quot;abc&quot;，printf(&quot;abc&quot;)是没用的，</span></span><br><span class="line">    <span class="comment">// printf(&quot;abc\n&quot;)才有用哦。</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (ch == <span class="string">&#x27;\n&#x27;</span> || tx_len &gt;= BUFFER_SIZE - <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        TheUART_dma_transmit();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ch;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">TheUART_HandleRxdata</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(rx_handle == <span class="number">1</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">uint8_t</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">strcpy</span>(cmd,rx_DataBuffer);</span><br><span class="line">        cmd[rx_len] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        <span class="keyword">if</span>(!Read_Show_index(<span class="number">1</span>))&#123;</span><br><span class="line">            other();</span><br><span class="line">            rx_len = <span class="number">0</span>;</span><br><span class="line">            rx_handle = <span class="number">0</span>;</span><br><span class="line">            TheUART_start();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>;i &lt; CMDNUM;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">strcmp</span>((<span class="type">const</span> <span class="type">char</span>*)cmd,(<span class="type">const</span> <span class="type">char</span>*)cmdlist[i].cmd_str) == <span class="number">0</span>)&#123;</span><br><span class="line">                cmdlist[i].fc();</span><br><span class="line">                rx_len = <span class="number">0</span>;</span><br><span class="line">                rx_handle = <span class="number">0</span>;</span><br><span class="line">                TheUART_start();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        other();</span><br><span class="line">        rx_len = <span class="number">0</span>;</span><br><span class="line">        rx_handle = <span class="number">0</span>;</span><br><span class="line">        TheUART_start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//命令函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">TF1</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">TF2</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">PF1</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">PF2</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">returnF1</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">returnF2</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">other</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//中断</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_TxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(huart-&gt;Instance == USART1)  <span class="comment">// 确保是目标串口</span></span><br><span class="line">    &#123;</span><br><span class="line">        tx_len = <span class="number">0</span>;  <span class="comment">// 清空缓冲区</span></span><br><span class="line">        tx_busy = <span class="number">0</span>; <span class="comment">// 标记为可用</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UARTEx_RxEventCallback</span><span class="params">(UART_HandleTypeDef *huart, <span class="type">uint16_t</span> Size)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(huart-&gt;Instance == USART1)&#123;</span><br><span class="line">        rx_len = Size;</span><br><span class="line">        rx_handle = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="adc使用定时器trgo信号触发adc转换"><a class="markdownIt-Anchor" href="#adc使用定时器trgo信号触发adc转换"></a> ADC：使用定时器TRGO信号触发ADC转换</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> ADC_Data = .<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">ADCFuc_Init</span><span class="params">(ADC_HandleTypeDef *hadc)</span>&#123;</span><br><span class="line">    HAL_ADCEx_Calibration_Start(hadc,ADC_SINGLE_ENDED);<span class="comment">//校准</span></span><br><span class="line">    HAL_ADC_Start_IT(hadc);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> <span class="title function_">ADCFuc_ReturnResult</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="type">double</span> result = ADC_Data;</span><br><span class="line">    result = (result / <span class="number">4095.0</span>) * <span class="number">3.3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//中断-------------------------------------------------------------//</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_ADC_ConvCpltCallback</span><span class="params">(ADC_HandleTypeDef *hadc)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(hadc-&gt;Instance == ADC2)&#123;</span><br><span class="line">        ADC_Data = HAL_ADC_GetValue(&amp;hadc2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="at24c02"><a class="markdownIt-Anchor" href="#at24c02"></a> at24c02</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">include <span class="string">&quot;i2c_hal.h&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> COMMAND_W   0xA0</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> COMMAND_R   0xA1</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">at24c02_Init</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    I2CInit();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// @brief at24c02写数据</span></span><br><span class="line"><span class="comment">/// @param address 要写入的地址</span></span><br><span class="line"><span class="comment">/// @param data 要写入的数据</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">at24c02_Write</span><span class="params">(<span class="type">uint8_t</span> address,<span class="type">uint8_t</span> data)</span>&#123;</span><br><span class="line">    </span><br><span class="line">    I2CStart();</span><br><span class="line"></span><br><span class="line">    I2CSendByte(COMMAND_W);</span><br><span class="line">    I2CWaitAck();</span><br><span class="line"></span><br><span class="line">    I2CSendByte(address);</span><br><span class="line">    I2CWaitAck();</span><br><span class="line"></span><br><span class="line">    I2CSendByte(data);</span><br><span class="line">    I2CWaitAck(); </span><br><span class="line"></span><br><span class="line">    I2CStop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// @brief at24c02读数据</span></span><br><span class="line"><span class="comment">/// @param address 要读数据的地址</span></span><br><span class="line"><span class="comment">/// @return 读出的数据</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">at24c02_Read</span><span class="params">(<span class="type">uint8_t</span> address)</span>&#123;</span><br><span class="line">    <span class="type">uint8_t</span> data = <span class="number">0</span>;</span><br><span class="line">    I2CStart();</span><br><span class="line"></span><br><span class="line">    I2CSendByte(COMMAND_W);</span><br><span class="line">    I2CWaitAck();</span><br><span class="line"></span><br><span class="line">    I2CSendByte(address);</span><br><span class="line">    I2CWaitAck();</span><br><span class="line"></span><br><span class="line">    I2CStart();<span class="comment">//不释放总线的情况下重启通信，发送读命令。</span></span><br><span class="line"></span><br><span class="line">    I2CSendByte(COMMAND_R);</span><br><span class="line">    I2CWaitAck();</span><br><span class="line"></span><br><span class="line">    data = I2CReceiveByte();</span><br><span class="line">    I2CSendNotAck();<span class="comment">//通知从机不再发送数据</span></span><br><span class="line"></span><br><span class="line">    I2CStop();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data;</span><br><span class="line">&#125;   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="韩信在干嘛韩信在偷塔能做到吗哇他出了一个名刀司命猫雷"><a class="markdownIt-Anchor" href="#韩信在干嘛韩信在偷塔能做到吗哇他出了一个名刀司命猫雷"></a> 韩信在干嘛？韩信在偷塔！能做到吗？哇他出了一个名刀·司命！猫雷！</h2>
+<p>挂一张梦老师保佑！<br />
+<img src="https://tiebapic.baidu.com/forum/w%3D580%3B/sign=770517cb7fdbb6fd255be52e391faa18/8326cffc1e178a829fdedc90b003738da977e824.jpg?tbpicau=2025-04-12-05_1fd40d1758be922db3d2562ec3e230c3" alt="" /></p>
+</div>          
+          <nav class="post-nav">
+    
+    
+    <a class="post-nav-item post-nav-next" href="/posts/20333/">
+      <div class="nav-arrow">OLDER&nbsp;&gt;</div>
+      <span class="post-title">hexo主题Klise-enhanced使用文档</span>
+    </a>
+    
+  </nav>
+
+   </main>
+</div>
+
+  <footer class="footer">
+    <small class="footer_copyright">
+      <div id="bottom-inner">
+        © Site by 茂神·g0dma0 
+        <br>
+        <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a> &
+        <a target="_blank" rel="noopener" href="https://github.com/dewjohn/hexo-theme-klise">Klise</a></p>
+        <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/fonts/jhlst/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2_002">京華老宋体</a> & <a target="_blank" rel="noopener" href="https://chinese-font.netlify.app/zh-cn/">中文网字支持计划</a>
+        <br>
+        始于2025.
+        
+      </div>
+    </small>
+  </footer>
+  
+  
+
+    
+      <script src="/js/main.js"></script>
+    
+  
+  <script>
+    window.FPConfig = {
+      delay: 0,
+      ignoreKeywords: [],
+      maxRPS: 3,
+      hoverDelay: 50,
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+});
+
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":10},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":10},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+</html>

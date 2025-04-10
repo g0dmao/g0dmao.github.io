@@ -279,7 +279,7 @@
         <div class="author-avatar-wrapper">
           <img
             class="author-avatar"
-            src=/img/mikasa-ackerman-snk.gif
+            src=/img/baina11.gif
             alt="avatar"
             loading="lazy"
           />
@@ -292,6 +292,13 @@
       
 
     <h3 class="posts-item-note" aria-label="Recent Posts">Recent Posts</h3>
+    
+      <article class="post-item">
+        <span class="post-item-date" datetime="2025-01-18T11:24:13.000Z">1月 18, 2025</span>
+        <h4 class="post-item-title">
+          <a href="/posts/27350/">曝光三要素</a>
+        </h4>
+      </article>
     
       <article class="post-item">
         <span class="post-item-date" datetime="2025-01-10T09:55:40.063Z">1月 10, 2025</span>
@@ -366,7 +373,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1]]);
+                    const groupedData = groupByYear([["2025-01-10",1],["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -489,7 +496,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,3],
+                            data: [7,2,9,4],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -562,13 +569,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"嵌入式","value":11},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"web前端","value":2}].map(category => category.name).reverse(), 
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"嵌入式","value":11},{"name":"CubeMX配置功能","value":5},{"name":"摄影学习","value":5},{"name":"程序架构","value":4},{"name":"web前端","value":2}].map(category => category.value).reverse(),
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -617,7 +624,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":4,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":11,"path":"嵌入式"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
