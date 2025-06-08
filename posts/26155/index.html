@@ -1,0 +1,698 @@
+<!DOCTYPE html><html lang="zh-CN"><head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end --><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>如何优雅的在win上运行Linux | GoDm@'s Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">如何优雅的在win上运行Linux</h1><a id="logo" href="/.">GoDm@'s Blog</a><p class="description">欢迎。Welcome.</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">如何优雅的在win上运行Linux</h1><div class="post-meta">2025-06-07<span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.4k</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 5</span><span class="post-meta-item-text"> 分钟</span></span></span></div><div class="post-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<p>在 Windows 和 Linux 之间切换开发环境是一件让人头疼的事。幸运的是，WSL（Windows Subsystem for Linux）为我们提供了一种优雅的解决方案：<strong>在 Windows 上原生运行 Linux</strong>，无需虚拟机或双系统。本文将带你优雅地入门 WSL，从安装到使用，让你轻松拥有双系统的快乐而不牺牲效率。</p>
+<h2 id="一-wsl-是什么"><a class="markdownIt-Anchor" href="#一-wsl-是什么"></a> 一、WSL 是什么？</h2>
+<p>WSL（Windows Subsystem for Linux）是微软提供的一种兼容层，使你可以直接在 Windows 上运行 Linux 用户空间环境。当前主流版本是 <strong>WSL 2</strong>，它使用轻量虚拟化技术，提供完整的 Linux 内核和更好的性能。那么它有什么好处呢？</p>
+<ul>
+<li>Linux 、Windows文件共享。你可以在Windows的文件资源管理器上处理Linux子系统的文件</li>
+<li>命令混用，在Windows里可以运行Liunx命令，在Linux里可以运行Windows程序</li>
+<li>显卡直通，在AI训练方面非常方便<br />
+等等…</li>
+</ul>
+<h2 id="二-准备工作"><a class="markdownIt-Anchor" href="#二-准备工作"></a> 二、准备工作</h2>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-success tips-style-success">
+                        <div class="icon">✅</div>
+                        <div class="content"></p>
+<ul>
+<li>Windows 10（版本 2004 及以上，推荐 21H2 或更高）</li>
+<li>或 Windows 11（原生支持 WSL 2）<br />
+</div>
+                    </div>
+                <br />
+本文以win11为例。</li>
+</ul>
+<h3 id="开启必要功能"><a class="markdownIt-Anchor" href="#开启必要功能"></a> 开启必要功能</h3>
+<p>在搜索栏搜索 <code>启动或关闭window功能</code><br />
+<img src="Snipaste_2025-06-07_23-29-33%201.png" alt="" /><br />
+开启如下两项：</p>
+<ul>
+<li>适用于Linux的Windows子系统</li>
+<li>虚拟机平台<br />
+<img src="Snipaste_2025-06-07_23-32-13.png" alt="" /><br />
+然后<strong>重启以使更改生效</strong>。<br />
+如果是win11的话重启后可以看到文件资源管理器中有个Linux<br />
+<img src="Snipaste_2025-06-07_23-36-31.png" alt="" /></li>
+</ul>
+<h2 id="安装linux子系统"><a class="markdownIt-Anchor" href="#安装linux子系统"></a> 安装Linux子系统</h2>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"><br />
+win11原生支持WSL2，如果没有安装WSL，可以点击这个链接安装<br />
+<a target="_blank" rel="noopener" href="https://apps.microsoft.com/detail/9p9tqf7mrm4r?ocid=pdpshare&amp;hl=en-us&amp;gl=US">Windows Subsystem for Linux - Microsoft Apps</a><br />
+</div>
+                    </div>
+                </p>
+<p>这里提供两种方法安装WSL2：</p>
+<h3 id="直接安装发行版"><a class="markdownIt-Anchor" href="#直接安装发行版"></a> 直接安装发行版</h3>
+<p>打开下面的链接：<br />
+<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/install-manual#step-1---enable-the-windows-subsystem-for-linux">旧版 WSL 的手动安装步骤 | Microsoft Learn</a><br />
+直接下载想要的系统的发行版：<br />
+<img src="Snipaste_2025-06-08_00-08-42.png" alt="" /></p>
+<p>下载下来后将文件后缀改为<code>.zip</code>,解压缩<br />
+<img src="Snipaste_2025-06-08_00-11-46.png" alt="" /></p>
+<p>解压后，选择x64版本，同样的方法，继续解压<br />
+<img src="Snipaste_2025-06-08_00-14-29.png" alt="" /></p>
+<p>解压后，复制如下两个文件到你想要安装的指定目录<br />
+<img src="Snipaste_2025-06-08_00-14-53.png" alt="" /></p>
+<p>例如我的是<code>E:\Linux\Ubuntu-24.04LTS</code></p>
+<p>在目录下双击运行exe文件，自此安装完成。<br />
+<img src="Snipaste_2025-06-08_00-18-01.png" alt="" /></p>
+<h3 id="命令行安装不推荐"><a class="markdownIt-Anchor" href="#命令行安装不推荐"></a> 命令行安装（不推荐）</h3>
+<p>不推荐原因如下：</p>
+<ul>
+<li>此方法下安装的Linux子系统默认安装在c盘，无法更改安装路径，想要迁移比较麻烦。</li>
+<li>由于服务器原因，下载很慢，需要一些上网技巧才能流畅下载。</li>
+</ul>
+<p>打开cmd命令提示符窗口，输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wsl --update</span><br><span class="line">wsl --install</span><br></pre></td></tr></table></figure>
+<p>等待安装成功。默认安装Ubuntu系统。<br />
+也可以指定版本<br />
+输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --list --online</span><br></pre></td></tr></table></figure>
+<p>可以查看当前可安装的发行版。<br />
+<img src="Snipaste_2025-06-08_00-01-29%201.png" alt="" /><br />
+比如安装Debian，直接输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --install Debian</span><br></pre></td></tr></table></figure>
+<p>等待安装完成即可。</p>
+<p><strong>安装完成后提示输入用户名和密码，注意密码输入是不显示的。</strong></p>
+<h3 id="开始使用"><a class="markdownIt-Anchor" href="#开始使用"></a> 开始使用</h3>
+<p>💡如果你的电脑只有那种丑丑的简陋的命令行工具，可以在微软商店下载一个<code>Windows Terminal Preview</code>获得更好的体验<br />
+<img src="Snipaste_2025-06-08_00-21-38.png" alt="" /></p>
+<h3 id="常用命令速查"><a class="markdownIt-Anchor" href="#常用命令速查"></a> 常用命令速查</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wsl</code></td>
+<td>启动默认 Linux 发行版</td>
+</tr>
+<tr>
+<td><code>wsl -l -v</code></td>
+<td>查看已安装的发行版和 WSL 版本</td>
+</tr>
+<tr>
+<td><code>wsl --set-version &lt;发行版&gt; 2</code></td>
+<td>将指定发行版升级到 WSL 2</td>
+</tr>
+<tr>
+<td><code>wsl --set-default-version 2</code></td>
+<td>设置默认启动Linux版本</td>
+</tr>
+<tr>
+<td><code>wsl -d &lt;发行版&gt;</code></td>
+<td>启动指定发行版</td>
+</tr>
+<tr>
+<td><code>wsl --shutdown</code></td>
+<td>关闭所有正在运行的 WSL 实例</td>
+</tr>
+<tr>
+<td><code>wsl --unregister &lt;发行版&gt;</code></td>
+<td>卸载发行版</td>
+</tr>
+<tr>
+<td><code>wsl --export Ubuntu ubuntu.tar</code></td>
+<td>对子系统进行备份与恢复 【导出】</td>
+</tr>
+<tr>
+<td><code>wsl --import &lt;自定义名&gt; &lt;目标路径&gt; &lt;.tar源路径&gt;</code></td>
+<td>对子系统进行读取/恢复  【导入】</td>
+</tr>
+</tbody>
+</table>
+<h2 id="启动"><a class="markdownIt-Anchor" href="#启动"></a> 启动</h2>
+<p>可以使用命令行启动（见上表）也可在<code>Windows Terminal Preview</code>下直接点击<br />
+<img src="Snipaste_2025-06-08_00-26-24.png" alt="" /><br />
+即可打开~</p>
+<h2 id="换源"><a class="markdownIt-Anchor" href="#换源"></a> 换源</h2>
+<p>这里使用清华源<br />
+<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a><br />
+有详细的使用介绍，根据自己的版本选择文件路径以及格式复制粘贴即可，以Ubuntu24.04为例：<br />
+使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/apt/sources.list.d/ubuntu.sources</span><br></pre></td></tr></table></figure>
+<p>进入编辑页面后，先把原来的配置源删除，再粘贴。<br />
+<img src="Snipaste_2025-06-08_13-50-00.png" alt="" /><br />
+然后按<code>Ctrl+O</code> <code>Enter</code> <code>Ctrl+x</code>退出 （&quot;^&quot;指Ctrl &quot;M&quot;指Alt）<br />
+退出后使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<p>更新软件包数据库。<br />
+最后使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure>
+<p>升级软件包。</p>
+<h2 id="退出系统"><a class="markdownIt-Anchor" href="#退出系统"></a> 退出系统</h2>
+<p><code>Windows Terminal Preview</code>下，直接叉掉Linux命令行窗口即可退出<br />
+或在Linux命令行窗口直接使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>推出后等待几秒可以输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></table></figure>
+<p>查看Liunx状态：是停止<br />
+<img src="Snipaste_2025-06-08_14-16-16.png" alt="" /><br />
+还可以使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure>
+<p>一次性关闭所有运行的实例。</p>
+<h2 id="卸载系统"><a class="markdownIt-Anchor" href="#卸载系统"></a> 卸载系统</h2>
+<p>使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --unregister &lt;发行版名&gt;</span><br></pre></td></tr></table></figure>
+<p>即可卸载</p>
+<h2 id="cc-环境搭建"><a class="markdownIt-Anchor" href="#cc-环境搭建"></a> C/C++ 环境搭建</h2>
+<p>比较简单，默认的 Ubuntu 软件源包含了一个软件包组，名称为 “build-essential”,它包含了 GNU 编辑器集合，GNU 调试器，和其他编译软件所必需的开发库和工具。<br />
+想要安装开发工具软件包，直接</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential</span><br></pre></td></tr></table></figure>
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc -v</span><br><span class="line">g++ -v</span><br><span class="line">gdb -v</span><br></pre></td></tr></table></figure>
+<p>有一个没有的话 单独安装一下即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gdb</span><br></pre></td></tr></table></figure>
+<h2 id="推荐玩法"><a class="markdownIt-Anchor" href="#推荐玩法"></a> 推荐玩法</h2>
+<h3 id="vscode插件"><a class="markdownIt-Anchor" href="#vscode插件"></a> VScode插件</h3>
+<p>使用 WSL 作为开发环境，结合 VS Code 的 <strong>Remote - WSL 插件</strong>，在 Windows 中编辑、WSL 中运行。<br />
+直接下载插件<br />
+<img src="Snipaste_2025-06-08_14-28-45.png" alt="" /><br />
+在Linux终端打开某个文件夹 然后使用命令即可在Linux环境下运行VScode</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code .</span><br></pre></td></tr></table></figure>
+<p><img src="Snipaste_2025-06-08_14-31-11.png" alt="" /><br />
+还可以直接使用VScode终端输入Linux命令。<br />
+<img src="Snipaste_2025-06-08_14-43-03.png" alt="" /></p>
+</div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>如何优雅的在win上运行Linux</p><p><span>文章作者：</span>GoDm@</p><p><span>发布时间：</span>2025-06-07</p><p><span>最后更新：</span>2025-06-08</p><p><span>原始链接：</span><a href="/posts/26155/">https://blog.godmao.top/posts/26155/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="https://blog.godmao.top/posts/26155/"></i></span></p><p><span>版权声明：</span>本文遵循[CC 4.0 BY-SA]版权协议，转载请附上原文出处链接和本声明。</p></div><br><div class="tags"></div><div class="post-nav"><a class="next" href="/posts/44982/">[自用]16届烂桥杯嵌入式赛道模块代码整理</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/baina11.gif"/></a><p>所有的伟大都源自一个勇敢的开始.</p><a class="info-icon" href="https://twitter.com/g0dMa0" title="Twitter" target="_blank" style="margin-inline:5px"> <i class="fa fa-twitter-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/g0dmao" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a><a class="info-icon" href="/atom.xml" title="RSS" target="_blank" style="margin-inline:5px"> <i class="fa fa-rss-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/">CubeMX配置功能</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/">程序架构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/">通信协议</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%91%84%E5%BD%B1%E5%AD%A6%E4%B9%A0/">摄影学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/Tags/STM32/" style="font-size: 15px;">STM32</a> <a href="/Tags/CubeMX/" style="font-size: 15px;">CubeMX</a> <a href="/Tags/ADC/" style="font-size: 15px;">ADC</a> <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" style="font-size: 15px;">嵌入式</a> <a href="/Tags/Timer/" style="font-size: 15px;">Timer</a> <a href="/Tags/%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F/" style="font-size: 15px;">阅读感悟</a> <a href="/Tags/%E8%87%AA%E6%8E%A7%E5%8A%9B/" style="font-size: 15px;">自控力</a> <a href="/Tags/iic/" style="font-size: 15px;">iic</a> <a href="/Tags/%E7%BD%91%E9%A1%B5/" style="font-size: 15px;">网页</a> <a href="/Tags/hexo%E4%B8%BB%E9%A2%98/" style="font-size: 15px;">hexo主题</a> <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">程序架构</a> <a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" style="font-size: 15px;">按键检测</a> <a href="/Tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 15px;">串口</a> <a href="/Tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" style="font-size: 15px;">学习路线</a> <a href="/Tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/Tags/%E5%8D%95%E7%89%87%E6%9C%BA/" style="font-size: 15px;">单片机</a> <a href="/Tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1/" style="font-size: 15px;">多任务</a> <a href="/Tags/web/" style="font-size: 15px;">web</a> <a href="/Tags/%E9%99%8D%E4%BD%8E%E8%80%A6%E5%90%88/" style="font-size: 15px;">降低耦合</a> <a href="/Tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" style="font-size: 15px;">摄影基础</a> <a href="/Tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 15px;">学习笔记</a> <a href="/Tags/%E5%BD%B1%E8%B0%83%E6%8E%A7%E5%88%B6/" style="font-size: 15px;">影调控制</a> <a href="/Tags/%E6%9C%BA%E4%BD%8D%E6%8E%8C%E6%8E%A7/" style="font-size: 15px;">机位掌控</a> <a href="/Tags/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/" style="font-size: 15px;">曝光三要素</a> <a href="/Tags/%E6%9E%84%E5%9B%BE/" style="font-size: 15px;">构图</a> <a href="/Tags/%E7%9B%B8%E6%9C%BA%E6%8E%A7%E8%89%B2/" style="font-size: 15px;">相机控色</a> <a href="/Tags/%E7%99%BD%E5%B9%B3%E8%A1%A1/" style="font-size: 15px;">白平衡</a> <a href="/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" style="font-size: 15px;">蓝桥杯</a> <a href="/Tags/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">通信协议</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/26155/">如何优雅的在win上运行Linux</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/44982/">[自用]16届烂桥杯嵌入式赛道模块代码整理</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/20333/">hexo主题Klise-enhanced使用文档</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/25619/">从c底层到嵌入式驱动开发的学习参考路线</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/57146/">Kelly McGonigal, Ph.D.《自控力》第四章阅读感悟</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/862/">三行代码实现按键的长短按检测</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/58440/">嵌入式模块化设计中的数据共享优化方案</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/18285/">串口重定向的非阻塞方法</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/58129/">CubeMX配置功能系列：iic</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/55329/">通信协议：iic</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2025 <a href="/." rel="nofollow">GoDm@'s Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,1],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":10},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":10},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"ADC","value":2},{"name":"Timer","value":2}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":12},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5},{"name":"web前端","value":2}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body></html>
