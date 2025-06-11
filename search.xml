@@ -372,9 +372,9 @@
             
             <tag> CubeMX </tag>
             
-            <tag> ADC </tag>
-            
             <tag> 嵌入式 </tag>
+            
+            <tag> ADC </tag>
             
         </tags>
       
@@ -418,9 +418,9 @@
             
             <tag> CubeMX </tag>
             
-            <tag> ADC </tag>
-            
             <tag> 嵌入式 </tag>
+            
+            <tag> ADC </tag>
             
         </tags>
       
@@ -511,9 +511,9 @@
             
             <tag> CubeMX </tag>
             
-            <tag> 嵌入式 </tag>
-            
             <tag> Timer </tag>
+            
+            <tag> 嵌入式 </tag>
             
         </tags>
       
@@ -544,9 +544,9 @@
             
             <tag> CubeMX </tag>
             
-            <tag> 嵌入式 </tag>
-            
             <tag> Timer </tag>
+            
+            <tag> 嵌入式 </tag>
             
         </tags>
       
