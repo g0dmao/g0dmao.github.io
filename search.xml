@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>Ubuntu文件系统结构</title>
+      <link href="/posts/7417/"/>
+      <url>/posts/7417/</url>
+      
+        <content type="html"><![CDATA[<details><summary>版权信息</summary><p>:::warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p><p>:::</p></details><hr /><blockquote><p>万物皆文件</p></blockquote><p><strong>仅作学习记录。</strong></p><table><thead><tr><th>目录</th><th>说明</th></tr></thead><tbody><tr><td><code>/</code></td><td>根目录，是所有文件和目录的起点。</td></tr><tr><td><code>/bin</code><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></td><td>存放系统启动和运行所需的基本命令（如 <code>ls</code>, <code>cp</code>, <code>mv</code>）。</td></tr><tr><td><code>/boot</code></td><td>启动相关文件，如内核 (<code>vmlinuz</code>)、引导加载器配置等。</td></tr><tr><td><code>/dev</code></td><td>包含所有设备（驱动）文件（如硬盘、终端、USB 设备）。</td></tr><tr><td><code>/etc</code></td><td>系统配置文件目录（如网络、用户、服务配置）。</td></tr><tr><td><code>/home</code></td><td>每个普通用户的主目录（如 <code>/home/alice</code>）。</td></tr><tr><td><code>/lib</code></td><td>存放系统程序所需的共享库文件。</td></tr><tr><td><code>/lib64</code></td><td>存放64位系统的共享库（与 <code>/lib</code> 类似）。</td></tr><tr><td><code>/media</code></td><td>可移动设备挂载点（如U盘、CD-ROM）。</td></tr><tr><td><code>/mnt</code></td><td>临时挂载文件系统的目录，供管理员使用。</td></tr><tr><td><code>/opt</code></td><td>为第三方软件提供安装位置。</td></tr><tr><td><code>/proc</code></td><td>虚拟文件系统，内核和进程信息以文件形式展现（如 <code>/proc/cpuinfo</code>）。存放系统运行的信息？</td></tr><tr><td><code>/root</code></td><td><code>root</code> 用户的主目录（注意：不是 <code>/</code>）。</td></tr><tr><td><code>/run</code></td><td>存放运行时数据，如系统启动后生成的PID文件或Socket文件。</td></tr><tr><td><code>/sbin</code></td><td>存放系统管理类命令，仅供 <code>root</code> 用户使用（如 <code>reboot</code>, <code>fsck</code>）。</td></tr><tr><td><code>/srv</code></td><td>存放提供服务的数据（如网站、FTP 服务器数据）。</td></tr><tr><td><code>/sys</code></td><td>虚拟文件系统，表示内核设备结构，供 <code>udev</code> 和其他工具使用。</td></tr><tr><td><code>/tmp</code></td><td>存放临时文件（系统重启后清空）。</td></tr><tr><td><code>/usr</code></td><td>多数用户空间程序和库的安装目录。</td></tr><tr><td><code>/usr/bin</code></td><td>非必要基本命令（大部分用户程序）的位置。</td></tr><tr><td><code>/usr/sbin</code></td><td>系统管理命令的位置，供管理员使用。</td></tr><tr><td><code>/usr/lib</code></td><td><code>/usr/bin</code> 和 <code>/usr/sbin</code> 程序所用库文件。</td></tr><tr><td><code>/var</code></td><td>可变数据文件（如日志、缓存、邮件、数据库文件等）。</td></tr></tbody></table><hr class="footnotes-sep" /><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>Faker VS Bin 你蹲我的意思吗 <a href="#fnref1" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> 文件系统 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux常用的shell命令总结</title>
+      <link href="/posts/37616/"/>
+      <url>/posts/37616/</url>
+      
+        <content type="html"><![CDATA[<details><summary>版权信息</summary><p>:::warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p><p>:::</p></details><hr /><p><strong>仅作学习记录。</strong></p><table><thead><tr><th>命令</th><th>说明</th><th>使用格式</th></tr></thead><tbody><tr><td><code>ls</code></td><td>列出目录内容</td><td><code>ls [选项] [目录]</code></td></tr><tr><td><code>cd</code></td><td>改变当前目录</td><td><code>cd [目录]</code></td></tr><tr><td><code>pwd</code></td><td>显示当前工作目录</td><td><code>pwd</code></td></tr><tr><td><code>cp</code></td><td>复制文件或目录</td><td><code>cp [选项] 源文件 目标文件</code></td></tr><tr><td><code>mv</code></td><td>移动文件或目录，重命名文件</td><td><code>mv [选项] 源文件 目标文件</code></td></tr><tr><td><code>rm</code></td><td>删除文件或目录</td><td><code>rm [选项] 文件</code></td></tr><tr><td><code>touch</code></td><td>创建空文件</td><td><code>touch 文件名</code></td></tr><tr><td><code>mkdir</code></td><td>创建目录</td><td><code>mkdir [选项] 目录名</code></td></tr><tr><td><code>rmdir</code></td><td>删除空目录</td><td><code>rmdir 目录名</code></td></tr><tr><td><code>chmod</code></td><td>更改文件或目录权限</td><td><code>chmod [选项] 权限 文件</code></td></tr><tr><td><code>chown</code></td><td>更改文件或目录的所有者</td><td><code>chown 用户:组 文件</code></td></tr><tr><td><code>chgrp</code></td><td>更改文件或目录的所属组</td><td><code>chgrp 组 文件</code></td></tr><tr><td><code>cat</code></td><td>查看文件内容</td><td><code>cat 文件名</code></td></tr><tr><td><code>more</code></td><td>分页显示文件内容</td><td><code>more 文件名</code></td></tr><tr><td><code>less</code></td><td>分页显示文件内容（支持上下翻页）</td><td><code>less 文件名</code></td></tr><tr><td><code>head</code></td><td>查看文件开头部分</td><td><code>head [选项] 文件</code></td></tr><tr><td><code>tail</code></td><td>查看文件尾部部分</td><td><code>tail [选项] 文件</code></td></tr><tr><td><code>find</code></td><td>查找文件或目录</td><td><code>find [路径] [选项] [表达式]</code></td></tr><tr><td><code>grep</code></td><td>文本搜索</td><td><code>grep [选项] &quot;模式&quot; 文件</code></td></tr><tr><td><code>tar</code></td><td>压缩或解压文件</td><td><code>tar [选项] [文件]</code></td></tr><tr><td><code>gzip</code></td><td>压缩文件</td><td><code>gzip 文件名</code></td></tr><tr><td><code>gunzip</code></td><td>解压.gz文件</td><td><code>gunzip 文件名.gz</code></td></tr><tr><td><code>zip</code></td><td>压缩文件</td><td><code>zip [选项] 压缩包 文件</code></td></tr><tr><td><code>unzip</code></td><td>解压.zip文件</td><td><code>unzip 压缩包</code></td></tr><tr><td><code>df</code></td><td>查看文件系统磁盘空间使用情况</td><td><code>df [选项]</code></td></tr><tr><td><code>du</code></td><td>查看目录或文件的磁盘使用情况</td><td><code>du [选项] 文件/目录</code></td></tr><tr><td><code>top</code></td><td>查看系统进程状态</td><td><code>top</code></td></tr><tr><td><code>ps</code></td><td>查看进程状态</td><td><code>ps [选项]</code></td></tr><tr><td><code>kill</code></td><td>终止进程</td><td><code>kill [选项] 进程号</code></td></tr><tr><td><code>pstree</code></td><td>以树形结构显示进程</td><td><code>pstree</code></td></tr><tr><td><code>free</code></td><td>查看内存使用情况</td><td><code>free [选项]</code></td></tr><tr><td><code>uname</code></td><td>查看系统信息</td><td><code>uname [选项]</code></td></tr><tr><td><code>ifconfig</code></td><td>配置网络接口</td><td><code>ifconfig [网络接口]</code></td></tr><tr><td><code>ip</code></td><td>查看或配置网络</td><td><code>ip [选项]</code></td></tr><tr><td><code>ping</code></td><td>测试网络连接</td><td><code>ping [选项] 地址</code></td></tr><tr><td><code>scp</code></td><td>安全复制文件</td><td><code>scp 源文件 用户@主机:目标</code></td></tr><tr><td><code>rsync</code></td><td>同步文件和目录</td><td><code>rsync [选项] 源 目标</code></td></tr><tr><td><code>wget</code></td><td>从网络下载文件</td><td><code>wget [选项] URL</code></td></tr><tr><td><code>curl</code></td><td>与网络交互（下载、上传文件等）</td><td><code>curl [选项] URL</code></td></tr><tr><td><code>alias</code></td><td>创建命令别名</td><td><code>alias 别名='命令'</code></td></tr><tr><td><code>history</code></td><td>查看命令历史</td><td><code>history</code></td></tr><tr><td><code>man</code></td><td>查看命令手册</td><td><code>man 命令名</code></td></tr><tr><td><code>echo</code></td><td>输出字符串到终端</td><td><code>echo &quot;文本&quot;</code></td></tr><tr><td><code>tee</code></td><td>从标准输入读取，并将其内容输出到文件</td><td><code>命令 | tee 文件</code></td></tr><tr><td><code>cut</code></td><td>按列切割文件内容</td><td><code>cut -d 分隔符 -f 列 文件</code></td></tr><tr><td><code>awk</code></td><td>强大的文本处理工具</td><td><code>awk '条件 &#123;动作&#125;' 文件</code></td></tr><tr><td><code>sed</code></td><td>流编辑器，处理文本数据</td><td><code>sed 's/模式/替换文本/' 文件</code></td></tr><tr><td><code>tr</code></td><td>转换字符</td><td><code>tr '旧字符' '新字符' &lt; 文件</code></td></tr><tr><td><code>wc</code></td><td>统计文件字数、行数、字节数等</td><td><code>wc [选项] 文件</code></td></tr><tr><td><code>whoami</code></td><td>查看当前用户</td><td><code>whoami</code></td></tr><tr><td><code>sudo</code></td><td>以超级用户身份执行命令</td><td><code>sudo 命令</code></td></tr><tr><td><code>exit</code></td><td>退出终端或当前Shell会话</td><td><code>exit</code></td></tr><tr><td><code>file</code></td><td>文件类型查看命令</td><td><code>file 文件路径</code></td></tr></tbody></table><h2 id="ls"><a class="markdownIt-Anchor" href="#ls"></a> ls</h2><p>-a 列出全部<br />-l 以列展示</p><h2 id="ranger"><a class="markdownIt-Anchor" href="#ranger"></a> ranger</h2><p>一个终端文件管理器（Vim风格）</p><table><thead><tr><th>操作</th><th>快捷键</th></tr></thead><tbody><tr><td>向上/向下</td><td>方向键</td></tr><tr><td>进入目录或打开文件</td><td><code>l / Enter</code></td></tr><tr><td>返回上一级目录</td><td>方向键</td></tr><tr><td>创建新文件</td><td><code>:touch filename</code></td></tr><tr><td>创建新目录</td><td><code>:mkdir dirname</code></td></tr><tr><td>删除文件/目录</td><td><code>D</code> 然后确认</td></tr><tr><td>重命名</td><td><code>cw</code></td></tr><tr><td>复制</td><td><code>yy</code>（复制）+ <code>pp</code>（粘贴）</td></tr><tr><td>剪切</td><td><code>dd</code>（剪切）+ <code>pp</code>（粘贴）</td></tr><tr><td>预览文件内容</td><td>自动或按 <code>i</code></td></tr><tr><td>搜索文件名</td><td><code>/关键词</code></td></tr><tr><td>退出</td><td><code>q</code> 或 <code>:q</code></td></tr></tbody></table><h2 id="grep"><a class="markdownIt-Anchor" href="#grep"></a> grep</h2><p>-r  递归子目录<br />-l  列出文件内容符合指定的样式的文件名称。<br />-i  不区分大小写<br />-n 字符串在哪一行</p><h2 id="du"><a class="markdownIt-Anchor" href="#du"></a> du</h2><p>-s 只显示指定目录总大小<br />-h 以单位k、m、g显示</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> shell </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>如何优雅的在win上运行Linux</title>
       <link href="/posts/26155/"/>
       <url>/posts/26155/</url>
