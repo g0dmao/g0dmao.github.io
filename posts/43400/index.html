@@ -1,0 +1,711 @@
+<!DOCTYPE html><html lang="zh-CN"><head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end --><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>【点灯大师】点亮I.MX6ULL开发板的LED灯 | GoDm@'s Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【点灯大师】点亮I.MX6ULL开发板的LED灯</h1><a id="logo" href="/.">GoDm@'s Blog</a><p class="description">记录自己所爱。</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">【点灯大师】点亮I.MX6ULL开发板的LED灯</h1><div class="post-meta">2025-06-30<span> | </span><span class="category"><a href="/categories/Linux/">Linux</a><a href="/categories/Linux/%E8%AE%B0%E5%BD%95/">记录</a></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 2.2k</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 8</span><span class="post-meta-item-text"> 分钟</span></span></span></div><div class="post-content"><details>
+<summary>版权信息</summary>
+<p>
+                    <div class="hexo-tips-layout hexo-tips-warning tips-style-warning">
+                        <div class="icon">⚠</div>
+                        <div class="content"></p>
+<p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+<p></div>
+                    </div>
+                </p>
+</details>
+<hr />
+<p>
+                    <div class="hexo-tips-layout hexo-tips-info tips-style-info">
+                        <div class="icon">ℹ️</div>
+                        <div class="content"><br />
+学习笔记记录，非教程。<br />
+</div>
+                    </div>
+                </p>
+<ul>
+<li><a href="#1-%E6%B1%87%E7%BC%96led%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90">1. 汇编LED原理分析</a></li>
+<li><a href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B">2. 初始化流程</a>
+<ul>
+<li><a href="#21-stm32%E7%9A%84%E5%A4%A7%E8%87%B4io%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B">2.1. STM32的大致IO初始化流程</a></li>
+<li><a href="#22-imx6ull-io%E5%88%9D%E5%A7%8B%E5%8C%96">2.2. I.MX6ULL IO初始化</a></li>
+</ul>
+</li>
+<li><a href="#3-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0">3. 汇编语言实现</a></li>
+<li><a href="#4-%E9%93%BE%E6%8E%A5%E4%B8%8E%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2">4. 链接与格式转换</a>
+<ul>
+<li><a href="#41-%E9%93%BE%E6%8E%A5">4.1. 链接</a></li>
+<li><a href="#42-%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2">4.2. 格式转换</a></li>
+</ul>
+</li>
+<li><a href="#5-%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9sdk%E5%8C%85%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6">5. 使用官方SDK包生成镜像文件</a></li>
+<li><a href="#6-%E5%AE%89%E8%A3%85sdk%E5%8C%85">6. 安装SDK包</a>
+<ul>
+<li><a href="#61-build-sdk">6.1. build SDK</a></li>
+<li><a href="#62-%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6">6.2. 生成镜像文件</a></li>
+</ul>
+</li>
+<li><a href="#7-%E7%83%A7%E5%BD%95%E5%88%B0sd%E5%8D%A1">7. 烧录到SD卡</a></li>
+<li><a href="#8-%E8%BE%BE%E6%88%90%E6%88%90%E5%B0%B1%E7%82%B9%E7%81%AF%E5%A4%A7%E5%B8%88">8. 达成成就【点灯大师】</a></li>
+<li><a href="#9-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">9. 参考资料</a></li>
+</ul>
+<h2 id="1-汇编led原理分析"><a class="markdownIt-Anchor" href="#1-汇编led原理分析"></a> 1. 汇编LED原理分析</h2>
+<p>为什么不像STM32那样直接使用c语言？</p>
+<p>答：因为ST已经为你用汇编写好了初始化过程，比如初始化时钟等等外设，初始化Ram，设置sp指针，配置好c语言运行环境等等。而一般这些一块CortexA架构的板子是不提供的。</p>
+<p>所以我们要使用汇编：</p>
+<ol>
+<li>初始化一些SOC外设。</li>
+<li>初始化DDR<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</li>
+</ol>
+<blockquote>
+<p>这个I.MX6U倒是不需要。I.MX内部的ROM存放了自己编写的启动代码，这些启动代码可以读取DDR配置信息，并完成其的初始化。</p>
+</blockquote>
+<ol start="3">
+<li>设置sp指针，一般指向DDR，设置好C语言运行环境。</li>
+</ol>
+<h2 id="2-初始化流程"><a class="markdownIt-Anchor" href="#2-初始化流程"></a> 2. 初始化流程</h2>
+<blockquote>
+<p>具体原理、寄存器详细位讲解可以看正点原子的Linux驱动开发指南。</p>
+</blockquote>
+<p>这里我们对比STM32的IO初始化流程来学习I.MX的初始化流程</p>
+<h3 id="21-stm32的大致io初始化流程"><a class="markdownIt-Anchor" href="#21-stm32的大致io初始化流程"></a> 2.1. STM32的大致IO初始化流程</h3>
+<ol>
+<li>使能时钟</li>
+<li>设置IO复用，复用为GPIO</li>
+<li>配置GPIO的电气属性</li>
+<li>使用GPIO——利用控制寄存器设置GPIO的输入输出功能</li>
+</ol>
+<h3 id="22-imx6ull-io初始化"><a class="markdownIt-Anchor" href="#22-imx6ull-io初始化"></a> 2.2. I.MX6ULL IO初始化</h3>
+<p>同样的，IO的使用分为两个部分，CONFIG和CONTROL</p>
+<p>CONFIG部分，I.MX的每个IO都有两个寄存器来配置，分别是多路复用寄存器（IOMUXC_SW_MUX_CTL_PAD_XX_XX）和配置电气特性的寄存器（IOMUXC_SW_PAD_CTL_PAD_XX_XX）它们在命名的第三个字段加以区分。我们可以查阅正点原子的Linux驱动开发指南以及官方的参考手册查看每一位的意义。</p>
+<p>CONTROL部分，也有各种寄存器，来控制IO的各个功能，比如<em>GPIOx_DR</em>寄存器就是控制输入输出的高低电平，共有32位，每一位控制第x组IO各个引脚的高低电平。</p>
+<p>使能时钟，CCGR0~CCGR6这7个寄存器控制着6ULL所有外设时钟的使能。（参考《I.MX6UL 参考手册》的第 18 章“Chapter 18: ClockController Module(CCM)”）</p>
+<p>总结一下，I.MX6ULL的初始化一个IO流程如下：</p>
+<ol>
+<li>使能时钟，CCGR0<sub>CCGR6这7个寄存器控制着6ULL所有外设时钟的使能。为了简单，设置CCGR0</sub>CCGR6这7个寄存器全部为0XFFFFFFFF，相当于使能所有外设时钟。</li>
+<li>IO复用，将寄存器IOMUXC_SW_MUX_CTL_PAD_GPIO1_IO03的bit3~0设置为0101=5，这样GPIO1_IO03就复用为GPIO。</li>
+<li>寄存器IOMUXC_SW_PAD_CTL_PAD_GPIO1_IO03是设置GPIO1_IO03的电气属性。包括压摆率、速度、驱动能力、开漏、上下拉等。</li>
+<li>配置GPIO功能，设置输入输出。设置GPIO1_DR寄存器bit3为1，也就是设置为输出模式。设置GPIO1_DR寄存器的bit3，为1表示输出高电平，为0表示输出低电平。</li>
+</ol>
+<h2 id="3-汇编语言实现"><a class="markdownIt-Anchor" href="#3-汇编语言实现"></a> 3. 汇编语言实现</h2>
+<p>在了解上述内容后我们可以正式开始写代码了，在Linux环境下新建<code>led.s</code>汇编文件。<br />
+内容可以参考如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">/* 点亮led汇编代码 */</span><br><span class="line"></span><br><span class="line">.global _start @全局标号</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line">@1.使能时钟</span><br><span class="line">    @查找原理图和参考手册可知，LED1连接GPIO1-io4，GPIO1的时钟属于CCM_CCGR1 CG13（26-27位）</span><br><span class="line"></span><br><span class="line">ldr r0, =0x020c406c @将寄存器地址加载到r0</span><br><span class="line">ldr r1, =0xFFFFFFF  @为了方便打开全部时钟，相应的功耗也有所增加</span><br><span class="line">str r1, [r0] @将r1中的值存入以r0中的值为地址的寄存器中</span><br><span class="line">  </span><br><span class="line">2.设置io引脚复用为gpio</span><br><span class="line">  </span><br><span class="line">ldr r0, =0x020e006c @将寄存器地址加载到r0</span><br><span class="line">mov r1, #5 @将寄存器要设置的值加载到r1</span><br><span class="line">str r1, [r0]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@3.设置io电气属性</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line"></span><br><span class="line">     * bit0     SRE压摆率       0       disable</span><br><span class="line"></span><br><span class="line">     * bit5:3   DSE io驱动能力  110     R0/6</span><br><span class="line"></span><br><span class="line">     * bit7:6   speed          10      100MHz</span><br><span class="line"></span><br><span class="line">     * bit11    ODE 开路输出     0      disable</span><br><span class="line"></span><br><span class="line">     * bit12    PKE 使能pull/keeper 1   enable</span><br><span class="line"></span><br><span class="line">     * bit13    PUE pull or keeper 0   keeper</span><br><span class="line"></span><br><span class="line">     * bit15:14 上下拉电阻       00      100K下拉</span><br><span class="line"></span><br><span class="line">     * bit16    HYS             0       disable</span><br><span class="line"></span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">ldr r0, =0x020e02f8</span><br><span class="line">ldr r1, =0x10b0 @将寄存器要设置的值加载到r1</span><br><span class="line">str r1, [r0]</span><br><span class="line"> </span><br><span class="line">@4.设置GPIO功能</span><br><span class="line">    @设置为输出 GDIR寄存器</span><br><span class="line"></span><br><span class="line">ldr r0, =0x0209c004</span><br><span class="line">mov r1, #16</span><br><span class="line">str r1, [r0] @将GPIO1组的第4个io口设置为输出模式</span><br><span class="line"></span><br><span class="line">    @设置为输出低电平 DR寄存器</span><br><span class="line"></span><br><span class="line">ldr r0, =0x0209c000</span><br><span class="line">mov r1, #0</span><br><span class="line">str r1, [r0] @将GPIO1组的第4个io口设置为输出低电平  </span><br><span class="line"></span><br><span class="line">@5.防止CPU进入未知状态</span><br><span class="line"></span><br><span class="line">    @写入死循环</span><br><span class="line">loop:</span><br><span class="line">    b loop</span><br><span class="line">    </span><br><span class="line">/* Finally! END! */</span><br></pre></td></tr></table></figure>
+<h2 id="4-链接与格式转换"><a class="markdownIt-Anchor" href="#4-链接与格式转换"></a> 4. 链接与格式转换</h2>
+<blockquote>
+<p>默认已安装了<code>arm-linux-gnueabihf</code>编译套件</p>
+</blockquote>
+<h3 id="41-链接"><a class="markdownIt-Anchor" href="#41-链接"></a> 4.1. 链接</h3>
+<p>使用命令</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arm-linux-gnueabihf-ld -Ttext 0X80000000 led.o -o led.elf</span><br></pre></td></tr></table></figure>
+<p>上述命令中-Ttext 就是指定链接起始地址，“-o”，我理解为output，指定链接生成的 elf 文件名，这里我们命名为 led.elf。上述命令执行完以后就会在工程目录下多一个 led.elf 文件。<br />
+这个elf相当于win中的exe，是一个可执行文件。</p>
+<h3 id="42-格式转换"><a class="markdownIt-Anchor" href="#42-格式转换"></a> 4.2. 格式转换</h3>
+<p>使用命令</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin</span><br></pre></td></tr></table></figure>
+<p>上述命令中，“-O”选项指定以什么格式输出，后面的“binary”表示以二进制格式输出，<br />
+选项“-S”表示不要复制源文件中的重定位信息和符号信息，“-g”表示不复制源文件中的调试<br />
+信息。<br />
+至此我们终于等到了想要的东西—led.bin 文件。<br />
+但是 I.MX6U 不能直接烧写编译生成的.bin 文件，我们需要在.bin 文件前面添加一些头信息构成满足 I.MX6U 需求的最终可烧写文件，I.MX6U 的最终可烧写文件组成如下：</p>
+<ol>
+<li>Image vector table，简称 IVT，IVT 里面包含了一系列的地址信息，这些地址信息在<br />
+ROM 中按照固定的地址存放着。</li>
+<li>Boot data，启动数据，包含了镜像要拷贝到哪个地址，拷贝的大小是多少等等。</li>
+<li>Device configuration data，简称 DCD，设备配置信息，重点是 DDR3 的初始化配置。</li>
+<li>用户代码可执行文件，比如 led.bin。</li>
+</ol>
+<h2 id="5-使用官方sdk包生成镜像文件"><a class="markdownIt-Anchor" href="#5-使用官方sdk包生成镜像文件"></a> 5. 使用官方SDK包生成镜像文件</h2>
+<p><span class="spoiler">你不会以为我要用正点原子或者野火提供的镜像制作软件吧孩子</span></p>
+<p>此步所需软件：<br />
+
+                    <div class="hexo-tips-layout hexo-tips-success tips-style-success">
+                        <div class="icon">✅</div>
+                        <div class="content"></p>
+<ul>
+<li>NXP SDK_2.2_MCIM6ULL<br />
+</div>
+                    </div>
+                </li>
+</ul>
+<p>第二个可从NXP官网获取。</p>
+<h2 id="6-安装sdk包"><a class="markdownIt-Anchor" href="#6-安装sdk包"></a> 6. 安装SDK包</h2>
+<p>使用共享文件夹将“SDK_2.2_MCIM6ULL_RFP_Linux.run” 拷贝到Linux下，存放位置自定。用chmod添加权限。然后运行.run文件生成SDK，linux下的源文件命令如下：</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./SDK_2.2_MCIM6ULL_RFP_Linux.run</span><br></pre></td></tr></table></figure>
+<h3 id="61-build-sdk"><a class="markdownIt-Anchor" href="#61-build-sdk"></a> 6.1. build SDK</h3>
+<p>此步所需软件：<br />
+
+                    <div class="hexo-tips-layout hexo-tips-success tips-style-success">
+                        <div class="icon">✅</div>
+                        <div class="content"></p>
+<ul>
+<li>gcc-arm-none-eabi交叉编译套件</li>
+<li>cmake<br />
+</div>
+                    </div>
+                <br />
+在Linux环境下，<br />
+添加临时环境变量，执行以下命令：</li>
+</ul>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ARMGCC_DIR=/usr</span><br></pre></td></tr></table></figure>
+<p>进入工程文件<strong>SDK_2.2_MCIM6ULL/boards/evkmcimx6ull/demo_apps/hello_world/armgcc</strong> 运行build_ddr_release.sh脚本</p>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build_ddr_release.sh</span><br></pre></td></tr></table></figure>
+<h3 id="62-生成镜像文件"><a class="markdownIt-Anchor" href="#62-生成镜像文件"></a> 6.2. 生成镜像文件</h3>
+<p>进入工程文件<strong>SDK_2.2_MCIM6ULL/tools/imgutil/evkmcimx6ull</strong><br />
+查看readme.txt 查看使用教程<br />
+readme.txt内容如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">IMGUTIL User Guide</span><br><span class="line">  </span><br><span class="line">======================================</span><br><span class="line"></span><br><span class="line">1. Build SDK2.0 application</span><br><span class="line">2. Copy built binary (.bin file) to imgutil/&lt;board&gt; folder and rename to sdk20-app.bin</span><br><span class="line">3. In imgutil/&lt;board&gt; folder, run mkimage.sh in mingw32 shell to get bootable image file sdk20-app.img</span><br><span class="line">    a. If the image is built with ram link file, use &quot;mkimage.sh ram&quot; to make the bootable image.</span><br><span class="line">    b. If the image is built with flash link file, use &quot;mkimage.sh flash&quot; to make the bootable XIP image.</span><br><span class="line">    c. If the image is built with ram link file and want to boot from MicroSD card, use &quot;mkimage.sh sd&quot; to make the bootable image.</span><br><span class="line"></span><br><span class="line">======================================</span><br></pre></td></tr></table></figure>
+<p>大致意思：</p>
+<ol>
+<li>build SDK（前面已经做了）</li>
+<li>复制你要制作为镜像的bin文件到对应的设备文件夹并将复制的bin文件改名为<code>sdk20-app.bin</code></li>
+</ol>
+<blockquote>
+<p>我们的板子是imx6ull，故复制到当前文件夹</p>
+</blockquote>
+<ol start="3">
+<li>使用 mkimage.sh+参数 来制作镜像 参数指定启动方式，有：
+<ul>
+<li>ram</li>
+<li>flash</li>
+<li>sd<br />
+参数我们使用sd。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./mkimage sd</span><br></pre></td></tr></table></figure>
+<p>运行后，生成了<code>sdk20-app.img</code>文件</p>
+<h2 id="7-烧录到sd卡"><a class="markdownIt-Anchor" href="#7-烧录到sd卡"></a> 7. 烧录到SD卡</h2>
+<p>由于我使用的是WSL环境，WSL访问USB比较不方便所以改在win下烧录。</p>
+<p>此步所需软件：<br />
+
+                    <div class="hexo-tips-layout hexo-tips-success tips-style-success">
+                        <div class="icon">✅</div>
+                        <div class="content"></p>
+<ul>
+<li>Win32DiskImager<br />
+</div>
+                    </div>
+                </li>
+</ul>
+<p>此步非常简单，将生成的img文件传到win文件夹下，使用Win32DiskImager软件烧录到连接到win的SD卡。</p>
+<h2 id="8-达成成就点灯大师"><a class="markdownIt-Anchor" href="#8-达成成就点灯大师"></a> 8. 达成成就【点灯大师】</h2>
+<p>将SD卡插入imx6ull，设置启动方式为SD卡，具体设置需参考你板子的硬件原理图，比如我的：<br />
+<img src="Snipaste_2025-06-30_00-49-08.png" alt="" /><br />
+成功点亮！<br />
+<img src="WIN_20250630_00_50_53_Pro.jpg" alt="" /></p>
+<h2 id="9-参考资料"><a class="markdownIt-Anchor" href="#9-参考资料"></a> 9. 参考资料</h2>
+<ul>
+<li>《【正点原子】I.MX6U嵌入式Linux驱动开发指南V1.81》</li>
+<li><a target="_blank" rel="noopener" href="https://doc.embedfire.com/linux/imx6/driver/zh/latest/index.html">[野火]嵌入式Linux驱动开发实战指南——基于i.MX6ULL系列 — [野火]嵌入式Linux驱动开发实战指南——基于i.MX6ULL系列 文档</a></li>
+<li>《IMX6ULL参考手册》</li>
+</ul>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Double Data Rate SDRAM 双倍数据速率同步动态随机存储器 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+</div><div class="post-copyright"><script type="text/javascript" src="/js/copyright.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copyright.css?v=1.0.0"><p><span>本文标题：</span>【点灯大师】点亮I.MX6ULL开发板的LED灯</p><p><span>文章作者：</span>GoDm@</p><p><span>发布时间：</span>2025-06-30</p><p><span>最后更新：</span>2025-06-30</p><p><span>原始链接：</span><a href="/posts/43400/">https://blog.godmao.top/posts/43400/</a><span class="copy-path"><i class="fa fa-clipboard" data-clipboard-text="https://blog.godmao.top/posts/43400/"></i></span></p><p><span>版权声明：</span>本文遵循[CC 4.0 BY-SA]版权协议，转载请附上原文出处链接和本声明。</p></div><br><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/Tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" rel="tag">嵌入式</a></li></ul></div><div class="post-nav"><a class="next" href="/posts/21870/">Shell脚本流程控制简明指南</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/baina11.gif"/></a><p>所有的伟大都源自一个勇敢的开始.</p><a class="info-icon" href="https://twitter.com/g0dMa0" title="Twitter" target="_blank" style="margin-inline:5px"> <i class="fa fa-twitter-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/g0dmao" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a><a class="info-icon" href="/atom.xml" title="RSS" target="_blank" style="margin-inline:5px"> <i class="fa fa-rss-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Shell/">Shell</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Ubuntu/">Ubuntu</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/WSL2/">WSL2</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E8%AE%B0%E5%BD%95/">记录</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/">CubeMX配置功能</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/">程序架构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/">通信协议</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%91%84%E5%BD%B1%E5%AD%A6%E4%B9%A0/">摄影学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/Tags/STM32/" style="font-size: 15px;">STM32</a> <a href="/Tags/CubeMX/" style="font-size: 15px;">CubeMX</a> <a href="/Tags/ADC/" style="font-size: 15px;">ADC</a> <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" style="font-size: 15px;">嵌入式</a> <a href="/Tags/Timer/" style="font-size: 15px;">Timer</a> <a href="/Tags/iic/" style="font-size: 15px;">iic</a> <a href="/Tags/%E9%98%85%E8%AF%BB%E6%84%9F%E6%82%9F/" style="font-size: 15px;">阅读感悟</a> <a href="/Tags/%E8%87%AA%E6%8E%A7%E5%8A%9B/" style="font-size: 15px;">自控力</a> <a href="/Tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/Tags/%E5%91%BD%E4%BB%A4/" style="font-size: 15px;">命令</a> <a href="/Tags/shell/" style="font-size: 15px;">shell</a> <a href="/Tags/Ubuntu/" style="font-size: 15px;">Ubuntu</a> <a href="/Tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">文件系统</a> <a href="/Tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" style="font-size: 15px;">磁盘管理</a> <a href="/Tags/%E9%93%BE%E6%8E%A5%E6%96%87%E4%BB%B6/" style="font-size: 15px;">链接文件</a> <a href="/Tags/USB/" style="font-size: 15px;">USB</a> <a href="/Tags/WSL2/" style="font-size: 15px;">WSL2</a> <a href="/Tags/%E7%BD%91%E9%A1%B5/" style="font-size: 15px;">网页</a> <a href="/Tags/hexo%E4%B8%BB%E9%A2%98/" style="font-size: 15px;">hexo主题</a> <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">程序架构</a> <a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" style="font-size: 15px;">按键检测</a> <a href="/Tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 15px;">串口</a> <a href="/Tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" style="font-size: 15px;">学习路线</a> <a href="/Tags/%E5%8D%95%E7%89%87%E6%9C%BA/" style="font-size: 15px;">单片机</a> <a href="/Tags/%E5%A4%9A%E4%BB%BB%E5%8A%A1/" style="font-size: 15px;">多任务</a> <a href="/Tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/Tags/web/" style="font-size: 15px;">web</a> <a href="/Tags/%E9%99%8D%E4%BD%8E%E8%80%A6%E5%90%88/" style="font-size: 15px;">降低耦合</a> <a href="/Tags/%E6%91%84%E5%BD%B1%E5%9F%BA%E7%A1%80/" style="font-size: 15px;">摄影基础</a> <a href="/Tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 15px;">学习笔记</a> <a href="/Tags/%E5%BD%B1%E8%B0%83%E6%8E%A7%E5%88%B6/" style="font-size: 15px;">影调控制</a> <a href="/Tags/%E6%9B%9D%E5%85%89%E4%B8%89%E8%A6%81%E7%B4%A0/" style="font-size: 15px;">曝光三要素</a> <a href="/Tags/%E6%9C%BA%E4%BD%8D%E6%8E%8C%E6%8E%A7/" style="font-size: 15px;">机位掌控</a> <a href="/Tags/%E6%9E%84%E5%9B%BE/" style="font-size: 15px;">构图</a> <a href="/Tags/%E7%9B%B8%E6%9C%BA%E6%8E%A7%E8%89%B2/" style="font-size: 15px;">相机控色</a> <a href="/Tags/%E7%99%BD%E5%B9%B3%E8%A1%A1/" style="font-size: 15px;">白平衡</a> <a href="/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" style="font-size: 15px;">蓝桥杯</a> <a href="/Tags/%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" style="font-size: 15px;">踩坑记录</a> <a href="/Tags/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/" style="font-size: 15px;">通信协议</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/posts/43400/">【点灯大师】点亮I.MX6ULL开发板的LED灯</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/21870/">Shell脚本流程控制简明指南</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/27290/">shell脚本入门</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/36626/">Ubuntu下连接文件</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/20676/">踩坑记录：WSL下对u盘格式化修改后在win下连接u盘发现盘内内容未改变</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/10180/">Ubuntu下文件权限管理</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/30265/">Ubuntu下磁盘管理</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/13715/">WSL下连接USB设备</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/7417/">Ubuntu文件系统结构</a></li><li class="post-list-item"><a class="post-list-link" href="/posts/37616/">Linux常用的命令总结</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2025 <a href="/." rel="nofollow">GoDm@'s Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"嵌入式","value":11},{"name":"Linux","value":11},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"嵌入式","value":11},{"name":"Linux","value":11},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"嵌入式","value":12},{"name":"Linux","value":11},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"嵌入式","value":12},{"name":"Linux","value":11},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5},{"name":"摄影学习","value":5}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"记录","children":[],"count":2,"path":"Linux/记录"}],"count":11,"path":"Linux"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":1,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body></html>
