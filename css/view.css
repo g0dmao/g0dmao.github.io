@@ -1,0 +1,12 @@
+@media screen and (max-width: 1024px) {
+
+    /* 文章中 */
+    .textinfo{
+        display: none;
+    }
+
+    div.posts_container{
+        flex-direction: column-reverse;
+    }
+    
+}

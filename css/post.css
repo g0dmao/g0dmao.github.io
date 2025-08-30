@@ -1,0 +1,140 @@
+.a_container{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+}
+
+.article{
+  width: 50%;
+  padding: 20px;
+
+}
+
+.article img {
+  width: 650px;   /* 图片不会超过容器宽度 */
+  height: auto;      /* 保持宽高比 */
+  display: block;    /* 去掉底部空隙，常见优化 */
+  margin: 1em auto;  /* 上下留白，并居中 */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+
+.info{
+  padding: 10px;
+  /*border-color: #e5e5e5;
+  border-style: dashed;*/
+  display: inline-flex;
+  flex-direction: column;
+  max-width: 350px;
+    
+}
+
+.info .textinfo{
+  background-color: #2A2A2A;
+  padding: 10px;
+  margin-bottom: 40px;
+}
+.info .toc{
+    
+  
+  padding: 10px;
+  max-height: 600px;  
+  position: sticky;
+  top: 10px;
+  a{
+    color:lightseagreen;
+  }
+  a:hover{
+    color:darkcyan;
+  }
+  span{
+    color: #60A5FA;
+    text-decoration-line: underline;
+  }
+  span:hover{
+    color: #3B82F6;
+  }
+    
+}
+
+.info .toc ol{
+  background-color: #2A2A2A;
+  list-style: none;
+  overflow: auto;
+  
+}
+#sumtoc{
+  font-size: 20px;
+  color:lightseagreen;
+}
+
+.tgs{
+  margin: 10px;
+  margin-left: 0;
+}
+
+#tgs{
+  background-color: rgb(96, 165, 250,0.2);
+  color: #3B82F6;
+  margin-right: 5px;
+  border-radius: 10px;
+  padding: 2px;
+}
+#tgs:hover{
+  background-color: rgb(96, 165, 250,0.4);
+}
+
+
+/* 代码块整体 */
+pre, code {
+  font-family: "Fira Code", "JetBrains Mono", "Consolas", "Courier New", monospace;
+  font-size: 15px;              /* 字体大小 */
+  line-height: 1.6;             /* 行间距，防止太挤 */
+  max-width: 100%;        /* 不超过文章容器 */
+  overflow-x: auto;        /* 超出部分横向滚动 */
+  border-radius: 10px;
+
+}
+
+/* pre 独立块级代码 */
+pre {
+  padding: 0px;
+  margin: 1.5em 0;              /* 与正文分隔 */
+  overflow-x: auto;             /* 超出部分可以横向滚动 */
+  font-size: 15px;              /* 让块级代码比内联大一些 */
+  
+}
+
+/* inline code (文章里的 `code`) */
+p code, li code {
+  padding: 2px 6px;
+  background: #2A2A2A;
+  border-radius: 4px;
+  font-size: 14px;
+  
+}
+
+.hljs{
+  width: 650px;        /* 不超过文章容器 */
+  overflow-x: scroll;        /* 超出部分横向滚动 */
+}
+
+.article strong{
+  background-color: goldenrod;
+  color: #121212;
+}
+
+
+.article h2{
+  text-decoration: underline;
+  text-decoration-color: darkmagenta;
+  text-decoration-thickness: bold;
+}
+.article h3{
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color:darkgreen;
+  text-decoration-thickness: bold;
+}
