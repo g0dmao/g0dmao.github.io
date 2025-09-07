@@ -1,12 +1,38 @@
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
 
     /* 文章中 */
-    .textinfo{
+    .info{
         display: none;
     }
-
     div.posts_container{
         flex-direction: column-reverse;
     }
+
+    .highlight {
+    margin: 0.8rem -15px;
+    border-radius: 0;
+    }
+  
+  .highlight pre {
+    padding: 12px;
+    font-size: 13px;
+    }
+  
+  .highlight .gutter {
+    width: 30px;
+    padding-right: 10px;
+    pre {
+      font-size: 12px;
+    }
+    }
+  
+  /* 在小屏幕上隐藏行号 */
+  .highlight .gutter {
+    display: none;
+  }
+  
+  .highlight td.code {
+    width: 100%;
+  } 
     
 }

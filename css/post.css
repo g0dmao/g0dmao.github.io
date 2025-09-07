@@ -6,13 +6,13 @@
 }
 
 .article{
-  width: 50%;
+  width: 60%;
   padding: 20px;
-
+  margin: 10px;
 }
 
 .article img {
-  width: 650px;   /* 图片不会超过容器宽度 */
+  max-width: 80%;   /* 图片不会超过容器宽度 */
   height: auto;      /* 保持宽高比 */
   display: block;    /* 去掉底部空隙，常见优化 */
   margin: 1em auto;  /* 上下留白，并居中 */
@@ -42,7 +42,7 @@
   padding: 10px;
   max-height: 600px;  
   position: sticky;
-  top: 10px;
+  top: 40px;
   a{
     color:lightseagreen;
   }
@@ -87,39 +87,62 @@
 }
 
 
+
 /* 代码块整体 */
-pre, code {
-  font-family: "Fira Code", "JetBrains Mono", "Consolas", "Courier New", monospace;
-  font-size: 15px;              /* 字体大小 */
-  line-height: 1.6;             /* 行间距，防止太挤 */
-  max-width: 100%;        /* 不超过文章容器 */
-  overflow-x: auto;        /* 超出部分横向滚动 */
-  border-radius: 10px;
+
+
+figure.highlight {
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin: 1em auto;  /* 上下留白，并居中 */
 
 }
 
-/* pre 独立块级代码 */
-pre {
-  padding: 0px;
-  margin: 1.5em 0;              /* 与正文分隔 */
-  overflow-x: auto;             /* 超出部分可以横向滚动 */
-  font-size: 15px;              /* 让块级代码比内联大一些 */
+.highlight, pre {
+  position: relative;
+}
+
+.highlight table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  background:#1e1e1e;
   
 }
 
-/* inline code (文章里的 `code`) */
-p code, li code {
-  padding: 2px 6px;
-  background: #2A2A2A;
-  border-radius: 4px;
-  font-size: 14px;
-  
+.highlight td.code {
+  width: 100%;
 }
 
-.hljs{
-  width: 650px;        /* 不超过文章容器 */
-  overflow-x: scroll;        /* 超出部分横向滚动 */
+.highlight .gutter {
+  width: 40px;
+  padding-right: 0px;
+  text-align: right;
+  border-right: 1px solid #444;
+  pre {
+    color: #7b7b7b;
+  }
 }
+
+.highlight pre {
+  margin: 0;
+  padding: 15px;
+  overflow: auto;
+  
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
+.highlight code {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: "Fira Code", "JetBrains Mono", Consolas, monospace !important;
+}
+
+
 
 .article strong{
   background-color: goldenrod;

@@ -6,7 +6,7 @@
   <link href="https://blog.godmao.top/atom.xml" rel="self"/>
   
   <link href="https://blog.godmao.top/"/>
-  <updated>2025-08-25T08:25:43.233Z</updated>
+  <updated>2025-09-07T10:45:40.598Z</updated>
   <id>https://blog.godmao.top/</id>
   
   <author>
@@ -15,6 +15,60 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>交叉编译器相关知识梳理</title>
+    <link href="https://blog.godmao.top/posts/27939/"/>
+    <id>https://blog.godmao.top/posts/27939/</id>
+    <published>2025-09-07T09:18:55.000Z</published>
+    <updated>2025-09-07T10:45:40.598Z</updated>
+    
+    <content type="html"><![CDATA[<details><summary>版权信息</summary><div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p></div></details><hr />]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;details&gt;
+&lt;summary&gt;版权信息&lt;/summary&gt;
+&lt;div class=&quot;admonition warning&quot;&gt;&lt;p class=&quot;admonition-title&quot;&gt;warning&lt;/p&gt;&lt;p&gt;本文章为博主原创文章。遵循 &lt;a href=&quot;https://c</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>关于Linux开发板与上位机的连接方式</title>
+    <link href="https://blog.godmao.top/posts/32814/"/>
+    <id>https://blog.godmao.top/posts/32814/</id>
+    <published>2025-09-07T09:17:17.000Z</published>
+    <updated>2025-09-07T11:49:14.697Z</updated>
+    
+    <content type="html"><![CDATA[<details><summary>版权信息</summary><div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p></div></details><hr /><div class="admonition info"><p class="admonition-title">info</p><p>本文旨在记录自己的IMX6ULL开发板上位机连接的过程。~~为什么感觉是后端这一块呢？~~</p></div><h2 id="前提条件"><a class="markdownIt-Anchor" href="#前提条件"></a> 前提条件</h2><div class="admonition note"><p class="admonition-title">设备</p><p>装有Debian/Ubuntu系统的、安装了ssh服务的、带有网络设备及驱动的开发板</p></div><div class="admonition note"><p class="admonition-title">工具</p><p>MobaXterm工具</p></div><div class="admonition todo"><p class="admonition-title">todo</p><p>目前使用的上位机是Win11平台，后续再研究Linux平台。</p></div><h2 id="基本操作"><a class="markdownIt-Anchor" href="#基本操作"></a> 基本操作</h2><h3 id="查询设备网络连接状态及ip地址"><a class="markdownIt-Anchor" href="#查询设备网络连接状态及ip地址"></a> 查询设备网络连接状态及ip地址</h3><p><code>ifconfig</code> 命令</p><h3 id="连接测试"><a class="markdownIt-Anchor" href="#连接测试"></a> 连接测试</h3><p><code>ping</code> 命令</p><h3 id="动态分配ip主动申请ip地址"><a class="markdownIt-Anchor" href="#动态分配ip主动申请ip地址"></a> 动态分配ip/主动申请ip地址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">udhcpc -i eth0<br></code></pre></td></tr></table></figure><p><strong><code>udhcpc</code></strong></p><ul><li>全称是 <em>Micro DHCP Client</em>，是 BusyBox 提供的一个轻量级 DHCP 客户端工具。</li><li>它会向局域网里的 DHCP 服务器（比如路由器、主机上的 Internet Connection Sharing 服务）发送请求，请求一个 IP 地址。</li></ul><p><strong><code>-i eth0</code></strong></p><ul><li>指定要使用的网络接口，这里是 <code>eth0</code>（开发板上的以太网网卡）。</li><li>如果你用的是其他网卡（比如 <code>eth1</code> 或 <code>enp0s3</code>），需要改成对应名字。</li></ul><p>成功的话，它会显示类似：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">udhcpc: sending discover<br>udhcpc: sending <span class="hljs-keyword">select</span> <span class="hljs-keyword">for</span> 192.168.137.2<br>udhcpc: lease of 192.168.137.2 obtained, lease <span class="hljs-keyword">time</span> 86400<br></code></pre></td></tr></table></figure><p>这表示网卡已经从 DHCP 服务器那里拿到了 IP（这里是 <code>192.168.137.2</code>）。如果没有 DHCP 服务器响应，就会一直 <code>sending discover</code>，说明没有可分配 IP。</p><h3 id="手动设置设备ip地址"><a class="markdownIt-Anchor" href="#手动设置设备ip地址"></a> 手动设置设备ip地址</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ifconfig eth0 192.168.10.2 netmask 255.255.255.0 up<br></code></pre></td></tr></table></figure><p><code>up</code> 指启用</p><h3 id="查询ssh是否开启"><a class="markdownIt-Anchor" href="#查询ssh是否开启"></a> 查询ssh是否开启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl status ssh<br></code></pre></td></tr></table></figure><h3 id="开启ssh服务"><a class="markdownIt-Anchor" href="#开启ssh服务"></a> 开启ssh服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl start ssh<br></code></pre></td></tr></table></figure><p>或</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/init.d/ssh start<br></code></pre></td></tr></table></figure><h3 id="ssh远程连接"><a class="markdownIt-Anchor" href="#ssh远程连接"></a> ssh远程连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh [username]@[ip-addr/hostname]<br></code></pre></td></tr></table></figure><h3 id="通过mobaxterm连接"><a class="markdownIt-Anchor" href="#通过mobaxterm连接"></a> 通过MobaXterm连接</h3><p>填好即可。<br /><img src="Snipaste_2025-09-07_19-20-07.png" alt="" /></p><p><code>hostname</code> 可以输入同名指令查看。</p><h2 id="方式一无线网络连接"><a class="markdownIt-Anchor" href="#方式一无线网络连接"></a> 方式一：无线网络连接</h2><div class="admonition note"><p class="admonition-title">优点</p><p>无线通信。</p></div><div class="admonition error"><p class="admonition-title">缺点</p><p>延迟可能较高。</p></div><h3 id="同一网络下"><a class="markdownIt-Anchor" href="#同一网络下"></a> 同一网络下</h3><p>在同一网段下（连接同一个WIFI），通过ssh建立连接。简简单单。</p><h3 id="不同网络下"><a class="markdownIt-Anchor" href="#不同网络下"></a> 不同网络下</h3><div class="admonition todo"><p class="admonition-title">todo</p><p>待补充。</p></div><h2 id="方式二通过网线与win电脑连接"><a class="markdownIt-Anchor" href="#方式二通过网线与win电脑连接"></a> 方式二：通过网线与Win电脑连接</h2><div class="admonition note"><p class="admonition-title">优点</p><p>延迟低。</p></div><div class="admonition error"><p class="admonition-title">缺点</p><p>有线通信。</p></div><h3 id="点对点通信无需共享电脑网络"><a class="markdownIt-Anchor" href="#点对点通信无需共享电脑网络"></a> 点对点通信（无需共享电脑网络）</h3><div class="admonition note"><p class="admonition-title">优点</p><p>操作简单。</p></div><div class="admonition error"><p class="admonition-title">缺点</p><p>开发板不能共享电脑网络。</p></div><p>将开发板网口和电脑网口用网线连接，进入电脑<code>网络和Internet</code>设置，选择<code>以太网</code></p><p>ip分配改为手动，ip地址可以分配为<code>192.168.10.1</code><br />掩码为<code>255.255.255.0</code><br /><img src="Snipaste_2025-09-07_19-29-57.png" alt="" /></p><p>开发板端同样指定ip地址和掩码，须在同一网段，例如<code>192.168.10.7</code> 。这样两个设备就能互相找到了。<br />再在电脑上进行ping测试。能ping通用ssh/MobaXterm连接即可。</p><h3 id="点对点通信并共享电脑网络电脑成网关"><a class="markdownIt-Anchor" href="#点对点通信并共享电脑网络电脑成网关"></a> 点对点通信并共享电脑网络（电脑成网关）</h3><div class="admonition note"><p class="admonition-title">优点</p><p>开发板不仅可以与电脑建立通信，还能共享电脑网络。</p></div><div class="admonition error"><p class="admonition-title">缺点</p><p>操作较复杂。</p></div><p>电脑通过wifi连接网络，通过以太网接口连接开发板。<br />在电脑控制面板&gt;网络和Internet&gt;网络和共享中心 右侧更改适配器设置，双击无线网卡设备（连接网络的那个设备）选择属性&gt; 共享选项卡 勾选<br /><img src="Snipaste_2025-09-07_19-41-42.png" alt="" /></p><p>提示：<br /><img src="Snipaste_2025-09-07_19-41-53.png" alt="" /></p><p>意思是：当该功能被启用时，你的LAN口 ip地址 自动被设置为 <code>192.168.137.1</code>，要通过这个LAN口连接网络的设备需将自己ip地址设置为动态获取，也就是在开发板执行前面的动态获取ip地址的命令。</p><p>当开发版成功获取到ip地址后，则可以正常建立连接。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;details&gt;
+&lt;summary&gt;版权信息&lt;/summary&gt;
+&lt;div class=&quot;admonition warning&quot;&gt;&lt;p class=&quot;admonition-title&quot;&gt;warning&lt;/p&gt;&lt;p&gt;本文章为博主原创文章。遵循 &lt;a href=&quot;https://c</summary>
+      
+    
+    
+    
+    <category term="Linux" scheme="https://blog.godmao.top/categories/Linux/"/>
+    
+    <category term="记录" scheme="https://blog.godmao.top/categories/Linux/%E8%AE%B0%E5%BD%95/"/>
+    
+    
+    <category term="Linux" scheme="https://blog.godmao.top/Tags/Linux/"/>
+    
+    <category term="网络" scheme="https://blog.godmao.top/Tags/%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="通信" scheme="https://blog.godmao.top/Tags/%E9%80%9A%E4%BF%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>无聊随便打点字</title>
@@ -539,64 +593,6 @@
     
     
     <category term="蓝桥杯" scheme="https://blog.godmao.top/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hexo主题Klise-enhanced使用文档</title>
-    <link href="https://blog.godmao.top/posts/20333/"/>
-    <id>https://blog.godmao.top/posts/20333/</id>
-    <published>2025-04-06T07:09:50.000Z</published>
-    <updated>2025-04-06T09:00:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<details><summary>版权信息</summary><p>:::warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p><p>:::</p></details><hr /><h2 id="说明"><a class="markdownIt-Anchor" href="#说明"></a> 说明</h2><p>本主题是根据dewjonh的hexo主题<a href="https://github.com/dewjohn/hexo-theme-Klise">Klise</a>改的，我非常喜欢这款主题，但是由于此主题原作者好像不再维护，对hexo的现版本（2024）的适配不太好，于是便自己修修补补用着🙂但是由于我没有太多的精力分配在前端上，所以有些代码可能有些不专业，希望各位大佬见谅并指正。当然如果有任何bug请尽管issue，我会尽力修复！</p><h2 id="主题概览"><a class="markdownIt-Anchor" href="#主题概览"></a> 主题概览</h2><p><img src="Snipaste_2025-04-06_15-26-39.png" alt="" /></p><p><img src="Snipaste_2025-04-06_15-27-19.png" alt="" /></p><p><img src="Snipaste_2025-04-06_15-27-54.png" alt="" /></p><p>你可以查看<a href="https://im.godmao.top/">demo</a>或<a href="https://im.godmao.top/">我的博客</a>来阅览主题效果。</p><h2 id="相较于原版有何改动"><a class="markdownIt-Anchor" href="#相较于原版有何改动"></a> 相较于原版有何改动</h2><ul><li>😢把scss全编译为css了，只有一个main.css文件，包含了所有的渲染样式…不过不用担心我注释了嘻嘻🤓</li><li>将原主题的深色模式进一步适配，并修改了一些元素的显示风格。</li></ul><h2 id="使用方法"><a class="markdownIt-Anchor" href="#使用方法"></a> 使用方法</h2><h3 id="首先"><a class="markdownIt-Anchor" href="#首先"></a> 首先，</h3><p>你需要下载一个字数统计插件:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-wordcount --save<br></code></pre></td></tr></table></figure><p>如果不想要下载或无法下载成功，你也可以放弃字数统计功能。前往主题文件夹下的<code>layout\post.ejs</code>删除</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ejs">字数: &lt;span class=&quot;post-count&quot;&gt;&lt;%= wordcount(page.content) %&gt;&lt;/span&gt;<br><br>预计阅读时间: &lt;span class=&quot;post-count&quot;&gt;&lt;%= min2read(page.content) %&gt;min&lt;/span&gt;<br></code></pre></td></tr></table></figure><p>两行。</p><h3 id="然后"><a class="markdownIt-Anchor" href="#然后"></a> 然后，</h3><p>安装主题文件</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/g0dmao/hexo-theme-Klise-enhanced.git<br></code></pre></td></tr></table></figure><p>将主题根目录的<code>_config.hexo-theme-Klise-enhanced.yml</code>移动到博客根目录。你可以打开该文件进行主题的一些配置。</p><p>在博客配置文件<code>_config.yml</code>中启用主题。</p><h3 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后，</h3><p>enjoy！</p><h2 id="个性化部分"><a class="markdownIt-Anchor" href="#个性化部分"></a> 个性化部分</h2><h3 id="自定义背景"><a class="markdownIt-Anchor" href="#自定义背景"></a> 自定义背景</h3><p>打开主题文件夹下的<code>source\css\main.css</code>在头部修改，可以自定义明暗模式下不同的背景，已做好注释。</p><h3 id="当网页失去焦点时标签页标题的显示文字"><a class="markdownIt-Anchor" href="#当网页失去焦点时标签页标题的显示文字"></a> 当网页失去焦点时标签页标题的显示文字</h3><p>打开主题文件夹下的<code>layout\layout.ejs</code> 修改document.title即可。</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">defer</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"></span><br><span class="language-javascript">  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;visibilitychange&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript"></span><br><span class="language-javascript">  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">visibilityState</span> == <span class="hljs-string">&#x27;hidden&#x27;</span>) &#123;</span><br><span class="language-javascript"></span><br><span class="language-javascript">      normal_title = <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span>;</span><br><span class="language-javascript"></span><br><span class="language-javascript">      <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = <span class="hljs-string">&#x27;点一下&#x27;</span>;</span><br><span class="language-javascript"></span><br><span class="language-javascript">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = normal_title;</span><br><span class="language-javascript"></span><br><span class="language-javascript">&#125;);</span><br><span class="language-javascript"></span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure><h3 id="可选"><a class="markdownIt-Anchor" href="#可选"></a> 可选</h3><p>你可以安装如下插件获得更好的浏览体验。</p><h4 id="hexo-renderer-markdown-it-plus"><a class="markdownIt-Anchor" href="#hexo-renderer-markdown-it-plus"></a> hexo-renderer-markdown-it-plus</h4><p>不使用自带的md渲染器。使用markdown-it渲染器，丰富的插件提供更好的md浏览体验。</p><h4 id="hexo-tips"><a class="markdownIt-Anchor" href="#hexo-tips"></a> hexo-tips</h4><p>在文章中生成各种提示卡片，此主题已做好适配。</p><h4 id="hexo-blog-encrypt"><a class="markdownIt-Anchor" href="#hexo-blog-encrypt"></a> hexo-blog-encrypt</h4><p>文章加密插件。</p><h2 id="可能的问题"><a class="markdownIt-Anchor" href="#可能的问题"></a> 可能的问题</h2><h3 id="tags-categories页面显示不正确"><a class="markdownIt-Anchor" href="#tags-categories页面显示不正确"></a> tags、categories页面显示不正确</h3><p>首先检查页面的路径设置是否正确。若正确则试着在相应页面的<code>index.md</code> 里添加type和layout标签：<br /><img src="Snipaste_2025-04-06_16-18-33.png" alt="" /><br />tags页面 type、layout 为tags。<br />categories页面 type、layout 为 categories。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;details&gt;
-&lt;summary&gt;版权信息&lt;/summary&gt;
-&lt;p&gt;:::warning&lt;/p&gt;
-&lt;p&gt;本文章为博主原创文章。遵循 &lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans&quot;&gt;C</summary>
-      
-    
-    
-    
-    <category term="web前端" scheme="https://blog.godmao.top/categories/web%E5%89%8D%E7%AB%AF/"/>
-    
-    
-    <category term="网页" scheme="https://blog.godmao.top/Tags/%E7%BD%91%E9%A1%B5/"/>
-    
-    <category term="hexo主题" scheme="https://blog.godmao.top/Tags/hexo%E4%B8%BB%E9%A2%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>从c底层到嵌入式驱动开发的学习参考路线</title>
-    <link href="https://blog.godmao.top/posts/25619/"/>
-    <id>https://blog.godmao.top/posts/25619/</id>
-    <published>2025-04-05T15:21:06.000Z</published>
-    <updated>2025-04-05T15:24:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<details><summary>版权信息</summary><p>:::warning</p><p>本文章为博主原创文章。遵循 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p><p>:::</p></details><hr /><p>以下是专为 <strong>嵌入式Linux驱动开发工程师</strong> 设计的 <strong>学习路线</strong>，整合了目标、重点、时间分配、书籍推荐和实战建议，力求清晰高效。由<code>deepseekR1</code>生成。</p><hr /><h3 id="一-学习路线总图"><a class="markdownIt-Anchor" href="#一-学习路线总图"></a> <strong>一、学习路线总图</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mermaid">graph LR<br>  A[C语言+硬件] --&gt; B[操作系统+驱动基础] --&gt; C[驱动专项+内核机制] --&gt; D[实战深化]<br></code></pre></td></tr></table></figure><hr /><h3 id="二-分阶段详解"><a class="markdownIt-Anchor" href="#二-分阶段详解"></a> <strong>二、分阶段详解</strong></h3><h4 id="阶段1c语言与硬件交互1-2个月"><a class="markdownIt-Anchor" href="#阶段1c语言与硬件交互1-2个月"></a> <strong>阶段1：C语言与硬件交互（1-2个月）</strong></h4><p><strong>目标</strong>：</p><ul><li>掌握C语言底层操作能力，理解程序如何直接控制硬件。</li></ul><p><strong>核心内容</strong>：</p><table><thead><tr><th><strong>知识点</strong></th><th><strong>必要程度</strong></th><th><strong>深入程度</strong></th><th><strong>推荐书籍/资源</strong></th></tr></thead><tbody><tr><td>指针与内存管理</td><td>★★★★★</td><td>理解内存布局</td><td>《C程序设计语言》（K&amp;R）</td></tr><tr><td>结构体与位操作</td><td>★★★★☆</td><td>能操作寄存器</td><td>《嵌入式C语言自我修养》</td></tr><tr><td>汇编基础</td><td>★★★☆☆</td><td>阅读简单汇编</td><td>《ARM Cortex-M权威指南》</td></tr><tr><td>编译流程（GCC）</td><td>★★★★☆</td><td>熟悉预处理-链接</td><td>CSAPP第3章</td></tr><tr><td>硬件交互（GPIO）</td><td>★★★★☆</td><td>裸机程序开发</td><td>STM32官方手册</td></tr></tbody></table><p><strong>实践项目</strong>：</p><ol><li>用STM32直接操作寄存器点亮LED（无需库函数）。</li><li>用C实现内存池分配器（模拟<code>malloc/free</code>）。</li></ol><p><strong>工具</strong>：</p><ul><li><strong>STM32CubeIDE</strong>：调试裸机程序。</li><li><strong>objdump</strong>：反汇编查看代码生成。</li></ul><p><strong>对Linux的用处</strong>：</p><ul><li>理解驱动中 <strong>寄存器映射</strong>（如<code>ioremap</code>）。</li><li>诊断 <strong>内存越界</strong> 和 <strong>硬件访问错误</strong>。</li></ul><hr /><h4 id="阶段2操作系统核心驱动基础2-3个月"><a class="markdownIt-Anchor" href="#阶段2操作系统核心驱动基础2-3个月"></a> <strong>阶段2：操作系统核心+驱动基础（2-3个月）</strong></h4><p><strong>目标</strong>：</p><ul><li>理解操作系统核心机制，入门Linux驱动开发。</li></ul><p><strong>核心内容</strong>：</p><table><thead><tr><th><strong>知识点</strong></th><th><strong>必要程度</strong></th><th><strong>深入程度</strong></th><th><strong>推荐书籍/资源</strong></th></tr></thead><tbody><tr><td>进程与线程</td><td>★★★☆☆</td><td>理解上下文切换</td><td>《操作系统导论》（OSTEP）</td></tr><tr><td>虚拟内存</td><td>★★★★☆</td><td>页表工作原理</td><td>《深入理解计算机系统》第9章</td></tr><tr><td>中断与异常</td><td>★★★★☆</td><td>中断处理流程</td><td>《Linux设备驱动程序》（LDD3）</td></tr><tr><td>内核模块开发</td><td>★★★★★</td><td>字符设备驱动</td><td>LDD3第3章</td></tr><tr><td>设备树（DT）</td><td>★★★★☆</td><td>解析硬件配置</td><td>内核文档《Device Tree Usage》</td></tr></tbody></table><p><strong>实践项目</strong>：</p><ol><li>编写虚拟字符设备驱动（实现<code>read</code>/<code>write</code>）。</li><li>为LED驱动添加设备树支持（<code>.dts</code>文件配置）。</li></ol><p><strong>工具</strong>：</p><ul><li><strong>QEMU</strong>：模拟ARM设备运行Linux。</li><li><strong>dmesg</strong>：查看内核日志。</li></ul><p><strong>对Linux的用处</strong>：</p><ul><li>掌握驱动开发框架（<code>file_operations</code>）。</li><li>理解 <strong>设备树</strong> 如何解耦硬件配置。</li></ul><hr /><h4 id="阶段3驱动专项内核机制3-6个月"><a class="markdownIt-Anchor" href="#阶段3驱动专项内核机制3-6个月"></a> <strong>阶段3：驱动专项+内核机制（3-6个月）</strong></h4><p><strong>目标</strong>：</p><ul><li>精通主流驱动开发技术，深入内核核心机制。</li></ul><p><strong>核心内容</strong>：</p><table><thead><tr><th><strong>知识点</strong></th><th><strong>必要程度</strong></th><th><strong>深入程度</strong></th><th><strong>推荐书籍/资源</strong></th></tr></thead><tbody><tr><td>GPIO/I2C/SPI驱动</td><td>★★★★★</td><td>完整驱动开发</td><td>《精通Linux设备驱动程序开发》</td></tr><tr><td>中断处理</td><td>★★★★★</td><td>顶半部/底半部</td><td>内核源码<code>drivers/irqchip</code></td></tr><tr><td>内核同步机制</td><td>★★★★☆</td><td>自旋锁/RCU</td><td>《Linux内核设计与实现》第5章</td></tr><tr><td>DMA与内存管理</td><td>★★★☆☆</td><td>缓存一致性</td><td>内核文档《DMA-API-HOWTO》</td></tr><tr><td>电源管理</td><td>★★★☆☆</td><td>suspend/resume</td><td>内核文档《Power Management》</td></tr></tbody></table><p><strong>实践项目</strong>：</p><ol><li>为树莓派开发I2C传感器驱动（如BMP280）。</li><li>实现带中断的按键驱动（<code>request_irq</code>）。</li></ol><p><strong>工具</strong>：</p><ul><li><strong>逻辑分析仪</strong>：抓取SPI/I2C时序。</li><li><strong>perf</strong>：分析驱动性能瓶颈。</li></ul><p><strong>对Linux的用处</strong>：</p><ul><li>掌握真实硬件驱动开发流程。</li><li>理解内核 <strong>并发控制</strong> 和 <strong>中断优化</strong>。</li></ul><hr /><h4 id="阶段4实战深化持续学习"><a class="markdownIt-Anchor" href="#阶段4实战深化持续学习"></a> <strong>阶段4：实战深化（持续学习）</strong></h4><p><strong>目标</strong>：</p><ul><li>参与真实项目，解决复杂问题。</li></ul><p><strong>核心内容</strong>：</p><table><thead><tr><th><strong>知识点</strong></th><th><strong>必要程度</strong></th><th><strong>深入程度</strong></th><th><strong>推荐资源</strong></th></tr></thead><tbody><tr><td>内核子系统</td><td>★★★★☆</td><td>输入/IIO子系统</td><td>内核源码<code>drivers/input</code></td></tr><tr><td>调试与调优</td><td>★★★★☆</td><td>ftrace/kgdb</td><td>内核文档《ftrace使用指南》</td></tr><tr><td>社区贡献</td><td>★★★☆☆</td><td>提交内核补丁</td><td>LKML（Linux内核邮件列表）</td></tr></tbody></table><p><strong>实践项目</strong>：</p><ol><li>为开源驱动修复Bug（如内核Bugzilla中的简单问题）。</li><li>优化驱动性能（减少中断延迟或内存占用）。</li></ol><p><strong>工具</strong>：</p><ul><li><strong>git</strong>：管理内核代码修改。</li><li><strong><a href="http://checkpatch.pl">checkpatch.pl</a></strong>：检查代码规范。</li></ul><p><strong>对Linux的用处</strong>：</p><ul><li>积累真实项目经验，提升工程能力。</li><li>理解Linux内核社区的协作方式。</li></ul><hr /><h3 id="三-时间分配建议"><a class="markdownIt-Anchor" href="#三-时间分配建议"></a> <strong>三、时间分配建议</strong></h3><table><thead><tr><th><strong>阶段</strong></th><th><strong>建议时长</strong></th><th><strong>核心目标</strong></th><th><strong>时间占比</strong></th></tr></thead><tbody><tr><td>C语言与硬件交互</td><td>1-2个月</td><td>裸机操作寄存器</td><td>15%</td></tr><tr><td>操作系统+驱动基础</td><td>2-3个月</td><td>字符设备驱动+设备树</td><td>30%</td></tr><tr><td>驱动专项+内核机制</td><td>3-6个月</td><td>GPIO/I2C/中断驱动开发</td><td>40%</td></tr><tr><td>实战深化</td><td>持续</td><td>项目经验+社区贡献</td><td>15%</td></tr></tbody></table><hr /><h3 id="四-驱动开发工程师核心能力"><a class="markdownIt-Anchor" href="#四-驱动开发工程师核心能力"></a> <strong>四、驱动开发工程师核心能力</strong></h3><ol><li><p><strong>硬件能力</strong>：</p><ul><li>阅读芯片手册（如时钟配置、寄存器定义）。</li><li>使用示波器调试I2C/SPI通信问题。</li></ul></li><li><p><strong>内核能力</strong>：</p><ul><li>编写符合内核编码规范（<code>checkpatch.pl</code>）的代码。</li><li>理解设备模型（总线/设备/驱动）。</li></ul></li><li><p><strong>调试能力</strong>：</p><ul><li>分析内核Oops和Panic日志。</li><li>使用<code>trace-cmd</code>跟踪函数调用链。</li></ul></li></ol><hr /><h3 id="五-学习建议与避坑"><a class="markdownIt-Anchor" href="#五-学习建议与避坑"></a> <strong>五、学习建议与避坑</strong></h3><ol><li><p><strong>必做</strong>：</p><ul><li>每天阅读内核驱动源码（如<code>drivers/gpio</code>）。</li><li>用真实硬件（树莓派/BeagleBone）替代仿真。</li></ul></li><li><p><strong>避免</strong>：</p><ul><li>沉迷自制操作系统内核（除非目标为内核研发）。</li><li>过早研究编译器后端优化（如LLVM Pass）。</li></ul></li><li><p><strong>捷径</strong>：</p><ul><li>直接参考内核中类似驱动的实现（如<code>drivers/i2c/busses/i2c-bcm2835.c</code>）。</li><li>参与开源社区（从文档改进开始）。</li></ul></li></ol><hr /><h3 id="六-驱动开发面试常见问题"><a class="markdownIt-Anchor" href="#六-驱动开发面试常见问题"></a> <strong>六、驱动开发面试常见问题</strong></h3><ul><li><p><strong>基础问题</strong>：</p><ul><li>解释<code>platform_driver</code>和<code>platform_device</code>的作用。</li><li>自旋锁为什么不能在睡眠场景使用？</li></ul></li><li><p><strong>实战问题</strong>：</p><ul><li>如何为一个新硬件编写设备树节点？</li><li>驱动中出现<code>Unable to handle kernel paging request</code>如何调试？</li></ul></li></ul><hr /><p>按此路线，<strong>12-18个月</strong> 可达到嵌入式Linux驱动工程师的入职要求。<strong>记住：驱动开发的本质是“用软件精确描述硬件行为”</strong>，保持对硬件的敏感度是关键！</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;details&gt;
-&lt;summary&gt;版权信息&lt;/summary&gt;
-&lt;p&gt;:::warning&lt;/p&gt;
-&lt;p&gt;本文章为博主原创文章。遵循 &lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans&quot;&gt;C</summary>
-      
-    
-    
-    
-    <category term="嵌入式" scheme="https://blog.godmao.top/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    
-    <category term="嵌入式" scheme="https://blog.godmao.top/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/"/>
-    
-    <category term="学习路线" scheme="https://blog.godmao.top/Tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/"/>
     
   </entry>
   
