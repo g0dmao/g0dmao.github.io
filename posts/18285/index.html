@@ -48,6 +48,16 @@
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
                 z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
                 
             }
             #time{
@@ -251,8 +261,17 @@
                 <span id="date" style="margin:5px;"></span>
                 <span id="clock" style="margin: 5px;"></span>
             </div>
+            
+                <div id="p_btn">
+                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
+                </div>
+                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+            
+            
+            
         </nav>
         <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
         <!-- 博客详情 -->
 <div class="a_container">
     <div class="article">      
@@ -295,7 +314,8 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
 <blockquote>
 <p><code>fputc()</code>打电话给DMA的秘书说我要发这个字符，然后他就认为我已经给DMA说了叫它发送这个字符啦，所以这个字符就发出去啦，剩下就不关我的事啦。结果DMA秘书看到DMA此时还在忙于上次发送，于是判断DMA为<code>HAL_BUSY</code>没有办法把字符交给DMA。这个字符信息就丢失了。。。。</p>
 </blockquote>
-    
+   
+        <script src="/js/foldpost.js"></script> 
     </div>
     <div class="info">
         <div class="textinfo">
@@ -351,10 +371,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
 
         <div class="toc">
             
-            <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-            </div>
-            <script src="/js/btn.js"></script>
+            
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
                 <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text"> 常用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%81%9A%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text"> 这样做的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%9A%84%E6%96%B9%E5%BC%8F%E7%81%B5%E6%B4%BB%E8%BF%90%E7%94%A8dma"><span class="toc-number">2.</span> <span class="toc-text"> 使用非阻塞的方式：灵活运用DMA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. 定义缓冲区。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E5%AE%9A%E5%90%91-fputc%E4%BD%BF%E7%94%A8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. 重定向 fputc()，使用缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89dma-%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.</span> <span class="toc-text"> 3. 定义DMA 发送函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-dma-%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83"><span class="toc-number">2.4.</span> <span class="toc-text"> 4. DMA 传输完成回调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E6%83%91%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="toc-number">3.</span> <span class="toc-text"> 一些疑惑的解答</span></a></li></ol>
@@ -394,7 +411,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",2]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -517,7 +534,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,2],
+                            data: [6,2,10,4,11,2,4,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -590,13 +607,13 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -645,7 +662,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":16,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":17,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

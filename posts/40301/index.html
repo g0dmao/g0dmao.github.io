@@ -48,6 +48,16 @@
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
                 z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
                 
             }
             #time{
@@ -251,8 +261,17 @@
                 <span id="date" style="margin:5px;"></span>
                 <span id="clock" style="margin: 5px;"></span>
             </div>
+            
+                <div id="p_btn">
+                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
+                </div>
+                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+            
+            
+            
         </nav>
         <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
         <!-- 博客详情 -->
 <div class="a_container">
     <div class="article">      
@@ -402,7 +421,8 @@
 <img src="Snipaste_2025-01-19_22-41-51.png" alt="" /></p>
 <h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
 <p>说到底，构图还是服从画面与内容，照片的意义，有时候不需要华丽的构图技巧和形式，简单，真实，有意义，能让观看者产生共鸣就够了。</p>
-    
+   
+        <script src="/js/foldpost.js"></script> 
     </div>
     <div class="info">
         <div class="textinfo">
@@ -446,10 +466,7 @@
 
         <div class="toc">
             
-            <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-            </div>
-            <script src="/js/btn.js"></script>
+            
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%95%99%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text"> 第一个教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E5%9B%BE%E7%9A%84%E6%A0%B8%E5%BF%83"><span class="toc-number">1.1.</span> <span class="toc-text"> 构图的核心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%8F%96%E6%99%AF%E8%8C%83%E5%9B%B4"><span class="toc-number">1.2.</span> <span class="toc-text"> 如何选择合适的取景范围？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E7%94%BB%E9%9D%A2%E6%9B%B4%E5%8A%A0%E5%90%B8%E5%BC%95%E4%BA%BA%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text"> 让画面更加吸引人的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E6%9E%84%E5%9B%BE%E6%8A%80%E5%B7%A7%E8%A6%81%E5%92%8C%E4%B8%8A%E9%9D%A2%E7%9A%84%E6%8A%80%E5%B7%A7%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text"> 常用的构图技巧（要和上面的技巧综合运用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%BB%E9%9D%A2%E7%9A%84%E5%B9%B3%E8%A1%A1"><span class="toc-number">1.5.</span> <span class="toc-text"> 画面的平衡</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%95%99%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text"> 第二个教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E5%BD%A2%E5%BC%8F%E7%9A%84%E6%9E%84%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text"> 第一阶段：形式的构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%E7%BB%93%E6%9E%84%E6%9E%84%E5%9B%BE"><span class="toc-number">2.2.</span> <span class="toc-text"> 第二阶段：结构构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%E5%BF%98%E6%8E%89%E6%9E%84%E5%9B%BE%E4%B8%93%E6%B3%A8%E4%BA%8E%E7%94%BB%E9%9D%A2%E5%86%85%E5%AE%B9%E4%B8%8E%E4%B8%BB%E9%A2%98%E8%BF%94%E7%92%9E%E5%BD%92%E7%9C%9F"><span class="toc-number">2.3.</span> <span class="toc-text"> 第三阶段：忘掉构图，专注于画面内容与主题，返璞归真</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text"> 总结</span></a></li></ol></li></ol>
@@ -489,7 +506,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",2]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -612,7 +629,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,2],
+                            data: [6,2,10,4,11,2,4,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -685,13 +702,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -740,7 +757,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":16,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":17,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

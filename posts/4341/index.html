@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+        
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/post.css">
+        <link rel="stylesheet" href="/css/view.css">
+        <link rel="stylesheet" href="/css/admonition.css">
+
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <style>
+            html{
+                scrollbar-width: thin;
+                scrollbar-color: #2a2a2a #121212 ;
+                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+            }
+
+            body{
+                background-color: #121212;
+                color: #cacaca;     
+                cursor:default;
+            }
+
+            a {
+                color: #60A5FA;
+                text-decoration: none;
+            }
+
+            a:hover{
+                color: #3B82F6;
+            }
+
+            nav{
+                text-align: center;
+                position: sticky;
+                top: 0;
+                background-color: #121212;
+                padding: 5px;
+                border-bottom-style: dotted;
+                border-color: #2a2a2a;
+                z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
+                
+            }
+            #time{
+                text-align: center;
+                background-color: #121212;
+                color: #cacaca;
+            }
+
+            footer{
+                text-align: center;
+                color: #2a2a2a;
+                border-top-style:dotted;
+                p{
+                    margin: 5px;
+                }
+                a{
+                    color: #7b7b7b;
+                }
+            }
+
+        </style>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+ 
+    <body>
+        <nav>
+            <div style="display: inline-block; margin: 5px;">
+                <span id="date" style="margin:5px;"></span>
+                <span id="clock" style="margin: 5px;"></span>
+            </div>
+            
+                <div id="p_btn">
+                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
+                </div>
+                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+            
+            
+            
+        </nav>
+        <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
+        <!-- 博客详情 -->
+<div class="a_container">
+    <div class="article">      
+        <!--<div style="height: 50px;"></div>-->
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>在软件开发中，项目通常包含很多源文件，如果每次编译都手动敲命令，不仅繁琐，还容易出错。<br />
+<strong>Makefile</strong> 可以帮助我们自动化构建流程，大幅提升效率。本文将介绍 Makefile 的基础语法与常用用法。</p>
+<hr />
+<ul>
+<li><a href="#1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95">1. 基础用法</a></li>
+<li><a href="#2-%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%911">2. 执行逻辑^1</a>
+<ul>
+<li><a href="#21--%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E7%A4%BA%E6%84%8F%E5%9B%BE">2.1. 🔄 执行流程示意图</a></li>
+</ul>
+</li>
+<li><a href="#3-%E4%BC%AA%E7%9B%AE%E6%A0%87-phony">3. 伪目标 .PHONY</a></li>
+<li><a href="#4-%E5%8F%98%E9%87%8F">4. 变量</a>
+<ul>
+<li><a href="#41-%E8%B5%8B%E5%80%BC%E7%AC%A6%E5%8F%B7">4.1. 赋值符号</a></li>
+</ul>
+</li>
+<li><a href="#5-%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6">5. 隐含规则与通配符</a></li>
+<li><a href="#6-%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF">6. 条件分支</a>
+<ul>
+<li><a href="#61-%E8%AF%AD%E6%B3%95">6.1. 语法</a></li>
+<li><a href="#62-%E7%A4%BA%E4%BE%8B%E4%B8%80%E6%A0%B9%E6%8D%AE%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9clean%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F">6.2. 示例一：根据平台选择clean执行方式</a></li>
+<li><a href="#63-%E7%A4%BA%E4%BE%8B%E4%BA%8C%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F">6.3. 示例二：调试模式与发布模式</a></li>
+</ul>
+</li>
+<li><a href="#7-%E5%87%BD%E6%95%B0">7. 函数</a>
+<ul>
+<li><a href="#71-subst--%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2">7.1. <code>subst</code> —— 字符串替换</a></li>
+<li><a href="#72-patsubst--%E6%A8%A1%E5%BC%8F%E6%9B%BF%E6%8D%A2">7.2. <code>patsubst</code> —— 模式替换</a></li>
+<li><a href="#73-wildcard--%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8">7.3. <code>wildcard</code> —— 获取文件列表</a></li>
+<li><a href="#74-notdir--%E5%8E%BB%E6%8E%89%E8%B7%AF%E5%BE%84%E5%8F%AA%E4%BF%9D%E7%95%99%E6%96%87%E4%BB%B6%E5%90%8D">7.4. <code>notdir</code> —— 去掉路径，只保留文件名</a></li>
+<li><a href="#75-dir--%E8%8E%B7%E5%8F%96%E8%B7%AF%E5%BE%84%E9%83%A8%E5%88%86">7.5. <code>dir</code> —— 获取路径部分</a></li>
+<li><a href="#76-basename--addsuffix-%E5%92%8C-addprefix--%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E5%90%8D">7.6. <code>basename</code> 、 <code>addsuffix</code> 和 <code>addprefix</code> —— 批量处理文件名</a></li>
+<li><a href="#77-shell--%E6%89%A7%E8%A1%8C-shell-%E5%91%BD%E4%BB%A4">7.7. <code>shell</code> —— 执行 shell 命令</a></li>
+</ul>
+</li>
+<li><a href="#8-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F">8. 完整示例程序</a></li>
+</ul>
+<h2 id="1-基础用法"><a class="markdownIt-Anchor" href="#1-基础用法"></a> 1. 基础用法</h2>
+<p>一个典型的规则格式如下：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-section">target: dependencies</span><br>&lt;TAB&gt; command<br></code></pre></td></tr></table></figure>
+<ul>
+<li>target：目标文件，比如可执行文件或中间文件。</li>
+<li>dependencies：依赖文件（源文件、头文件等）。</li>
+<li>command：生成目标所需要执行的命令（必须以 TAB 缩进 开头）。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-section">main.o: main.c</span><br>	gcc -c main.c -o main.o<br></code></pre></td></tr></table></figure>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>由于makfile对空格、tab极其敏感，建议编写时打开编辑器的空格、tab显示，并避免不必要的空格，规范化书写。</p>
+</div>
+<h2 id="2-执行逻辑"><a class="markdownIt-Anchor" href="#2-执行逻辑"></a> 2. 执行逻辑<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+<p>当我们执行 <code>make</code> 时，大致流程如下：</p>
+<ol>
+<li>
+<p><strong>解析 Makefile</strong></p>
+<ul>
+<li><code>make</code> 会从当前目录寻找 <code>Makefile</code> 或 <code>makefile</code> 文件。</li>
+<li>读取其中的规则、变量、伪目标等定义。</li>
+</ul>
+</li>
+<li>
+<p><strong>确定默认目标</strong></p>
+<ul>
+<li>一般是文件中的第一个目标（例如 <code>app</code>）。</li>
+<li>也可以通过命令行指定，例如：</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">make clean<br></code></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p><strong>检查依赖关系</strong></p>
+<ul>
+<li>从目标开始，逐层检查依赖文件是否存在、是否比目标文件更新。</li>
+<li>如果依赖文件比目标文件“新”，说明目标需要重新生成。</li>
+</ul>
+</li>
+<li>
+<p><strong>执行命令</strong></p>
+<ul>
+<li>对需要更新的目标，执行其规则中定义的命令。</li>
+<li>命令必须以 <strong>TAB 缩进</strong> 开头。</li>
+</ul>
+</li>
+<li>
+<p><strong>递归构建</strong></p>
+<ul>
+<li>如果依赖文件本身也是其他规则的目标，则会递归检查和执行。</li>
+<li>直到所有依赖满足，才最终生成目标。</li>
+</ul>
+</li>
+<li>
+<p><strong>结束</strong></p>
+<ul>
+<li>如果所有目标都已是最新，则 <code>make</code> 会提示：</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">make</span>: <span class="hljs-string">&#x27;app&#x27;</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">up</span> <span class="hljs-keyword">to</span> date.<br></code></pre></td></tr></table></figure>
+<h3 id="21-执行流程示意图"><a class="markdownIt-Anchor" href="#21-执行流程示意图"></a> 2.1. 🔄 执行流程示意图</h3>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs text">          make<br>           │<br>           ▼<br>   读取并解析 Makefile<br>           │<br>           ▼<br>   确定要构建的目标 (默认/指定)<br>           │<br>           ▼<br>   检查目标的依赖文件<br>           │<br>    ┌──────┴────────┐<br>    │               │<br>依赖比目标旧      依赖比目标新/不存在<br>    │               │<br>目标已是最新    执行规则命令 → 生成新目标<br></code></pre></td></tr></table></figure>
+<div class="admonition info"><p class="admonition-title">tips
+</p><p>可以使用 make -f [makefile_name] 指定使用某个makefile文件。</p>
+</div>
+<h2 id="3-伪目标-phony"><a class="markdownIt-Anchor" href="#3-伪目标-phony"></a> 3. 伪目标 .PHONY</h2>
+<p>有些目标不是实际文件，而只是一个操作，例如 <code>clean</code>。<br />
+这时建议使用 <strong>.PHONY</strong> 声明：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: clean  </span><br><span class="hljs-section">clean:  </span><br>	rm -r  [filepath]<br></code></pre></td></tr></table></figure>
+<p>指定make目标文件：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make">make clean<br></code></pre></td></tr></table></figure>
+<h2 id="4-变量"><a class="markdownIt-Anchor" href="#4-变量"></a> 4. 变量</h2>
+<p>Makefile 支持变量，常用于保存编译器或编译选项。<br />
+使用示例如下：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs make">CC = gcc<br>CFLAGS = -Wall -g<br><br><span class="hljs-section">app: main.o utils.o</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CFLAGS)</span> main.o utils.o -o app<br><br><span class="hljs-section">main.o: main.c</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CFLAGS)</span> -c main.c -o main.o<br><br><span class="hljs-section">utils.o: utils.c</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CFLAGS)</span> -c utils.c -o utils.o<br></code></pre></td></tr></table></figure>
+<h3 id="41-赋值符号"><a class="markdownIt-Anchor" href="#41-赋值符号"></a> 4.1. 赋值符号</h3>
+<ul>
+<li><strong>=</strong><br />
+我称之为最终赋值，同一个变量无论被赋值多次，永远取最后指定的值。<br />
+示例：</li>
+</ul>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs make">VIR_A = A<br>VIR_B = <span class="hljs-variable">$(VIR_A)</span> B<br>VIR_A = AA<br></code></pre></td></tr></table></figure>
+<p>最后VIR_B的值是AA B。</p>
+<ul>
+<li><strong>:=</strong><br />
+立即赋值，正常逻辑的赋值号，类似于c语言的赋值号。</li>
+<li><strong>?=</strong><br />
+如果变量在之前没有被赋值则赋值。<br />
+可以理解为  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ...</span><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+</li>
+<li><strong>+=</strong><br />
+追加赋值，将值追加到变量中。</li>
+</ul>
+<h2 id="5-隐含规则与通配符"><a class="markdownIt-Anchor" href="#5-隐含规则与通配符"></a> 5. 隐含规则与通配符</h2>
+<p>Make 内置了一些规则，可以用简写方式：</p>
+<ul>
+<li><code>$@</code>：目标文件名</li>
+<li><code>$&lt;</code>：第一个依赖文件</li>
+<li><code>$^</code>：所有依赖文件</li>
+</ul>
+<p><code>%</code> 表示可以匹配任意长度的字符串，用于定义一类文件的生成规则。例如：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-section">%.o: %.c     </span><br>	gcc -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>含义：
+<ul>
+<li><code>%.o</code> 表示所有以 <code>.o</code> 结尾的目标文件。</li>
+<li><code>%.c</code> 表示所有以 <code>.c</code> 结尾的源文件。</li>
+<li><code>$&lt;</code> 是第一个依赖文件（这里是 <code>.c</code> 文件）。</li>
+<li><code>$@</code> 是目标文件（这里是 <code>.o</code> 文件）。</li>
+</ul>
+</li>
+<li>作用：这条规则表示，所有 <code>.c</code> 文件可以通过编译生成对应的 <code>.o</code> 文件。</li>
+</ul>
+<hr />
+<p><code>%</code> 可以匹配文件名的某一部分，用于简化规则。例如：</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs erlang">build/<span class="hljs-comment">%: src/%     </span><br>	cp <span class="hljs-string">$&lt;</span> <span class="hljs-string">$@</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>含义：
+<ul>
+<li><code>build/%</code> 表示目标文件在 <code>build/</code> 目录下。</li>
+<li><code>src/%</code> 表示依赖文件在 <code>src/</code> 目录下。</li>
+<li><code>$&lt;</code> 是依赖文件，<code>$@</code> 是目标文件。</li>
+</ul>
+</li>
+<li>作用：这条规则表示，将 <code>src/</code> 目录下的文件复制到 <code>build/</code> 目录下。</li>
+</ul>
+<hr />
+<p>在模式规则中，<code>%</code> 可以用于定义多个目标。例如：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mel">%.a: %.b %.c     <br>	cat $^ &gt; $@<span class="hljs-string">`</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>含义：
+<ul>
+<li><code>%.a</code> 是目标文件。</li>
+<li><code>%.b</code> 和 <code>%.c</code> 是依赖文件。</li>
+<li><code>$^</code> 表示所有依赖文件，<code>$@</code> 是目标文件。</li>
+</ul>
+</li>
+<li>作用：这条规则表示，将 <code>.b</code> 和 <code>.c</code> 文件合并生成 <code>.a</code> 文件。</li>
+</ul>
+<hr />
+<h2 id="6-条件分支"><a class="markdownIt-Anchor" href="#6-条件分支"></a> 6. 条件分支</h2>
+<p>在 Makefile 中，我们可以使用条件语句来根据不同情况执行不同规则或定义变量。常见的有 <code>ifeq</code>、<code>ifneq</code>、<code>ifdef</code>、<code>ifndef</code>。</p>
+<h3 id="61-语法"><a class="markdownIt-Anchor" href="#61-语法"></a> 6.1. 语法</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-keyword">ifeq</span> (条件1, 条件2)<br>    <span class="hljs-comment"># 当 条件1 == 条件2 时执行这里</span><br><span class="hljs-keyword">else</span><br>    <span class="hljs-comment"># 否则执行这里</span><br><span class="hljs-keyword">endif</span><br><br><span class="hljs-keyword">ifneq</span> (条件1, 条件2)<br>    <span class="hljs-comment"># 当 条件1 != 条件2 时执行这里</span><br><span class="hljs-keyword">endif</span><br><br><span class="hljs-keyword">ifdef</span> 变量名<br>    <span class="hljs-comment"># 当变量已定义时执行这里</span><br><span class="hljs-keyword">endif</span><br><br><span class="hljs-keyword">ifndef</span> 变量名<br>    <span class="hljs-comment"># 当变量未定义时执行这里</span><br><span class="hljs-keyword">endif</span><br></code></pre></td></tr></table></figure>
+<h3 id="62-示例一根据平台选择clean执行方式"><a class="markdownIt-Anchor" href="#62-示例一根据平台选择clean执行方式"></a> 6.2. 示例一：根据平台选择clean执行方式</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-comment"># 默认变量</span><br>CC = gcc<br><br><span class="hljs-comment"># 判断系统</span><br><span class="hljs-keyword">ifeq</span> (<span class="hljs-variable">$(OS)</span>, Windows_NT)<br>    RM = del<br><span class="hljs-keyword">else</span><br>    RM = rm -f<br><span class="hljs-keyword">endif</span><br><br><span class="hljs-section">app: main.o</span><br>	<span class="hljs-variable">$(CC)</span> main.o -o app<br><br><span class="hljs-section">clean:</span><br>	<span class="hljs-variable">$(RM)</span> *.o app<br></code></pre></td></tr></table></figure>
+<h3 id="63-示例二调试模式与发布模式"><a class="markdownIt-Anchor" href="#63-示例二调试模式与发布模式"></a> 6.3. 示例二：调试模式与发布模式</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-comment"># 设置编译选项</span><br>CFLAGS = -Wall<br><br><span class="hljs-keyword">ifeq</span> (<span class="hljs-variable">$(MODE)</span>, debug)<br>    CFLAGS += -g<br><span class="hljs-keyword">else</span><br>    CFLAGS += -O2<br><span class="hljs-keyword">endif</span><br><br><span class="hljs-section">app: main.o</span><br>	<span class="hljs-variable">$(CC)</span> <span class="hljs-variable">$(CFLAGS)</span> main.o -o app<br></code></pre></td></tr></table></figure>
+<p>使用方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">make MODE=debug   <span class="hljs-comment"># 调试模式，带调试信息</span><br>make MODE=release <span class="hljs-comment"># 默认优化模式</span><br></code></pre></td></tr></table></figure>
+<h2 id="7-函数"><a class="markdownIt-Anchor" href="#7-函数"></a> 7. 函数</h2>
+<p>Makefile 内置了许多函数，用来处理字符串、文件名、路径等。<br />
+常见函数格式为：</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make">$(函数名 参数1 参数2 ...)<br></code></pre></td></tr></table></figure>
+<p>下面介绍一些<strong>常用函数</strong></p>
+<h3 id="71-subst-字符串替换"><a class="markdownIt-Anchor" href="#71-subst-字符串替换"></a> 7.1. <code>subst</code> —— 字符串替换</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-variable">$(<span class="hljs-built_in">subst</span> from,to,text)</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>功能：将 <code>text</code> 中的 <code>from</code> 替换为 <code>to</code>。</p>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs makefile">SRC = main.c utils.c <br>OBJ = <span class="hljs-variable">$(<span class="hljs-built_in">subst</span> .c,.o,<span class="hljs-variable">$(SRC)</span>)</span> <br><br><span class="hljs-comment"># 结果：OBJ = main.o utils.o</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="72-patsubst-模式替换"><a class="markdownIt-Anchor" href="#72-patsubst-模式替换"></a> 7.2. <code>patsubst</code> —— 模式替换</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> pattern,replacement,text)</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>功能：更灵活的字符串替换，支持通配符 <code>%</code>。</p>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs make">SRC = main.c utils.c test.c<br>OBJ = <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.c,%.o,<span class="hljs-variable">$(SRC)</span>)</span><br><br><span class="hljs-comment"># 结果：OBJ = main.o utils.o test.o</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="73-wildcard-获取文件列表"><a class="markdownIt-Anchor" href="#73-wildcard-获取文件列表"></a> 7.3. <code>wildcard</code> —— 获取文件列表</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> pattern)</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>功能：匹配符合模式的文件。</p>
+</li>
+<li>
+<p>示例：</p>
+</li>
+</ul>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs make">SRC = <span class="hljs-variable">$(<span class="hljs-built_in">wildcard</span> *.c)</span><br><span class="hljs-comment"># 结果：SRC = 当前目录下所有 .c 文件</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="74-notdir-去掉路径只保留文件名"><a class="markdownIt-Anchor" href="#74-notdir-去掉路径只保留文件名"></a> 7.4. <code>notdir</code> —— 去掉路径，只保留文件名</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs make">FILES = src/main.c src/utils.c<br>NAMES = <span class="hljs-variable">$(<span class="hljs-built_in">notdir</span> <span class="hljs-variable">$(FILES)</span>)</span><br><span class="hljs-comment"># 结果：NAMES = main.c utils.c</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="75-dir-获取路径部分"><a class="markdownIt-Anchor" href="#75-dir-获取路径部分"></a> 7.5. <code>dir</code> —— 获取路径部分</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs make">FILES = src/main.c src/utils.c<br>PATHS = <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$(FILES)</span>)</span><br><span class="hljs-comment"># 结果：PATHS = src/ src/</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="76-basename-addsuffix-和-addprefix-批量处理文件名"><a class="markdownIt-Anchor" href="#76-basename-addsuffix-和-addprefix-批量处理文件名"></a> 7.6. <code>basename</code> 、 <code>addsuffix</code> 和 <code>addprefix</code> —— 批量处理文件名</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs make">FILES = main.c utils.c<br><br><span class="hljs-comment"># 去掉后缀</span><br>NAMES = <span class="hljs-variable">$(<span class="hljs-built_in">basename</span> <span class="hljs-variable">$(FILES)</span>)</span><br><span class="hljs-comment"># NAMES = main utils</span><br><br><span class="hljs-comment"># 批量添加后缀</span><br>OBJS = <span class="hljs-variable">$(<span class="hljs-built_in">addsuffix</span> .o,<span class="hljs-variable">$(NAMES)</span>)</span><br><span class="hljs-comment"># OBJS = main.o utils.o</span><br><br><span class="hljs-comment"># 批量添加前缀</span><br>OBJS = <span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> -I,<span class="hljs-variable">$(NAMES)</span>)</span><br><span class="hljs-comment"># OBJS = -Imain -Iutils</span><br></code></pre></td></tr></table></figure>
+<hr />
+<h3 id="77-shell-执行-shell-命令"><a class="markdownIt-Anchor" href="#77-shell-执行-shell-命令"></a> 7.7. <code>shell</code> —— 执行 shell 命令</h3>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs make">DATE = <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> date +%Y-%m-%d)</span><br></code></pre></td></tr></table></figure>
+<p>这样可以在 Makefile 中直接使用系统命令的输出。</p>
+<h2 id="8-完整示例程序"><a class="markdownIt-Anchor" href="#8-完整示例程序"></a> 8. 完整示例程序</h2>
+<p>这是一个完整Makefile示例程序，用于将c语言程序编译为可执行的二进制bin文件。它可以制成镜像供SoC烧录。</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs make"><span class="hljs-comment">#0###########################################################</span><br><br><span class="hljs-comment"># 设置目录变量，方便统一管理和修改</span><br><span class="hljs-comment"># 当前根目录:</span><br>ROOT_DIR := .<br><br><span class="hljs-comment"># 中间目标文件（.o）输出目录:</span><br>BUILD_DIR := build<br><br><span class="hljs-comment"># 最终生成的二进制文件（.bin）目录:</span><br>BIN_DIR := bin<br><br><span class="hljs-comment"># 工程名</span><br>NAME := key<br><br><span class="hljs-comment"># 指定链接脚本</span><br>LDS = imx.lds<br><br><span class="hljs-comment">#############################################################</span><br><br><span class="hljs-comment">#1###########################################################</span><br><br><span class="hljs-comment"># 自动查找 src/ 目录下的所有 .c 文件</span><br>SRCS = <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(ROOT_DIR)</span> -name <span class="hljs-string">&quot;*.c&quot;</span>)</span><br><br><span class="hljs-comment"># 将 SRC中的 xxx.c 转换为 build/xxx.o</span><br><span class="hljs-comment"># 同时添加 build/startup.o（汇编启动文件）</span><br>OBJS = <span class="hljs-variable">$(BUILD_DIR)</span>/startup.o<br>OBJS += <span class="hljs-variable">$(<span class="hljs-built_in">patsubst</span> %.c,<span class="hljs-variable">$(BUILD_DIR)</span>/%.o,<span class="hljs-variable">$(SRCS)</span>)</span><br><br><span class="hljs-comment"># 自动查找所有包含头文件的目录</span><br>INC_DIRS = <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> find <span class="hljs-variable">$(ROOT_DIR)</span> -type f -name <span class="hljs-string">&quot;*.h&quot;</span> -exec dirname &#123;&#125; \; | <span class="hljs-built_in">sort</span> -u)</span><br>INCLUDES = <span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> -I, <span class="hljs-variable">$(INC_DIRS)</span>)</span><br><br><span class="hljs-comment">#############################################################</span><br><br><span class="hljs-comment">#2###########################################################</span><br><br><span class="hljs-comment"># 设置编译工具（使用 ARM 的交叉编译工具链）</span><br>CC := arm-none-eabi-<br><br><span class="hljs-comment"># 编译器（用于 .c 和 .S 文件）:</span><br>GCC := <span class="hljs-variable">$(CC)</span>gcc<br><br><span class="hljs-comment"># 链接器:</span><br>LD := <span class="hljs-variable">$(CC)</span>ld<br><br><span class="hljs-comment"># 用于将 elf 转为 bin 格式:</span><br>OBJCOPY := <span class="hljs-variable">$(CC)</span>objcopy<br><br><span class="hljs-comment"># 用于反汇编</span><br>OBJDUMP := <span class="hljs-variable">$(CC)</span>objdump<br><br><span class="hljs-comment"># 编译选项（GCC 编译阶段）</span><br><span class="hljs-comment"># -I：指定头文件搜索目录</span><br><span class="hljs-comment"># -Wall：打开所有警告</span><br><span class="hljs-comment"># -O2：优化等级 2（推荐用于 release）</span><br><span class="hljs-comment"># -nostdlib：不链接标准库（适用于裸机）</span><br><span class="hljs-comment"># -c：只编译，不链接</span><br>GCC_FLAGS = <span class="hljs-variable">$(INCLUDES)</span> -Wall -nostdlib -c<br><br><span class="hljs-comment"># 链接器选项</span><br>LD_FLAGS = -T<span class="hljs-variable">$(LDS)</span><br><br><span class="hljs-comment"># 使用 objdump 工具对生成的 ELF 文件进行反汇编</span><br><span class="hljs-comment"># -D：反汇编所有节（包括代码段、启动代码等）</span><br><span class="hljs-comment"># -m arm：指定目标架构为 ARM</span><br><span class="hljs-comment"># .elf：输入的可执行文件</span><br><span class="hljs-comment"># &gt; .dis：将反汇编结果输出为 .dis 文本文件</span><br>OBJDUMP_FLAGS = -D -m arm <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(NAME)</span>.elf &gt; <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(NAME)</span>.dis<br><br><span class="hljs-comment">#############################################################</span><br><br><span class="hljs-comment">#3###########################################################</span><br><br><span class="hljs-comment"># 目标：生成最终的二进制文件 bin/$(NAME).bin</span><br><span class="hljs-variable">$(BIN_DIR)</span>/<span class="hljs-variable">$(NAME)</span>.bin: <span class="hljs-variable">$(OBJS)</span><br>	<span class="hljs-comment"># 链接所有 .o 文件生成 elf 格式可执行文件</span><br>    <span class="hljs-variable">$(LD)</span> <span class="hljs-variable">$(LD_FLAGS)</span> <span class="hljs-variable">$(OBJS)</span> -o <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(NAME)</span>.elf<br>	<span class="hljs-comment"># 反汇编 调试用</span><br>    <span class="hljs-variable">$(OBJDUMP)</span> <span class="hljs-variable">$(OBJDUMP_FLAGS)</span><br>	<span class="hljs-comment"># 把 elf 文件转换为裸机二进制文件（无符号、无头信息）</span><br>    <span class="hljs-variable">$(OBJCOPY)</span> -O binary -S <span class="hljs-variable">$(BUILD_DIR)</span>/<span class="hljs-variable">$(NAME)</span>.elf <span class="hljs-variable">$@</span><br> <br><span class="hljs-comment"># 编译汇编启动文件 startup.S，生成 build/startup.o</span><br><span class="hljs-variable">$(BUILD_DIR)</span>/startup.o: startup.S<br>	<span class="hljs-comment"># 注意 startup.S 是汇编文件，用 gcc 编译也可以，默认会调用汇编器</span><br>    <span class="hljs-variable">$(GCC)</span> <span class="hljs-variable">$(GCC_FLAGS)</span> <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-comment"># 编译每个 .c 文件到 build/xxx.o</span><br><span class="hljs-comment"># $@：目标文件（例如 build/main.o）</span><br><span class="hljs-comment"># $&lt;：依赖的源文件（例如 src/main.c）</span><br><span class="hljs-variable">$(BUILD_DIR)</span>/%.o: %.c<br>	<span class="hljs-comment"># 修复由于没有文件夹报错</span><br>    mkdir -p <span class="hljs-variable">$(<span class="hljs-built_in">dir</span> <span class="hljs-variable">$@</span>)</span><br>    <span class="hljs-variable">$(GCC)</span> <span class="hljs-variable">$(GCC_FLAGS)</span> -c <span class="hljs-variable">$&lt;</span> -o <span class="hljs-variable">$@</span><br><br><span class="hljs-comment">#############################################################</span><br><br><span class="hljs-meta"><span class="hljs-keyword">.PHONY</span>: clean</span><br><span class="hljs-section">clean:</span><br>    rm -r <span class="hljs-variable">$(BUILD_DIR)</span>/* <span class="hljs-variable">$(BIN_DIR)</span>/*<br></code></pre></td></tr></table></figure>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>仅作了解 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+   
+        <script src="/js/foldpost.js"></script> 
+    </div>
+    <div class="info">
+        <div class="textinfo">
+            <h1 style="text-align: center;">MakeFile简明指南</h1>
+            <p>创建时间：9月 07, 2025 </p>
+            <p>最后更新：9月 08, 2025</p>
+            <p>字数统计：2.4k字</p>
+            <p>预计阅读：9min</p>
+            
+            <div class="catgrs">文章分类：
+                
+                    <span>
+                        <a href="/categories/Linux/" id="catgrs">
+                            -Linux  
+                        </a>
+                    </span>
+                
+                    <span>
+                        <a href="/categories/Linux/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/" id="catgrs">
+                            -项目管理  
+                        </a>
+                    </span>
+                
+            </div>
+            <div class="tgs">
+                
+                    <span>
+                        <a href="/Tags/MakeFile/" id="tgs">
+                            #MakeFile  
+                        </a>
+                    </span>
+                
+            </div>
+        </div>
+
+        <div class="toc">
+            
+            
+            <details>
+                <summary id="sumtoc">TOC(自动生成)</summary>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text"> 1. 基础用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91"><span class="toc-number">2.</span> <span class="toc-text"> 2. 执行逻辑[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1. 🔄 执行流程示意图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BC%AA%E7%9B%AE%E6%A0%87-phony"><span class="toc-number">3.</span> <span class="toc-text"> 3. 伪目标 .PHONY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%98%E9%87%8F"><span class="toc-number">4.</span> <span class="toc-text"> 4. 变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E8%B5%8B%E5%80%BC%E7%AC%A6%E5%8F%B7"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 赋值符号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-number">5.</span> <span class="toc-text"> 5. 隐含规则与通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF"><span class="toc-number">6.</span> <span class="toc-text"> 6. 条件分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#61-%E8%AF%AD%E6%B3%95"><span class="toc-number">6.1.</span> <span class="toc-text"> 6.1. 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E7%A4%BA%E4%BE%8B%E4%B8%80%E6%A0%B9%E6%8D%AE%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9clean%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="toc-number">6.2.</span> <span class="toc-text"> 6.2. 示例一：根据平台选择clean执行方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#63-%E7%A4%BA%E4%BE%8B%E4%BA%8C%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F"><span class="toc-number">6.3.</span> <span class="toc-text"> 6.3. 示例二：调试模式与发布模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%87%BD%E6%95%B0"><span class="toc-number">7.</span> <span class="toc-text"> 7. 函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#71-subst-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2"><span class="toc-number">7.1.</span> <span class="toc-text"> 7.1. subst —— 字符串替换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#72-patsubst-%E6%A8%A1%E5%BC%8F%E6%9B%BF%E6%8D%A2"><span class="toc-number">7.2.</span> <span class="toc-text"> 7.2. patsubst —— 模式替换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#73-wildcard-%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="toc-number">7.3.</span> <span class="toc-text"> 7.3. wildcard —— 获取文件列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#74-notdir-%E5%8E%BB%E6%8E%89%E8%B7%AF%E5%BE%84%E5%8F%AA%E4%BF%9D%E7%95%99%E6%96%87%E4%BB%B6%E5%90%8D"><span class="toc-number">7.4.</span> <span class="toc-text"> 7.4. notdir —— 去掉路径，只保留文件名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#75-dir-%E8%8E%B7%E5%8F%96%E8%B7%AF%E5%BE%84%E9%83%A8%E5%88%86"><span class="toc-number">7.5.</span> <span class="toc-text"> 7.5. dir —— 获取路径部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76-basename-addsuffix-%E5%92%8C-addprefix-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E5%90%8D"><span class="toc-number">7.6.</span> <span class="toc-text"> 7.6. basename 、 addsuffix 和 addprefix —— 批量处理文件名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#77-shell-%E6%89%A7%E8%A1%8C-shell-%E5%91%BD%E4%BB%A4"><span class="toc-number">7.7.</span> <span class="toc-text"> 7.7. shell —— 执行 shell 命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F"><span class="toc-number">8.</span> <span class="toc-text"> 8. 完整示例程序</span></a></li></ol>
+            </details>
+        </div>
+        
+    </div>    
+</div>
+
+
+
+
+
+        <footer>
+            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a></p>
+        </footer>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,3],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":17,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+ 
+</html>
+

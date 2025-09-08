@@ -48,6 +48,16 @@
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
                 z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
                 
             }
             #time{
@@ -78,8 +88,12 @@
                 <span id="date" style="margin:5px;"></span>
                 <span id="clock" style="margin: 5px;"></span>
             </div>
+            
+            
+            
         </nav>
         <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
         <!--归档-->
 
 <div class="i_container">
@@ -97,6 +111,13 @@
         <div class="i_posts">
             <div class="i_lsposts">
                 <ul class="i_posts">
+                    
+                        <li class="i_posts">
+                            2025/09/07 - 
+                            <a href="/posts/4341/">
+                                MakeFile简明指南 
+                            </a>  
+                        </li>
                     
                         <li class="i_posts">
                             2025/09/07 - 
@@ -149,7 +170,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",2]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -272,7 +293,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,2],
+                            data: [6,2,10,4,11,2,4,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -345,13 +366,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -400,7 +421,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":16,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":17,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

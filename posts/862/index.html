@@ -48,6 +48,16 @@
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
                 z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
                 
             }
             #time{
@@ -251,8 +261,17 @@
                 <span id="date" style="margin:5px;"></span>
                 <span id="clock" style="margin: 5px;"></span>
             </div>
+            
+                <div id="p_btn">
+                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
+                </div>
+                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+            
+            
+            
         </nav>
         <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
         <!-- 博客详情 -->
 <div class="a_container">
     <div class="article">      
@@ -352,7 +371,8 @@
 <hr />
 <p>关于消抖我还没有实际上机跑过，但是也写一下，Deepseek写的：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> DEBOUNCE_TIME 1 <span class="hljs-comment">//消抖时间参数，根据时间片的时间来设定</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    KEY_STATE_IDLE,<span class="hljs-comment">//空闲</span><br>    KEY_STATE_PRESSED,<span class="hljs-comment">//按下</span><br>    KEY_STATE_RELEASED<span class="hljs-comment">//松开</span><br>&#125; KeyState;<br><br>KeyState key_state = KEY_STATE_IDLE;<br><br><span class="hljs-type">uint16_t</span> debounce_timer = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">KeyScan</span><span class="hljs-params">()</span> &#123;<br>    uchar ReadData = PINB ^ <span class="hljs-number">0xff</span>;<br>    uchar new_trg = ReadData &amp; (ReadData ^ cont);<br><br>    <span class="hljs-keyword">switch</span> (key_state) &#123;<br>        <span class="hljs-keyword">case</span> KEY_STATE_IDLE:<br>            <span class="hljs-keyword">if</span> (new_trg != <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 检测到按键变化</span><br>                key_state = KEY_STATE_PRESSED;<br>                debounce_timer = DEBOUNCE_TIME;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br><br>        <span class="hljs-keyword">case</span> KEY_STATE_PRESSED:<br>            <span class="hljs-keyword">if</span> (debounce_timer &gt; <span class="hljs-number">0</span>) &#123;<br>                debounce_timer --;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">if</span> (ReadData == (PINB ^ <span class="hljs-number">0xff</span>)) &#123; <span class="hljs-comment">// 确认按键状态</span><br>                    trg = new_trg;<br>                    cont = ReadData;<br>		    <span class="hljs-keyword">if</span>(trg &amp;&amp; cont)&#123;<br>			<span class="hljs-comment">/*写单击逻辑*/</span><br>		    &#125;<br>                    key_state = KEY_STATE_RELEASED;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    key_state = KEY_STATE_IDLE;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br><br>        <span class="hljs-keyword">case</span> KEY_STATE_RELEASED:<br>            <span class="hljs-keyword">if</span> (new_trg == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 等待按键释放</span><br>                key_state = KEY_STATE_IDLE;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-    
+   
+        <script src="/js/foldpost.js"></script> 
     </div>
     <div class="info">
         <div class="textinfo">
@@ -396,10 +416,7 @@
 
         <div class="toc">
             
-            <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-            </div>
-            <script src="/js/btn.js"></script>
+            
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
                 <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text"> 话不多说直接上代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> 尝试理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-number">2.1.</span> <span class="toc-text"> 取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%87%BB%E6%8C%89%E4%B8%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 单击按下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E5%90%8E%E8%BF%98%E6%B2%A1%E6%9C%89%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80%E5%BC%95%E7%94%B3%E5%88%B0%E9%95%BF%E6%8C%89"><span class="toc-number">2.3.</span> <span class="toc-text"> 按下后还没有完全松开（引申到长按）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80"><span class="toc-number">2.4.</span> <span class="toc-text"> 完全松开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%80%85%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-number">2.5.</span> <span class="toc-text"> 笔者的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text"> 在STM32中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B6%88%E6%8A%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text"> 关于消抖问题</span></a></li></ol>
@@ -439,7 +456,7 @@
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",2]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -562,7 +579,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,2],
+                            data: [6,2,10,4,11,2,4,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -635,13 +652,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":16},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":17},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -690,7 +707,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":16,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":17,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

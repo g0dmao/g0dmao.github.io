@@ -42,20 +42,14 @@
   padding: 10px;
   max-height: 600px;  
   position: sticky;
-  top: 40px;
+  top: 80px;
   a{
     color:lightseagreen;
   }
   a:hover{
     color:darkcyan;
   }
-  span{
-    color: #60A5FA;
-    text-decoration-line: underline;
-  }
-  span:hover{
-    color: #3B82F6;
-  }
+  
     
 }
 
@@ -94,7 +88,7 @@
 figure.highlight {
   margin: 1rem 0;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 80%;
   margin: 1em auto;  /* 上下留白，并居中 */
@@ -137,7 +131,7 @@ figure.highlight {
 }
 
 .highlight code {
-  white-space: pre-wrap;
+  white-space: pre;
   word-wrap: break-word;
   font-family: "Fira Code", "JetBrains Mono", Consolas, monospace !important;
 }
@@ -160,4 +154,25 @@ figure.highlight {
   text-decoration-style: dashed;
   text-decoration-color:darkgreen;
   text-decoration-thickness: bold;
+}
+
+/* 折叠样式 */
+
+.collapsible-content {
+  display: block; /* 默认展开 */
+  margin-left: 1em;
+}
+.collapsible-title {
+  cursor: pointer;
+  user-select: none;
+}
+.collapsible-title::before {
+  content: "O_O"; /* 默认展开箭头 */
+  color: #3B82F6;
+  transition: transform 0.2s;
+}
+
+.collapsible-title.collapsed::before {
+  content: "~_~"; /* 折叠状态箭头 */
+  color: #3B82F6;
 }
