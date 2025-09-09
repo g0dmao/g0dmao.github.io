@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+        
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/post.css">
+        <link rel="stylesheet" href="/css/view.css">
+        <link rel="stylesheet" href="/css/admonition.css">
+
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
+        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <style>
+            html{
+                scrollbar-width: thin;
+                scrollbar-color: #2a2a2a #121212 ;
+                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+            }
+
+            body{
+                background-color: #121212;
+                color: #cacaca;     
+                cursor:default;
+            }
+
+            a {
+                color: #60A5FA;
+                text-decoration: none;
+            }
+
+            a:hover{
+                color: #3B82F6;
+            }
+
+            nav{
+                text-align: center;
+                position: sticky;
+                top: 0;
+                background-color: #121212;
+                padding: 5px;
+                border-bottom-style: dotted;
+                border-color: #2a2a2a;
+                z-index: 99;
+                #p_btn{
+                    span{
+                    color: #60A5FA;
+                    text-decoration-line: underline;
+                    }
+                    span:hover{
+                        color: #3B82F6;
+                    }
+                }
+                
+                
+            }
+            #time{
+                text-align: center;
+                background-color: #121212;
+                color: #cacaca;
+            }
+
+            footer{
+                text-align: center;
+                color: #333333;
+                border-top-style:dotted;
+                font-size: 14px;
+                p{
+                    margin: 5px;
+                }
+                a{
+                    color: #7b7b7b;
+                }
+            }
+
+        </style>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+
+            .tips-style-warning {
+                --tips-light-bg: #fff8e6;
+                --tips-dark-bg: #3d371f;
+                --tips-border: #ffb100;
+            }
+        
+            .tips-style-danger {
+                --tips-light-bg: #ffeded;
+                --tips-dark-bg: #3d2222;
+                --tips-border: #ff4545;
+            }
+        
+            .tips-style-tip {
+                --tips-light-bg: #e6f4ff;
+                --tips-dark-bg: #1f2f3d;
+                --tips-border: #409eff;
+            }
+        
+            .tips-style-mention {
+                --tips-light-bg: #f3e6ff;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #b45fff;
+            }
+        
+            .tips-style-recommend {
+                --tips-light-bg: #e6ffe6;
+                --tips-dark-bg: #1f3d1f;
+                --tips-border: #67c23a;
+            }
+        
+            .tips-style-note {
+                --tips-light-bg: #f5f5f5;
+                --tips-dark-bg: #363636;
+                --tips-border: #9e9e9e;
+            }
+        
+            .tips-style-info {
+                --tips-light-bg: #e3f2fd;
+                --tips-dark-bg: #1f313d;
+                --tips-border: #03a9f4;
+            }
+        
+            .tips-style-success {
+                --tips-light-bg: #e8f5e9;
+                --tips-dark-bg: #1f3d24;
+                --tips-border: #4caf50;
+            }
+        
+            .tips-style-error {
+                --tips-light-bg: #ffebee;
+                --tips-dark-bg: #3d1f22;
+                --tips-border: #f44336;
+            }
+        
+            .tips-style-bug {
+                --tips-light-bg: #fce4ec;
+                --tips-dark-bg: #3d1f2a;
+                --tips-border: #e91e63;
+            }
+        
+            .tips-style-todo {
+                --tips-light-bg: #f3e5f5;
+                --tips-dark-bg: #2f1f3d;
+                --tips-border: #9c27b0;
+            }
+        
+            .tips-style-example {
+                --tips-light-bg: #fff3e0;
+                --tips-dark-bg: #3d311f;
+                --tips-border: #ff9800;
+            }
+        
+            .tips-style-quote {
+                --tips-light-bg: #eceff1;
+                --tips-dark-bg: #1f292d;
+                --tips-border: #607d8b;
+            }
+        
+            .tips-style-link {
+                --tips-light-bg: #e8eaf6;
+                --tips-dark-bg: #1f2137;
+                --tips-border: #3f51b5;
+            }
+        
+            .tips-style-code {
+                --tips-light-bg: #fafafa;
+                --tips-dark-bg: #363636;
+                --tips-border: #616161;
+            }
+        
+            .tips-style-update {
+                --tips-light-bg: #e0f2f1;
+                --tips-dark-bg: #1f3734;
+                --tips-border: #009688;
+            }
+        
+            .tips-style-star {
+                --tips-light-bg: #fffde7;
+                --tips-dark-bg: #3d3a1f;
+                --tips-border: #ffd700;
+            }
+        
+            .tips-style-time {
+                --tips-light-bg: #efebe9;
+                --tips-dark-bg: #332824;
+                --tips-border: #795548;
+            }
+        </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+ 
+    <body>
+        <nav>
+            <div style="display: inline-block; margin: 5px;">
+                <span id="date" style="margin:5px;"></span>
+                <span id="clock" style="margin: 5px;"></span>
+            </div>
+            
+                <div id="p_btn">
+                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
+                </div>
+                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+            
+            
+            
+        </nav>
+        <script src="/js/clock.js"></script>
+        <script src="/js/btn.js"></script>
+        <!-- 博客详情 -->
+<div class="a_container">
+    <div class="article">      
+        <!--<div style="height: 50px;"></div>-->
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="文件描述符内核分发的身份证"><a class="markdownIt-Anchor" href="#文件描述符内核分发的身份证"></a> 文件描述符：内核分发的身份证</h2>
+<p>在 Linux 系统中，<strong>文件描述符（File Descriptor，简称 FD）是一个核心概念，它是一个非负整数</strong>，用于唯一标识一个已打开的文件。这个文件可以是普通文件、目录、网络套接字（socket），甚至是设备（如键盘、显示器）。</p>
+<p>文件描述符的设计主要有以下几个优点：</p>
+<ol>
+<li>
+<p><strong>简化了 I/O 接口</strong>：无论是读写本地文件，还是进行网络通信，开发者都可以使用一套统一的系统调用（<code>read</code>, <code>write</code>, <code>close</code> 等），而无需关心底层的具体类型。这种“一切皆文件”的设计哲学是 Linux 简洁和强大的体现。</p>
+</li>
+<li>
+<p><strong>隔离了应用程序与内核</strong>：应用程序只知道一个简单的整数，而不需要知道文件在磁盘上的物理位置，也不用关心内核是如何管理文件的。所有复杂的操作都由内核在幕后完成。</p>
+</li>
+<li>
+<p><strong>管理系统资源</strong>：内核通过文件描述符表来管理每个进程打开的文件。当一个进程结束时，内核可以根据这个表自动关闭所有打开的文件，避免资源泄露。</p>
+</li>
+</ol>
+<p>文件描述符的几个重要特点：</p>
+<ul>
+<li>
+<p><strong>唯一性</strong>：在一个进程中，每个打开的文件都有一个独一无二的文件描述符。</p>
+</li>
+<li>
+<p><strong>非负整数</strong>：文件描述符的值通常从 3 开始分配，因为 0、1、2 这三个描述符被系统预留给标准输入、标准输出和标准错误。</p>
+<ul>
+<li>
+<p><strong>0</strong>：标准输入（<code>stdin</code>），通常是键盘。</p>
+</li>
+<li>
+<p><strong>1</strong>：标准输出（<code>stdout</code>），通常是显示器。</p>
+</li>
+<li>
+<p><strong>2</strong>：标准错误（<code>stderr</code>），也通常是显示器。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>进程私有</strong>：文件描述符是在进程内部使用的，不同进程的文件描述符互不影响。例如，进程 A 的文件描述符 3 和进程 B 的文件描述符 3 可能指向完全不同的文件。</p>
+</li>
+</ul>
+<h2 id="最基础的系统调用函数"><a class="markdownIt-Anchor" href="#最基础的系统调用函数"></a> 最基础的系统调用函数</h2>
+<p><strong>Linux I/O 编程中常见的系统调用函数</strong>，这些函数位于 <strong><code>unistd.h</code></strong>（以及 <code>fcntl.h</code> 等）中，是用户态和内核态交互的基础接口。</p>
+<h3 id="1-open"><a class="markdownIt-Anchor" href="#1-open"></a> 1. <code>open</code></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span>    <span class="hljs-comment">// open flags</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h4>
+<p>打开或创建一个文件，返回一个 <strong>文件描述符</strong>（fd，整数），后续 I/O 都依赖它。</p>
+<h4 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数</h4>
+<ul>
+<li>
+<p><code>pathname</code>：文件路径。</p>
+</li>
+<li>
+<p><code>flags</code>：打开方式，常用值：</p>
+<ul>
+<li>
+<p><code>O_RDONLY</code>：只读</p>
+</li>
+<li>
+<p><code>O_WRONLY</code>：只写</p>
+</li>
+<li>
+<p><code>O_RDWR</code>：读写</p>
+</li>
+<li>
+<p><code>O_CREAT</code>：若文件不存在则创建，需要配合 <code>mode</code> 参数</p>
+</li>
+<li>
+<p><code>O_TRUNC</code>：打开时清空文件</p>
+</li>
+<li>
+<p><code>O_APPEND</code>：写时追加到文件尾部</p>
+</li>
+<li>
+<p><code>O_NOBLOCK</code>：非阻塞模式</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>mode</code>：创建文件时的权限（如 <code>0666</code>，受 umask 影响）。</p>
+</li>
+</ul>
+<h4 id="返回值"><a class="markdownIt-Anchor" href="#返回值"></a> 返回值</h4>
+<ul>
+<li>
+<p>成功：文件描述符（非负整数）</p>
+</li>
+<li>
+<p>失败：<code>-1</code>，并设置 <code>errno</code></p>
+</li>
+</ul>
+<hr />
+<h3 id="2-write"><a class="markdownIt-Anchor" href="#2-write"></a> 2. <code>write</code></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="作用-2"><a class="markdownIt-Anchor" href="#作用-2"></a> 作用</h4>
+<p>向文件（或设备）写入数据。</p>
+<h4 id="参数-2"><a class="markdownIt-Anchor" href="#参数-2"></a> 参数</h4>
+<ul>
+<li>
+<p><code>fd</code>：文件描述符</p>
+</li>
+<li>
+<p><code>buf</code>：要写入的数据缓冲区指针</p>
+</li>
+<li>
+<p><code>count</code>：要写入的字节数</p>
+</li>
+</ul>
+<h4 id="返回值-2"><a class="markdownIt-Anchor" href="#返回值-2"></a> 返回值</h4>
+<ul>
+<li>
+<p>成功：实际写入的字节数（可能小于 <code>count</code>）</p>
+</li>
+<li>
+<p>失败：<code>-1</code></p>
+</li>
+</ul>
+<h4 id="注意"><a class="markdownIt-Anchor" href="#注意"></a> 注意</h4>
+<ul>
+<li>
+<p>对于普通文件，通常会写入全部数据。</p>
+</li>
+<li>
+<p>对于管道、socket 等，可能分多次写入，需要循环写。</p>
+</li>
+</ul>
+<hr />
+<h3 id="3-read"><a class="markdownIt-Anchor" href="#3-read"></a> 3. <code>read</code></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br>  <br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="作用-3"><a class="markdownIt-Anchor" href="#作用-3"></a> 作用</h4>
+<p>从文件（或设备）读取数据。</p>
+<h4 id="参数-3"><a class="markdownIt-Anchor" href="#参数-3"></a> 参数</h4>
+<ul>
+<li>
+<p><code>fd</code>：文件描述符</p>
+</li>
+<li>
+<p><code>buf</code>：存放读出数据的缓冲区</p>
+</li>
+<li>
+<p><code>count</code>：最大读取字节数</p>
+</li>
+</ul>
+<h4 id="返回值-3"><a class="markdownIt-Anchor" href="#返回值-3"></a> 返回值</h4>
+<ul>
+<li>
+<p>成功：实际读取的字节数</p>
+<ul>
+<li><code>0</code> 表示到达文件结尾 (EOF)</li>
+</ul>
+</li>
+<li>
+<p>失败：<code>-1</code></p>
+</li>
+</ul>
+<h4 id="注意-2"><a class="markdownIt-Anchor" href="#注意-2"></a> 注意</h4>
+<ul>
+<li>
+<p>实际读取字节数可能小于 <code>count</code>。</p>
+</li>
+<li>
+<p>对于阻塞 I/O，如果没有数据，可能会挂起等待。</p>
+</li>
+</ul>
+<hr />
+<h3 id="4-lseek"><a class="markdownIt-Anchor" href="#4-lseek"></a> 4. <code>lseek</code></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span>  </span><br><br><span class="hljs-type">off_t</span> <span class="hljs-title function_">lseek</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> offset, <span class="hljs-type">int</span> whence)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="作用-4"><a class="markdownIt-Anchor" href="#作用-4"></a> 作用</h4>
+<p>移动文件读写位置（文件指针）。</p>
+<h4 id="参数-4"><a class="markdownIt-Anchor" href="#参数-4"></a> 参数</h4>
+<ul>
+<li>
+<p><code>fd</code>：文件描述符</p>
+</li>
+<li>
+<p><code>offset</code>：偏移量（可正可负）</p>
+</li>
+<li>
+<p><code>whence</code>：偏移起始点</p>
+<ul>
+<li>
+<p><code>SEEK_SET</code>：从文件开头</p>
+</li>
+<li>
+<p><code>SEEK_CUR</code>：从当前位置</p>
+</li>
+<li>
+<p><code>SEEK_END</code>：从文件末尾</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="返回值-4"><a class="markdownIt-Anchor" href="#返回值-4"></a> 返回值</h4>
+<ul>
+<li>
+<p>成功：新的文件偏移位置</p>
+</li>
+<li>
+<p>失败：<code>-1</code></p>
+</li>
+</ul>
+<h4 id="注意-3"><a class="markdownIt-Anchor" href="#注意-3"></a> 注意</h4>
+<ul>
+<li>
+<p>常用来实现随机读写。</p>
+</li>
+<li>
+<p>对某些设备文件可能不支持（如管道）。</p>
+</li>
+</ul>
+<hr />
+<h3 id="5-close"><a class="markdownIt-Anchor" href="#5-close"></a> 5. <code>close</code></h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br></code></pre></td></tr></table></figure>
+<h4 id="作用-5"><a class="markdownIt-Anchor" href="#作用-5"></a> 作用</h4>
+<p>关闭一个打开的文件描述符，释放内核资源。</p>
+<h4 id="参数-5"><a class="markdownIt-Anchor" href="#参数-5"></a> 参数</h4>
+<ul>
+<li><code>fd</code>：文件描述符</li>
+</ul>
+<h4 id="返回值-5"><a class="markdownIt-Anchor" href="#返回值-5"></a> 返回值</h4>
+<ul>
+<li>
+<p>成功：<code>0</code></p>
+</li>
+<li>
+<p>失败：<code>-1</code></p>
+</li>
+</ul>
+<h2 id="常见函数查找表"><a class="markdownIt-Anchor" href="#常见函数查找表"></a> 常见函数查找表</h2>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>头文件</th>
+<th>功能</th>
+<th>主要参数</th>
+<th>返回值</th>
+<th>常见用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td><code>&lt;fcntl.h&gt;</code>, <code>&lt;unistd.h&gt;</code></td>
+<td>打开或创建文件，返回文件描述符</td>
+<td><code>pathname</code>：路径<code>flags</code>：打开方式（如 <code>O_RDONLY</code>）<code>mode</code>：权限（如 <code>0644</code>，仅在 <code>O_CREAT</code> 时有效）</td>
+<td>成功：文件描述符 (≥0)失败：<code>-1</code></td>
+<td>打开文件/设备，获得 <code>fd</code></td>
+</tr>
+<tr>
+<td><code>write</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>向文件写入数据</td>
+<td><code>fd</code>：文件描述符<code>buf</code>：数据缓冲区<code>count</code>：要写入字节数</td>
+<td>成功：实际写入字节数失败：<code>-1</code></td>
+<td>向文件、管道、socket 写数据</td>
+</tr>
+<tr>
+<td><code>read</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>从文件读取数据</td>
+<td><code>fd</code>：文件描述符<code>buf</code>：存放数据的缓冲区<code>count</code>：最大读取字节数</td>
+<td>成功：实际读取字节数<code>0</code>：文件结尾失败：<code>-1</code></td>
+<td>读取文件、键盘输入、网络数据</td>
+</tr>
+<tr>
+<td><code>lseek</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>改变文件读写位置（文件指针）</td>
+<td><code>fd</code>：文件描述符<code>offset</code>：偏移量<code>whence</code>：参考位置（<code>SEEK_SET</code>/<code>SEEK_CUR</code>/<code>SEEK_END</code>）</td>
+<td>成功：新的偏移位置失败：<code>-1</code></td>
+<td>随机读写文件、获取文件大小</td>
+</tr>
+<tr>
+<td><code>close</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>关闭文件描述符，释放资源</td>
+<td><code>fd</code>：文件描述符</td>
+<td>成功：<code>0</code>失败：<code>-1</code></td>
+<td>程序结束或文件不再使用时关闭</td>
+</tr>
+<tr>
+<td><code>sync</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>将内核缓冲区中所有修改过的数据（脏页）写入磁盘</td>
+<td>无</td>
+<td>无返回值</td>
+<td>全局刷新，影响所有文件，效率较低</td>
+</tr>
+<tr>
+<td><code>fsync</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>将指定文件的缓存数据强制写入磁盘</td>
+<td><code>fd</code>：文件描述符</td>
+<td>成功：<code>0</code>，失败：<code>-1</code></td>
+<td>精确到单个文件，常用于数据库、日志写入</td>
+</tr>
+<tr>
+<td><code>pipe</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>创建匿名管道，用于进程间通信</td>
+<td><code>int pipefd[2]</code></td>
+<td>成功：0，失败：-1</td>
+<td><code>pipefd[0]</code> 读端，<code>pipefd[1]</code> 写端</td>
+</tr>
+<tr>
+<td><code>unlink</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>删除一个文件（目录用 <code>rmdir</code>）</td>
+<td><code>pathname</code>：文件路径</td>
+<td>成功：0，失败：-1</td>
+<td>实际删除在引用计数归零时发生</td>
+</tr>
+<tr>
+<td><code>access</code></td>
+<td><code>&lt;unistd.h&gt;</code></td>
+<td>检查文件是否存在及权限</td>
+<td><code>pathname, mode</code></td>
+<td>成功：0，失败：-1</td>
+<td><code>mode</code> 可取 <code>R_OK, W_OK, X_OK, F_OK</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="对比c-标准库io操作"><a class="markdownIt-Anchor" href="#对比c-标准库io操作"></a> 对比C 标准库IO操作</h2>
+<p>使用c标准库的IO操作，小量频繁读写的效率更高，因为其内部自带有缓冲区。<br />
+这可以理解为在系统IO上有封装了一层，进行文件操作时写入C自带缓冲区，满足一定条件再调用系统IO，将缓冲区的内容写入IO缓存区，再到内核的页缓存区，最后到物理的磁盘。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Linux 系统调用 I/O</th>
+<th>C 标准库文件操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>头文件</strong></td>
+<td><code>&lt;unistd.h&gt;</code>, <code>&lt;fcntl.h&gt;</code></td>
+<td><code>&lt;stdio.h&gt;</code></td>
+</tr>
+<tr>
+<td><strong>函数示例</strong></td>
+<td><code>open</code>, <code>read</code>, <code>write</code>, <code>lseek</code>, <code>close</code></td>
+<td><code>fopen</code>, <code>fread</code>, <code>fwrite</code>, <code>fseek</code>, <code>fclose</code>, <code>fprintf</code>, <code>fscanf</code></td>
+</tr>
+<tr>
+<td><strong>返回值</strong></td>
+<td>直接返回字节数、文件描述符等，或 <code>-1</code></td>
+<td>返回 <code>FILE*</code> 指针，或 <code>EOF</code> 等错误码</td>
+</tr>
+<tr>
+<td><strong>数据单位</strong></td>
+<td>以 <strong>字节（byte）</strong> 为单位</td>
+<td>以 <strong>缓冲区 / 结构化数据</strong> 为单位（有缓冲机制）</td>
+</tr>
+<tr>
+<td><strong>缓冲</strong></td>
+<td><strong>无用户态缓冲</strong>，直接在用户空间和内核空间间传递数据</td>
+<td><strong>带缓冲区</strong>（stdio 库内部维护缓存，加速小块读写）</td>
+</tr>
+<tr>
+<td><strong>层次</strong></td>
+<td>操作系统内核提供的 <strong>底层接口</strong></td>
+<td>基于系统调用的 <strong>封装库函数</strong></td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>可操作普通文件、设备文件、socket、管道</td>
+<td>主要操作普通文件和标准输入输出</td>
+</tr>
+<tr>
+<td><strong>可移植性</strong></td>
+<td>偏向 Unix/Linux 系统</td>
+<td>跨平台（符合 ANSI C 标准，Windows/Linux 通用）</td>
+</tr>
+<tr>
+<td><strong>典型用途</strong></td>
+<td>驱动开发、系统编程、精确控制 I/O</td>
+<td>应用层文件读写、文本处理、快速开发</td>
+</tr>
+</tbody>
+</table>
+   
+        <script src="/js/foldpost.js"></script> 
+    </div>
+    <div class="info">
+        <div class="textinfo">
+            <h1 style="text-align: center;">Linux 系统IO编程</h1>
+            <p>创建时间：9月 09, 2025 </p>
+            <p>最后更新：9月 09, 2025</p>
+            <p>字数统计：2.1k字</p>
+            <p>预计阅读：7min</p>
+            
+            <div class="catgrs">文章分类：
+                
+                    <span>
+                        <a href="/categories/Linux/" id="catgrs">
+                            -Linux  
+                        </a>
+                    </span>
+                
+                    <span>
+                        <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
+                            -内核编程  
+                        </a>
+                    </span>
+                
+            </div>
+            <div class="tgs">
+                
+                    <span>
+                        <a href="/Tags/Linux/" id="tgs">
+                            #Linux  
+                        </a>
+                    </span>
+                
+                    <span>
+                        <a href="/Tags/IO/" id="tgs">
+                            #IO  
+                        </a>
+                    </span>
+                
+                    <span>
+                        <a href="/Tags/%E5%86%85%E6%A0%B8/" id="tgs">
+                            #内核  
+                        </a>
+                    </span>
+                
+            </div>
+        </div>
+
+        <div class="toc">
+            
+            
+            <details>
+                <summary id="sumtoc">TOC(自动生成)</summary>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%86%85%E6%A0%B8%E5%88%86%E5%8F%91%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text"> 文件描述符：内核分发的身份证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%9F%BA%E7%A1%80%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text"> 最基础的系统调用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-open"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. open</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 返回值</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-write"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. write</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-2"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-2"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-2"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-read"><span class="toc-number">2.3.</span> <span class="toc-text"> 3. read</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-3"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-3"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-3"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F-2"><span class="toc-number">2.3.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-lseek"><span class="toc-number">2.4.</span> <span class="toc-text"> 4. lseek</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-4"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-4"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-4"><span class="toc-number">2.4.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F-3"><span class="toc-number">2.4.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-close"><span class="toc-number">2.5.</span> <span class="toc-text"> 5. close</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-5"><span class="toc-number">2.5.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-5"><span class="toc-number">2.5.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-5"><span class="toc-number">2.5.3.</span> <span class="toc-text"> 返回值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 常见函数查找表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94c-%E6%A0%87%E5%87%86%E5%BA%93io%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text"> 对比C 标准库IO操作</span></a></li></ol>
+            </details>
+        </div>
+        
+    </div>    
+</div>
+
+
+
+
+
+        <footer>
+            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
+        </footer>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = [18, 18];
+                    
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+                    
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2]]);
+                    const years = Object.keys(groupedData).reverse();
+                    
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+                    
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: { 
+                            position: 'top', 
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        },
+                        calendar: { 
+                            top: '10%',
+                            left: 'left', 
+                            right: '8%',
+                            range: initYear,
+                            cellSize: cellSize, 
+                            splitLine: { lineStyle: { color: '#E0E0E0', width: 1 } }, 
+                            itemStyle: { borderWidth: 1, borderColor: '#E0E0E0' }, 
+                            dayLabel: { show: false },
+                            monthLabel: { show: true },
+                            yearLabel: { show: false },
+                        },
+                        visualMap: { 
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#A3DFF7","#B5D8C4","#F7C9B7"] }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14 },
+                            selectedMode: 'single',
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+                    
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+                    
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+                    
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,5],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":18},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            color: ["#F2A7D1","#F5E05D","#D74B76","#1EAEAC","#FFC836","#A8A2FF","#A9E9FF","#FF6767"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":18},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"Ubuntu","value":3}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"Linux","value":19},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":19},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":2,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":19,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#4C8C99',
+                                borderColor: '#F9B5E2'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+ 
+</html>
+
