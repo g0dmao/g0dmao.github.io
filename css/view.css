@@ -1,5 +1,8 @@
 @media screen and (max-width: 768px) {
 
+    .chart{
+      display: none;
+    }
     /* 文章中 */
     .info{
         display: none;
@@ -34,5 +37,6 @@
   .highlight td.code {
     width: 100%;
   } 
-    
+  
+
 }

@@ -12,11 +12,13 @@
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
+        <link rel="stylesheet" href="/css/search.css">
 
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
         <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
 
+            
         <style>
             html{
                 scrollbar-width: thin;
@@ -33,10 +35,12 @@
             a {
                 color: #60A5FA;
                 text-decoration: none;
+                
             }
 
             a:hover{
                 color: #3B82F6;
+                
             }
 
             nav{
@@ -82,8 +86,18 @@
         </style>
     <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
- 
+    <!--
+        ╔══════════════════════════════════════════════════════════════╗
+        ║    嘿，开发者！你发现了站点的隐藏彩蛋 👀                      ║
+        ║                                                              ║
+        ║    如果你对本站有想法/建议/或者想加入我们，欢迎联系：         ║
+        ║    email: hello@example.com                                   ║
+        ║                                                              ║
+        ║    小提示：安全第一，别在注释里放任何机密信息（比如 token）！  ║
+        ╚══════════════════════════════════════════════════════════════╝
+    -->
     <body>
+        
         <nav>
             <div style="display: inline-block; margin: 5px;">
                 <span id="date" style="margin:5px;"></span>
@@ -108,7 +122,21 @@
     <p class="i_bar">
         <a target="_blank" rel="noopener" href="https://hi.godmao.top"><strong>about & contact</strong></a>
     </p>
-    <div id="heatmapChart" style="width: 1000px; height: 180px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 10px auto; position: relative;"></div>
+    <div id="heatmapChart" style="width: 1000px; height: 180px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 0px auto; position: relative;"></div>
+    <div id="search-container" style="max-width:600px;margin:20px auto;">
+  <h1 style="text-align:center;color: #e0e0e0;font-size:24px;margin-bottom:15px;">本地搜索</h1>
+  <input id="search-input" type="text" placeholder="搜索文章..."
+         style="width:100%;padding:10px 15px;font-size:16px;border-radius:8px;
+                border:none;background-color:#222;color:#e0e0e0;box-shadow:0 2px 6px rgba(0,0,0,0.4);
+                transition: box-shadow 0.3s;">
+  <ul id="search-results" style="list-style:none;padding:0;margin-top:15px;"></ul>
+  <div id="status-message" class="statusmessage" style="color:#888;text-align:center;margin-top:10px;display:none;"></div>
+</div>
+<!-- Fuse.js 库 -->
+<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+<script src="/js/search.js"></script>
+
+ 
     <div class="posts_container">
         <div class="find" style="margin-right: 60px;">
             <h3>时间查找/archives</h3>
@@ -437,19 +465,25 @@
                     
                 </ul>
             </div>
+            
             <div class="i_paginator">
                 <!--分页器暂时不需要-->
             </div>
         </div>
         
-    </div>
-    <div style="display: flex; justify-content: center; flex-direction: column;">
-        <div id="categoriesTreeChart" style="width: 1000px; height: 600px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 0 auto; position: relative;"></div>
-        <div id="tagsChart" style="width: 1000px; height: 400px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 0 auto; position: relative;"></div>
-        <div id="monthlyChart" style="width: 1000px; height: 300px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 0 auto; position: relative; "></div>
-        
-    </div>
 </div>
+
+<!--要不要加隐藏按钮呢？？纠结中...-->
+<!--<details id="toggle-btn">-->
+    <!--<summary>数据统计</summary>-->
+    <div class="chart" id="tagsChart" style="width: 1000px; height: 250px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 20px auto; position: relative;"></div>
+    <div class="chart" id="monthlyChart" style="width: 1000px; height: 250px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 20px auto; position: relative;"></div>
+    <div class="chart" id="categoriesChart" style="width: 1000px; height: 250px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 20px auto; position: relative;"></div>
+    <div class="chart" id="categoriesTreeChart" style="width: 1000px; height: 500px; overflow-x: auto; overflow-y: hidden; margin: 20px auto 20px auto; position: relative;"></div>
+
+<!--</details>-->
+
+
 
         <footer>
             <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
@@ -675,11 +709,11 @@
                 if(categoriesChartDom){
                     const categoriesChart = echarts.init(categoriesChartDom, 'light');
                     categoriesChart.setOption({
-                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
                             data: [{"name":"Linux","value":20},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
-                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
@@ -690,7 +724,7 @@
                                 position: 'right',
                                 formatter: params => params.value,
                                 fontSize: 14,
-                                color: '#000',
+                                color: '#7b7b7b',
                                 fontWeight: 'bold',
                                 fontFamily: 'Microsoft YaHei, SimSun, serif'
                             },
@@ -733,7 +767,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":3,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":20,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":3,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":20,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -781,6 +815,15 @@
         </script>
     
     </body>
- 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 彩色控制台信息（更容易被看到）
+            console.log('%c 发现隐藏彩蛋 🎉 ', 'background:#2b2b2b;color:#fff;padding:6px 10px;border-radius:6px;font-weight:bold;');
+            console.log('%c 你好，探索者！欢迎来到本站。若想合作或反馈，请发邮件到 hello@example.com ', 'color:#9d7ff5;');
+
+            // 可选：输出多行 ASCII（仿终端风）
+            console.log('%c\n  /\\_/\\   小心：此处仅供彩蛋，不要在此处粘贴敏感信息。\n ( o.o )\n  > ^ <\n', 'color:#b99fff');
+        });
+    </script>
 </html>
 
