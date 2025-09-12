@@ -399,400 +399,605 @@ Behavior:
         
 
         
+            <!--
+AI-assisted attribution module (AILOGO)
+Single-file HTML snippet. Copy the <section>...</section> into your article template where you want the notice to appear.
+
+Features:
+- Minimal, dark-friendly design
+- Badge with AILOGO (inline SVG) or replace with an <img> pointing to your logo
+- One-line summary + expandable details
+- Accessible (aria) and keyboard-friendly
+- Small JS for toggle; no external libs
+
+How to use:
+- If you already have a site stylesheet, this snippet is self-contained. You can extract the CSS into your global stylesheet.
+- Replace the SVG or the <img> src with your official AILOGO asset if you have one.
+-->
+
+<section class="ai-attrib" aria-labelledby="ai-attrib-heading">
+  <style>
+    /* Minimal, neutral styling that fits dark/light themes */
+    .ai-attrib{
+      --bg: rgba(250,250,250,0.03);
+      --muted: #9aa0a6;
+      --text: #dfe6ea;
+      --accent: #6ee7b7; /* subtle accent; change to match your brand */
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--text);
+      margin: 24px 0 8px 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.03);
+      max-width: 820px;
+    }
+
+    /* Logo area */
+    .ai-attrib__logo{
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+    .ai-attrib__logo svg{ width:28px; height:28px; display:block }
+
+    /* main text */
+    .ai-attrib__body{ flex:1; min-width:0 }
+    .ai-attrib__heading{ display:flex; gap:8px; align-items:center; justify-content:space-between }
+    .ai-attrib__title{
+      font-weight:600; font-size:13px; color:var(--text);
+    }
+    .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
+
+    /* toggle details */
+    .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
+    .ai-attrib__toggle:focus{ outline:2px solid rgba(110,231,183,0.22); outline-offset:2px }
+
+    .ai-attrib__details{
+      margin-top:8px; color:var(--muted); font-size:12px; display:none;
+      padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02)
+    }
+    .ai-attrib__details a{ color:var(--accent); text-decoration:none }
+
+    /* small pill for explicit 'AI used' */
+    .ai-attrib__pill{ background: rgba(255,255,255,0.02); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+
+    /* compact responsive */
+    @media (max-width:540px){
+      .ai-attrib{ padding:10px; gap:10px }
+      .ai-attrib__logo{ width:38px; height:38px }
+    }
+  </style>
+    
+  <!-- Replace inline SVG below with your official AILOGO image if you have one. -->
+  <div class="ai-attrib__logo" aria-hidden="true">
+      <img src="/img/Gemini.webp" alt="Gemini Logo" style="max-height:40px; margin: auto;" />
+  </div>
+
+  <div class="ai-attrib__body">
+    <div class="ai-attrib__heading">
+      <div>
+        <div id="ai-attrib-heading" class="ai-attrib__title">本文由 Gemini 2.5 Flash 协助创作</div>
+        <div class="ai-attrib__summary">本文部分内容由AI生成，最终版本由作者审核与修改。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="ai-attrib__toggle" aria-expanded="false" aria-controls="ai-attrib-details" id="ai-toggle">查看详情</button>
+      </div>
+    </div>
+
+    <div id="ai-attrib-details" class="ai-attrib__details" role="region" aria-hidden="true">
+
+      <p>更多信息：
+        <span class="ai-attrib__pill" title="AI 工具与人工分工">🔎 AI · 辅助写作</span>
+      </p>
+      <p style="margin-top:8px">AI 用于初稿构思、建议段落与示例代码；作者负责内容校验、事实核查、补充与最终编辑。</p>
+      
+      <p style="margin-top:8px"><a href="https://gemini.google.com/" rel="noopener" target="_blank">了解该AI模型</a></p>
+      
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('ai-toggle');
+      const det = document.getElementById('ai-attrib-details');
+      // keyboard accessible toggle
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看详情' : '收起';
+      });
+
+      // optionally, start collapsed but allow users to open via 'o' key when focused on module
+      document.querySelector('.ai-attrib').addEventListener('keydown', (e)=>{
+        if(e.key === 'o' || e.key === 'O') btn.click();
+      });
+    })();
+  </script>
+</section>
+ 
+        
         <details>
 <summary>版权信息</summary>
 <div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 </div>
 </details>
 <hr />
-<h2 id="文件描述符内核分发的身份证"><a class="markdownIt-Anchor" href="#文件描述符内核分发的身份证"></a> 文件描述符：内核分发的身份证</h2>
-<p>在 Linux 系统中，<strong>文件描述符（File Descriptor，简称 FD）是一个核心概念，它是一个非负整数</strong>，用于唯一标识一个已打开的文件。这个文件可以是普通文件、目录、网络套接字（socket），甚至是设备（如键盘、显示器）。</p>
-<p>文件描述符的设计主要有以下几个优点：</p>
+<p>在 Linux 世界中，进程是独立的执行单元，拥有自己的地址空间。但很多时候，为了完成一个复杂的任务，不同的进程需要协同工作，交换数据。这时，我们就需要<strong>进程间通信（IPC, Inter-Process Communication）</strong>。IPC 就像是进程之间的一座桥梁，让它们能够相互“交谈”，共享信息。</p>
+<p>本文将带你深入了解 Linux 中常见的 IPC 机制，并以<strong>使用为导向</strong>，结合代码示例，让你能够快速掌握这些“通信”技术。</p>
+<h2 id="为什么需要-ipc"><a class="markdownIt-Anchor" href="#为什么需要-ipc"></a> 为什么需要 IPC？</h2>
+<p>想象一个场景：你正在开发一个 Web 服务器。一个主进程负责监听网络请求，但处理这些请求非常耗时。如果主进程自己处理，服务器就会变得很慢，无法响应新的请求。一个更好的设计是，主进程每接收到一个请求，就创建一个新的子进程或将请求发送给一个工作进程池来处理。这样，主进程可以立即回去监听新的连接，而工作进程则专注于处理任务。</p>
+<p>在这个例子中，主进程需要将请求数据传递给工作进程。这就是 IPC 发挥作用的地方。</p>
+<h2 id="常见的-linux-ipc-机制"><a class="markdownIt-Anchor" href="#常见的-linux-ipc-机制"></a> 常见的 Linux IPC 机制</h2>
+<p>Linux 提供了多种 IPC 机制，每种都有其独特的优缺点和适用场景。我们可以将它们分为两大类：<strong>基于文件</strong>和<strong>基于内存</strong>。</p>
+<h3 id="1-管道pipes"><a class="markdownIt-Anchor" href="#1-管道pipes"></a> 1. 管道（Pipes）</h3>
+<p>管道可能是最简单、最古老的 IPC 形式。它就像一个单向的“水管”，一端用于写入，另一端用于读取。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>单向通信</strong>：数据只能从一端流向另一端。</p>
+</li>
+<li>
+<p><strong>父子进程通信</strong>：管道通常用于有亲缘关系的进程之间，比如父进程和子进程。</p>
+</li>
+<li>
+<p><strong>半双工</strong>：虽然是单向，但如果创建两个管道，就可以实现双向通信。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li><strong><code>pipe()</code> 函数</strong>：这是创建管道的核心函数。</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pipe</span><span class="hljs-params">(<span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>])</span>;<br></code></pre></td></tr></table></figure>
+<p><code>pipefd</code> 是一个包含两个文件描述符的数组，<code>pipefd[0]</code> 用于读取，<code>pipefd[1]</code> 用于写入。</p>
+</li>
+<li>
+<p><strong>代码示例</strong>：一个简单的父子进程通信。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>];<br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from parent!&quot;</span>;<br><br>    <span class="hljs-keyword">if</span> (pipe(pipefd) == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;pipe&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;fork&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 父进程</span><br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>        write(pipefd[<span class="hljs-number">1</span>], msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端</span><br>        wait(<span class="hljs-literal">NULL</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 子进程</span><br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端</span><br>        read(pipefd[<span class="hljs-number">0</span>], buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child received: %s\n&quot;</span>, buf);<br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-fifo命名管道"><a class="markdownIt-Anchor" href="#2-fifo命名管道"></a> 2. FIFO（命名管道）</h3>
+<p>管道只能用于有亲缘关系的进程，那如果两个毫不相关的进程想通信怎么办？答案就是 <strong>FIFO (First-In, First-Out)</strong>，也叫<strong>命名管道</strong>。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>文件系统路径</strong>：它在文件系统中有一个路径名，不同于匿名管道。</p>
+</li>
+<li>
+<p><strong>非亲缘进程通信</strong>：任意两个进程都可以通过这个路径名打开并通信。</p>
+</li>
+<li>
+<p><strong>单向</strong>：和管道一样，FIFO 也是单向的，需要两个 FIFO 来实现双向通信。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li><strong><code>mkfifo()</code> 函数</strong>或 <strong><code>mkfifo</code> 命令</strong>：用来创建 FIFO。</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">mkfifo</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>open()</code>, <code>read()</code>, <code>write()</code> 函数</strong>：像操作普通文件一样来操作 FIFO。</li>
+</ul>
+</li>
+<li>
+<p><strong>代码示例</strong>：</p>
+<ul>
+<li><strong><code>writer.c</code></strong>：</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FIFO_NAME <span class="hljs-string">&quot;my_fifo&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> fd;<br>    <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from writer!&quot;</span>;<br><br>    mkfifo(FIFO_NAME, <span class="hljs-number">0666</span>);<br>    fd = open(FIFO_NAME, O_WRONLY);<br>    write(fd, msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>    close(fd);<br>    unlink(FIFO_NAME); <span class="hljs-comment">// 删除命名管道文件</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>reader.c</code></strong>：</li>
+</ul>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FIFO_NAME <span class="hljs-string">&quot;my_fifo&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> fd;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br><br>    mkfifo(FIFO_NAME, <span class="hljs-number">0666</span>); <span class="hljs-comment">// 保证文件存在</span><br>    fd = open(FIFO_NAME, O_RDONLY);<br>    read(fd, buf, <span class="hljs-keyword">sizeof</span>(buf));<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Reader received: %s\n&quot;</span>, buf);<br>    close(fd);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>你可以先运行 <code>writer.c</code>，再运行 <code>reader.c</code>。</p>
+</li>
+</ul>
+<h3 id="system-v-ipc-system-v-ipc"><a class="markdownIt-Anchor" href="#system-v-ipc-system-v-ipc"></a> System V IPC (System V IPC)</h3>
+<p>System V IPC 是 Linux 系统中一组更高级、更强大的 IPC 机制，包括消息队列、信号量和共享内存。它们都是<strong>基于内核</strong>的，需要一个唯一的键值（key）来标识。</p>
+<h4 id="1-消息队列message-queues"><a class="markdownIt-Anchor" href="#1-消息队列message-queues"></a> 1. 消息队列（Message Queues）</h4>
+<p>消息队列就像一个链表，允许进程向其中添加消息或从中读取消息。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>异步通信</strong>：发送进程可以发送消息后立即返回，不需要等待接收进程。</p>
+</li>
+<li>
+<p><strong>带类型</strong>：消息可以带有类型，接收进程可以只接收特定类型的消息。</p>
+</li>
+<li>
+<p><strong>存储在内核中</strong>：即使发送进程结束，消息依然保留在队列中，直到被读取。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>ftok()</code></strong>：将文件路径和整数转换为一个唯一的 IPC 键值。</p>
+</li>
+<li>
+<p><strong><code>msgget()</code></strong>：创建或获取一个消息队列。</p>
+</li>
+<li>
+<p><strong><code>msgsnd()</code></strong>：发送消息。</p>
+</li>
+<li>
+<p><strong><code>msgrcv()</code></strong>：接收消息。</p>
+</li>
+<li>
+<p><strong><code>msgctl()</code></strong>：控制消息队列，如删除。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-信号量semaphores"><a class="markdownIt-Anchor" href="#2-信号量semaphores"></a> 2. 信号量（Semaphores）</h4>
+<p>信号量主要用于<strong>同步</strong>，控制对共享资源的访问。它本身不传递数据，而是作为一种“计数器”。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>互斥和同步</strong>：常用于实现互斥锁，确保同一时间只有一个进程访问共享资源。</p>
+</li>
+<li>
+<p><strong>原子操作</strong>：信号量的操作（P/V操作）是原子的，不会被中断。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>semget()</code></strong>：创建或获取一组信号量。</p>
+</li>
+<li>
+<p><strong><code>semop()</code></strong>：对信号量进行操作，如加/减计数。</p>
+</li>
+<li>
+<p><strong><code>semctl()</code></strong>：控制信号量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-共享内存shared-memory"><a class="markdownIt-Anchor" href="#3-共享内存shared-memory"></a> 3. 共享内存（Shared Memory）</h4>
+<p>共享内存是最高效的 IPC 方式。它允许两个或多个进程共享同一块物理内存。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>最高效</strong>：一旦映射到进程的地址空间，读写操作就像访问普通内存一样，不需要内核的参与。</p>
+</li>
+<li>
+<p><strong>需要同步</strong>：由于多个进程同时访问，需要用<strong>信号量</strong>等机制来同步访问，防止数据竞争。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>shmget()</code></strong>：创建或获取一个共享内存段。</p>
+</li>
+<li>
+<p><strong><code>shmat()</code></strong>：将共享内存段附加到进程的地址空间。</p>
+</li>
+<li>
+<p><strong><code>shmdt()</code></strong>：将共享内存段从进程的地址空间分离。</p>
+</li>
+<li>
+<p><strong><code>shmctl()</code></strong>：控制共享内存，如删除。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="ipc-总结与选择"><a class="markdownIt-Anchor" href="#ipc-总结与选择"></a> IPC 总结与选择</h3>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>适用场景</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>管道</strong></td>
+<td>有亲缘关系的进程</td>
+<td>简单，易于使用</td>
+<td>单向，仅限于亲缘进程</td>
+</tr>
+<tr>
+<td><strong>FIFO</strong></td>
+<td>无亲缘关系的进程</td>
+<td>可以在文件系统中命名，灵活</td>
+<td>单向，需要同步，读写时有阻塞</td>
+</tr>
+<tr>
+<td><strong>消息队列</strong></td>
+<td>异步通信，少量数据</td>
+<td>消息带类型，无需同步</td>
+<td>效率较低，有大小限制</td>
+</tr>
+<tr>
+<td><strong>信号量</strong></td>
+<td>进程间同步，互斥</td>
+<td>用于控制访问，防止竞争</td>
+<td>不传递数据</td>
+</tr>
+<tr>
+<td><strong>共享内存</strong></td>
+<td>大量数据传输</td>
+<td>最高效，读写速度快</td>
+<td>必须配合其他同步机制使用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如何选择？</strong></p>
+<ul>
+<li>
+<p>如果是父子进程之间少量数据的通信，<strong>管道</strong>是最佳选择。</p>
+</li>
+<li>
+<p>如果是两个不相关的进程，且数据量不大，<strong>消息队列</strong>是一个不错的方案。</p>
+</li>
+<li>
+<p>如果需要传输大量数据，且对性能要求极高，<strong>共享内存</strong>是首选，但<strong>必须</strong>结合<strong>信号量</strong>或其他同步机制。</p>
+</li>
+<li>
+<p>如果你只想解决资源访问的同步问题，<strong>信号量</strong>是专门为此设计的。</p>
+</li>
+</ul>
+<p>了解这些 IPC 机制，就如同掌握了进程之间“沟通”的多种语言。在开发时，选择合适的“语言”能让你的程序更加健壮、高效。现在，你可以尝试用这些机制来解决你遇到的实际问题了！</p>
+<h2 id="posix-ipcsystem-v-的继任者"><a class="markdownIt-Anchor" href="#posix-ipcsystem-v-的继任者"></a> POSIX IPC：System V 的继任者</h2>
+<p><strong>POSIX IPC</strong>（Portable Operating System Interface）是一套新的 IPC 标准，旨在解决 <strong>System V IPC</strong> 的一些局限性。它提供了一套更统一、更现代的 API，使用<strong>文件名</strong>作为标识符，而不是 System V 的<strong>键值</strong>，这使得 IPC 资源的管理更加直观。</p>
+<h3 id="1-posix-消息队列"><a class="markdownIt-Anchor" href="#1-posix-消息队列"></a> 1. POSIX 消息队列</h3>
+<p>与 System V 消息队列类似，但 API 更简洁。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>基于文件</strong>：通过 <code>/dev/mqueue</code> 目录下的文件名来标识。</p>
+</li>
+<li>
+<p><strong>优先级</strong>：支持消息优先级，高优先级的消息会被优先处理。</p>
+</li>
+<li>
+<p><strong>非阻塞模式</strong>：可以设置消息队列为非阻塞模式，防止 <code>mq_send</code> 或 <code>mq_receive</code> 阻塞进程。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>mq_open()</code></strong>：创建或打开一个消息队列。</p>
+</li>
+<li>
+<p><strong><code>mq_send()</code></strong>：发送消息。</p>
+</li>
+<li>
+<p><strong><code>mq_receive()</code></strong>：接收消息。</p>
+</li>
+<li>
+<p><strong><code>mq_close()</code></strong>：关闭消息队列。</p>
+</li>
+<li>
+<p><strong><code>mq_unlink()</code></strong>：删除消息队列。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-posix-信号量"><a class="markdownIt-Anchor" href="#2-posix-信号量"></a> 2. POSIX 信号量</h3>
+<p>用于进程间的同步，功能与 System V 信号量类似，但提供了更简单的接口。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>有名信号量</strong>：通过一个文件名标识，可以用于非亲缘进程。</p>
+</li>
+<li>
+<p><strong>无名信号量</strong>：常用于线程间的同步，存放在共享内存中，只能用于有亲缘关系的进程。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>sem_open()</code></strong>：创建或打开有名信号量。</p>
+</li>
+<li>
+<p><strong><code>sem_wait()</code></strong>：原子性地减少信号量计数器，如果为0则阻塞。</p>
+</li>
+<li>
+<p><strong><code>sem_post()</code></strong>：原子性地增加信号量计数器。</p>
+</li>
+<li>
+<p><strong><code>sem_close()</code></strong>：关闭信号量。</p>
+</li>
+<li>
+<p><strong><code>sem_unlink()</code></strong>：删除信号量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-posix-共享内存"><a class="markdownIt-Anchor" href="#3-posix-共享内存"></a> 3. POSIX 共享内存</h3>
+<p>和 System V 共享内存一样，都是最快的 IPC 方式，但 POSIX 版本使用了文件描述符。</p>
+<ul>
+<li>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>
+<p><strong>基于文件</strong>：通过 <code>shm_open</code> 创建或打开一个共享内存对象，返回一个文件描述符。</p>
+</li>
+<li>
+<p><strong>内存映射</strong>：通过 <code>mmap()</code> 将文件描述符对应的内存映射到进程的地址空间。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>使用</strong>：</p>
+<ul>
+<li>
+<p><strong><code>shm_open()</code></strong>：创建或打开共享内存对象。</p>
+</li>
+<li>
+<p><strong><code>ftruncate()</code></strong>：调整共享内存对象的大小。</p>
+</li>
+<li>
+<p><strong><code>mmap()</code></strong>：将共享内存映射到进程地址空间。</p>
+</li>
+<li>
+<p><strong><code>munmap()</code></strong>：解除映射。</p>
+</li>
+<li>
+<p><strong><code>shm_unlink()</code></strong>：删除共享内存对象。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="套接字socket网络通信的基石"><a class="markdownIt-Anchor" href="#套接字socket网络通信的基石"></a> 套接字（Socket）：网络通信的基石</h2>
+<p><strong>套接字（Socket）</strong> 是一种更通用的 IPC 机制，它不仅可以在同一台机器上的进程间通信，更重要的能力是实现<strong>跨网络</strong>、不同主机上的进程通信。它是网络通信的基石。</p>
+<h3 id="1-套接字类型"><a class="markdownIt-Anchor" href="#1-套接字类型"></a> 1. 套接字类型</h3>
+<ul>
+<li>
+<p><strong>流式套接字（SOCK_STREAM）</strong>：</p>
+<ul>
+<li>
+<p><strong>特点</strong>：提供可靠的、面向连接的、全双工的数据流。</p>
+</li>
+<li>
+<p><strong>协议</strong>：通常使用 <strong>TCP</strong> 协议。</p>
+</li>
+<li>
+<p><strong>适用场景</strong>：需要保证数据完整性和顺序的通信，如文件传输、HTTP 请求等。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>数据报套接字（SOCK_DGRAM）</strong>：</p>
+<ul>
+<li>
+<p><strong>特点</strong>：提供不可靠的、无连接的数据报服务。</p>
+</li>
+<li>
+<p><strong>协议</strong>：通常使用 <strong>UDP</strong> 协议。</p>
+</li>
+<li>
+<p><strong>适用场景</strong>：对实时性要求高、少量数据、不严格要求可靠性的通信，如在线游戏、DNS 查询等。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>原始套接字（SOCK_RAW）</strong>：</p>
+<ul>
+<li><strong>特点</strong>：允许直接访问底层网络协议，通常用于网络监控或特殊应用。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-套接字通信流程以-tcp-为例"><a class="markdownIt-Anchor" href="#2-套接字通信流程以-tcp-为例"></a> 2. 套接字通信流程（以 TCP 为例）</h3>
+<p><strong>服务器端：</strong></p>
 <ol>
 <li>
-<p><strong>简化了 I/O 接口</strong>：无论是读写本地文件，还是进行网络通信，开发者都可以使用一套统一的系统调用（<code>read</code>, <code>write</code>, <code>close</code> 等），而无需关心底层的具体类型。这种“一切皆文件”的设计哲学是 Linux 简洁和强大的体现。</p>
+<p><strong><code>socket()</code></strong>：创建一个套接字。</p>
 </li>
 <li>
-<p><strong>隔离了应用程序与内核</strong>：应用程序只知道一个简单的整数，而不需要知道文件在磁盘上的物理位置，也不用关心内核是如何管理文件的。所有复杂的操作都由内核在幕后完成。</p>
+<p><strong><code>bind()</code></strong>：将套接字与一个 IP 地址和端口号绑定。</p>
 </li>
 <li>
-<p><strong>管理系统资源</strong>：内核通过文件描述符表来管理每个进程打开的文件。当一个进程结束时，内核可以根据这个表自动关闭所有打开的文件，避免资源泄露。</p>
+<p><strong><code>listen()</code></strong>：监听来自客户端的连接请求。</p>
+</li>
+<li>
+<p><strong><code>accept()</code></strong>：接受客户端连接，返回一个新的套接字用于与该客户端通信。</p>
+</li>
+<li>
+<p><strong><code>read()</code>/<code>write()</code></strong>：通过新的套接字与客户端进行数据交换。</p>
+</li>
+<li>
+<p><strong><code>close()</code></strong>：关闭套接字。</p>
 </li>
 </ol>
-<p>文件描述符的几个重要特点：</p>
+<p><strong>客户端：</strong></p>
+<ol>
+<li>
+<p><strong><code>socket()</code></strong>：创建一个套接字。</p>
+</li>
+<li>
+<p><strong><code>connect()</code></strong>：连接到服务器指定的 IP 地址和端口号。</p>
+</li>
+<li>
+<p><strong><code>write()</code>/<code>read()</code></strong>：向服务器发送数据或接收数据。</p>
+</li>
+<li>
+<p><strong><code>close()</code></strong>：关闭套接字。</p>
+</li>
+</ol>
+<h3 id="3-套接字域socket-domain"><a class="markdownIt-Anchor" href="#3-套接字域socket-domain"></a> 3. 套接字域（Socket Domain）</h3>
+<p>除了我们熟悉的网络套接字（<code>AF_INET</code>），还有一种特别的 IPC 机制：<strong>UNIX 域套接字（AF_UNIX）</strong>。</p>
 <ul>
 <li>
-<p><strong>唯一性</strong>：在一个进程中，每个打开的文件都有一个独一无二的文件描述符。</p>
-</li>
-<li>
-<p><strong>非负整数</strong>：文件描述符的值通常从 3 开始分配，因为 0、1、2 这三个描述符被系统预留给标准输入、标准输出和标准错误。</p>
+<p><strong>UNIX 域套接字</strong>：</p>
 <ul>
 <li>
-<p><strong>0</strong>：标准输入（<code>stdin</code>），通常是键盘。</p>
+<p><strong>特点</strong>：只在<strong>同一台机器上</strong>的进程间通信。它使用文件系统路径作为地址，而非 IP 地址和端口。</p>
 </li>
 <li>
-<p><strong>1</strong>：标准输出（<code>stdout</code>），通常是显示器。</p>
-</li>
-<li>
-<p><strong>2</strong>：标准错误（<code>stderr</code>），也通常是显示器。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>进程私有</strong>：文件描述符是在进程内部使用的，不同进程的文件描述符互不影响。例如，进程 A 的文件描述符 3 和进程 B 的文件描述符 3 可能指向完全不同的文件。</p>
-</li>
-</ul>
-<h2 id="最基础的系统调用函数"><a class="markdownIt-Anchor" href="#最基础的系统调用函数"></a> 最基础的系统调用函数</h2>
-<p><strong>Linux I/O 编程中常见的系统调用函数</strong>，这些函数位于 <strong><code>unistd.h</code></strong>（以及 <code>fcntl.h</code> 等）中，是用户态和内核态交互的基础接口。</p>
-<h3 id="1-open"><a class="markdownIt-Anchor" href="#1-open"></a> 1. <code>open</code></h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span>    <span class="hljs-comment">// open flags</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
-<h4 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h4>
-<p>打开或创建一个文件，返回一个 <strong>文件描述符</strong>（fd，整数），后续 I/O 都依赖它。</p>
-<h4 id="参数"><a class="markdownIt-Anchor" href="#参数"></a> 参数</h4>
-<ul>
-<li>
-<p><code>pathname</code>：文件路径。</p>
-</li>
-<li>
-<p><code>flags</code>：打开方式，常用值：</p>
-<ul>
-<li>
-<p><code>O_RDONLY</code>：只读</p>
-</li>
-<li>
-<p><code>O_WRONLY</code>：只写</p>
-</li>
-<li>
-<p><code>O_RDWR</code>：读写</p>
-</li>
-<li>
-<p><code>O_CREAT</code>：若文件不存在则创建，需要配合 <code>mode</code> 参数</p>
-</li>
-<li>
-<p><code>O_TRUNC</code>：打开时清空文件</p>
-</li>
-<li>
-<p><code>O_APPEND</code>：写时追加到文件尾部</p>
-</li>
-<li>
-<p><code>O_NOBLOCK</code>：非阻塞模式</p>
-</li>
-</ul>
-</li>
-<li>
-<p><code>mode</code>：创建文件时的权限（如 <code>0666</code>，受 umask 影响）。</p>
-</li>
-</ul>
-<h4 id="返回值"><a class="markdownIt-Anchor" href="#返回值"></a> 返回值</h4>
-<ul>
-<li>
-<p>成功：文件描述符（非负整数）</p>
-</li>
-<li>
-<p>失败：<code>-1</code>，并设置 <code>errno</code></p>
-</li>
-</ul>
-<hr />
-<h3 id="2-write"><a class="markdownIt-Anchor" href="#2-write"></a> 2. <code>write</code></h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">write</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">const</span> <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span>;<br></code></pre></td></tr></table></figure>
-<h4 id="作用-2"><a class="markdownIt-Anchor" href="#作用-2"></a> 作用</h4>
-<p>向文件（或设备）写入数据。</p>
-<h4 id="参数-2"><a class="markdownIt-Anchor" href="#参数-2"></a> 参数</h4>
-<ul>
-<li>
-<p><code>fd</code>：文件描述符</p>
-</li>
-<li>
-<p><code>buf</code>：要写入的数据缓冲区指针</p>
-</li>
-<li>
-<p><code>count</code>：要写入的字节数</p>
-</li>
-</ul>
-<h4 id="返回值-2"><a class="markdownIt-Anchor" href="#返回值-2"></a> 返回值</h4>
-<ul>
-<li>
-<p>成功：实际写入的字节数（可能小于 <code>count</code>）</p>
-</li>
-<li>
-<p>失败：<code>-1</code></p>
-</li>
-</ul>
-<h4 id="注意"><a class="markdownIt-Anchor" href="#注意"></a> 注意</h4>
-<ul>
-<li>
-<p>对于普通文件，通常会写入全部数据。</p>
-</li>
-<li>
-<p>对于管道、socket 等，可能分多次写入，需要循环写。</p>
-</li>
-</ul>
-<hr />
-<h3 id="3-read"><a class="markdownIt-Anchor" href="#3-read"></a> 3. <code>read</code></h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br>  <br><span class="hljs-type">ssize_t</span> <span class="hljs-title function_">read</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">void</span> *buf, <span class="hljs-type">size_t</span> count)</span>;<br></code></pre></td></tr></table></figure>
-<h4 id="作用-3"><a class="markdownIt-Anchor" href="#作用-3"></a> 作用</h4>
-<p>从文件（或设备）读取数据。</p>
-<h4 id="参数-3"><a class="markdownIt-Anchor" href="#参数-3"></a> 参数</h4>
-<ul>
-<li>
-<p><code>fd</code>：文件描述符</p>
-</li>
-<li>
-<p><code>buf</code>：存放读出数据的缓冲区</p>
-</li>
-<li>
-<p><code>count</code>：最大读取字节数</p>
-</li>
-</ul>
-<h4 id="返回值-3"><a class="markdownIt-Anchor" href="#返回值-3"></a> 返回值</h4>
-<ul>
-<li>
-<p>成功：实际读取的字节数</p>
-<ul>
-<li><code>0</code> 表示到达文件结尾 (EOF)</li>
-</ul>
-</li>
-<li>
-<p>失败：<code>-1</code></p>
-</li>
-</ul>
-<h4 id="注意-2"><a class="markdownIt-Anchor" href="#注意-2"></a> 注意</h4>
-<ul>
-<li>
-<p>实际读取字节数可能小于 <code>count</code>。</p>
-</li>
-<li>
-<p>对于阻塞 I/O，如果没有数据，可能会挂起等待。</p>
-</li>
-</ul>
-<hr />
-<h3 id="4-lseek"><a class="markdownIt-Anchor" href="#4-lseek"></a> 4. <code>lseek</code></h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span>  </span><br><br><span class="hljs-type">off_t</span> <span class="hljs-title function_">lseek</span><span class="hljs-params">(<span class="hljs-type">int</span> fd, <span class="hljs-type">off_t</span> offset, <span class="hljs-type">int</span> whence)</span>;<br></code></pre></td></tr></table></figure>
-<h4 id="作用-4"><a class="markdownIt-Anchor" href="#作用-4"></a> 作用</h4>
-<p>移动文件读写位置（文件指针）。</p>
-<h4 id="参数-4"><a class="markdownIt-Anchor" href="#参数-4"></a> 参数</h4>
-<ul>
-<li>
-<p><code>fd</code>：文件描述符</p>
-</li>
-<li>
-<p><code>offset</code>：偏移量（可正可负）</p>
-</li>
-<li>
-<p><code>whence</code>：偏移起始点</p>
-<ul>
-<li>
-<p><code>SEEK_SET</code>：从文件开头</p>
-</li>
-<li>
-<p><code>SEEK_CUR</code>：从当前位置</p>
-</li>
-<li>
-<p><code>SEEK_END</code>：从文件末尾</p>
+<p><strong>优点</strong>：相比于网络套接字，它<strong>不涉及网络协议栈</strong>，因此通信效率更高，且安全性更好。</p>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="返回值-4"><a class="markdownIt-Anchor" href="#返回值-4"></a> 返回值</h4>
+<h3 id="总结与选择"><a class="markdownIt-Anchor" href="#总结与选择"></a> 总结与选择</h3>
 <ul>
 <li>
-<p>成功：新的文件偏移位置</p>
+<p><strong>POSIX IPC</strong> 是 <strong>System V IPC</strong> 的现代版本，如果你正在编写新的应用程序，<strong>推荐优先使用 POSIX IPC</strong>，因为它提供了更简洁、更标准化的接口。</p>
 </li>
 <li>
-<p>失败：<code>-1</code></p>
+<p><strong>套接字</strong> 是最通用的通信方式。如果你需要<strong>跨网络</strong>通信，<strong>套接字是唯一的选择</strong>。</p>
+</li>
+<li>
+<p>如果你的通信只限于<strong>同一台机器</strong>上，但需要像网络通信一样<strong>客户端-服务器模式</strong>，且追求更高的效率，那么 <strong>UNIX 域套接字</strong> 是一个非常好的替代方案。</p>
 </li>
 </ul>
-<h4 id="注意-3"><a class="markdownIt-Anchor" href="#注意-3"></a> 注意</h4>
-<ul>
-<li>
-<p>常用来实现随机读写。</p>
-</li>
-<li>
-<p>对某些设备文件可能不支持（如管道）。</p>
-</li>
-</ul>
-<hr />
-<h3 id="5-close"><a class="markdownIt-Anchor" href="#5-close"></a> 5. <code>close</code></h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span>;<br></code></pre></td></tr></table></figure>
-<h4 id="作用-5"><a class="markdownIt-Anchor" href="#作用-5"></a> 作用</h4>
-<p>关闭一个打开的文件描述符，释放内核资源。</p>
-<h4 id="参数-5"><a class="markdownIt-Anchor" href="#参数-5"></a> 参数</h4>
-<ul>
-<li><code>fd</code>：文件描述符</li>
-</ul>
-<h4 id="返回值-5"><a class="markdownIt-Anchor" href="#返回值-5"></a> 返回值</h4>
-<ul>
-<li>
-<p>成功：<code>0</code></p>
-</li>
-<li>
-<p>失败：<code>-1</code></p>
-</li>
-</ul>
-<h2 id="常见函数查找表"><a class="markdownIt-Anchor" href="#常见函数查找表"></a> 常见函数查找表</h2>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>头文件</th>
-<th>功能</th>
-<th>主要参数</th>
-<th>返回值</th>
-<th>常见用途</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>open</code></td>
-<td><code>&lt;fcntl.h&gt;</code>, <code>&lt;unistd.h&gt;</code></td>
-<td>打开或创建文件，返回文件描述符</td>
-<td><code>pathname</code>：路径<code>flags</code>：打开方式（如 <code>O_RDONLY</code>）<code>mode</code>：权限（如 <code>0644</code>，仅在 <code>O_CREAT</code> 时有效）</td>
-<td>成功：文件描述符 (≥0)失败：<code>-1</code></td>
-<td>打开文件/设备，获得 <code>fd</code></td>
-</tr>
-<tr>
-<td><code>write</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>向文件写入数据</td>
-<td><code>fd</code>：文件描述符<code>buf</code>：数据缓冲区<code>count</code>：要写入字节数</td>
-<td>成功：实际写入字节数失败：<code>-1</code></td>
-<td>向文件、管道、socket 写数据</td>
-</tr>
-<tr>
-<td><code>read</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>从文件读取数据</td>
-<td><code>fd</code>：文件描述符<code>buf</code>：存放数据的缓冲区<code>count</code>：最大读取字节数</td>
-<td>成功：实际读取字节数<code>0</code>：文件结尾失败：<code>-1</code></td>
-<td>读取文件、键盘输入、网络数据</td>
-</tr>
-<tr>
-<td><code>lseek</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>改变文件读写位置（文件指针）</td>
-<td><code>fd</code>：文件描述符<code>offset</code>：偏移量<code>whence</code>：参考位置（<code>SEEK_SET</code>/<code>SEEK_CUR</code>/<code>SEEK_END</code>）</td>
-<td>成功：新的偏移位置失败：<code>-1</code></td>
-<td>随机读写文件、获取文件大小</td>
-</tr>
-<tr>
-<td><code>close</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>关闭文件描述符，释放资源</td>
-<td><code>fd</code>：文件描述符</td>
-<td>成功：<code>0</code>失败：<code>-1</code></td>
-<td>程序结束或文件不再使用时关闭</td>
-</tr>
-<tr>
-<td><code>sync</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>将内核缓冲区中所有修改过的数据（脏页）写入磁盘</td>
-<td>无</td>
-<td>无返回值</td>
-<td>全局刷新，影响所有文件，效率较低</td>
-</tr>
-<tr>
-<td><code>fsync</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>将指定文件的缓存数据强制写入磁盘</td>
-<td><code>fd</code>：文件描述符</td>
-<td>成功：<code>0</code>，失败：<code>-1</code></td>
-<td>精确到单个文件，常用于数据库、日志写入</td>
-</tr>
-<tr>
-<td><code>pipe</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>创建匿名管道，用于进程间通信</td>
-<td><code>int pipefd[2]</code></td>
-<td>成功：0，失败：-1</td>
-<td><code>pipefd[0]</code> 读端，<code>pipefd[1]</code> 写端</td>
-</tr>
-<tr>
-<td><code>unlink</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>删除一个文件（目录用 <code>rmdir</code>）</td>
-<td><code>pathname</code>：文件路径</td>
-<td>成功：0，失败：-1</td>
-<td>实际删除在引用计数归零时发生</td>
-</tr>
-<tr>
-<td><code>access</code></td>
-<td><code>&lt;unistd.h&gt;</code></td>
-<td>检查文件是否存在及权限</td>
-<td><code>pathname, mode</code></td>
-<td>成功：0，失败：-1</td>
-<td><code>mode</code> 可取 <code>R_OK, W_OK, X_OK, F_OK</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="对比c-标准库io操作"><a class="markdownIt-Anchor" href="#对比c-标准库io操作"></a> 对比C 标准库IO操作</h2>
-<p>使用c标准库的IO操作，小量频繁读写的效率更高，因为其内部自带有缓冲区。<br />
-这可以理解为在系统IO上有封装了一层，进行文件操作时写入C自带缓冲区，满足一定条件再调用系统IO，将缓冲区的内容写入IO缓存区，再到内核的页缓存区，最后到物理的磁盘。</p>
-<table>
-<thead>
-<tr>
-<th>特性</th>
-<th>Linux 系统调用 I/O</th>
-<th>C 标准库文件操作</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>头文件</strong></td>
-<td><code>&lt;unistd.h&gt;</code>, <code>&lt;fcntl.h&gt;</code></td>
-<td><code>&lt;stdio.h&gt;</code></td>
-</tr>
-<tr>
-<td><strong>函数示例</strong></td>
-<td><code>open</code>, <code>read</code>, <code>write</code>, <code>lseek</code>, <code>close</code></td>
-<td><code>fopen</code>, <code>fread</code>, <code>fwrite</code>, <code>fseek</code>, <code>fclose</code>, <code>fprintf</code>, <code>fscanf</code></td>
-</tr>
-<tr>
-<td><strong>返回值</strong></td>
-<td>直接返回字节数、文件描述符等，或 <code>-1</code></td>
-<td>返回 <code>FILE*</code> 指针，或 <code>EOF</code> 等错误码</td>
-</tr>
-<tr>
-<td><strong>数据单位</strong></td>
-<td>以 <strong>字节（byte）</strong> 为单位</td>
-<td>以 <strong>缓冲区 / 结构化数据</strong> 为单位（有缓冲机制）</td>
-</tr>
-<tr>
-<td><strong>缓冲</strong></td>
-<td><strong>无用户态缓冲</strong>，直接在用户空间和内核空间间传递数据</td>
-<td><strong>带缓冲区</strong>（stdio 库内部维护缓存，加速小块读写）</td>
-</tr>
-<tr>
-<td><strong>层次</strong></td>
-<td>操作系统内核提供的 <strong>底层接口</strong></td>
-<td>基于系统调用的 <strong>封装库函数</strong></td>
-</tr>
-<tr>
-<td><strong>灵活性</strong></td>
-<td>可操作普通文件、设备文件、socket、管道</td>
-<td>主要操作普通文件和标准输入输出</td>
-</tr>
-<tr>
-<td><strong>可移植性</strong></td>
-<td>偏向 Unix/Linux 系统</td>
-<td>跨平台（符合 ANSI C 标准，Windows/Linux 通用）</td>
-</tr>
-<tr>
-<td><strong>典型用途</strong></td>
-<td>驱动开发、系统编程、精确控制 I/O</td>
-<td>应用层文件读写、文本处理、快速开发</td>
-</tr>
-</tbody>
-</table>
+<p>掌握这些 IPC 机制，你就能够让你的程序在不同维度上进行“对话”，无论是同一台机器上的协作，还是跨越网络边界的协同工作。</p>
    
         <script src="/js/foldpost.js"></script> 
     </div>
     <div class="info">
         <div class="textinfo">
-            <h1 style="text-align: center;">Linux 系统IO编程</h1>
-            <p>创建时间：9月 09, 2025 </p>
-            <p>最后更新：9月 09, 2025</p>
-            <p>字数统计：2.1k字</p>
-            <p>预计阅读：7min</p>
+            <h1 style="text-align: center;">深入浅出 Linux IPC：进程间通信的艺术</h1>
+            <p>创建时间：9月 12, 2025 </p>
+            <p>最后更新：9月 12, 2025</p>
+            <p>字数统计：3.2k字</p>
+            <p>预计阅读：12min</p>
             
             <div class="catgrs">文章分类：
                 
@@ -818,14 +1023,8 @@ Behavior:
                     </span>
                 
                     <span>
-                        <a href="/Tags/IO/" id="tgs">
-                            #IO  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E5%86%85%E6%A0%B8/" id="tgs">
-                            #内核  
+                        <a href="/Tags/IPC/" id="tgs">
+                            #IPC  
                         </a>
                     </span>
                 
@@ -837,7 +1036,7 @@ Behavior:
             
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%86%85%E6%A0%B8%E5%88%86%E5%8F%91%E7%9A%84%E8%BA%AB%E4%BB%BD%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text"> 文件描述符：内核分发的身份证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%9F%BA%E7%A1%80%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text"> 最基础的系统调用函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-open"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. open</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 返回值</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-write"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. write</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-2"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-2"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-2"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-read"><span class="toc-number">2.3.</span> <span class="toc-text"> 3. read</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-3"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-3"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-3"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F-2"><span class="toc-number">2.3.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-lseek"><span class="toc-number">2.4.</span> <span class="toc-text"> 4. lseek</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-4"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-4"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-4"><span class="toc-number">2.4.3.</span> <span class="toc-text"> 返回值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F-3"><span class="toc-number">2.4.4.</span> <span class="toc-text"> 注意</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-close"><span class="toc-number">2.5.</span> <span class="toc-text"> 5. close</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8-5"><span class="toc-number">2.5.1.</span> <span class="toc-text"> 作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0-5"><span class="toc-number">2.5.2.</span> <span class="toc-text"> 参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC-5"><span class="toc-number">2.5.3.</span> <span class="toc-text"> 返回值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text"> 常见函数查找表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94c-%E6%A0%87%E5%87%86%E5%BA%93io%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text"> 对比C 标准库IO操作</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-number">1.</span> <span class="toc-text"> 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text"> 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%A1%E9%81%93pipes"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#system-v-ipc-system-v-ipc"><span class="toc-number">2.3.</span> <span class="toc-text"> System V IPC (System V IPC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">2.4.</span> <span class="toc-text"> IPC 总结与选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85"><span class="toc-number">3.</span> <span class="toc-text"> POSIX IPC：System V 的继任者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.1.</span> <span class="toc-text"> 1. POSIX 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.2.</span> <span class="toc-text"> 2. POSIX 信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text"> 3. POSIX 共享内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3"><span class="toc-number">4.</span> <span class="toc-text"> 套接字（Socket）：网络通信的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 1. 套接字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text"> 2. 套接字通信流程（以 TCP 为例）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain"><span class="toc-number">4.3.</span> <span class="toc-text"> 3. 套接字域（Socket Domain）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">4.4.</span> <span class="toc-text"> 总结与选择</span></a></li></ol></li></ol>
             </details>
         </div>
         

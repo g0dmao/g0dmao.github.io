@@ -46,7 +46,7 @@
   position: sticky;
   top: 80px;
   a{
-    color:lightseagreen;
+    color:#6ee7b7;
   }
   a:hover{
     color:darkcyan;
@@ -63,7 +63,7 @@
 }
 #sumtoc{
   font-size: 20px;
-  color:lightseagreen;
+  color:#6ee7b7;
 }
 
 .tgs{
