@@ -18,6 +18,9 @@
         <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
 
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+        
+        
             
         <style>
             html{
@@ -96,10 +99,12 @@
     <body>
         
         <nav>
+
+            
             <div style="display: inline-block; margin: 5px;">
                 <span id="date" style="margin:5px;"></span>
                 <span id="clock" style="margin: 5px;"></span>
-            </div>
+            </div><span><strong>  Welcome to my blog :) </strong></span>
             
                 <div id="p_btn">
                 <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
@@ -112,6 +117,8 @@
         <script src="/js/clock.js"></script>
         <script src="/js/btn.js"></script>
         <!-- 博客详情 -->
+<div id="reading-progress"></div>
+<script src="/js/page_line.js"></script>
 <div class="a_container">
     <div class="article">      
         <!--<div style="height: 50px;"></div>-->
@@ -173,9 +180,9 @@ How to use:
     </div>
 
     <div id="copyright-details" class="copyright-notice__details" role="region" aria-hidden="true">
-      <p><span class="copyright-notice__pill">许可：<span id="cn-license">LICENSE_NAME</span></span></p>
-      <p style="margin-top:8px">本文章为博主原创文章。遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</p>
-      <p style="margin-top:8px"><a href="LICENSE_URL" id="cn-license-link" target="_blank" rel="noopener">查看完整许可条款</a></p>
+      <div><span class="copyright-notice__pill">许可：<span id="cn-license">LICENSE_NAME</span></span></div>
+      <div style="margin-top:8px">本文章为博主原创文章。遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</div>
+      <div style="margin-top:8px"><a href="LICENSE_URL" id="cn-license-link" target="_blank" rel="noopener">查看完整许可条款</a></div>
     </div>
   </div>
 
@@ -300,9 +307,9 @@ Behavior:
     </div>
 
     <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
-      <p>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></p>
-      <p style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</p>
-      <p style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：god_mao@foxmail.com</p>
+      <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
+      <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
+      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：god_mao@foxmail.com</div>
     </div>
   </div>
 
@@ -701,7 +708,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -749,6 +756,7 @@ Behavior:
         </script>
     
     </body>
+    <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // 彩色控制台信息（更容易被看到）

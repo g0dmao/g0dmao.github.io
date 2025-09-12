@@ -13,6 +13,12 @@
   border-color: #2a2a2a;
 }
 
+.article p {
+  font-size: 16px;
+  line-height: 1.6; /* 行间距 */
+  margin-bottom: 1.2em; /* 段间距 */
+}
+
 .article img {
   max-width: 80%;   /* 图片不会超过容器宽度 */
   height: auto;      /* 保持宽高比 */
@@ -45,13 +51,6 @@
   max-height: 600px;  
   position: sticky;
   top: 80px;
-  a{
-    color:#6ee7b7;
-  }
-  a:hover{
-    color:darkcyan;
-  }
-  
     
 }
 
@@ -63,7 +62,6 @@
 }
 #sumtoc{
   font-size: 20px;
-  color:#6ee7b7;
 }
 
 .tgs{
@@ -121,8 +119,6 @@
   overflow-x: auto;         /* 超长代码水平滚动 */
   display: inline;    /* 避免块级换行 */
 }
-
-
 
 
 /* 代码块整体 */
@@ -240,4 +236,15 @@ figure.highlight {
 .collapsible-title.collapsed::before {
   content: ">_< "; /* 折叠状态箭头 */
   color: rgba(255, 255, 255, 0.3);
+}
+
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(to right, #666666, #d8d8d8);
+    z-index: 9999;
+    transition: width 0.1s;
 }
