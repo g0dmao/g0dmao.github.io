@@ -36,7 +36,7 @@
   display: inline-flex;
   flex-direction: column;
   width: 350px;
-    
+
 }
 
 .info .textinfo{
@@ -45,20 +45,20 @@
   margin-bottom: 40px;
 }
 .info .toc{
-    
-  
+
+
   padding: 10px;
-  max-height: 600px;  
+  max-height: 600px;
   position: sticky;
   top: 80px;
-    
+
 }
 
 .info .toc ol{
   background-color: #2A2A2A;
   list-style: none;
   overflow: auto;
-  
+
 }
 #sumtoc{
   font-size: 20px;
@@ -131,7 +131,7 @@ figure.highlight {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 80%;
   margin: 1em auto;  /* 上下留白，并居中 */
-  
+
 
 }
 
@@ -144,7 +144,7 @@ figure.highlight {
   border-collapse: collapse;
   margin: 0;
   background:#1e1e1e;
-  
+
 }
 
 .highlight td.code {
@@ -166,7 +166,7 @@ figure.highlight {
   margin: 0;
   padding: 0;
   overflow: auto;
-  
+
   font-size: 14px !important;
   line-height: 1.6 !important;
 }
@@ -175,7 +175,7 @@ figure.highlight {
   white-space: pre;
   word-wrap: break-word;
   font-family: "Fira Code", "JetBrains Mono", Consolas, monospace !important;
-  background-color: #0d1234;
+  background-color: #0f111b;
 }
 
 
@@ -203,11 +203,11 @@ figure.highlight {
 
 .article h3{
   background-color: #1e1e1e;           /* 深色背景，暗色主题 */
-  color: #e0e0e0;                      /* 文字颜色 */
+  color: #ddd;                      /* 文字颜色 */
   padding: 20px;                        /* 内边距 */
   border-radius: 8px;                   /* 圆角 */
   box-shadow: 0 4px 6px rgba(0,0,0,0.6), /* 下方阴影 */
-              0 0 0 1px rgba(255,255,255,0.05); /* 微边框增强立体感 */  
+              0 0 0 1px rgba(255,255,255,0.05); /* 微边框增强立体感 */
 }
 
 .article hr{

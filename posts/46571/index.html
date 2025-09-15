@@ -544,14 +544,65 @@ How to use:
 </div>
 </details>
 <hr />
+<ul>
+<li><a href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc">1. 为什么需要 IPC？</a></li>
+<li><a href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6">2. 常见的 Linux IPC 机制</a>
+<ul>
+<li><a href="#21-%E7%AE%A1%E9%81%93pipes">2.1. 管道（Pipes）</a></li>
+<li><a href="#22-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93">2.2. FIFO（命名管道）</a></li>
+<li><a href="#23-%E4%BF%A1%E5%8F%B7">2.3. 信号</a>
+<ul>
+<li><a href="#231-%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%88%86%E7%B1%BB">2.3.1. 信号的分类</a></li>
+<li><a href="#232-%E4%BF%A1%E5%8F%B7%E4%B8%8E-ipc-%E7%9A%84%E5%85%B3%E7%B3%BB">2.3.2. 信号与 IPC 的关系</a></li>
+<li><a href="#233-%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%89%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F">2.3.3. 信号的三种处理方式</a></li>
+<li><a href="#234-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7">2.3.4. 如何使用信号？</a>
+<ul>
+<li><a href="#2341-%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7kill-%E5%87%BD%E6%95%B0">2.3.4.1. 发送信号：<code>kill()</code> 函数</a></li>
+<li><a href="#2342-%E6%B3%A8%E5%86%8C%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0signal-%E5%92%8C-sigaction">2.3.4.2. 注册信号处理函数：<code>signal()</code> 和 <code>sigaction()</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#24-%E4%BF%A1%E5%8F%B7%E9%9B%86signal-set%E5%92%8C%E9%98%BB%E5%A1%9E">2.4. 信号集（Signal Set）和阻塞</a>
+<ul>
+<li><a href="#241-%E4%BF%A1%E5%8F%B7%E9%9B%86%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0">2.4.1. 信号集操作函数</a></li>
+<li><a href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask">2.4.2. 阻塞信号：<code>sigprocmask()</code></a></li>
+</ul>
+</li>
+<li><a href="#25-system-v-ipc-system-v-ipc">2.5. System V IPC (System V IPC)</a>
+<ul>
+<li><a href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues">2.5.1. 消息队列（Message Queues）</a></li>
+<li><a href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores">2.5.2. 信号量（Semaphores）</a></li>
+<li><a href="#253-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory">2.5.3. 共享内存（Shared Memory）</a></li>
+</ul>
+</li>
+<li><a href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9">2.6. IPC 总结与选择</a></li>
+</ul>
+</li>
+<li><a href="#3-posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85">3. POSIX IPC：System V 的继任者</a>
+<ul>
+<li><a href="#31-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">3.1. POSIX 消息队列</a></li>
+<li><a href="#32-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F">3.2. POSIX 信号量</a></li>
+<li><a href="#33-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98">3.3. POSIX 共享内存</a></li>
+</ul>
+</li>
+<li><a href="#4-%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3">4. 套接字（Socket）：网络通信的基石</a>
+<ul>
+<li><a href="#41-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B">4.1. 套接字类型</a></li>
+<li><a href="#42-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B">4.2. 套接字通信流程（以 TCP 为例）</a></li>
+<li><a href="#43-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain">4.3. 套接字域（Socket Domain）</a></li>
+<li><a href="#44-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9">4.4. 总结与选择</a></li>
+</ul>
+</li>
+</ul>
 <p>在 Linux 世界中，进程是独立的执行单元，拥有自己的地址空间。但很多时候，为了完成一个复杂的任务，不同的进程需要协同工作，交换数据。这时，我们就需要<strong>进程间通信（IPC, Inter-Process Communication）</strong>。IPC 就像是进程之间的一座桥梁，让它们能够相互“交谈”，共享信息。</p>
 <p>本文将带你深入了解 Linux 中常见的 IPC 机制，并以<strong>使用为导向</strong>，结合代码示例，让你能够快速掌握这些“通信”技术。</p>
-<h2 id="为什么需要-ipc"><a class="markdownIt-Anchor" href="#为什么需要-ipc"></a> 为什么需要 IPC？</h2>
+<h2 id="1-为什么需要-ipc"><a class="markdownIt-Anchor" href="#1-为什么需要-ipc"></a> 1. 为什么需要 IPC？</h2>
 <p>想象一个场景：你正在开发一个 Web 服务器。一个主进程负责监听网络请求，但处理这些请求非常耗时。如果主进程自己处理，服务器就会变得很慢，无法响应新的请求。一个更好的设计是，主进程每接收到一个请求，就创建一个新的子进程或将请求发送给一个工作进程池来处理。这样，主进程可以立即回去监听新的连接，而工作进程则专注于处理任务。</p>
 <p>在这个例子中，主进程需要将请求数据传递给工作进程。这就是 IPC 发挥作用的地方。</p>
-<h2 id="常见的-linux-ipc-机制"><a class="markdownIt-Anchor" href="#常见的-linux-ipc-机制"></a> 常见的 Linux IPC 机制</h2>
+<h2 id="2-常见的-linux-ipc-机制"><a class="markdownIt-Anchor" href="#2-常见的-linux-ipc-机制"></a> 2. 常见的 Linux IPC 机制</h2>
 <p>Linux 提供了多种 IPC 机制，每种都有其独特的优缺点和适用场景。我们可以将它们分为两大类：<strong>基于文件</strong>和<strong>基于内存</strong>。</p>
-<h3 id="1-管道pipes"><a class="markdownIt-Anchor" href="#1-管道pipes"></a> 1. 管道（Pipes）</h3>
+<h3 id="21-管道pipes"><a class="markdownIt-Anchor" href="#21-管道pipes"></a> 2.1. 管道（Pipes）</h3>
 <p>管道可能是最简单、最古老的 IPC 形式。它就像一个单向的“水管”，一端用于写入，另一端用于读取。</p>
 <ul>
 <li>
@@ -580,8 +631,8 @@ How to use:
 <p><strong>代码示例</strong>：一个简单的父子进程通信。</p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>];<br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from parent!&quot;</span>;<br><br>    <span class="hljs-keyword">if</span> (pipe(pipefd) == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;pipe&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;fork&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 父进程</span><br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>        write(pipefd[<span class="hljs-number">1</span>], msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端</span><br>        wait(<span class="hljs-literal">NULL</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 子进程</span><br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端</span><br>        read(pipefd[<span class="hljs-number">0</span>], buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child received: %s\n&quot;</span>, buf);<br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="2-fifo命名管道"><a class="markdownIt-Anchor" href="#2-fifo命名管道"></a> 2. FIFO（命名管道）</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>];<br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from parent!&quot;</span>;<br><br>    <span class="hljs-keyword">if</span> (pipe(pipefd) == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;pipe&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;fork&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 父进程</span><br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>        write(pipefd[<span class="hljs-number">1</span>], msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端，如果不关，子进程读端收不到EOF信号，则会一直读导致程序阻塞</span><br>        wait(<span class="hljs-literal">NULL</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 子进程</span><br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端，如果不关</span><br>        read(pipefd[<span class="hljs-number">0</span>], buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child received: %s\n&quot;</span>, buf);<br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="22-fifo命名管道"><a class="markdownIt-Anchor" href="#22-fifo命名管道"></a> 2.2. FIFO（命名管道）</h3>
 <p>管道只能用于有亲缘关系的进程，那如果两个毫不相关的进程想通信怎么办？答案就是 <strong>FIFO (First-In, First-Out)</strong>，也叫<strong>命名管道</strong>。</p>
 <ul>
 <li>
@@ -621,9 +672,182 @@ How to use:
 <p>你可以先运行 <code>writer.c</code>，再运行 <code>reader.c</code>。</p>
 </li>
 </ul>
-<h3 id="system-v-ipc-system-v-ipc"><a class="markdownIt-Anchor" href="#system-v-ipc-system-v-ipc"></a> System V IPC (System V IPC)</h3>
+<h3 id="23-信号"><a class="markdownIt-Anchor" href="#23-信号"></a> 2.3. 信号</h3>
+<p><strong>信号（Signal）</strong> 是一种更轻量级、更异步的进程间通信和事件通知机制。它就像一个“软中断”，用来通知进程发生了某个事件。</p>
+<p>想象一下，你正在专注地工作，突然有人拍了你一下肩膀。你停下手中的活，转头看看发生了什么事，然后根据情况做出反应（比如，对方是同事，你可能和他聊两句；对方是领导，你可能马上站起来）。</p>
+<p>在 Linux 中，<strong>信号</strong>就是那个“拍肩膀”的动作。当一个进程收到一个信号时，它会暂停当前执行的任务，转而去处理这个信号，处理完后再恢复执行。</p>
+<ul>
+<li>
+<p><strong>发送者</strong>：可以是内核（比如你按下 <code>Ctrl+C</code>，内核会发送 <code>SIGINT</code> 信号给前台进程）、也可以是其他进程（使用 <code>kill()</code> 函数）。</p>
+</li>
+<li>
+<p><strong>接收者</strong>：任何一个进程都可以接收信号。</p>
+</li>
+</ul>
+<h4 id="231-信号的分类"><a class="markdownIt-Anchor" href="#231-信号的分类"></a> 2.3.1. 信号的分类</h4>
+<p>信号有很多种，每种都有其特定的用途。常见的信号及其作用如下：</p>
+<table>
+<thead>
+<tr>
+<th>信号名称</th>
+<th>默认行为</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>SIGHUP</code> (1)</strong></td>
+<td>终止进程</td>
+<td>当终端关闭时发送给关联的进程。</td>
+</tr>
+<tr>
+<td><strong><code>SIGINT</code> (2)</strong></td>
+<td>终止进程</td>
+<td>来自键盘中断，通常是 <code>Ctrl+C</code>。</td>
+</tr>
+<tr>
+<td><strong><code>SIGQUIT</code> (3)</strong></td>
+<td>终止并生成核心转储文件</td>
+<td>来自键盘退出，通常是 <code>Ctrl+\\</code>。</td>
+</tr>
+<tr>
+<td><strong><code>SIGKILL</code> (9)</strong></td>
+<td>强制终止进程</td>
+<td>无法被捕获、阻塞或忽略，强制杀死进程。</td>
+</tr>
+<tr>
+<td><strong><code>SIGTERM</code> (15)</strong></td>
+<td>终止进程</td>
+<td>友好的终止请求，可以被捕获。<code>kill</code> 命令默认发送此信号。</td>
+</tr>
+<tr>
+<td><strong><code>SIGCHLD</code></strong></td>
+<td>忽略</td>
+<td>子进程终止或停止时发送给父进程。</td>
+</tr>
+<tr>
+<td><strong><code>SIGSTOP</code></strong></td>
+<td>停止进程</td>
+<td>无法被捕获、忽略，暂停进程。</td>
+</tr>
+<tr>
+<td><strong><code>SIGCONT</code></strong></td>
+<td>继续进程</td>
+<td>使停止的进程继续运行。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="232-信号与-ipc-的关系"><a class="markdownIt-Anchor" href="#232-信号与-ipc-的关系"></a> 2.3.2. 信号与 IPC 的关系</h4>
+<ul>
+<li>
+<p><strong>异步通知</strong>：信号是典型的异步 IPC 机制，它不像管道或共享内存那样传递数据，而是<strong>传递事件信息</strong>。</p>
+</li>
+<li>
+<p><strong>轻量级</strong>：相比于其他 IPC，信号的开销非常小。</p>
+</li>
+<li>
+<p><strong>同步</strong>：信号也可以用于同步目的，例如 <code>SIGCHLD</code> 信号常用于父进程等待子进程结束。</p>
+</li>
+</ul>
+<p>理解信号，特别是信号集和阻塞的概念，对于编写健壮的多进程或多线程程序至关重要。它能让你更好地控制程序对外部事件的响应。</p>
+<h4 id="233-信号的三种处理方式"><a class="markdownIt-Anchor" href="#233-信号的三种处理方式"></a> 2.3.3. 信号的三种处理方式</h4>
+<p>当进程收到一个信号时，它可以有三种处理方式：</p>
+<ol>
+<li>
+<p><strong>执行默认动作（Default）</strong>：大多数信号都有一个预定义的默认行为。例如，<code>SIGINT</code> 的默认行为就是终止进程。</p>
+</li>
+<li>
+<p><strong>忽略信号（Ignore）</strong>：有些信号可以被忽略，即进程收到信号后不做任何处理。<code>SIGCHLD</code> 信号的默认行为就是忽略。</p>
+</li>
+<li>
+<p><strong>捕获信号（Catch）</strong>：这是最灵活的方式。进程可以为某个信号注册一个<strong>信号处理函数（Signal Handler）</strong>。当信号到来时，进程会执行这个函数来处理信号，而不是执行默认动作。</p>
+</li>
+</ol>
+<div class="admonition caution"><p class="admonition-title">caution</p><p><strong>注意</strong>：<code>SIGKILL</code> 和 <code>SIGSTOP</code> 这两个信号是<strong>不能被捕获、忽略或阻塞</strong>的。它们是系统管理员强制终止或停止进程的“最后手段”。</p>
+</div>
+<h4 id="234-如何使用信号"><a class="markdownIt-Anchor" href="#234-如何使用信号"></a> 2.3.4. 如何使用信号？</h4>
+<h5 id="2341-发送信号kill-函数"><a class="markdownIt-Anchor" href="#2341-发送信号kill-函数"></a> 2.3.4.1. 发送信号：<code>kill()</code> 函数</h5>
+<p>你可以使用 <code>kill()</code> 函数向另一个进程发送信号。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">kill</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">int</span> sig)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>pid</code>：目标进程的 ID。</p>
+</li>
+<li>
+<p><code>sig</code>：要发送的信号编号。</p>
+</li>
+</ul>
+<h5 id="2342-注册信号处理函数signal-和-sigaction"><a class="markdownIt-Anchor" href="#2342-注册信号处理函数signal-和-sigaction"></a> 2.3.4.2. 注册信号处理函数：<code>signal()</code> 和 <code>sigaction()</code></h5>
+<ul>
+<li>
+<p><strong><code>signal()</code> 函数</strong>：这是最简单的注册方式，但它在不同系统上的行为可能不一致，不推荐在新代码中使用。</p>
+</li>
+<li>
+<p><strong><code>sigaction()</code> 函数</strong>：这是 POSIX 标准推荐的方式，更强大，更可靠。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">sigaction</span><span class="hljs-params">(<span class="hljs-type">int</span> signum, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sigaction *act, <span class="hljs-keyword">struct</span> sigaction *oldact)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>signum</code>：要捕获的信号编号。</p>
+</li>
+<li>
+<p><code>act</code>：指向 <code>struct sigaction</code> 结构体，该结构体定义了新的信号处理行为。</p>
+</li>
+<li>
+<p><code>oldact</code>：可选，用于保存旧的信号处理行为。</p>
+</li>
+</ul>
+<p><strong><code>struct sigaction</code> 结构体</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sigaction</span> &#123;</span><br>    <span class="hljs-type">void</span> (*sa_handler)(<span class="hljs-type">int</span>);  <span class="hljs-comment">// 信号处理函数</span><br>    <span class="hljs-type">sigset_t</span> sa_mask;         <span class="hljs-comment">// 信号集，在信号处理函数执行期间需要阻塞的信号</span><br>    <span class="hljs-type">int</span> sa_flags;             <span class="hljs-comment">// 标志位</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="24-信号集signal-set和阻塞"><a class="markdownIt-Anchor" href="#24-信号集signal-set和阻塞"></a> 2.4. 信号集（Signal Set）和阻塞</h3>
+<p>当你在处理一个信号时，你可能不希望被其他信号打断。<strong>信号集（<code>sigset_t</code>）</strong> 就是用来管理一组信号的。通过操作信号集，你可以<strong>阻塞（Block）</strong> 某些信号，让它们在进程处理完当前任务后才被传递。</p>
+<h4 id="241-信号集操作函数"><a class="markdownIt-Anchor" href="#241-信号集操作函数"></a> 2.4.1. 信号集操作函数</h4>
+<ul>
+<li>
+<p><strong><code>sigemptyset()</code></strong>：初始化一个空的信号集。</p>
+</li>
+<li>
+<p><strong><code>sigaddset()</code></strong>：向信号集中添加一个信号。</p>
+</li>
+<li>
+<p><strong><code>sigdelset()</code></strong>：从信号集中删除一个信号。</p>
+</li>
+<li>
+<p><strong><code>sigismember()</code></strong>：检查一个信号是否在信号集中。</p>
+</li>
+</ul>
+<h4 id="242-阻塞信号sigprocmask"><a class="markdownIt-Anchor" href="#242-阻塞信号sigprocmask"></a> 2.4.2. 阻塞信号：<code>sigprocmask()</code></h4>
+<p><code>sigprocmask()</code> 函数用来设置进程的<strong>信号阻塞掩码（Signal Mask）</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">sigprocmask</span><span class="hljs-params">(<span class="hljs-type">int</span> how, <span class="hljs-type">const</span> <span class="hljs-type">sigset_t</span> *<span class="hljs-built_in">set</span>, <span class="hljs-type">sigset_t</span> *oldset)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>how</code>：指定如何修改信号阻塞掩码，有以下几种：</p>
+<ul>
+<li>
+<p><code>SIG_BLOCK</code>：将 <code>set</code> 中的信号添加到阻塞掩码中。</p>
+</li>
+<li>
+<p><code>SIG_UNBLOCK</code>：将 <code>set</code> 中的信号从阻塞掩码中移除。</p>
+</li>
+<li>
+<p><code>SIG_SETMASK</code>：将阻塞掩码设置为 <code>set</code>。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>set</code>：包含要阻塞或解除阻塞的信号集。</p>
+</li>
+<li>
+<p><code>oldset</code>：可选，用于保存旧的阻塞掩码。</p>
+</li>
+</ul>
+<p><strong>示例</strong>：在处理关键代码段时临时阻塞 <code>SIGINT</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">my_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Caught signal %d\n&quot;</span>, sig);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">sigset_t</span> block_mask, old_mask;<br><br>    <span class="hljs-comment">// 1. 设置要阻塞的信号集</span><br>    sigemptyset(&amp;block_mask);<br>    sigaddset(&amp;block_mask, SIGINT);<br><br>    <span class="hljs-comment">// 2. 阻塞 SIGINT 信号</span><br>    sigprocmask(SIG_BLOCK, &amp;block_mask, &amp;old_mask);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SIGINT is blocked. Press Ctrl+C...\n&quot;</span>);<br>    sleep(<span class="hljs-number">10</span>); <span class="hljs-comment">// 在这10秒内，Ctrl+C不会终止进程</span><br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Unblocking SIGINT...\n&quot;</span>);<br>    <span class="hljs-comment">// 3. 解除阻塞，恢复旧的信号掩码</span><br>    sigprocmask(SIG_SETMASK, &amp;old_mask, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SIGINT is unblocked. Press Ctrl+C again.\n&quot;</span>);<br><br>    <span class="hljs-comment">// 4. 注册一个信号处理函数</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sigaction</span> <span class="hljs-title">sa</span>;</span><br>    sa.sa_handler = my_handler;<br>    sigemptyset(&amp;sa.sa_mask);<br>    sa.sa_flags = <span class="hljs-number">0</span>;<br>    sigaction(SIGINT, &amp;sa, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Running...\n&quot;</span>);<br>        sleep(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行这段代码，你会看到在阻塞期间，<code>Ctrl+C</code> 无法终止进程。当解除阻塞后，<code>Ctrl+C</code> 才能触发信号处理函数。</p>
+<h3 id="25-system-v-ipc-system-v-ipc"><a class="markdownIt-Anchor" href="#25-system-v-ipc-system-v-ipc"></a> 2.5. System V IPC (System V IPC)</h3>
 <p>System V IPC 是 Linux 系统中一组更高级、更强大的 IPC 机制，包括消息队列、信号量和共享内存。它们都是<strong>基于内核</strong>的，需要一个唯一的键值（key）来标识。</p>
-<h4 id="1-消息队列message-queues"><a class="markdownIt-Anchor" href="#1-消息队列message-queues"></a> 1. 消息队列（Message Queues）</h4>
+<h4 id="251-消息队列message-queues"><a class="markdownIt-Anchor" href="#251-消息队列message-queues"></a> 2.5.1. 消息队列（Message Queues）</h4>
 <p>消息队列就像一个链表，允许进程向其中添加消息或从中读取消息。</p>
 <ul>
 <li>
@@ -661,7 +885,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h4 id="2-信号量semaphores"><a class="markdownIt-Anchor" href="#2-信号量semaphores"></a> 2. 信号量（Semaphores）</h4>
+<h4 id="252-信号量semaphores"><a class="markdownIt-Anchor" href="#252-信号量semaphores"></a> 2.5.2. 信号量（Semaphores）</h4>
 <p>信号量主要用于<strong>同步</strong>，控制对共享资源的访问。它本身不传递数据，而是作为一种“计数器”。</p>
 <ul>
 <li>
@@ -690,7 +914,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h4 id="3-共享内存shared-memory"><a class="markdownIt-Anchor" href="#3-共享内存shared-memory"></a> 3. 共享内存（Shared Memory）</h4>
+<h4 id="253-共享内存shared-memory"><a class="markdownIt-Anchor" href="#253-共享内存shared-memory"></a> 2.5.3. 共享内存（Shared Memory）</h4>
 <p>共享内存是最高效的 IPC 方式。它允许两个或多个进程共享同一块物理内存。</p>
 <ul>
 <li>
@@ -722,7 +946,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h3 id="ipc-总结与选择"><a class="markdownIt-Anchor" href="#ipc-总结与选择"></a> IPC 总结与选择</h3>
+<h3 id="26-ipc-总结与选择"><a class="markdownIt-Anchor" href="#26-ipc-总结与选择"></a> 2.6. IPC 总结与选择</h3>
 <table>
 <thead>
 <tr>
@@ -781,9 +1005,9 @@ How to use:
 </li>
 </ul>
 <p>了解这些 IPC 机制，就如同掌握了进程之间“沟通”的多种语言。在开发时，选择合适的“语言”能让你的程序更加健壮、高效。现在，你可以尝试用这些机制来解决你遇到的实际问题了！</p>
-<h2 id="posix-ipcsystem-v-的继任者"><a class="markdownIt-Anchor" href="#posix-ipcsystem-v-的继任者"></a> POSIX IPC：System V 的继任者</h2>
+<h2 id="3-posix-ipcsystem-v-的继任者"><a class="markdownIt-Anchor" href="#3-posix-ipcsystem-v-的继任者"></a> 3. POSIX IPC：System V 的继任者</h2>
 <p><strong>POSIX IPC</strong>（Portable Operating System Interface）是一套新的 IPC 标准，旨在解决 <strong>System V IPC</strong> 的一些局限性。它提供了一套更统一、更现代的 API，使用<strong>文件名</strong>作为标识符，而不是 System V 的<strong>键值</strong>，这使得 IPC 资源的管理更加直观。</p>
-<h3 id="1-posix-消息队列"><a class="markdownIt-Anchor" href="#1-posix-消息队列"></a> 1. POSIX 消息队列</h3>
+<h3 id="31-posix-消息队列"><a class="markdownIt-Anchor" href="#31-posix-消息队列"></a> 3.1. POSIX 消息队列</h3>
 <p>与 System V 消息队列类似，但 API 更简洁。</p>
 <ul>
 <li>
@@ -821,7 +1045,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h3 id="2-posix-信号量"><a class="markdownIt-Anchor" href="#2-posix-信号量"></a> 2. POSIX 信号量</h3>
+<h3 id="32-posix-信号量"><a class="markdownIt-Anchor" href="#32-posix-信号量"></a> 3.2. POSIX 信号量</h3>
 <p>用于进程间的同步，功能与 System V 信号量类似，但提供了更简单的接口。</p>
 <ul>
 <li>
@@ -856,7 +1080,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h3 id="3-posix-共享内存"><a class="markdownIt-Anchor" href="#3-posix-共享内存"></a> 3. POSIX 共享内存</h3>
+<h3 id="33-posix-共享内存"><a class="markdownIt-Anchor" href="#33-posix-共享内存"></a> 3.3. POSIX 共享内存</h3>
 <p>和 System V 共享内存一样，都是最快的 IPC 方式，但 POSIX 版本使用了文件描述符。</p>
 <ul>
 <li>
@@ -891,9 +1115,9 @@ How to use:
 </ul>
 </li>
 </ul>
-<h2 id="套接字socket网络通信的基石"><a class="markdownIt-Anchor" href="#套接字socket网络通信的基石"></a> 套接字（Socket）：网络通信的基石</h2>
+<h2 id="4-套接字socket网络通信的基石"><a class="markdownIt-Anchor" href="#4-套接字socket网络通信的基石"></a> 4. 套接字（Socket）：网络通信的基石</h2>
 <p><strong>套接字（Socket）</strong> 是一种更通用的 IPC 机制，它不仅可以在同一台机器上的进程间通信，更重要的能力是实现<strong>跨网络</strong>、不同主机上的进程通信。它是网络通信的基石。</p>
-<h3 id="1-套接字类型"><a class="markdownIt-Anchor" href="#1-套接字类型"></a> 1. 套接字类型</h3>
+<h3 id="41-套接字类型"><a class="markdownIt-Anchor" href="#41-套接字类型"></a> 4.1. 套接字类型</h3>
 <ul>
 <li>
 <p><strong>流式套接字（SOCK_STREAM）</strong>：</p>
@@ -930,7 +1154,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h3 id="2-套接字通信流程以-tcp-为例"><a class="markdownIt-Anchor" href="#2-套接字通信流程以-tcp-为例"></a> 2. 套接字通信流程（以 TCP 为例）</h3>
+<h3 id="42-套接字通信流程以-tcp-为例"><a class="markdownIt-Anchor" href="#42-套接字通信流程以-tcp-为例"></a> 4.2. 套接字通信流程（以 TCP 为例）</h3>
 <p><strong>服务器端：</strong></p>
 <ol>
 <li>
@@ -967,7 +1191,7 @@ How to use:
 <p><strong><code>close()</code></strong>：关闭套接字。</p>
 </li>
 </ol>
-<h3 id="3-套接字域socket-domain"><a class="markdownIt-Anchor" href="#3-套接字域socket-domain"></a> 3. 套接字域（Socket Domain）</h3>
+<h3 id="43-套接字域socket-domain"><a class="markdownIt-Anchor" href="#43-套接字域socket-domain"></a> 4.3. 套接字域（Socket Domain）</h3>
 <p>除了我们熟悉的网络套接字（<code>AF_INET</code>），还有一种特别的 IPC 机制：<strong>UNIX 域套接字（AF_UNIX）</strong>。</p>
 <ul>
 <li>
@@ -982,7 +1206,7 @@ How to use:
 </ul>
 </li>
 </ul>
-<h3 id="总结与选择"><a class="markdownIt-Anchor" href="#总结与选择"></a> 总结与选择</h3>
+<h3 id="44-总结与选择"><a class="markdownIt-Anchor" href="#44-总结与选择"></a> 4.4. 总结与选择</h3>
 <ul>
 <li>
 <p><strong>POSIX IPC</strong> 是 <strong>System V IPC</strong> 的现代版本，如果你正在编写新的应用程序，<strong>推荐优先使用 POSIX IPC</strong>，因为它提供了更简洁、更标准化的接口。</p>
@@ -1002,9 +1226,9 @@ How to use:
         <div class="textinfo">
             <h1 style="text-align: center;">深入浅出 Linux IPC：进程间通信的艺术</h1>
             <p>创建时间：9月 12, 2025 </p>
-            <p>最后更新：9月 12, 2025</p>
-            <p>字数统计：3.2k字</p>
-            <p>预计阅读：12min</p>
+            <p>最后更新：9月 15, 2025</p>
+            <p>字数统计：5.1k字</p>
+            <p>预计阅读：19min</p>
             
             <div class="catgrs">文章分类：
                 
@@ -1043,7 +1267,7 @@ How to use:
             
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-number">1.</span> <span class="toc-text"> 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text"> 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%A1%E9%81%93pipes"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#system-v-ipc-system-v-ipc"><span class="toc-number">2.3.</span> <span class="toc-text"> System V IPC (System V IPC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">2.4.</span> <span class="toc-text"> IPC 总结与选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85"><span class="toc-number">3.</span> <span class="toc-text"> POSIX IPC：System V 的继任者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.1.</span> <span class="toc-text"> 1. POSIX 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.2.</span> <span class="toc-text"> 2. POSIX 信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text"> 3. POSIX 共享内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3"><span class="toc-number">4.</span> <span class="toc-text"> 套接字（Socket）：网络通信的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 1. 套接字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text"> 2. 套接字通信流程（以 TCP 为例）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain"><span class="toc-number">4.3.</span> <span class="toc-text"> 3. 套接字域（Socket Domain）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">4.4.</span> <span class="toc-text"> 总结与选择</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-number">1.</span> <span class="toc-text"> 1. 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text"> 2. 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%AE%A1%E9%81%93pipes"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3. 信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 2.3.1. 信号的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-%E4%BF%A1%E5%8F%B7%E4%B8%8E-ipc-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 2.3.2. 信号与 IPC 的关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%89%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 2.3.3. 信号的三种处理方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.3.4.</span> <span class="toc-text"> 2.3.4. 如何使用信号？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2341-%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7kill-%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.4.1.</span> <span class="toc-text"> 2.3.4.1. 发送信号：kill() 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2342-%E6%B3%A8%E5%86%8C%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0signal-%E5%92%8C-sigaction"><span class="toc-number">2.3.4.2.</span> <span class="toc-text"> 2.3.4.2. 注册信号处理函数：signal() 和 sigaction()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%BF%A1%E5%8F%B7%E9%9B%86signal-set%E5%92%8C%E9%98%BB%E5%A1%9E"><span class="toc-number">2.4.</span> <span class="toc-text"> 2.4. 信号集（Signal Set）和阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E4%BF%A1%E5%8F%B7%E9%9B%86%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 2.4.1. 信号集操作函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 2.4.2. 阻塞信号：sigprocmask()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-system-v-ipc-system-v-ipc"><span class="toc-number">2.5.</span> <span class="toc-text"> 2.5. System V IPC (System V IPC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-number">2.5.1.</span> <span class="toc-text"> 2.5.1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-number">2.5.2.</span> <span class="toc-text"> 2.5.2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#253-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-number">2.5.3.</span> <span class="toc-text"> 2.5.3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">2.6.</span> <span class="toc-text"> 2.6. IPC 总结与选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85"><span class="toc-number">3.</span> <span class="toc-text"> 3. POSIX IPC：System V 的继任者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1. POSIX 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2. POSIX 信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text"> 3.3. POSIX 共享内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3"><span class="toc-number">4.</span> <span class="toc-text"> 4. 套接字（Socket）：网络通信的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 套接字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2. 套接字通信流程（以 TCP 为例）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain"><span class="toc-number">4.3.</span> <span class="toc-text"> 4.3. 套接字域（Socket Domain）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">4.4.</span> <span class="toc-text"> 4.4. 总结与选择</span></a></li></ol></li></ol>
             </details>
         </div>
         
@@ -1336,7 +1560,7 @@ How to use:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
