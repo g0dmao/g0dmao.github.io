@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -478,8 +475,9 @@ Behavior:
 </li>
 </ol>
 </section>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
@@ -488,73 +486,72 @@ Behavior:
             <p>最后更新：3月 10, 2025</p>
             <p>字数统计：1k字</p>
             <p>预计阅读：3min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
-                            -嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" id="catgrs">
-                            -CubeMX配置功能  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
+                                -嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" id="catgrs">
+                                -CubeMX配置功能
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/STM32/" id="tgs">
-                            #STM32  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/CubeMX/" id="tgs">
-                            #CubeMX  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/ADC/" id="tgs">
-                            #ADC  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
-                            #嵌入式  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/STM32/" id="tgs">
+                                #STM32
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/CubeMX/" id="tgs">
+                                #CubeMX
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/ADC/" id="tgs">
+                                #ADC
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
+                                #嵌入式
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text"> 1. 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-analog-to-digital-converter%E7%AE%80%E4%BB%8B"><span class="toc-number">3.</span> <span class="toc-text"> 2. Analog-to-Digital Converter简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-stm32%E9%87%8C%E7%9A%84adc%E6%98%AF%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E8%BD%AC%E6%8D%A2%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text"> 3. STM32里的ADC是如何进行转换的？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90"><span class="toc-number">4.1.</span> <span class="toc-text"> 3.1. 数据对齐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E"><span class="toc-number">4.2.</span> <span class="toc-text"> 3.2. 具体说明：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-adc%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text"> 4. ADC的转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%A6%81%E6%8C%81%E7%BB%AD%E8%BD%AC%E6%8D%A2"><span class="toc-number">5.1.</span> <span class="toc-text"> 4.1. 关于是否要持续转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%A6%82%E6%9E%9C%E6%9C%89%E5%A4%9A%E4%B8%AA%E9%80%9A%E9%81%93"><span class="toc-number">5.2.</span> <span class="toc-text"> 4.2. 如果有多个通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-number">6.</span> <span class="toc-text"> 5. 参考博客</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AF%B4%E6%98%8E"><span class="toc-text"> 1. 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-analog-to-digital-converter%E7%AE%80%E4%BB%8B"><span class="toc-text"> 2. Analog-to-Digital Converter简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-stm32%E9%87%8C%E7%9A%84adc%E6%98%AF%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E8%BD%AC%E6%8D%A2%E7%9A%84"><span class="toc-text"> 3. STM32里的ADC是如何进行转换的？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%95%B0%E6%8D%AE%E5%AF%B9%E9%BD%90"><span class="toc-text"> 3.1. 数据对齐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E"><span class="toc-text"> 3.2. 具体说明：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-adc%E7%9A%84%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 4. ADC的转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%85%B3%E4%BA%8E%E6%98%AF%E5%90%A6%E8%A6%81%E6%8C%81%E7%BB%AD%E8%BD%AC%E6%8D%A2"><span class="toc-text"> 4.1. 关于是否要持续转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%A6%82%E6%9E%9C%E6%9C%89%E5%A4%9A%E4%B8%AA%E9%80%9A%E9%81%93"><span class="toc-text"> 4.2. 如果有多个通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-text"> 5. 参考博客</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -576,7 +573,7 @@ Behavior:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -702,7 +699,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -739,7 +736,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -754,7 +751,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -776,13 +773,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -831,7 +828,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -879,6 +876,13 @@ Behavior:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -890,5 +894,6 @@ Behavior:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

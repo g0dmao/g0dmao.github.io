@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -445,11 +442,24 @@ Behavior:
 <p>Shell 脚本不仅可以批量处理命令任务，还拥有完整的流程控制语法结构，包括条件判断、循环与分支等逻辑控制结构。本文将简明介绍 Shell 的基本流程控制语法，适用于 bash 环境。</p>
 <h2 id="1-条件判断语句-ifelse"><a class="markdownIt-Anchor" href="#1-条件判断语句-ifelse"></a> 1. 条件判断语句 if/else</h2>
 <h3 id="11-基本语法"><a class="markdownIt-Anchor" href="#11-基本语法"></a> 1.1. 基本语法：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">if [ 条件 ]; then<br>    命令1<br>elif [ 条件 ]; then<br>    命令2<br>else<br>    命令3<br>fi<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">if</span> <span class="token punctuation">[</span> 条件 <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    命令1
+<span class="token keyword">elif</span> <span class="token punctuation">[</span> 条件 <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    命令2
+<span class="token keyword">else</span>
+    命令3
+<span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>写成一行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">if [ ]; then ; fi<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token punctuation">;</span> <span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="12-示例"><a class="markdownIt-Anchor" href="#12-示例"></a> 1.2. 示例：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">read -p &quot;请输入一个数字: &quot; num<br>if [ &quot;$num&quot; -gt 0 ]; then<br>    echo &quot;正数&quot;<br>elif [ &quot;$num&quot; -lt 0 ]; then<br>    echo &quot;负数&quot;<br>else<br>    echo &quot;零&quot;<br>fi<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"请输入一个数字: "</span> num
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$num</span>"</span> <span class="token parameter variable">-gt</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"正数"</span>
+<span class="token keyword">elif</span> <span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$num</span>"</span> <span class="token parameter variable">-lt</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"负数"</span>
+<span class="token keyword">else</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"零"</span>
+<span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr />
 <h2 id="2-判断符号说明"><a class="markdownIt-Anchor" href="#2-判断符号说明"></a> 2. 判断符号说明</h2>
 <table>
@@ -512,90 +522,129 @@ Behavior:
 <h2 id="3-case-分支结构"><a class="markdownIt-Anchor" href="#3-case-分支结构"></a> 3. case 分支结构</h2>
 <p>用于多个条件的匹配处理。</p>
 <h3 id="31-语法"><a class="markdownIt-Anchor" href="#31-语法"></a> 3.1. 语法：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">case $变量 in<br>    模式1)<br>        命令 ;;<br>    模式2)<br>        命令 ;;<br>    *)<br>        默认命令 ;;<br>esac<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">case</span> $变量 <span class="token keyword">in</span>
+    模式1<span class="token punctuation">)</span>
+        命令 <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    模式2<span class="token punctuation">)</span>
+        命令 <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    *<span class="token punctuation">)</span>
+        默认命令 <span class="token punctuation">;</span><span class="token punctuation">;</span>
+<span class="token keyword">esac</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="32-示例"><a class="markdownIt-Anchor" href="#32-示例"></a> 3.2. 示例：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">read -p &quot;请输入选项[a/b/c]: &quot; choice<br>case $choice in<br>    a) echo &quot;你选择了A&quot; ;;<br>    b) echo &quot;你选择了B&quot; ;;<br>    c) echo &quot;你选择了C&quot; ;;<br>    *) echo &quot;无效选项&quot; ;;<br>esac<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"请输入选项[a/b/c]: "</span> choice
+<span class="token keyword">case</span> <span class="token variable">$choice</span> <span class="token keyword">in</span>
+    a<span class="token punctuation">)</span> <span class="token builtin class-name">echo</span> <span class="token string">"你选择了A"</span> <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    b<span class="token punctuation">)</span> <span class="token builtin class-name">echo</span> <span class="token string">"你选择了B"</span> <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    c<span class="token punctuation">)</span> <span class="token builtin class-name">echo</span> <span class="token string">"你选择了C"</span> <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    *<span class="token punctuation">)</span> <span class="token builtin class-name">echo</span> <span class="token string">"无效选项"</span> <span class="token punctuation">;</span><span class="token punctuation">;</span>
+<span class="token keyword">esac</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="4-for-循环"><a class="markdownIt-Anchor" href="#4-for-循环"></a> 4. for 循环</h2>
 <h3 id="41-遍历列表"><a class="markdownIt-Anchor" href="#41-遍历列表"></a> 4.1. 遍历列表：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">for var in 值1 值2 值3; do<br>    命令<br>done<br></code></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">for name in Alice Bob Charlie; do<br>    echo &quot;Hello, $name&quot;<br>done<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token for-or-select variable">var</span> <span class="token keyword">in</span> 值1 值2 值3<span class="token punctuation">;</span> <span class="token keyword">do</span>
+    命令
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token for-or-select variable">name</span> <span class="token keyword">in</span> Alice Bob Charlie<span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"Hello, <span class="token variable">$name</span>"</span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h3 id="42-使用-c-风格语法"><a class="markdownIt-Anchor" href="#42-使用-c-风格语法"></a> 4.2. 使用 C 风格语法：</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> ((i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-number">5</span>; i++)); <span class="hljs-keyword">do</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;第 <span class="hljs-variable">$i</span> 次&quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token variable"><span class="token punctuation">((</span>i<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span> i<span class="token operator">&lt;=</span><span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">))</span></span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"第 <span class="token variable">$i</span> 次"</span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h2 id="5-while-循环"><a class="markdownIt-Anchor" href="#5-while-循环"></a> 5. while 循环</h2>
 <h3 id="51-基本语法"><a class="markdownIt-Anchor" href="#51-基本语法"></a> 5.1. 基本语法：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">while [ 条件 ]; do<br>    命令<br>done<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">while</span> <span class="token punctuation">[</span> 条件 <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    命令
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h3 id="52-示例"><a class="markdownIt-Anchor" href="#52-示例"></a> 5.2. 示例：</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">i=1<br>while [ $i -le 5 ]; do<br>    echo &quot;循环第 $i 次&quot;<br>    ((i++))<br>done<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">i</span><span class="token operator">=</span><span class="token number">1</span>
+<span class="token keyword">while</span> <span class="token punctuation">[</span> <span class="token variable">$i</span> <span class="token parameter variable">-le</span> <span class="token number">5</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"循环第 <span class="token variable">$i</span> 次"</span>
+    <span class="token variable"><span class="token punctuation">((</span>i<span class="token operator">++</span><span class="token punctuation">))</span></span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="6-until-循环"><a class="markdownIt-Anchor" href="#6-until-循环"></a> 6. until 循环</h2>
 <p>与 <code>while</code> 相反：<strong>条件为假时执行</strong></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">i=1<br>until [ $i -gt 5 ]; do<br>    echo &quot;第 $i 次&quot;<br>    ((i++))<br>done<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">i</span><span class="token operator">=</span><span class="token number">1</span>
+<span class="token keyword">until</span> <span class="token punctuation">[</span> <span class="token variable">$i</span> <span class="token parameter variable">-gt</span> <span class="token number">5</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"第 <span class="token variable">$i</span> 次"</span>
+    <span class="token variable"><span class="token punctuation">((</span>i<span class="token operator">++</span><span class="token punctuation">))</span></span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="7-跳出循环break-和-continue"><a class="markdownIt-Anchor" href="#7-跳出循环break-和-continue"></a> 7. 跳出循环：break 和 continue</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">for ((i=1;i&lt;=10;i++)); do<br>    if [ $i -eq 5 ]; then<br>        break   # 提前结束循环<br>    fi<br>    echo $i<br>done<br></code></pre></td></tr></table></figure>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">for ((i=1;i&lt;=5;i++)); do<br>    if [ $i -eq 3 ]; then<br>        continue   # 跳过当前循环<br>    fi<br>    echo $i<br>done<br></code></pre></td></tr></table></figure>   
-        <script src="/js/foldpost.js"></script> 
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token variable"><span class="token punctuation">((</span>i<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>i<span class="token operator">&lt;=</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">))</span></span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$i</span> <span class="token parameter variable">-eq</span> <span class="token number">5</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">break</span>   <span class="token comment"># 提前结束循环</span>
+    <span class="token keyword">fi</span>
+    <span class="token builtin class-name">echo</span> <span class="token variable">$i</span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token keyword">for</span> <span class="token variable"><span class="token punctuation">((</span>i<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">;</span>i<span class="token operator">&lt;=</span><span class="token number">5</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">))</span></span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$i</span> <span class="token parameter variable">-eq</span> <span class="token number">3</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">continue</span>   <span class="token comment"># 跳过当前循环</span>
+    <span class="token keyword">fi</span>
+    <span class="token builtin class-name">echo</span> <span class="token variable">$i</span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">Shell脚本流程控制简明指南</h1>
             <p>创建时间：6月 18, 2025 </p>
             <p>最后更新：6月 18, 2025</p>
-            <p>字数统计：651字</p>
+            <p>字数统计：630字</p>
             <p>预计阅读：2min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/Shell/" id="catgrs">
-                            -Shell  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/Shell/" id="catgrs">
+                                -Shell
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/shell/" id="tgs">
-                            #shell  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/shell/" id="tgs">
+                                #shell
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5-ifelse"><span class="toc-number">1.</span> <span class="toc-text"> 1. 条件判断语句 if&#x2F;else</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1. 基本语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%A4%E6%96%AD%E7%AC%A6%E5%8F%B7%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text"> 2. 判断符号说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-case-%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text"> 3. case 分支结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E8%AF%AD%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1. 语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-for-%E5%BE%AA%E7%8E%AF"><span class="toc-number">4.</span> <span class="toc-text"> 4. for 循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E9%81%8D%E5%8E%86%E5%88%97%E8%A1%A8"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 遍历列表：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BD%BF%E7%94%A8-c-%E9%A3%8E%E6%A0%BC%E8%AF%AD%E6%B3%95"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2. 使用 C 风格语法：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-while-%E5%BE%AA%E7%8E%AF"><span class="toc-number">5.</span> <span class="toc-text"> 5. while 循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">5.1.</span> <span class="toc-text"> 5.1. 基本语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E7%A4%BA%E4%BE%8B"><span class="toc-number">5.2.</span> <span class="toc-text"> 5.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-until-%E5%BE%AA%E7%8E%AF"><span class="toc-number">6.</span> <span class="toc-text"> 6. until 循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%B7%B3%E5%87%BA%E5%BE%AA%E7%8E%AFbreak-%E5%92%8C-continue"><span class="toc-number">7.</span> <span class="toc-text"> 7. 跳出循环：break 和 continue</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5-ifelse"><span class="toc-text"> 1. 条件判断语句 if&#x2F;else</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text"> 1.1. 基本语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 1.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%A4%E6%96%AD%E7%AC%A6%E5%8F%B7%E8%AF%B4%E6%98%8E"><span class="toc-text"> 2. 判断符号说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-case-%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84"><span class="toc-text"> 3. case 分支结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E8%AF%AD%E6%B3%95"><span class="toc-text"> 3.1. 语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 3.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-for-%E5%BE%AA%E7%8E%AF"><span class="toc-text"> 4. for 循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E9%81%8D%E5%8E%86%E5%88%97%E8%A1%A8"><span class="toc-text"> 4.1. 遍历列表：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BD%BF%E7%94%A8-c-%E9%A3%8E%E6%A0%BC%E8%AF%AD%E6%B3%95"><span class="toc-text"> 4.2. 使用 C 风格语法：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-while-%E5%BE%AA%E7%8E%AF"><span class="toc-text"> 5. while 循环</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text"> 5.1. 基本语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 5.2. 示例：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-until-%E5%BE%AA%E7%8E%AF"><span class="toc-text"> 6. until 循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%B7%B3%E5%87%BA%E5%BE%AA%E7%8E%AFbreak-%E5%92%8C-continue"><span class="toc-text"> 7. 跳出循环：break 和 continue</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -617,7 +666,7 @@ Behavior:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -743,7 +792,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -780,7 +829,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -795,7 +844,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -817,13 +866,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -872,7 +921,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -920,6 +969,13 @@ Behavior:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -931,5 +987,6 @@ Behavior:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

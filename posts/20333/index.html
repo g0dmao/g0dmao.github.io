@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -428,13 +425,15 @@ Behavior:
 <h2 id="使用方法"><a class="markdownIt-Anchor" href="#使用方法"></a> 使用方法</h2>
 <h3 id="首先"><a class="markdownIt-Anchor" href="#首先"></a> 首先，</h3>
 <p>你需要下载一个字数统计插件:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-wordcount --save<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> hexo-wordcount <span class="token parameter variable">--save</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果不想要下载或无法下载成功，你也可以放弃字数统计功能。前往主题文件夹下的<code>layout\post.ejs</code>删除</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ejs">字数: &lt;span class=&quot;post-count&quot;&gt;&lt;%= wordcount(page.content) %&gt;&lt;/span&gt;<br><br>预计阅读时间: &lt;span class=&quot;post-count&quot;&gt;&lt;%= min2read(page.content) %&gt;min&lt;/span&gt;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs">字数: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post-count<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%=</span><span class="token language-javascript"> <span class="token function">wordcount</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span>content<span class="token punctuation">)</span> </span><span class="token delimiter punctuation">%></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+
+预计阅读时间: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post-count<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%=</span><span class="token language-javascript"> <span class="token function">min2read</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span>content<span class="token punctuation">)</span> </span><span class="token delimiter punctuation">%></span></span>min<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>两行。</p>
 <h3 id="然后"><a class="markdownIt-Anchor" href="#然后"></a> 然后，</h3>
 <p>安装主题文件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/g0dmao/hexo-theme-Klise-enhanced.git<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/g0dmao/hexo-theme-Klise-enhanced.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>将主题根目录的<code>_config.hexo-theme-Klise-enhanced.yml</code>移动到博客根目录。你可以打开该文件进行主题的一些配置。</p>
 <p>在博客配置文件<code>_config.yml</code>中启用主题。</p>
 <h3 id="最后"><a class="markdownIt-Anchor" href="#最后"></a> 最后，</h3>
@@ -444,7 +443,21 @@ Behavior:
 <p>打开主题文件夹下的<code>source\css\main.css</code>在头部修改，可以自定义明暗模式下不同的背景，已做好注释。</p>
 <h3 id="当网页失去焦点时标签页标题的显示文字"><a class="markdownIt-Anchor" href="#当网页失去焦点时标签页标题的显示文字"></a> 当网页失去焦点时标签页标题的显示文字</h3>
 <p>打开主题文件夹下的<code>layout\layout.ejs</code> 修改document.title即可。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">defer</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript"></span><br><span class="language-javascript">  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;visibilitychange&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript"></span><br><span class="language-javascript">  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">visibilityState</span> == <span class="hljs-string">&#x27;hidden&#x27;</span>) &#123;</span><br><span class="language-javascript"></span><br><span class="language-javascript">      normal_title = <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span>;</span><br><span class="language-javascript"></span><br><span class="language-javascript">      <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = <span class="hljs-string">&#x27;点一下&#x27;</span>;</span><br><span class="language-javascript"></span><br><span class="language-javascript">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = normal_title;</span><br><span class="language-javascript"></span><br><span class="language-javascript">&#125;);</span><br><span class="language-javascript"></span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">defer</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
+
+  document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'visibilitychange'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>document<span class="token punctuation">.</span>visibilityState <span class="token operator">==</span> <span class="token string">'hidden'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+      normal_title <span class="token operator">=</span> document<span class="token punctuation">.</span>title<span class="token punctuation">;</span>
+
+      document<span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">'点一下'</span><span class="token punctuation">;</span>
+
+  <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> document<span class="token punctuation">.</span>title <span class="token operator">=</span> normal_title<span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="可选"><a class="markdownIt-Anchor" href="#可选"></a> 可选</h3>
 <p>你可以安装如下插件获得更好的浏览体验。</p>
 <h4 id="hexo-renderer-markdown-it-plus"><a class="markdownIt-Anchor" href="#hexo-renderer-markdown-it-plus"></a> hexo-renderer-markdown-it-plus</h4>
@@ -459,65 +472,65 @@ Behavior:
 <img src="Snipaste_2025-04-06_16-18-33.png" alt="" /><br />
 tags页面 type、layout 为tags。<br />
 categories页面 type、layout 为 categories。</p>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">hexo主题Klise-enhanced使用文档</h1>
             <p>创建时间：4月 06, 2025 </p>
             <p>最后更新：4月 06, 2025</p>
-            <p>字数统计：714字</p>
+            <p>字数统计：694字</p>
             <p>预计阅读：2min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/web%E5%89%8D%E7%AB%AF/" id="catgrs">
-                            -web前端  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" id="catgrs">
+                                -web前端
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/%E7%BD%91%E9%A1%B5/" id="tgs">
-                            #网页  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/hexo%E4%B8%BB%E9%A2%98/" id="tgs">
-                            #hexo主题  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/%E7%BD%91%E9%A1%B5/" id="tgs">
+                                #网页
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/hexo%E4%B8%BB%E9%A2%98/" id="tgs">
+                                #hexo主题
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E6%A6%82%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text"> 主题概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E8%BE%83%E4%BA%8E%E5%8E%9F%E7%89%88%E6%9C%89%E4%BD%95%E6%94%B9%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text"> 相较于原版有何改动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text"> 使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88"><span class="toc-number">4.1.</span> <span class="toc-text"> 首先，</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E"><span class="toc-number">4.2.</span> <span class="toc-text"> 然后，</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-number">4.3.</span> <span class="toc-text"> 最后，</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96%E9%83%A8%E5%88%86"><span class="toc-number">5.</span> <span class="toc-text"> 个性化部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%83%8C%E6%99%AF"><span class="toc-number">5.1.</span> <span class="toc-text"> 自定义背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E7%BD%91%E9%A1%B5%E5%A4%B1%E5%8E%BB%E7%84%A6%E7%82%B9%E6%97%B6%E6%A0%87%E7%AD%BE%E9%A1%B5%E6%A0%87%E9%A2%98%E7%9A%84%E6%98%BE%E7%A4%BA%E6%96%87%E5%AD%97"><span class="toc-number">5.2.</span> <span class="toc-text"> 当网页失去焦点时标签页标题的显示文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%80%89"><span class="toc-number">5.3.</span> <span class="toc-text"> 可选</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-renderer-markdown-it-plus"><span class="toc-number">5.3.1.</span> <span class="toc-text"> hexo-renderer-markdown-it-plus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-tips"><span class="toc-number">5.3.2.</span> <span class="toc-text"> hexo-tips</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-blog-encrypt"><span class="toc-number">5.3.3.</span> <span class="toc-text"> hexo-blog-encrypt</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">6.</span> <span class="toc-text"> 可能的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tags-categories%E9%A1%B5%E9%9D%A2%E6%98%BE%E7%A4%BA%E4%B8%8D%E6%AD%A3%E7%A1%AE"><span class="toc-number">6.1.</span> <span class="toc-text"> tags、categories页面显示不正确</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E6%A6%82%E8%A7%88"><span class="toc-text"> 主题概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E8%BE%83%E4%BA%8E%E5%8E%9F%E7%89%88%E6%9C%89%E4%BD%95%E6%94%B9%E5%8A%A8"><span class="toc-text"> 相较于原版有何改动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text"> 使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88"><span class="toc-text"> 首先，</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E"><span class="toc-text"> 然后，</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E"><span class="toc-text"> 最后，</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96%E9%83%A8%E5%88%86"><span class="toc-text"> 个性化部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%83%8C%E6%99%AF"><span class="toc-text"> 自定义背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E7%BD%91%E9%A1%B5%E5%A4%B1%E5%8E%BB%E7%84%A6%E7%82%B9%E6%97%B6%E6%A0%87%E7%AD%BE%E9%A1%B5%E6%A0%87%E9%A2%98%E7%9A%84%E6%98%BE%E7%A4%BA%E6%96%87%E5%AD%97"><span class="toc-text"> 当网页失去焦点时标签页标题的显示文字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%80%89"><span class="toc-text"> 可选</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-renderer-markdown-it-plus"><span class="toc-text"> hexo-renderer-markdown-it-plus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-tips"><span class="toc-text"> hexo-tips</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-blog-encrypt"><span class="toc-text"> hexo-blog-encrypt</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text"> 可能的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tags-categories%E9%A1%B5%E9%9D%A2%E6%98%BE%E7%A4%BA%E4%B8%8D%E6%AD%A3%E7%A1%AE"><span class="toc-text"> tags、categories页面显示不正确</span></a></li></ol></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -539,7 +552,7 @@ categories页面 type、layout 为 categories。</p>
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -665,7 +678,7 @@ categories页面 type、layout 为 categories。</p>
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -702,7 +715,7 @@ categories页面 type、layout 为 categories。</p>
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -717,7 +730,7 @@ categories页面 type、layout 为 categories。</p>
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -739,13 +752,13 @@ categories页面 type、layout 为 categories。</p>
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -794,7 +807,7 @@ categories页面 type、layout 为 categories。</p>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -842,6 +855,13 @@ categories页面 type、layout 为 categories。</p>
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -853,5 +873,6 @@ categories页面 type、layout 为 categories。</p>
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

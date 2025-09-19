@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -414,11 +411,27 @@ Behavior:
 </details>
 <hr />
 <h2 id="话不多说直接上代码"><a class="markdownIt-Anchor" href="#话不多说直接上代码"></a> 话不多说直接上代码</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">uchar cont,trg;    <span class="hljs-comment">//triger触发 continue连续</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">KeyScan</span><span class="hljs-params">()</span><br>&#123;<br>	uchar ReadData =  PINB^<span class="hljs-number">0xff</span>;<br>	trg = ReadData &amp; (ReadData^cont);<br>	cont = ReadData;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">uchar cont<span class="token punctuation">,</span>trg<span class="token punctuation">;</span>    <span class="token comment">//triger触发 continue连续</span>
+<span class="token keyword">void</span> <span class="token function">KeyScan</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	uchar ReadData <span class="token operator">=</span>  PINB<span class="token operator">^</span><span class="token number">0xff</span><span class="token punctuation">;</span>
+	trg <span class="token operator">=</span> ReadData <span class="token operator">&amp;</span> <span class="token punctuation">(</span>ReadData<span class="token operator">^</span>cont<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cont <span class="token operator">=</span> ReadData<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>就完事了，灰常的amzing啊。</p>
 <h2 id="尝试理解"><a class="markdownIt-Anchor" href="#尝试理解"></a> 尝试理解</h2>
 <p>首先我们要理解<code>PINB</code>，这里的<code>PINB</code>指的是我们的单片机GPIOB的所有Pin的端口数据，而每个端口的数据（高/低——1/0）对应1个bit位。例如某单片机有八个端口只有端口0为高，其余皆为低，则PINB=0000 0001。在STM32Hal库中，我们可以这样实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint8_t</span> <span class="hljs-title function_">KeyBit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    <span class="hljs-type">uint8_t</span> keybit = <span class="hljs-number">0x00</span>;<br>    <span class="hljs-comment">//读取B1的电平状态并把他左移到bit0位</span><br>    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//同上</span><br>    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="hljs-number">1</span>;<br>    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="hljs-number">2</span>;<br>    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="hljs-number">3</span>;<br>    <span class="hljs-keyword">return</span> keybit; <br><br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">uint8_t</span> <span class="token function">KeyBit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint8_t</span> keybit <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    <span class="token comment">//读取B1的电平状态并把他左移到bit0位</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B1_GPIO_Port<span class="token punctuation">,</span>B1_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">//同上</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B2_GPIO_Port<span class="token punctuation">,</span>B2_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B3_GPIO_Port<span class="token punctuation">,</span>B3_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B4_GPIO_Port<span class="token punctuation">,</span>B4_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> keybit<span class="token punctuation">;</span> 
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="取反"><a class="markdownIt-Anchor" href="#取反"></a> 取反</h3>
 <p>第一行代码就相当于是取反操作，使没有按键按下时data始终为0x00。</p>
 <p>注意，不一定就是异或0xff，按照上面的hal库方法，你的PINB变量实际上只有四位有效位，为了让没有按键按下时data为0x00，我们异或0x0f即可，或者将keybit初始化为0xf0然后异或0xff；而有时GPIO输入接了下拉，没有输入的情况本来就是0，这时就不需要再取反。反正就是要让它没有按键按下时等于0x00。</p>
@@ -461,9 +474,9 @@ Behavior:
 <p>第一次PB0按下的情况<br />
 端口数据原本为0xfe，ReadData读端口并且取反，变为 0x01 （第一行）。<br />
 因为这是第一次按下，所以Cont是上次的值，应为为0。与0异或不改变原有值，那么第二行执行的实际是：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Trg</span> = <span class="hljs-number">0</span>x01 &amp; (<span class="hljs-number">0</span>x01^<span class="hljs-number">0</span>x00) = <span class="hljs-number">0</span>x01  <br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Trg &#x3D; 0x01 &amp; (0x01^0x00) &#x3D; 0x01  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>将cont赋值</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">Cont</span> <span class="hljs-operator">=</span> ReadData <span class="hljs-operator">=</span> <span class="hljs-number">0</span>x01<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Cont &#x3D; ReadData &#x3D; 0x01<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>结果就是：</p>
 <ul>
 <li>ReadData ＝ 0x01</li>
@@ -488,16 +501,138 @@ Behavior:
 <p>这样的思路让我联想到了3-8译码器的巧妙设计，通过3个值的输入，可以得到8个值的输出，用3个值就可以为8个不同的情况进行处理。</p>
 <h2 id="在stm32中使用"><a class="markdownIt-Anchor" href="#在stm32中使用"></a> 在STM32中使用</h2>
 <p>附上我的使用方法，我使用的是<a target="_blank" rel="noopener" href="http://im.godmao.top/posts/39448/">时间片轮询架构</a>。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> B1 0x01</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> B2 0x02</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> B3 0x04</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> B4 0x08</span><br><br><span class="hljs-type">uint8_t</span> <span class="hljs-title function_">KeyBit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>    <span class="hljs-type">uint8_t</span> keybit = <span class="hljs-number">0x00</span>;<br><br>    <span class="hljs-comment">//读取B1的电平状态并把他左移到bit0位</span><br>    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//同上</span><br>    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="hljs-number">1</span>;<br>    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="hljs-number">2</span>;<br>    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="hljs-number">3</span>;<br><br>    <span class="hljs-keyword">return</span> keybit;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">KeyFuc</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<span class="hljs-comment">//按键逻辑</span><br><br>    <span class="hljs-type">static</span> <span class="hljs-type">uint8_t</span> i = <span class="hljs-number">0</span>;                           <span class="hljs-comment">//长按时间计数器</span><br><br>    <span class="hljs-comment">//核心代码：三行代码完成按键单、长按检测</span><br><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> ReadData = KeyBit() ^ <span class="hljs-number">0x0f</span>;       <span class="hljs-comment">// 取反：在没有按键按下的情况下，其始终为0x00</span><br><br>    Trg = ReadData &amp; (ReadData ^ Cont);             <span class="hljs-comment">// 2</span><br><br>    Cont = ReadData;                                <span class="hljs-comment">// 3                        </span><br><br>    <span class="hljs-keyword">if</span>(Trg &amp;&amp; Cont)&#123;<span class="hljs-comment">//单击逻辑      </span><br><br>        <span class="hljs-keyword">switch</span>(Trg)&#123;                            <br><br>            <span class="hljs-keyword">case</span> B4: Key4_Fuc();<span class="hljs-keyword">break</span>;<br><br>            <span class="hljs-keyword">case</span> B3: Key3_Fuc();<span class="hljs-keyword">break</span>;          <br><br>            <span class="hljs-keyword">case</span> B2: Key2_Fuc();<span class="hljs-keyword">break</span>;          <br><br>            <span class="hljs-keyword">case</span> B1: Key1_Fuc();<span class="hljs-keyword">break</span>;  <br><br>            <span class="hljs-keyword">default</span>: <span class="hljs-keyword">break</span>;<br><br>        &#125;<br><br>    &#125;<br><br>    <span class="hljs-keyword">if</span>(Cont &amp;&amp; <span class="hljs-number">0</span> == Trg) i++;<span class="hljs-comment">//以下为长按逻辑</span><br>    <span class="hljs-keyword">else</span> i = <span class="hljs-number">0</span>;<br>    <br>    <span class="hljs-keyword">if</span>(i &gt;= <span class="hljs-number">20</span>)&#123;<br>        i = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">switch</span>(Cont)<br>        &#123;<br><br>            <span class="hljs-keyword">case</span> B3: Key3_Fuc_Preesed();<span class="hljs-keyword">break</span>;<br><br>            <span class="hljs-keyword">default</span>: <span class="hljs-keyword">break</span>;<br><br>        &#125;<br><br>    &#125;<br><br>  <br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">B1</span> <span class="token expression"><span class="token number">0x01</span></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">B2</span> <span class="token expression"><span class="token number">0x02</span></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">B3</span> <span class="token expression"><span class="token number">0x04</span></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">B4</span> <span class="token expression"><span class="token number">0x08</span></span></span>
+
+<span class="token class-name">uint8_t</span> <span class="token function">KeyBit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token class-name">uint8_t</span> keybit <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//读取B1的电平状态并把他左移到bit0位</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B1_GPIO_Port<span class="token punctuation">,</span>B1_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">//同上</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B2_GPIO_Port<span class="token punctuation">,</span>B2_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B3_GPIO_Port<span class="token punctuation">,</span>B3_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B4_GPIO_Port<span class="token punctuation">,</span>B4_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> keybit<span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">KeyFuc</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token comment">//按键逻辑</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">uint8_t</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>                           <span class="token comment">//长按时间计数器</span>
+
+    <span class="token comment">//核心代码：三行代码完成按键单、长按检测</span>
+
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> ReadData <span class="token operator">=</span> <span class="token function">KeyBit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">0x0f</span><span class="token punctuation">;</span>       <span class="token comment">// 取反：在没有按键按下的情况下，其始终为0x00</span>
+
+    Trg <span class="token operator">=</span> ReadData <span class="token operator">&amp;</span> <span class="token punctuation">(</span>ReadData <span class="token operator">^</span> Cont<span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment">// 2</span>
+
+    Cont <span class="token operator">=</span> ReadData<span class="token punctuation">;</span>                                <span class="token comment">// 3                        </span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>Trg <span class="token operator">&amp;&amp;</span> Cont<span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token comment">//单击逻辑      </span>
+
+        <span class="token keyword">switch</span><span class="token punctuation">(</span>Trg<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>                            
+
+            <span class="token keyword">case</span> B4<span class="token operator">:</span> <span class="token function">Key4_Fuc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">case</span> B3<span class="token operator">:</span> <span class="token function">Key3_Fuc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">break</span><span class="token punctuation">;</span>          
+
+            <span class="token keyword">case</span> B2<span class="token operator">:</span> <span class="token function">Key2_Fuc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">break</span><span class="token punctuation">;</span>          
+
+            <span class="token keyword">case</span> B1<span class="token operator">:</span> <span class="token function">Key1_Fuc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">break</span><span class="token punctuation">;</span>  
+
+            <span class="token keyword">default</span><span class="token operator">:</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">&#125;</span>
+
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>Cont <span class="token operator">&amp;&amp;</span> <span class="token number">0</span> <span class="token operator">==</span> Trg<span class="token punctuation">)</span> i<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//以下为长按逻辑</span>
+    <span class="token keyword">else</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    
+    <span class="token keyword">if</span><span class="token punctuation">(</span>i <span class="token operator">>=</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">switch</span><span class="token punctuation">(</span>Cont<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+
+            <span class="token keyword">case</span> B3<span class="token operator">:</span> <span class="token function">Key3_Fuc_Preesed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">default</span><span class="token operator">:</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">&#125;</span>
+
+    <span class="token punctuation">&#125;</span>
+
+  
+
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="关于消抖问题"><a class="markdownIt-Anchor" href="#关于消抖问题"></a> 关于消抖问题</h2>
 <p><s>不知道为什么，按理来说是需要消抖的，但是实际跑起来的时候没有消抖也非常稳，，，可能是我的按键检测任务执行间隔比较长？</s></p>
 <hr />
 <p>2025.03.28 补充修改：如果使用时间片轮询调度，理论上如果按键扫描任务执行间隔时间较长，是不用消抖的。这就解释了为什么我的程序没有消抖也那么稳！例如，假设你设置的时间片调度间隔是 100ms，如果按键每次扫描时是 100ms 执行一次，假设按键抖动的周期是 10ms，那么每次扫描时按键就已经稳定了。这样，按键的物理状态变化就不太可能被误判为多个状态变化，因为时间间隔本身已经足够长。当然代价是 <strong>会牺牲按键响应速度，以及无法应用快速连按的按键逻辑</strong></p>
 <hr />
 <p>关于消抖我还没有实际上机跑过，但是也写一下，Deepseek写的：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> DEBOUNCE_TIME 1 <span class="hljs-comment">//消抖时间参数，根据时间片的时间来设定</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>    KEY_STATE_IDLE,<span class="hljs-comment">//空闲</span><br>    KEY_STATE_PRESSED,<span class="hljs-comment">//按下</span><br>    KEY_STATE_RELEASED<span class="hljs-comment">//松开</span><br>&#125; KeyState;<br><br>KeyState key_state = KEY_STATE_IDLE;<br><br><span class="hljs-type">uint16_t</span> debounce_timer = <span class="hljs-number">0</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">KeyScan</span><span class="hljs-params">()</span> &#123;<br>    uchar ReadData = PINB ^ <span class="hljs-number">0xff</span>;<br>    uchar new_trg = ReadData &amp; (ReadData ^ cont);<br><br>    <span class="hljs-keyword">switch</span> (key_state) &#123;<br>        <span class="hljs-keyword">case</span> KEY_STATE_IDLE:<br>            <span class="hljs-keyword">if</span> (new_trg != <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 检测到按键变化</span><br>                key_state = KEY_STATE_PRESSED;<br>                debounce_timer = DEBOUNCE_TIME;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br><br>        <span class="hljs-keyword">case</span> KEY_STATE_PRESSED:<br>            <span class="hljs-keyword">if</span> (debounce_timer &gt; <span class="hljs-number">0</span>) &#123;<br>                debounce_timer --;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">if</span> (ReadData == (PINB ^ <span class="hljs-number">0xff</span>)) &#123; <span class="hljs-comment">// 确认按键状态</span><br>                    trg = new_trg;<br>                    cont = ReadData;<br>		    <span class="hljs-keyword">if</span>(trg &amp;&amp; cont)&#123;<br>			<span class="hljs-comment">/*写单击逻辑*/</span><br>		    &#125;<br>                    key_state = KEY_STATE_RELEASED;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    key_state = KEY_STATE_IDLE;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br><br>        <span class="hljs-keyword">case</span> KEY_STATE_RELEASED:<br>            <span class="hljs-keyword">if</span> (new_trg == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 等待按键释放</span><br>                key_state = KEY_STATE_IDLE;<br>            &#125;<br>            <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-   
-        <script src="/js/foldpost.js"></script> 
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">DEBOUNCE_TIME</span> <span class="token expression"><span class="token number">1</span> </span><span class="token comment">//消抖时间参数，根据时间片的时间来设定</span></span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token punctuation">&#123;</span>
+    KEY_STATE_IDLE<span class="token punctuation">,</span><span class="token comment">//空闲</span>
+    KEY_STATE_PRESSED<span class="token punctuation">,</span><span class="token comment">//按下</span>
+    KEY_STATE_RELEASED<span class="token comment">//松开</span>
+<span class="token punctuation">&#125;</span> KeyState<span class="token punctuation">;</span>
+
+KeyState key_state <span class="token operator">=</span> KEY_STATE_IDLE<span class="token punctuation">;</span>
+
+<span class="token class-name">uint16_t</span> debounce_timer <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">KeyScan</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    uchar ReadData <span class="token operator">=</span> PINB <span class="token operator">^</span> <span class="token number">0xff</span><span class="token punctuation">;</span>
+    uchar new_trg <span class="token operator">=</span> ReadData <span class="token operator">&amp;</span> <span class="token punctuation">(</span>ReadData <span class="token operator">^</span> cont<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">switch</span> <span class="token punctuation">(</span>key_state<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">case</span> KEY_STATE_IDLE<span class="token operator">:</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>new_trg <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 检测到按键变化</span>
+                key_state <span class="token operator">=</span> KEY_STATE_PRESSED<span class="token punctuation">;</span>
+                debounce_timer <span class="token operator">=</span> DEBOUNCE_TIME<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> KEY_STATE_PRESSED<span class="token operator">:</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>debounce_timer <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                debounce_timer <span class="token operator">--</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>ReadData <span class="token operator">==</span> <span class="token punctuation">(</span>PINB <span class="token operator">^</span> <span class="token number">0xff</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 确认按键状态</span>
+                    trg <span class="token operator">=</span> new_trg<span class="token punctuation">;</span>
+                    cont <span class="token operator">=</span> ReadData<span class="token punctuation">;</span>
+		    <span class="token keyword">if</span><span class="token punctuation">(</span>trg <span class="token operator">&amp;&amp;</span> cont<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+			<span class="token comment">/*写单击逻辑*/</span>
+		    <span class="token punctuation">&#125;</span>
+                    key_state <span class="token operator">=</span> KEY_STATE_RELEASED<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                    key_state <span class="token operator">=</span> KEY_STATE_IDLE<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">case</span> KEY_STATE_RELEASED<span class="token operator">:</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>new_trg <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 等待按键释放</span>
+                key_state <span class="token operator">=</span> KEY_STATE_IDLE<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
@@ -506,61 +641,60 @@ Behavior:
             <p>最后更新：3月 28, 2025</p>
             <p>字数统计：1.5k字</p>
             <p>预计阅读：5min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
-                            -嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
-                            -程序架构  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
+                                -嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
+                                -程序架构
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="tgs">
-                            #程序架构  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" id="tgs">
-                            #按键检测  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="tgs">
+                                #程序架构
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E6%8C%89%E9%94%AE%E6%A3%80%E6%B5%8B/" id="tgs">
+                                #按键检测
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81"><span class="toc-number">1.</span> <span class="toc-text"> 话不多说直接上代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> 尝试理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-number">2.1.</span> <span class="toc-text"> 取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%87%BB%E6%8C%89%E4%B8%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 单击按下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E5%90%8E%E8%BF%98%E6%B2%A1%E6%9C%89%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80%E5%BC%95%E7%94%B3%E5%88%B0%E9%95%BF%E6%8C%89"><span class="toc-number">2.3.</span> <span class="toc-text"> 按下后还没有完全松开（引申到长按）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80"><span class="toc-number">2.4.</span> <span class="toc-text"> 完全松开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%80%85%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-number">2.5.</span> <span class="toc-text"> 笔者的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text"> 在STM32中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B6%88%E6%8A%96%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text"> 关于消抖问题</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9D%E4%B8%8D%E5%A4%9A%E8%AF%B4%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BB%A3%E7%A0%81"><span class="toc-text"> 话不多说直接上代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E7%90%86%E8%A7%A3"><span class="toc-text"> 尝试理解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-text"> 取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E5%87%BB%E6%8C%89%E4%B8%8B"><span class="toc-text"> 单击按下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%89%E4%B8%8B%E5%90%8E%E8%BF%98%E6%B2%A1%E6%9C%89%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80%E5%BC%95%E7%94%B3%E5%88%B0%E9%95%BF%E6%8C%89"><span class="toc-text"> 按下后还没有完全松开（引申到长按）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E6%9D%BE%E5%BC%80"><span class="toc-text"> 完全松开</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%80%85%E7%9A%84%E6%80%9D%E8%80%83"><span class="toc-text"> 笔者的思考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8stm32%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text"> 在STM32中使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%B6%88%E6%8A%96%E9%97%AE%E9%A2%98"><span class="toc-text"> 关于消抖问题</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -582,7 +716,7 @@ Behavior:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -708,7 +842,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -745,7 +879,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -760,7 +894,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -782,13 +916,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -837,7 +971,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -885,6 +1019,13 @@ Behavior:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -896,5 +1037,6 @@ Behavior:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -536,7 +533,7 @@ How to use:
     })();
   </script>
 </section>
- 
+
         
         <details>
 <summary>版权信息</summary>
@@ -550,11 +547,17 @@ How to use:
 <hr />
 <h2 id="1-进程与-pid"><a class="markdownIt-Anchor" href="#1-进程与-pid"></a> 1. 进程与 PID</h2>
 <p>每个进程都会有一个唯一的 <strong>进程号（PID）</strong>，可以通过 <code>getpid()</code> 获取当前进程号，通过 <code>getppid()</code> 获取父进程号。这在调试和进程管理时非常重要。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;当前进程PID=%d, 父进程PID=%d\n&quot;</span>, getpid(), getppid());<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"当前进程PID=%d, 父进程PID=%d\n"</span><span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">getppid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>⚠️ 注意：如果父进程先退出，子进程会被 <code>init</code> 进程接管，<code>ppid</code> 会变为 1。</p>
 <h2 id="2-创建进程-fork"><a class="markdownIt-Anchor" href="#2-创建进程-fork"></a> 2. 创建进程 — <code>fork()</code></h2>
 <p><code>fork()</code> 是创建新进程的主要方式。它会复制当前进程（父进程）的大部分内容，生成一个几乎一模一样的子进程。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">pid_t</span> pid = fork();<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">pid_t</span> pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>在父进程中，<code>fork()</code> 返回子进程的 PID。</strong></p>
@@ -567,7 +570,20 @@ How to use:
 </li>
 </ul>
 <p>示例：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;[子进程] pid=%d, ppid=%d\n&quot;</span>, getpid(), getppid());<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;[父进程] pid=%d, 子进程pid=%d\n&quot;</span>, getpid(), pid);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        perror(<span class="hljs-string">&quot;fork 失败&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">pid_t</span> pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[子进程] pid=%d, ppid=%d\n"</span><span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">getppid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[父进程] pid=%d, 子进程pid=%d\n"</span><span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> pid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"fork 失败"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="admonition caution"><p class="admonition-title">caution</p><ul>
 <li>
 <p>子进程不会继承父进程的所有资源，例如文件锁。</p>
@@ -640,15 +656,39 @@ How to use:
 <ol>
 <li><strong>execl：用绝对路径调用程序</strong></li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span> </span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;     <br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Before exec\n&quot;</span>);     <br>execl(<span class="hljs-string">&quot;/bin/ls&quot;</span>, <span class="hljs-string">&quot;ls&quot;</span>, <span class="hljs-string">&quot;-l&quot;</span>, <span class="hljs-literal">NULL</span>);     <br><span class="hljs-comment">// 只有 exec 调用失败时才会继续执行    </span><br>perror(<span class="hljs-string">&quot;execl failed&quot;</span>);     <br><span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; &#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span> </span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>     
+<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Before exec\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     
+<span class="token function">execl</span><span class="token punctuation">(</span><span class="token string">"/bin/ls"</span><span class="token punctuation">,</span> <span class="token string">"ls"</span><span class="token punctuation">,</span> <span class="token string">"-l"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     
+<span class="token comment">// 只有 exec 调用失败时才会继续执行    </span>
+<span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"execl failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>     
+<span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="2">
 <li><strong>execvp：在 PATH 中搜索命令</strong></li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">char</span> *argv[] = &#123;<span class="hljs-string">&quot;ls&quot;</span>, <span class="hljs-string">&quot;-a&quot;</span>, <span class="hljs-literal">NULL</span>&#125;;<br>    execvp(<span class="hljs-string">&quot;ls&quot;</span>, argv);<br>    perror(<span class="hljs-string">&quot;execvp failed&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"ls"</span><span class="token punctuation">,</span> <span class="token string">"-a"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token function">execvp</span><span class="token punctuation">(</span><span class="token string">"ls"</span><span class="token punctuation">,</span> argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"execvp failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="3">
 <li><strong>execle：传入自定义环境变量</strong></li>
 </ol>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">char</span> *envp[] = &#123;<span class="hljs-string">&quot;MYVAR=HelloExec&quot;</span>, <span class="hljs-literal">NULL</span>&#125;;<br>    execl(<span class="hljs-string">&quot;/usr/bin/env&quot;</span>, <span class="hljs-string">&quot;env&quot;</span>, <span class="hljs-literal">NULL</span>, envp);<br>    perror(<span class="hljs-string">&quot;execle failed&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>envp<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"MYVAR=HelloExec"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token function">execl</span><span class="token punctuation">(</span><span class="token string">"/usr/bin/env"</span><span class="token punctuation">,</span> <span class="token string">"env"</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> envp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"execle failed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> 注意事项</h3>
 <ul>
 <li>
@@ -668,7 +708,11 @@ How to use:
 <p><strong>父进程需要回收子进程退出时的资源，否则子进程会成为 僵尸进程（Zombie）。</strong></p>
 <p>这两个函数用于 <strong>父进程等待子进程结束</strong> 并<strong>回收资源</strong>，避免僵尸进程。</p>
 <h3 id="1-wait"><a class="markdownIt-Anchor" href="#1-wait"></a> 1. wait()</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">wait</span><span class="hljs-params">(<span class="hljs-type">int</span> *status)</span>;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token class-name">pid_t</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>参数</strong></p>
@@ -691,7 +735,24 @@ How to use:
 <p><strong>使用示例</strong></p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 子进程</span><br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child running...\n&quot;</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">42</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 父进程</span><br>        <span class="hljs-type">int</span> status;<br>        <span class="hljs-type">pid_t</span> cpid = wait(&amp;status); <span class="hljs-comment">// 等待子进程</span><br>        <span class="hljs-keyword">if</span> (WIFEXITED(status)) &#123;   <span class="hljs-comment">// 判断是否正常退出</span><br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child %d exited with code %d\n&quot;</span>, cpid, WEXITSTATUS(status));<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">pid_t</span> pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 子进程</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child running...\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">42</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 父进程</span>
+        <span class="token keyword">int</span> status<span class="token punctuation">;</span>
+        <span class="token class-name">pid_t</span> cpid <span class="token operator">=</span> <span class="token function">wait</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>status<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等待子进程</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">WIFEXITED</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>   <span class="token comment">// 判断是否正常退出</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child %d exited with code %d\n"</span><span class="token punctuation">,</span> cpid<span class="token punctuation">,</span> <span class="token function">WEXITSTATUS</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="admonition caution"><p class="admonition-title">caution</p><ul>
 <li>
 <p><code>wait()</code> 会阻塞父进程，直到任意一个子进程退出。</p>
@@ -702,7 +763,11 @@ How to use:
 </ul>
 </div>
 <h3 id="2-waitpid"><a class="markdownIt-Anchor" href="#2-waitpid"></a> 2. waitpid()</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">waitpid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">int</span> *status, <span class="hljs-type">int</span> options)</span>;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token class-name">pid_t</span> <span class="token function">waitpid</span><span class="token punctuation">(</span><span class="token class-name">pid_t</span> pid<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>status<span class="token punctuation">,</span> <span class="token keyword">int</span> options<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>参数</strong></p>
@@ -764,7 +829,28 @@ How to use:
 <p><strong>使用示例</strong></p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">pid_t</span> pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 子进程</span><br>        sleep(<span class="hljs-number">2</span>);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">100</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 父进程</span><br>        <span class="hljs-type">int</span> status;<br>        <span class="hljs-type">pid_t</span> cpid;<br>        <span class="hljs-keyword">while</span> ((cpid = waitpid(pid, &amp;status, WNOHANG)) == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child still running...\n&quot;</span>);<br>            sleep(<span class="hljs-number">1</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (WIFEXITED(status)) &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child %d exited with code %d\n&quot;</span>, cpid, WEXITSTATUS(status));<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/wait.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">pid_t</span> pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 子进程</span>
+        <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">100</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 父进程</span>
+        <span class="token keyword">int</span> status<span class="token punctuation">;</span>
+        <span class="token class-name">pid_t</span> cpid<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>cpid <span class="token operator">=</span> <span class="token function">waitpid</span><span class="token punctuation">(</span>pid<span class="token punctuation">,</span> <span class="token operator">&amp;</span>status<span class="token punctuation">,</span> WNOHANG<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child still running...\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">WIFEXITED</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child %d exited with code %d\n"</span><span class="token punctuation">,</span> cpid<span class="token punctuation">,</span> <span class="token function">WEXITSTATUS</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <div class="admonition caution"><p class="admonition-title">caution</p><ul>
 <li>
 <p><code>waitpid()</code> 可以实现 <strong>非阻塞等待</strong>，适合父进程同时管理多个子进程。</p>
@@ -811,9 +897,11 @@ How to use:
 <h3 id="ps-命令的常见用法"><a class="markdownIt-Anchor" href="#ps-命令的常见用法"></a> <code>ps</code> 命令的常见用法</h3>
 <h4 id="1-查看当前终端中的进程"><a class="markdownIt-Anchor" href="#1-查看当前终端中的进程"></a> 1. 查看当前终端中的进程</h4>
 <p>这是最简单的用法，不加任何选项，<code>ps</code> 命令只会显示当前终端会话中运行的进程。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>运行后你可能会看到类似下面的输出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">PID TTY          TIME CMD<br>1234 pts/0    00:00:00 bash<br>5678 pts/0    00:00:00 ps<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">PID TTY          TIME CMD
+<span class="token number">1234</span> pts/0    00:00:00 <span class="token function">bash</span>
+<span class="token number">5678</span> pts/0    00:00:00 <span class="token function">ps</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>PID</strong>：进程的唯一标识符（Process ID）。</p>
@@ -830,9 +918,9 @@ How to use:
 </ul>
 <h4 id="2-查看所有进程"><a class="markdownIt-Anchor" href="#2-查看所有进程"></a> 2. 查看所有进程</h4>
 <p>如果你想查看系统中所有用户的所有进程，可以使用 <code>-e</code> 选项（代表所有进程）或 <code>-a</code> 选项（代表所有进程，除了会话引导进程）。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -e<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span> <span class="token parameter variable">-e</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者使用 <code>-ef</code> 组合，这是最常用的组合之一，它提供了更详细的信息：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -ef<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span> <span class="token parameter variable">-ef</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>UID</strong>：启动进程的用户 ID。</p>
@@ -861,11 +949,11 @@ How to use:
 </ul>
 <h4 id="3-查看用户进程"><a class="markdownIt-Anchor" href="#3-查看用户进程"></a> 3. 查看用户进程</h4>
 <p>如果你只想查看某个特定用户（例如 <code>root</code>）的进程，可以使用 <code>-u</code> 选项。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -u root<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span> <span class="token parameter variable">-u</span> root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h4 id="4-通过管道和-grep-查找特定进程"><a class="markdownIt-Anchor" href="#4-通过管道和-grep-查找特定进程"></a> 4. 通过管道和 <code>grep</code> 查找特定进程</h4>
 <p>在实际工作中，你通常会需要查找某个特定的进程，比如 Nginx 或 MySQL。这时，<code>ps</code> 命令通常会配合 <code>grep</code> 命令一起使用。<code>grep</code> 可以从 <code>ps</code> 的输出中过滤出你想要的信息。</p>
 <p>例如，查找所有与 Nginx 相关的进程：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -ef | grep nginx<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span> <span class="token parameter variable">-ef</span> <span class="token operator">|</span> <span class="token function">grep</span> nginx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这里的 <code>|</code> 是管道符，它的作用是将 <code>ps -ef</code> 命令的输出作为 <code>grep</code> 命令的输入。</p>
 <h3 id="ps-命令的常用选项总结"><a class="markdownIt-Anchor" href="#ps-命令的常用选项总结"></a> <code>ps</code> 命令的常用选项总结</h3>
 <table>
@@ -901,7 +989,7 @@ How to use:
 <h3 id="实际应用示例"><a class="markdownIt-Anchor" href="#实际应用示例"></a> 实际应用示例</h3>
 <p>假设你想查看当前系统中 CPU 或内存占用最高的几个进程，<code>ps</code> 命令可以与 <code>head</code>、<code>sort</code> 等命令结合使用。</p>
 <p><strong>查看 CPU 占用最高的 5 个进程：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -aux --<span class="hljs-built_in">sort</span>=-%cpu | <span class="hljs-built_in">head</span> -n 6<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ps</span> <span class="token parameter variable">-aux</span> <span class="token parameter variable">--sort</span><span class="token operator">=</span>-%cpu <span class="token operator">|</span> <span class="token function">head</span> <span class="token parameter variable">-n</span> <span class="token number">6</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这里的 <code>--sort=-%cpu</code> 表示按 CPU 占用率降序排列，<code>head -n 6</code> 则取前 6 行（包括标题行）。</p>
 <h3 id="解析-ps-aux-命令的输出"><a class="markdownIt-Anchor" href="#解析-ps-aux-命令的输出"></a> 解析 <code>ps -aux</code> 命令的输出</h3>
 <p>当你运行 <code>ps -aux</code> 命令时，你会看到一个包含多个列的表格。每一列都提供了关于进程的重要信息。下面是对这些列的详细解释：</p>
@@ -965,7 +1053,7 @@ How to use:
 </ul>
 <h3 id="示例解析"><a class="markdownIt-Anchor" href="#示例解析"></a> 示例解析</h3>
 <p>假设你运行 <code>ps -aux</code> 看到以下一行输出：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">root      1234  0.0  0.1 23456 1234 ?        S    Sep01  0:05 /usr/sbin/sshd -D<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root      <span class="token number">1234</span>  <span class="token number">0.0</span>  <span class="token number">0.1</span> <span class="token number">23456</span> <span class="token number">1234</span> ?        S    Sep01  <span class="token number">0</span>:05 /usr/sbin/sshd <span class="token parameter variable">-D</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
 <li>
 <p><strong>USER</strong>：<code>root</code> 用户。</p>
@@ -1002,8 +1090,9 @@ How to use:
 </li>
 </ul>
 <p>通过这些信息，你可以快速了解一个进程是由谁运行的、它消耗了多少资源、处于什么状态，以及它是什么程序。这对于系统监控和故障排除非常有帮助。</p>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
@@ -1012,67 +1101,66 @@ How to use:
             <p>最后更新：9月 12, 2025</p>
             <p>字数统计：3.1k字</p>
             <p>预计阅读：12min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
-                            -内核编程  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
+                                -内核编程
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E5%86%85%E6%A0%B8/" id="tgs">
-                            #内核  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E8%BF%9B%E7%A8%8B/" id="tgs">
-                            #进程  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%86%85%E6%A0%B8/" id="tgs">
+                                #内核
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E8%BF%9B%E7%A8%8B/" id="tgs">
+                                #进程
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E4%B8%8E-pid"><span class="toc-number">1.</span> <span class="toc-text"> 1. 进程与 PID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B-fork"><span class="toc-number">2.</span> <span class="toc-text"> 2. 创建进程 — fork()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%A8%8B%E5%BA%8F%E6%9B%BF%E6%8D%A2-exec-%E7%B3%BB%E5%88%97"><span class="toc-number">3.</span> <span class="toc-text"> 3. 程序替换 — exec() 系列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text"> 常见函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.2.</span> <span class="toc-text"> 使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">3.3.</span> <span class="toc-text"> 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B-wait-waitpid"><span class="toc-number">4.</span> <span class="toc-text"> 4. 等待子进程 — wait() &#x2F; waitpid()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-wait"><span class="toc-number">4.1.</span> <span class="toc-text"> 1. wait()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-waitpid"><span class="toc-number">4.2.</span> <span class="toc-text"> 2. waitpid()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA-exit-%E4%B8%8E-_exit"><span class="toc-number">5.</span> <span class="toc-text"> 5. 进程退出 — exit() 与 _exit()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-ps-%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0"><span class="toc-number">6.</span> <span class="toc-text"> 6. ps 命令简述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ps-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95"><span class="toc-number">6.1.</span> <span class="toc-text"> ps 命令的常见用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%BB%88%E7%AB%AF%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.1.</span> <span class="toc-text"> 1. 查看当前终端中的进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.2.</span> <span class="toc-text"> 2. 查看所有进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.3.</span> <span class="toc-text"> 3. 查看用户进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%80%9A%E8%BF%87%E7%AE%A1%E9%81%93%E5%92%8C-grep-%E6%9F%A5%E6%89%BE%E7%89%B9%E5%AE%9A%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.4.</span> <span class="toc-text"> 4. 通过管道和 grep 查找特定进程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ps-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93"><span class="toc-number">6.2.</span> <span class="toc-text"> ps 命令的常用选项总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">6.3.</span> <span class="toc-text"> 实际应用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90-ps-aux-%E5%91%BD%E4%BB%A4%E7%9A%84%E8%BE%93%E5%87%BA"><span class="toc-number">6.4.</span> <span class="toc-text"> 解析 ps -aux 命令的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-number">6.5.</span> <span class="toc-text"> 示例解析</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E4%B8%8E-pid"><span class="toc-text"> 1. 进程与 PID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B-fork"><span class="toc-text"> 2. 创建进程 — fork()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%A8%8B%E5%BA%8F%E6%9B%BF%E6%8D%A2-exec-%E7%B3%BB%E5%88%97"><span class="toc-text"> 3. 程序替换 — exec() 系列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%87%BD%E6%95%B0"><span class="toc-text"> 常见函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text"> 注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AD%89%E5%BE%85%E5%AD%90%E8%BF%9B%E7%A8%8B-wait-waitpid"><span class="toc-text"> 4. 等待子进程 — wait() &#x2F; waitpid()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-wait"><span class="toc-text"> 1. wait()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-waitpid"><span class="toc-text"> 2. waitpid()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA-exit-%E4%B8%8E-_exit"><span class="toc-text"> 5. 进程退出 — exit() 与 _exit()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-ps-%E5%91%BD%E4%BB%A4%E7%AE%80%E8%BF%B0"><span class="toc-text"> 6. ps 命令简述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ps-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95"><span class="toc-text"> ps 命令的常见用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%BB%88%E7%AB%AF%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 1. 查看当前终端中的进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 2. 查看所有进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 3. 查看用户进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%80%9A%E8%BF%87%E7%AE%A1%E9%81%93%E5%92%8C-grep-%E6%9F%A5%E6%89%BE%E7%89%B9%E5%AE%9A%E8%BF%9B%E7%A8%8B"><span class="toc-text"> 4. 通过管道和 grep 查找特定进程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ps-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%E6%80%BB%E7%BB%93"><span class="toc-text"> ps 命令的常用选项总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 实际应用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90-ps-aux-%E5%91%BD%E4%BB%A4%E7%9A%84%E8%BE%93%E5%87%BA"><span class="toc-text"> 解析 ps -aux 命令的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text"> 示例解析</span></a></li></ol></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -1094,7 +1182,7 @@ How to use:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -1220,7 +1308,7 @@ How to use:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -1257,7 +1345,7 @@ How to use:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -1272,7 +1360,7 @@ How to use:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -1294,13 +1382,13 @@ How to use:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1349,7 +1437,7 @@ How to use:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -1397,6 +1485,13 @@ How to use:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1408,5 +1503,6 @@ How to use:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

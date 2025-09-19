@@ -64,7 +64,7 @@ p.admonition-title {
 }
 
 .failure>.admonition-title::before,.missing>.admonition-title::before,.fail>.admonition-title::before,.error>.admonition-title::before{
-  background-color: #ff5252;;
+  background-color: #ff5252;
   border-radius: 50%;
 }
 

@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -569,7 +566,33 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
 <p>当被ADC转换的模拟电压值低于低阈值或高于高阈值时，便会产生中断。阈值的高低值由ADC_LTR和ADC_HTR配置。<br />
 可以防止读取到的电压值超量程或者低于量程，也可以监控CPU温度，防止温度过高，反正是用处多多。</p>
 <h2 id="3-参考函数"><a class="markdownIt-Anchor" href="#3-参考函数"></a> 3. 参考函数</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//开启ADC 3种模式 ( 轮询模式 中断模式 DMA模式 )</span><br>HAL_ADC_Start(&amp;hadcx);       <span class="hljs-comment">//轮询模式开启ADC</span><br>HAL_ADC_Start_IT(&amp;hadcx);       <span class="hljs-comment">//中断轮询模式开启ADC</span><br>HAL_ADC_Start_DMA(&amp;hadcx);       <span class="hljs-comment">//DMA模式开启ADC</span><br><br><span class="hljs-comment">//关闭ADC 3种模式 ( 轮询模式 中断模式 DMA模式 )</span><br>HAL_ADC_Stop();<br>HAL_ADC_Stop_IT();<br>HAL_ADC_Stop_DMA();<br><br><span class="hljs-comment">//ADC校准函数 ：F4系列不支持</span><br>HAL_ADCEx_Calibration_Start(&amp;hadcx);      <br><br><span class="hljs-comment">//读取ADC转换值</span><br>HAL_ADC_GetValue();<br><br><span class="hljs-comment">//等待转换结束函数.第一个参数为哪个ADC,第二个参数为最大等待时间</span><br>HAL_ADC_PollForConversion(&amp;hadc1, <span class="hljs-number">50</span>);<br><br><span class="hljs-comment">//ADC中断回调函数</span><br>HAL_ADC_ConvCpltCallback();<br><br><span class="hljs-comment">//转换完成后回调，DMA模式下DMA传输完成后调用</span><br><br><span class="hljs-comment">//规则通道及看门狗配置</span><br>HAL_ADC_ConfigChannel(); <span class="hljs-comment">//配置规则组通道</span><br>HAL_ADC_AnalogWDGConfig();<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//开启ADC 3种模式 ( 轮询模式 中断模式 DMA模式 )</span>
+<span class="token function">HAL_ADC_Start</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadcx<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">//轮询模式开启ADC</span>
+<span class="token function">HAL_ADC_Start_IT</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadcx<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">//中断轮询模式开启ADC</span>
+<span class="token function">HAL_ADC_Start_DMA</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadcx<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">//DMA模式开启ADC</span>
+
+<span class="token comment">//关闭ADC 3种模式 ( 轮询模式 中断模式 DMA模式 )</span>
+<span class="token function">HAL_ADC_Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">HAL_ADC_Stop_IT</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">HAL_ADC_Stop_DMA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//ADC校准函数 ：F4系列不支持</span>
+<span class="token function">HAL_ADCEx_Calibration_Start</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadcx<span class="token punctuation">)</span><span class="token punctuation">;</span>      
+
+<span class="token comment">//读取ADC转换值</span>
+<span class="token function">HAL_ADC_GetValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//等待转换结束函数.第一个参数为哪个ADC,第二个参数为最大等待时间</span>
+<span class="token function">HAL_ADC_PollForConversion</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadc1<span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//ADC中断回调函数</span>
+<span class="token function">HAL_ADC_ConvCpltCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">//转换完成后回调，DMA模式下DMA传输完成后调用</span>
+
+<span class="token comment">//规则通道及看门狗配置</span>
+<span class="token function">HAL_ADC_ConfigChannel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//配置规则组通道</span>
+<span class="token function">HAL_ADC_AnalogWDGConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="4-参考博客"><a class="markdownIt-Anchor" href="#4-参考博客"></a> 4. 参考博客</h2>
 <p>有星星的是我觉得写的很好的博客。</p>
 <ul>
@@ -589,8 +612,9 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
 </li>
 </ol>
 </section>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
@@ -599,73 +623,72 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
             <p>最后更新：3月 12, 2025</p>
             <p>字数统计：2.9k字</p>
             <p>预计阅读：11min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
-                            -嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" id="catgrs">
-                            -CubeMX配置功能  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
+                                -嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/" id="catgrs">
+                                -CubeMX配置功能
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/STM32/" id="tgs">
-                            #STM32  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/CubeMX/" id="tgs">
-                            #CubeMX  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/ADC/" id="tgs">
-                            #ADC  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
-                            #嵌入式  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/STM32/" id="tgs">
+                                #STM32
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/CubeMX/" id="tgs">
+                                #CubeMX
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/ADC/" id="tgs">
+                                #ADC
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
+                                #嵌入式
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BE%93%E5%85%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text"> 1. 输入模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%8D%95%E7%AB%AF%E8%BE%93%E5%85%A5"><span class="toc-number">2.1.</span> <span class="toc-text"> 1.1. 单端输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%B7%AE%E5%88%86%E8%BE%93%E5%85%A5"><span class="toc-number">2.2.</span> <span class="toc-text"> 1.2. 差分输入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BB%A7%E7%BB%AD%E7%9C%8Bconfig%E9%83%A8%E5%88%86"><span class="toc-number">3.</span> <span class="toc-text"> 2. 继续看config部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E9%80%9A%E7%94%A8%E8%AE%BE%E7%BD%AE%E9%83%A8%E5%88%86"><span class="toc-number">3.1.</span> <span class="toc-text"> 2.1. 通用设置部分：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-adc-%E8%AE%BE%E7%BD%AE%E9%83%A8%E5%88%86"><span class="toc-number">3.2.</span> <span class="toc-text"> 2.2. ADC 设置部分：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#221-clockpre"><span class="toc-number">3.2.1.</span> <span class="toc-text"> 2.2.1. ClockPre…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#222-resolusion"><span class="toc-number">3.2.2.</span> <span class="toc-text"> 2.2.2. Resolusion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#223-data-ali"><span class="toc-number">3.2.3.</span> <span class="toc-text"> 2.2.3. Data Ali…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#224-gain-com"><span class="toc-number">3.2.4.</span> <span class="toc-text"> 2.2.4. Gain Com…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#225-scan-conversion-mode"><span class="toc-number">3.2.5.</span> <span class="toc-text"> 2.2.5. Scan Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#226-end-of-conversion-selection"><span class="toc-number">3.2.6.</span> <span class="toc-text"> 2.2.6. End Of Conversion Selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#227-low-power-auto-wait"><span class="toc-number">3.2.7.</span> <span class="toc-text"> 2.2.7. Low Power Auto Wait</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#228-continuous-conversion-mode"><span class="toc-number">3.2.8.</span> <span class="toc-text"> 2.2.8. Continuous Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#229-discontinuous-conversion-mode"><span class="toc-number">3.2.9.</span> <span class="toc-text"> 2.2.9. Discontinuous Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2210-dma-continuous-requests"><span class="toc-number">3.2.10.</span> <span class="toc-text"> 2.2.10. DMA Continuous Requests</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2211-overrun-behaviour"><span class="toc-number">3.2.11.</span> <span class="toc-text"> 2.2.11. Overrun behaviour</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2212-conversion-data-managerment-modeh7"><span class="toc-number">3.2.12.</span> <span class="toc-text"> 2.2.12. Conversion Data Managerment Mode（H7）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E8%A7%84%E5%88%99%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.3.</span> <span class="toc-text"> 2.3. 规则转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-enable-regular-conversions"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 2.3.1. Enable Regular Conversions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-enable-regular-oversamping%E4%B8%8D%E5%B8%B8%E7%94%A8"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 2.3.2. Enable Regular Oversamping（不常用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-oversamping-right-shift%E4%B8%8D%E5%B8%B8%E7%94%A8"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 2.3.3. Oversamping Right Shift（不常用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-number-of-conversion"><span class="toc-number">3.3.4.</span> <span class="toc-text"> 2.3.4. Number Of Conversion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#235-external-trigger-conversion-soure%E8%A7%A6%E5%8F%91%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%A4%96%E9%83%A8%E6%9D%A5%E6%BA%90"><span class="toc-number">3.3.5.</span> <span class="toc-text"> 2.3.5. External Trigger Conversion Soure（触发转换的外部来源）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#236-external-trigger-conversion-edge%E8%A7%A6%E5%8F%91%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%A4%96%E9%83%A8%E6%B2%BF"><span class="toc-number">3.3.6.</span> <span class="toc-text"> 2.3.6. External Trigger Conversion Edge（触发转换的外部沿）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#237-rank"><span class="toc-number">3.3.7.</span> <span class="toc-text"> 2.3.7. Rank</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#238-offset-number"><span class="toc-number">3.3.8.</span> <span class="toc-text"> 2.3.8. Offset Number</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E7%84%B6%E5%90%8E%E6%98%AF%E6%B3%A8%E5%85%A5%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.4.</span> <span class="toc-text"> 2.4. 然后是注入转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E8%A7%84%E5%88%99%E9%80%9A%E9%81%93"><span class="toc-number">3.4.1.</span> <span class="toc-text"> 2.4.1. 规则通道：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E6%B3%A8%E5%85%A5%E9%80%9A%E9%81%93"><span class="toc-number">3.4.2.</span> <span class="toc-text"> 2.4.2. 注入通道：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-%E6%9C%80%E5%90%8E%E6%98%AF%E5%8F%AF%E7%88%B1%E7%9A%84%E7%9C%8B%E9%97%A8%E5%B0%8F%E7%8B%97~"><span class="toc-number">3.5.</span> <span class="toc-text"> 2.5. 最后是可爱的看门小狗🥰~</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8F%82%E8%80%83%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text"> 3. 参考函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-number">5.</span> <span class="toc-text"> 4. 参考博客</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text"> 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BE%93%E5%85%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 1. 输入模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%8D%95%E7%AB%AF%E8%BE%93%E5%85%A5"><span class="toc-text"> 1.1. 单端输入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%B7%AE%E5%88%86%E8%BE%93%E5%85%A5"><span class="toc-text"> 1.2. 差分输入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BB%A7%E7%BB%AD%E7%9C%8Bconfig%E9%83%A8%E5%88%86"><span class="toc-text"> 2. 继续看config部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E9%80%9A%E7%94%A8%E8%AE%BE%E7%BD%AE%E9%83%A8%E5%88%86"><span class="toc-text"> 2.1. 通用设置部分：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-adc-%E8%AE%BE%E7%BD%AE%E9%83%A8%E5%88%86"><span class="toc-text"> 2.2. ADC 设置部分：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#221-clockpre"><span class="toc-text"> 2.2.1. ClockPre…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#222-resolusion"><span class="toc-text"> 2.2.2. Resolusion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#223-data-ali"><span class="toc-text"> 2.2.3. Data Ali…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#224-gain-com"><span class="toc-text"> 2.2.4. Gain Com…</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#225-scan-conversion-mode"><span class="toc-text"> 2.2.5. Scan Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#226-end-of-conversion-selection"><span class="toc-text"> 2.2.6. End Of Conversion Selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#227-low-power-auto-wait"><span class="toc-text"> 2.2.7. Low Power Auto Wait</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#228-continuous-conversion-mode"><span class="toc-text"> 2.2.8. Continuous Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#229-discontinuous-conversion-mode"><span class="toc-text"> 2.2.9. Discontinuous Conversion Mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2210-dma-continuous-requests"><span class="toc-text"> 2.2.10. DMA Continuous Requests</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2211-overrun-behaviour"><span class="toc-text"> 2.2.11. Overrun behaviour</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2212-conversion-data-managerment-modeh7"><span class="toc-text"> 2.2.12. Conversion Data Managerment Mode（H7）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E8%A7%84%E5%88%99%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 2.3. 规则转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-enable-regular-conversions"><span class="toc-text"> 2.3.1. Enable Regular Conversions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-enable-regular-oversamping%E4%B8%8D%E5%B8%B8%E7%94%A8"><span class="toc-text"> 2.3.2. Enable Regular Oversamping（不常用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-oversamping-right-shift%E4%B8%8D%E5%B8%B8%E7%94%A8"><span class="toc-text"> 2.3.3. Oversamping Right Shift（不常用）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-number-of-conversion"><span class="toc-text"> 2.3.4. Number Of Conversion</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#235-external-trigger-conversion-soure%E8%A7%A6%E5%8F%91%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%A4%96%E9%83%A8%E6%9D%A5%E6%BA%90"><span class="toc-text"> 2.3.5. External Trigger Conversion Soure（触发转换的外部来源）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#236-external-trigger-conversion-edge%E8%A7%A6%E5%8F%91%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%A4%96%E9%83%A8%E6%B2%BF"><span class="toc-text"> 2.3.6. External Trigger Conversion Edge（触发转换的外部沿）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#237-rank"><span class="toc-text"> 2.3.7. Rank</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#238-offset-number"><span class="toc-text"> 2.3.8. Offset Number</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E7%84%B6%E5%90%8E%E6%98%AF%E6%B3%A8%E5%85%A5%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 2.4. 然后是注入转换模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E8%A7%84%E5%88%99%E9%80%9A%E9%81%93"><span class="toc-text"> 2.4.1. 规则通道：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E6%B3%A8%E5%85%A5%E9%80%9A%E9%81%93"><span class="toc-text"> 2.4.2. 注入通道：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-%E6%9C%80%E5%90%8E%E6%98%AF%E5%8F%AF%E7%88%B1%E7%9A%84%E7%9C%8B%E9%97%A8%E5%B0%8F%E7%8B%97~"><span class="toc-text"> 2.5. 最后是可爱的看门小狗🥰~</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8F%82%E8%80%83%E5%87%BD%E6%95%B0"><span class="toc-text"> 3. 参考函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-text"> 4. 参考博客</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -687,7 +710,7 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -813,7 +836,7 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -850,7 +873,7 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -865,7 +888,7 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -887,13 +910,13 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -942,7 +965,7 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -990,6 +1013,13 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1001,5 +1031,6 @@ Trigger detection on the rising and falling edge（上升与下降沿）</p>
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

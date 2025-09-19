@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -523,7 +520,25 @@ CPU 核心在处理前向 GIC 确认（acknowledge），处理完向 GIC 报告�
 <p>:::danger<br />
 <strong>中断向量表必须按固定顺序来定义</strong>，顺序是由 ARM 硬件架构规定的，不是随便排列的。这样CPU才能正确处理不同的异常<br />
 :::</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs asm">/* 设置中断向量表，当中断来时，CPU就会执行对应指令 */<br><br>    /* 顺序不能改变，名字可以改变！ */<br><br>    ldr pc, =Reset_Handler      /* 复位中断                     */  <br><br>    ldr pc, =Undefined_Handler  /* 未定义中断                    */<br><br>    ldr pc, =SVC_Handler        /* SVC(Supervisor)中断        */<br><br>    ldr pc, =PrefAbort_Handler  /* 预取终止中断                   */<br><br>    ldr pc, =DataAbort_Handler  /* 数据终止中断                   */<br><br>    ldr pc, =NotUsed_Handler    /* 未使用中断                    */<br><br>    ldr pc, =IRQ_Handler        /* IRQ中断                    */<br><br>    ldr pc, =FIQ_Handler        /* FIQ(快速中断)未定义中断           */<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">&#x2F;* 设置中断向量表，当中断来时，CPU就会执行对应指令 *&#x2F;
+
+    &#x2F;* 顺序不能改变，名字可以改变！ *&#x2F;
+
+    ldr pc, &#x3D;Reset_Handler      &#x2F;* 复位中断                     *&#x2F;  
+
+    ldr pc, &#x3D;Undefined_Handler  &#x2F;* 未定义中断                    *&#x2F;
+
+    ldr pc, &#x3D;SVC_Handler        &#x2F;* SVC(Supervisor)中断        *&#x2F;
+
+    ldr pc, &#x3D;PrefAbort_Handler  &#x2F;* 预取终止中断                   *&#x2F;
+
+    ldr pc, &#x3D;DataAbort_Handler  &#x2F;* 数据终止中断                   *&#x2F;
+
+    ldr pc, &#x3D;NotUsed_Handler    &#x2F;* 未使用中断                    *&#x2F;
+
+    ldr pc, &#x3D;IRQ_Handler        &#x2F;* IRQ中断                    *&#x2F;
+
+    ldr pc, &#x3D;FIQ_Handler        &#x2F;* FIQ(快速中断)未定义中断           *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="3-复位中断函数的编写"><a class="markdownIt-Anchor" href="#3-复位中断函数的编写"></a> 3. 复位中断函数的编写</h2>
 <h3 id="31-操作cp15协处理器"><a class="markdownIt-Anchor" href="#31-操作cp15协处理器"></a> 3.1. 操作CP15协处理器</h3>
 <p><strong>关闭I、D Cache 和MMU</strong></p>
@@ -628,14 +643,40 @@ CPU 核心在处理前向 GIC 确认（acknowledge），处理完向 GIC 报告�
 </ul>
 </details>
 <p>代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs asm">* 禁用MMU、cache、对齐检查等，配置适合裸机启动的环境，这样的启动代码移植性更好 */<br><br>    mrc     p15, 0, r0, c1, c0, 0     /*  读取CP15系统控制寄存器   */<br><br>    bic     r0,  r0, #0x1000          /*  清除第12位（I位）禁用 I Cache  */<br><br>    bic     r0,  r0, #0x4             /*  清除第 2位（C位）禁用 D Cache  */<br><br>    bic     r0,  r0, #0x2             /*  清除第 1位（A位）禁止严格对齐   */<br><br>    bic     r0,  r0, #0x800           /*  清除第11位（Z位）分支预测   */<br><br>    bic     r0,  r0, #0x1             /*  清除第 0位（M位）禁用 MMU   */<br><br>    mcr     p15, 0, r0, c1, c0, 0     /*  将修改后的值写回CP15寄存器   */<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">* 禁用MMU、cache、对齐检查等，配置适合裸机启动的环境，这样的启动代码移植性更好 *&#x2F;
+
+    mrc     p15, 0, r0, c1, c0, 0     &#x2F;*  读取CP15系统控制寄存器   *&#x2F;
+
+    bic     r0,  r0, #0x1000          &#x2F;*  清除第12位（I位）禁用 I Cache  *&#x2F;
+
+    bic     r0,  r0, #0x4             &#x2F;*  清除第 2位（C位）禁用 D Cache  *&#x2F;
+
+    bic     r0,  r0, #0x2             &#x2F;*  清除第 1位（A位）禁止严格对齐   *&#x2F;
+
+    bic     r0,  r0, #0x800           &#x2F;*  清除第11位（Z位）分支预测   *&#x2F;
+
+    bic     r0,  r0, #0x1             &#x2F;*  清除第 0位（M位）禁用 MMU   *&#x2F;
+
+    mcr     p15, 0, r0, c1, c0, 0     &#x2F;*  将修改后的值写回CP15寄存器   *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="32-中断向量表偏移"><a class="markdownIt-Anchor" href="#32-中断向量表偏移"></a> 3.2. 中断向量表偏移</h3>
 <p>访问CP15 VBAR（Vector Base Address Register）寄存器，该寄存器是专门指定中断向量表偏移首地址的。</p>
 <ul>
 <li><code>dsb</code>（Data Synchronization Barrier）保证所有数据访问指令执行完再继续。</li>
 <li><code>isb</code>（Instruction Synchronization Barrier）保证新的 VBAR 设置马上生效，不会被 CPU 指令流水线里的旧指令影响。</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs asm">/* 访问CP15 VBAR寄存器 设置中断向量表偏移 */<br><br>    ldr r0, =0x80000000<br><br>    dsb<br><br>    isb /* 数据同步指令 */<br><br>    mcr p15, 0, r0, c12, c0, 0<br><br>    dsb<br><br>    isb<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">&#x2F;* 访问CP15 VBAR寄存器 设置中断向量表偏移 *&#x2F;
+
+    ldr r0, &#x3D;0x80000000
+
+    dsb
+
+    isb &#x2F;* 数据同步指令 *&#x2F;
+
+    mcr p15, 0, r0, c12, c0, 0
+
+    dsb
+
+    isb<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="33-设置sp指针"><a class="markdownIt-Anchor" href="#33-设置sp指针"></a> 3.3. 设置sp指针</h3>
 <p>内核工作在不同模式下，User模式和是Sys模式共用sp寄存器，而其他模式是独享一个sp寄存器。</p>
 <ul>
@@ -676,7 +717,21 @@ CPU 核心在处理前向 GIC 确认（acknowledge），处理完向 GIC 报告�
 </ul>
 <p>因此，<strong>启动代码（crt0 或汇编 startup.s）通常会在 <code>main()</code> 之前清零 bss 段</strong>，保证所有这些变量是干净的 0。</p>
 </details>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs asm">/* 清除bss段 防止未初始化变量等数据访问错误 */<br><br>    ldr r0, =__bss_start<br><br>    ldr r1, =__bss_end<br><br>    mov r2, #0<br><br>bss_clear:          /* ia: increse after */<br><br>    stmia r0!, &#123;r2&#125; /* stmia: 从r0所存地址开始，将r2的值写入该地址，写入后地址自动递增 */<br><br>    cmp r0, r1<br><br>    ble bss_clear /* less &amp; equal */<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">&#x2F;* 清除bss段 防止未初始化变量等数据访问错误 *&#x2F;
+
+    ldr r0, &#x3D;__bss_start
+
+    ldr r1, &#x3D;__bss_end
+
+    mov r2, #0
+
+bss_clear:          &#x2F;* ia: increse after *&#x2F;
+
+    stmia r0!, &#123;r2&#125; &#x2F;* stmia: 从r0所存地址开始，将r2的值写入该地址，写入后地址自动递增 *&#x2F;
+
+    cmp r0, r1
+
+    ble bss_clear &#x2F;* less &amp; equal *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="4-irq中断函数的编写"><a class="markdownIt-Anchor" href="#4-irq中断函数的编写"></a> 4. IRQ中断函数的编写</h2>
 <details>
 <summary>中断函数实现了什么？（详细版）</summary>
@@ -759,7 +814,139 @@ irq_handler:</li>
 ps： 最后一行subs指令有点抽象。。。。。。。。</li>
 </ul>
 <h2 id="5-整个启动文件"><a class="markdownIt-Anchor" href="#5-整个启动文件"></a> 5. 整个启动文件</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><code class="hljs asm">.global _start<br>/* 以下两个变量在链接脚本中定义 */<br>.global __bss_start<br>.global __bss_end<br>_start:<br>    @ /* 1.设置处理器模式为SVC模式(其实CotexA内核上电默认即为SVC模式故不需要写) */<br>    @ mrs r0, cpsr                /* 读取cpsr到r0 */<br>    @ bic r0, r0, #0x1f           /* bic bit-clear位清零 */          <br>    @                             /* 等同于R0 = R0 &amp; (~Operand2) 这个操作数2自己推算*/<br>    @                             /* 现在这个操作相当于将r0的前5位清零了 */<br>    @ orr r0, r0, #0x13           /* orr 按位或 */<br>    @ msr cpsr, r0                /* 写入cpsr */  <br>    /* 设置中断向量表，当中断来时，CPU就会执行对应指令 */<br>    /* 顺序不能改变，名字可以改变！ */<br>    ldr pc, =Reset_Handler      /* 复位中断                     */  <br>    ldr pc, =Undefined_Handler  /* 未定义中断                    */<br>    ldr pc, =SVC_Handler        /* SVC(Supervisor)中断        */<br>    ldr pc, =PrefAbort_Handler  /* 预取终止中断                   */<br>    ldr pc, =DataAbort_Handler  /* 数据终止中断                   */<br>    ldr pc, =NotUsed_Handler    /* 未使用中断                    */<br>    ldr pc, =IRQ_Handler        /* IRQ中断                    */<br>    ldr pc, =FIQ_Handler        /* FIQ(快速中断)未定义中断           */<br>Reset_Handler:  <br>    cpsid i                           /* Change Processor State Interrupt or abort Disable irq */<br><br>    /* 禁用MMU、cache、对齐检查等，配置适合裸机启动的环境，这样的启动代码移植性更好 */<br>    mrc     p15, 0, r0, c1, c0, 0     /*  读取CP15系统控制寄存器   */<br>    bic     r0,  r0, #0x1000          /*  清除第12位（I位）禁用 I Cache  */<br>    bic     r0,  r0, #0x4             /*  清除第 2位（C位）禁用 D Cache  */<br>    bic     r0,  r0, #0x2             /*  清除第 1位（A位）禁止严格对齐   */<br>    bic     r0,  r0, #0x800           /*  清除第11位（Z位）分支预测   */<br>    bic     r0,  r0, #0x1             /*  清除第 0位（M位）禁用 MMU   */<br>    mcr     p15, 0, r0, c1, c0, 0     /*  将修改后的值写回CP15寄存器   */<br>    /* 访问CP15 VBAR寄存器 设置中断向量表偏移 */<br>    ldr r0, =0x80000000<br>    dsb<br>    isb /* 数据同步指令 */<br>    mcr p15, 0, r0, c12, c0, 0<br>    dsb<br>    isb<br>    /* 清除bss段 防止未初始化变量等数据访问错误 */<br>    ldr r0, =__bss_start<br>    ldr r1, =__bss_end<br>    mov r2, #0<br>bss_clear:          /* ia: increse after */<br>    stmia r0!, &#123;r2&#125; /* stmia: 从r0所存地址开始，将r2的值写入该地址，写入后地址自动递增 */<br>    cmp r0, r1<br>    ble bss_clear /* less &amp; equal */  <br>    /* 设置各个模式下的栈指针，<br>     * 注意：IMX6UL的堆栈是向下增长的！<br>     * 堆栈指针地址一定要是4字节地址对齐的！！！<br>     * DDR范围:0X80000000~0X9FFFFFFF<br>     */<br>    /* 进入IRQ模式 */<br>    mrs r0, cpsr<br>    bic r0, r0, #0x1f   /* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  */<br>    orr r0, r0, #0x12   /* r0或上0x13,表示使用IRQ模式                   */<br>    msr cpsr, r0        /* 将r0 的数据写入到cpsr_c中                    */<br>    ldr sp, =0x80600000 /* 设置IRQ模式下的栈首地址为0X80600000,大小为2MB */<br>    /* 进入SYS模式 */<br>    mrs r0, cpsr<br>    bic r0, r0, #0x1f   /* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  */<br>    orr r0, r0, #0x1f   /* r0或上0x13,表示使用SYS模式                   */<br>    msr cpsr, r0        /* 将r0 的数据写入到cpsr_c中                    */<br>    ldr sp, =0x80500000 /* 设置SYS模式下的栈首地址为0X80400000,大小为2MB */<br>    /* 进入SVC模式 */<br>    mrs r0, cpsr<br>    bic r0, r0, #0x1f   /* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  */<br>    orr r0, r0, #0x13   /* r0或上0x13,表示使用SVC模式                   */<br>    msr cpsr, r0        /* 将r0 的数据写入到cpsr_c中                    */<br>    ldr sp, =0X80400000 /* 设置SVC模式下的栈首地址为0X80200000,大小为2MB */<br>    cpsie i             /* 打开全局中断 */<br>    /* 跳转到main函数 */<br>    b main<br>/* 未定义中断 */<br>Undefined_Handler:<br>    ldr r0, =Undefined_Handler<br>    bx r0<br>/* SVC中断 */<br>SVC_Handler:<br>    ldr r0, =SVC_Handler<br>    bx r0<br>/* 预取终止中断 */<br>PrefAbort_Handler:<br>    ldr r0, =PrefAbort_Handler  <br>    bx r0<br>/* 数据终止中断 */<br>DataAbort_Handler:<br>    ldr r0, =DataAbort_Handler<br>    bx r0  <br>/* 未使用的中断 */<br>NotUsed_Handler:<br>    ldr r0, =NotUsed_Handler<br>    bx r0  <br>/* IRQ中断！重点！！！！！ */<br>IRQ_Handler:<br>    /* 保护现场 */<br>    push &#123;lr&#125;                   /* 保存lr地址 */<br>    push &#123;r0-r3, r12&#125;           /* 保存r0-r3，r12寄存器 */<br>    mrs r0, spsr                /* 读取spsr寄存器 */<br>    push &#123;r0&#125;                   /* 保存spsr寄存器 */ <br><br>    /* 读取GIC控制器基地址 */<br>    mrc p15, 4, r1, c15, c0, 0 /* 从CP15的C0寄存器内的值到R1寄存器中<br>                                * 参考文档ARM Cortex-A(armV7)编程手册V4.0.pdf P49<br>                                * Cortex-A7 Technical ReferenceManua.pdf P68 P138<br>                                */                          <br>    add r1, r1, #0X2000         /* GIC基地址加0X2000，也就是GIC的CPU接口端基地址 */<br>    /* 查询中断号 */<br>    ldr r0, [r1, #0XC]          /* GIC的CPU接口端基地址加0X0C就是GICC_IAR寄存器，<br>                                 * GICC_IAR寄存器保存这当前发生中断的中断号，我们要根据<br>                                 * 这个中断号来绝对调用哪个中断服务函数<br>                                 */<br>    push &#123;r0, r1&#125;               /* 保存r0,r1 */<br>    cps #0x13                   /* 进入SVC模式，允许其他中断再次进去 */<br>    push &#123;lr&#125;                   /* 保存SVC模式的lr寄存器 */<br>    ldr r2, =system_irqhandler  /* 加载C语言中断处理函数到r2寄存器中*/<br>    blx r2                      /* 运行C语言中断处理函数，带有一个参数，保存在R0寄存器中 */<br>    pop &#123;lr&#125;                    /* 执行完C语言中断服务函数，lr出栈 */<br>    cps #0x12                   /* 进入IRQ模式 */<br>    pop &#123;r0, r1&#125;                <br>    str r0, [r1, #0X10]         /* 中断执行完成，写EOIR，相当于确认中断执行完成 */<br>    pop &#123;r0&#125;                        <br>    msr spsr_cxsf, r0           /* 恢复spsr */<br>    pop &#123;r0-r3, r12&#125;            /* r0-r3,r12出栈 */<br>    pop &#123;lr&#125;                    /* lr出栈 */<br>    subs pc, lr, #4             /* 将lr-4赋给pc */<br>/* FIQ中断 */<br>FIQ_Handler:<br>    ldr r0, =FIQ_Handler    <br>    bx r0<br>loop:<br>    b loop<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">.global _start
+&#x2F;* 以下两个变量在链接脚本中定义 *&#x2F;
+.global __bss_start
+.global __bss_end
+_start:
+    @ &#x2F;* 1.设置处理器模式为SVC模式(其实CotexA内核上电默认即为SVC模式故不需要写) *&#x2F;
+    @ mrs r0, cpsr                &#x2F;* 读取cpsr到r0 *&#x2F;
+    @ bic r0, r0, #0x1f           &#x2F;* bic bit-clear位清零 *&#x2F;          
+    @                             &#x2F;* 等同于R0 &#x3D; R0 &amp; (~Operand2) 这个操作数2自己推算*&#x2F;
+    @                             &#x2F;* 现在这个操作相当于将r0的前5位清零了 *&#x2F;
+    @ orr r0, r0, #0x13           &#x2F;* orr 按位或 *&#x2F;
+    @ msr cpsr, r0                &#x2F;* 写入cpsr *&#x2F;  
+    &#x2F;* 设置中断向量表，当中断来时，CPU就会执行对应指令 *&#x2F;
+    &#x2F;* 顺序不能改变，名字可以改变！ *&#x2F;
+    ldr pc, &#x3D;Reset_Handler      &#x2F;* 复位中断                     *&#x2F;  
+    ldr pc, &#x3D;Undefined_Handler  &#x2F;* 未定义中断                    *&#x2F;
+    ldr pc, &#x3D;SVC_Handler        &#x2F;* SVC(Supervisor)中断        *&#x2F;
+    ldr pc, &#x3D;PrefAbort_Handler  &#x2F;* 预取终止中断                   *&#x2F;
+    ldr pc, &#x3D;DataAbort_Handler  &#x2F;* 数据终止中断                   *&#x2F;
+    ldr pc, &#x3D;NotUsed_Handler    &#x2F;* 未使用中断                    *&#x2F;
+    ldr pc, &#x3D;IRQ_Handler        &#x2F;* IRQ中断                    *&#x2F;
+    ldr pc, &#x3D;FIQ_Handler        &#x2F;* FIQ(快速中断)未定义中断           *&#x2F;
+Reset_Handler:  
+    cpsid i                           &#x2F;* Change Processor State Interrupt or abort Disable irq *&#x2F;
+
+    &#x2F;* 禁用MMU、cache、对齐检查等，配置适合裸机启动的环境，这样的启动代码移植性更好 *&#x2F;
+    mrc     p15, 0, r0, c1, c0, 0     &#x2F;*  读取CP15系统控制寄存器   *&#x2F;
+    bic     r0,  r0, #0x1000          &#x2F;*  清除第12位（I位）禁用 I Cache  *&#x2F;
+    bic     r0,  r0, #0x4             &#x2F;*  清除第 2位（C位）禁用 D Cache  *&#x2F;
+    bic     r0,  r0, #0x2             &#x2F;*  清除第 1位（A位）禁止严格对齐   *&#x2F;
+    bic     r0,  r0, #0x800           &#x2F;*  清除第11位（Z位）分支预测   *&#x2F;
+    bic     r0,  r0, #0x1             &#x2F;*  清除第 0位（M位）禁用 MMU   *&#x2F;
+    mcr     p15, 0, r0, c1, c0, 0     &#x2F;*  将修改后的值写回CP15寄存器   *&#x2F;
+    &#x2F;* 访问CP15 VBAR寄存器 设置中断向量表偏移 *&#x2F;
+    ldr r0, &#x3D;0x80000000
+    dsb
+    isb &#x2F;* 数据同步指令 *&#x2F;
+    mcr p15, 0, r0, c12, c0, 0
+    dsb
+    isb
+    &#x2F;* 清除bss段 防止未初始化变量等数据访问错误 *&#x2F;
+    ldr r0, &#x3D;__bss_start
+    ldr r1, &#x3D;__bss_end
+    mov r2, #0
+bss_clear:          &#x2F;* ia: increse after *&#x2F;
+    stmia r0!, &#123;r2&#125; &#x2F;* stmia: 从r0所存地址开始，将r2的值写入该地址，写入后地址自动递增 *&#x2F;
+    cmp r0, r1
+    ble bss_clear &#x2F;* less &amp; equal *&#x2F;  
+    &#x2F;* 设置各个模式下的栈指针，
+     * 注意：IMX6UL的堆栈是向下增长的！
+     * 堆栈指针地址一定要是4字节地址对齐的！！！
+     * DDR范围:0X80000000~0X9FFFFFFF
+     *&#x2F;
+    &#x2F;* 进入IRQ模式 *&#x2F;
+    mrs r0, cpsr
+    bic r0, r0, #0x1f   &#x2F;* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  *&#x2F;
+    orr r0, r0, #0x12   &#x2F;* r0或上0x13,表示使用IRQ模式                   *&#x2F;
+    msr cpsr, r0        &#x2F;* 将r0 的数据写入到cpsr_c中                    *&#x2F;
+    ldr sp, &#x3D;0x80600000 &#x2F;* 设置IRQ模式下的栈首地址为0X80600000,大小为2MB *&#x2F;
+    &#x2F;* 进入SYS模式 *&#x2F;
+    mrs r0, cpsr
+    bic r0, r0, #0x1f   &#x2F;* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  *&#x2F;
+    orr r0, r0, #0x1f   &#x2F;* r0或上0x13,表示使用SYS模式                   *&#x2F;
+    msr cpsr, r0        &#x2F;* 将r0 的数据写入到cpsr_c中                    *&#x2F;
+    ldr sp, &#x3D;0x80500000 &#x2F;* 设置SYS模式下的栈首地址为0X80400000,大小为2MB *&#x2F;
+    &#x2F;* 进入SVC模式 *&#x2F;
+    mrs r0, cpsr
+    bic r0, r0, #0x1f   &#x2F;* 将r0寄存器中的低5位清零，也就是cpsr的M0~M4  *&#x2F;
+    orr r0, r0, #0x13   &#x2F;* r0或上0x13,表示使用SVC模式                   *&#x2F;
+    msr cpsr, r0        &#x2F;* 将r0 的数据写入到cpsr_c中                    *&#x2F;
+    ldr sp, &#x3D;0X80400000 &#x2F;* 设置SVC模式下的栈首地址为0X80200000,大小为2MB *&#x2F;
+    cpsie i             &#x2F;* 打开全局中断 *&#x2F;
+    &#x2F;* 跳转到main函数 *&#x2F;
+    b main
+&#x2F;* 未定义中断 *&#x2F;
+Undefined_Handler:
+    ldr r0, &#x3D;Undefined_Handler
+    bx r0
+&#x2F;* SVC中断 *&#x2F;
+SVC_Handler:
+    ldr r0, &#x3D;SVC_Handler
+    bx r0
+&#x2F;* 预取终止中断 *&#x2F;
+PrefAbort_Handler:
+    ldr r0, &#x3D;PrefAbort_Handler  
+    bx r0
+&#x2F;* 数据终止中断 *&#x2F;
+DataAbort_Handler:
+    ldr r0, &#x3D;DataAbort_Handler
+    bx r0  
+&#x2F;* 未使用的中断 *&#x2F;
+NotUsed_Handler:
+    ldr r0, &#x3D;NotUsed_Handler
+    bx r0  
+&#x2F;* IRQ中断！重点！！！！！ *&#x2F;
+IRQ_Handler:
+    &#x2F;* 保护现场 *&#x2F;
+    push &#123;lr&#125;                   &#x2F;* 保存lr地址 *&#x2F;
+    push &#123;r0-r3, r12&#125;           &#x2F;* 保存r0-r3，r12寄存器 *&#x2F;
+    mrs r0, spsr                &#x2F;* 读取spsr寄存器 *&#x2F;
+    push &#123;r0&#125;                   &#x2F;* 保存spsr寄存器 *&#x2F; 
+
+    &#x2F;* 读取GIC控制器基地址 *&#x2F;
+    mrc p15, 4, r1, c15, c0, 0 &#x2F;* 从CP15的C0寄存器内的值到R1寄存器中
+                                * 参考文档ARM Cortex-A(armV7)编程手册V4.0.pdf P49
+                                * Cortex-A7 Technical ReferenceManua.pdf P68 P138
+                                *&#x2F;                          
+    add r1, r1, #0X2000         &#x2F;* GIC基地址加0X2000，也就是GIC的CPU接口端基地址 *&#x2F;
+    &#x2F;* 查询中断号 *&#x2F;
+    ldr r0, [r1, #0XC]          &#x2F;* GIC的CPU接口端基地址加0X0C就是GICC_IAR寄存器，
+                                 * GICC_IAR寄存器保存这当前发生中断的中断号，我们要根据
+                                 * 这个中断号来绝对调用哪个中断服务函数
+                                 *&#x2F;
+    push &#123;r0, r1&#125;               &#x2F;* 保存r0,r1 *&#x2F;
+    cps #0x13                   &#x2F;* 进入SVC模式，允许其他中断再次进去 *&#x2F;
+    push &#123;lr&#125;                   &#x2F;* 保存SVC模式的lr寄存器 *&#x2F;
+    ldr r2, &#x3D;system_irqhandler  &#x2F;* 加载C语言中断处理函数到r2寄存器中*&#x2F;
+    blx r2                      &#x2F;* 运行C语言中断处理函数，带有一个参数，保存在R0寄存器中 *&#x2F;
+    pop &#123;lr&#125;                    &#x2F;* 执行完C语言中断服务函数，lr出栈 *&#x2F;
+    cps #0x12                   &#x2F;* 进入IRQ模式 *&#x2F;
+    pop &#123;r0, r1&#125;                
+    str r0, [r1, #0X10]         &#x2F;* 中断执行完成，写EOIR，相当于确认中断执行完成 *&#x2F;
+    pop &#123;r0&#125;                        
+    msr spsr_cxsf, r0           &#x2F;* 恢复spsr *&#x2F;
+    pop &#123;r0-r3, r12&#125;            &#x2F;* r0-r3,r12出栈 *&#x2F;
+    pop &#123;lr&#125;                    &#x2F;* lr出栈 *&#x2F;
+    subs pc, lr, #4             &#x2F;* 将lr-4赋给pc *&#x2F;
+&#x2F;* FIQ中断 *&#x2F;
+FIQ_Handler:
+    ldr r0, &#x3D;FIQ_Handler    
+    bx r0
+loop:
+    b loop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr class="footnotes-sep" />
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -767,71 +954,71 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
 </li>
 </ol>
 </section>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">I-MX6ULL的中断实验（上）</h1>
             <p>创建时间：8月 11, 2025 </p>
             <p>最后更新：8月 25, 2025</p>
-            <p>字数统计：4.1k字</p>
-            <p>预计阅读：16min</p>
-            
-            <div class="catgrs">文章分类：
+            <p>字数统计：4.4k字</p>
+            <p>预计阅读：17min</p>
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/%E8%AE%B0%E5%BD%95/" id="catgrs">
-                            -记录  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E8%AE%B0%E5%BD%95/" id="catgrs">
+                                -记录
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
-                            #嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
+                                #嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-cortex-a7%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text"> 1. Cortex-A7中断系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-cortex-a%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1. Cortex-A中断向量表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E5%81%8F%E7%A7%BB"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2. 中断向量表偏移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-gic-v2%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3. GIC v2中断控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#131-gic-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-number">1.3.1.</span> <span class="toc-text"> 1.3.1. GIC 的主要功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#132-%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.2.</span> <span class="toc-text"> 1.3.2. 核心结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#133-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E7%AE%80%E5%8D%95%E7%89%88"><span class="toc-number">1.3.3.</span> <span class="toc-text"> 1.3.3. 核心原理（简单版）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-%E4%B8%AD%E6%96%AD%E5%8F%B7"><span class="toc-number">1.4.</span> <span class="toc-text"> 1.4. 中断号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B7%BB%E5%8A%A0%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text"> 2. 添加中断向量表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A4%8D%E4%BD%8D%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-number">3.</span> <span class="toc-text"> 3. 复位中断函数的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%93%8D%E4%BD%9Ccp15%E5%8D%8F%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1. 操作CP15协处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E5%81%8F%E7%A7%BB"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2. 中断向量表偏移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E8%AE%BE%E7%BD%AEsp%E6%8C%87%E9%92%88"><span class="toc-number">3.3.</span> <span class="toc-text"> 3.3. 设置sp指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-%E6%B8%85%E9%99%A4bss%E6%AE%B5"><span class="toc-number">3.4.</span> <span class="toc-text"> 3.4. 清除.bss段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-irq%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-number">4.</span> <span class="toc-text"> 4. IRQ中断函数的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BF%9D%E5%AD%98%E4%B8%AD%E6%96%AD%E7%8E%B0%E5%9C%BA%E9%98%B2%E6%AD%A2%E7%A0%B4%E5%9D%8F%E5%8E%9F%E4%BB%BB%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 保存中断现场（防止破坏原任务状态）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BB%8E-gic%E9%80%9A%E7%94%A8%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E8%AF%BB%E5%8F%96%E4%B8%AD%E6%96%AD%E5%8F%B7"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2. 从 GIC（通用中断控制器）读取中断号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%88%87%E6%8D%A2%E5%88%B0-svc-%E6%A8%A1%E5%BC%8F%E6%89%A7%E8%A1%8C-c-%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0"><span class="toc-number">4.3.</span> <span class="toc-text"> 4.3. 切换到 SVC 模式执行 C 语言中断处理函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E7%BB%93%E6%9D%9F%E4%B8%AD%E6%96%AD%E5%B9%B6%E6%81%A2%E5%A4%8D%E7%8E%B0%E5%9C%BA"><span class="toc-number">4.4.</span> <span class="toc-text"> 4.4. 结束中断并恢复现场</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%95%B4%E4%B8%AA%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text"> 5. 整个启动文件</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-cortex-a7%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F"><span class="toc-text"> 1. Cortex-A7中断系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-cortex-a%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-text"> 1.1. Cortex-A中断向量表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E5%81%8F%E7%A7%BB"><span class="toc-text"> 1.2. 中断向量表偏移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-gic-v2%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text"> 1.3. GIC v2中断控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#131-gic-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-text"> 1.3.1. GIC 的主要功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#132-%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84"><span class="toc-text"> 1.3.2. 核心结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#133-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%E7%AE%80%E5%8D%95%E7%89%88"><span class="toc-text"> 1.3.3. 核心原理（简单版）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-%E4%B8%AD%E6%96%AD%E5%8F%B7"><span class="toc-text"> 1.4. 中断号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B7%BB%E5%8A%A0%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8"><span class="toc-text"> 2. 添加中断向量表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A4%8D%E4%BD%8D%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text"> 3. 复位中断函数的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%93%8D%E4%BD%9Ccp15%E5%8D%8F%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-text"> 3.1. 操作CP15协处理器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E4%B8%AD%E6%96%AD%E5%90%91%E9%87%8F%E8%A1%A8%E5%81%8F%E7%A7%BB"><span class="toc-text"> 3.2. 中断向量表偏移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E8%AE%BE%E7%BD%AEsp%E6%8C%87%E9%92%88"><span class="toc-text"> 3.3. 设置sp指针</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-%E6%B8%85%E9%99%A4bss%E6%AE%B5"><span class="toc-text"> 3.4. 清除.bss段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-irq%E4%B8%AD%E6%96%AD%E5%87%BD%E6%95%B0%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text"> 4. IRQ中断函数的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BF%9D%E5%AD%98%E4%B8%AD%E6%96%AD%E7%8E%B0%E5%9C%BA%E9%98%B2%E6%AD%A2%E7%A0%B4%E5%9D%8F%E5%8E%9F%E4%BB%BB%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="toc-text"> 4.1. 保存中断现场（防止破坏原任务状态）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BB%8E-gic%E9%80%9A%E7%94%A8%E4%B8%AD%E6%96%AD%E6%8E%A7%E5%88%B6%E5%99%A8%E8%AF%BB%E5%8F%96%E4%B8%AD%E6%96%AD%E5%8F%B7"><span class="toc-text"> 4.2. 从 GIC（通用中断控制器）读取中断号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%88%87%E6%8D%A2%E5%88%B0-svc-%E6%A8%A1%E5%BC%8F%E6%89%A7%E8%A1%8C-c-%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0"><span class="toc-text"> 4.3. 切换到 SVC 模式执行 C 语言中断处理函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E7%BB%93%E6%9D%9F%E4%B8%AD%E6%96%AD%E5%B9%B6%E6%81%A2%E5%A4%8D%E7%8E%B0%E5%9C%BA"><span class="toc-text"> 4.4. 结束中断并恢复现场</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%95%B4%E4%B8%AA%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6"><span class="toc-text"> 5. 整个启动文件</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -853,7 +1040,7 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -979,7 +1166,7 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -1016,7 +1203,7 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -1031,7 +1218,7 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -1053,13 +1240,13 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1108,7 +1295,7 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -1156,6 +1343,13 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1167,5 +1361,6 @@ ps： 最后一行subs指令有点抽象。。。。。。。。</li>
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

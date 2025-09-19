@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -536,7 +533,7 @@ How to use:
     })();
   </script>
 </section>
- 
+
         
         <details>
 <summary>版权信息</summary>
@@ -569,7 +566,7 @@ How to use:
 <li><a href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask">2.4.2. 阻塞信号：<code>sigprocmask()</code></a></li>
 </ul>
 </li>
-<li><a href="#25-system-v-ipc-system-v-ipc">2.5. System V IPC (System V IPC)</a>
+<li><a href="#25-system-v-ipc-system-v-ipc">2.5. System V IPC (System V IPC)[^1]</a>
 <ul>
 <li><a href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues">2.5.1. 消息队列（Message Queues）</a></li>
 <li><a href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores">2.5.2. 信号量（Semaphores）</a></li>
@@ -577,21 +574,6 @@ How to use:
 </ul>
 </li>
 <li><a href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9">2.6. IPC 总结与选择</a></li>
-</ul>
-</li>
-<li><a href="#3-posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85">3. POSIX IPC：System V 的继任者</a>
-<ul>
-<li><a href="#31-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">3.1. POSIX 消息队列</a></li>
-<li><a href="#32-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F">3.2. POSIX 信号量</a></li>
-<li><a href="#33-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98">3.3. POSIX 共享内存</a></li>
-</ul>
-</li>
-<li><a href="#4-%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3">4. 套接字（Socket）：网络通信的基石</a>
-<ul>
-<li><a href="#41-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B">4.1. 套接字类型</a></li>
-<li><a href="#42-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B">4.2. 套接字通信流程（以 TCP 为例）</a></li>
-<li><a href="#43-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain">4.3. 套接字域（Socket Domain）</a></li>
-<li><a href="#44-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9">4.4. 总结与选择</a></li>
 </ul>
 </li>
 </ul>
@@ -624,14 +606,51 @@ How to use:
 <ul>
 <li><strong><code>pipe()</code> 函数</strong>：这是创建管道的核心函数。</li>
 </ul>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">pipe</span><span class="hljs-params">(<span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>])</span>;<br></code></pre></td></tr></table></figure>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token keyword">int</span> <span class="token function">pipe</span><span class="token punctuation">(</span><span class="token keyword">int</span> pipefd<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><code>pipefd</code> 是一个包含两个文件描述符的数组，<code>pipefd[0]</code> 用于读取，<code>pipefd[1]</code> 用于写入。</p>
 </li>
 <li>
 <p><strong>代码示例</strong>：一个简单的父子进程通信。</p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/wait.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> pipefd[<span class="hljs-number">2</span>];<br>    <span class="hljs-type">pid_t</span> pid;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from parent!&quot;</span>;<br><br>    <span class="hljs-keyword">if</span> (pipe(pipefd) == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;pipe&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    pid = fork();<br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">-1</span>) &#123;<br>        perror(<span class="hljs-string">&quot;fork&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(EXIT_FAILURE);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (pid &gt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 父进程</span><br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>        write(pipefd[<span class="hljs-number">1</span>], msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端，如果不关，子进程读端收不到EOF信号，则会一直读导致程序阻塞</span><br>        wait(<span class="hljs-literal">NULL</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// 子进程</span><br>        close(pipefd[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 关闭写入端，如果不关</span><br>        read(pipefd[<span class="hljs-number">0</span>], buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Child received: %s\n&quot;</span>, buf);<br>        close(pipefd[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 关闭读取端</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/wait.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> pipefd<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token class-name">pid_t</span> pid<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>msg <span class="token operator">=</span> <span class="token string">"Hello from parent!"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">pipe</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"pipe"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    pid <span class="token operator">=</span> <span class="token function">fork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">perror</span><span class="token punctuation">(</span><span class="token string">"fork"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">exit</span><span class="token punctuation">(</span>EXIT_FAILURE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 父进程</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭读取端</span>
+        <span class="token function">write</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭写入端，如果不关，子进程读端收不到EOF信号，则会一直读导致程序阻塞</span>
+        <span class="token function">wait</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 子进程</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭写入端，如果不关</span>
+        <span class="token function">read</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Child received: %s\n"</span><span class="token punctuation">,</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span>pipefd<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭读取端</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="22-fifo命名管道"><a class="markdownIt-Anchor" href="#22-fifo命名管道"></a> 2.2. FIFO（命名管道）</h3>
 <p>管道只能用于有亲缘关系的进程，那如果两个毫不相关的进程想通信怎么办？答案就是 <strong>FIFO (First-In, First-Out)</strong>，也叫<strong>命名管道</strong>。</p>
 <ul>
@@ -654,7 +673,9 @@ How to use:
 <ul>
 <li><strong><code>mkfifo()</code> 函数</strong>或 <strong><code>mkfifo</code> 命令</strong>：用来创建 FIFO。</li>
 </ul>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">mkfifo</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">mode_t</span> mode)</span>;<br></code></pre></td></tr></table></figure>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span></span>
+<span class="token keyword">int</span> <span class="token function">mkfifo</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>pathname<span class="token punctuation">,</span> <span class="token class-name">mode_t</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li><strong><code>open()</code>, <code>read()</code>, <code>write()</code> 函数</strong>：像操作普通文件一样来操作 FIFO。</li>
 </ul>
@@ -664,11 +685,47 @@ How to use:
 <ul>
 <li><strong><code>writer.c</code></strong>：</li>
 </ul>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FIFO_NAME <span class="hljs-string">&quot;my_fifo&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> fd;<br>    <span class="hljs-type">char</span> *msg = <span class="hljs-string">&quot;Hello from writer!&quot;</span>;<br><br>    mkfifo(FIFO_NAME, <span class="hljs-number">0666</span>);<br>    fd = open(FIFO_NAME, O_WRONLY);<br>    write(fd, msg, <span class="hljs-built_in">strlen</span>(msg) + <span class="hljs-number">1</span>);<br>    close(fd);<br>    unlink(FIFO_NAME); <span class="hljs-comment">// 删除命名管道文件</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">FIFO_NAME</span> <span class="token string">"my_fifo"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>msg <span class="token operator">=</span> <span class="token string">"Hello from writer!"</span><span class="token punctuation">;</span>
+
+    <span class="token function">mkfifo</span><span class="token punctuation">(</span>FIFO_NAME<span class="token punctuation">,</span> <span class="token number">0666</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>FIFO_NAME<span class="token punctuation">,</span> O_WRONLY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">unlink</span><span class="token punctuation">(</span>FIFO_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 删除命名管道文件</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li><strong><code>reader.c</code></strong>：</li>
 </ul>
-  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> FIFO_NAME <span class="hljs-string">&quot;my_fifo&quot;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">int</span> fd;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br><br>    mkfifo(FIFO_NAME, <span class="hljs-number">0666</span>); <span class="hljs-comment">// 保证文件存在</span><br>    fd = open(FIFO_NAME, O_RDONLY);<br>    read(fd, buf, <span class="hljs-keyword">sizeof</span>(buf));<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Reader received: %s\n&quot;</span>, buf);<br>    close(fd);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/stat.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">FIFO_NAME</span> <span class="token string">"my_fifo"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token function">mkfifo</span><span class="token punctuation">(</span>FIFO_NAME<span class="token punctuation">,</span> <span class="token number">0666</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 保证文件存在</span>
+    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>FIFO_NAME<span class="token punctuation">,</span> O_RDONLY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Reader received: %s\n"</span><span class="token punctuation">,</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>你可以先运行 <code>writer.c</code>，再运行 <code>reader.c</code>。</p>
 </li>
 </ul>
@@ -768,7 +825,9 @@ How to use:
 <h4 id="234-如何使用信号"><a class="markdownIt-Anchor" href="#234-如何使用信号"></a> 2.3.4. 如何使用信号？</h4>
 <h5 id="2341-发送信号kill-函数"><a class="markdownIt-Anchor" href="#2341-发送信号kill-函数"></a> 2.3.4.1. 发送信号：<code>kill()</code> 函数</h5>
 <p>你可以使用 <code>kill()</code> 函数向另一个进程发送信号。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">kill</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid, <span class="hljs-type">int</span> sig)</span>;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;signal.h></span></span>
+<span class="token keyword">int</span> <span class="token function">kill</span><span class="token punctuation">(</span><span class="token class-name">pid_t</span> pid<span class="token punctuation">,</span> <span class="token keyword">int</span> sig<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><code>pid</code>：目标进程的 ID。</p>
@@ -786,7 +845,8 @@ How to use:
 <p><strong><code>sigaction()</code> 函数</strong>：这是 POSIX 标准推荐的方式，更强大，更可靠。</p>
 </li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">sigaction</span><span class="hljs-params">(<span class="hljs-type">int</span> signum, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sigaction *act, <span class="hljs-keyword">struct</span> sigaction *oldact)</span>;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;signal.h></span></span>
+<span class="token keyword">int</span> <span class="token function">sigaction</span><span class="token punctuation">(</span><span class="token keyword">int</span> signum<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">sigaction</span> <span class="token operator">*</span>act<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">sigaction</span> <span class="token operator">*</span>oldact<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><code>signum</code>：要捕获的信号编号。</p>
@@ -799,7 +859,11 @@ How to use:
 </li>
 </ul>
 <p><strong><code>struct sigaction</code> 结构体</strong>：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sigaction</span> &#123;</span><br>    <span class="hljs-type">void</span> (*sa_handler)(<span class="hljs-type">int</span>);  <span class="hljs-comment">// 信号处理函数</span><br>    <span class="hljs-type">sigset_t</span> sa_mask;         <span class="hljs-comment">// 信号集，在信号处理函数执行期间需要阻塞的信号</span><br>    <span class="hljs-type">int</span> sa_flags;             <span class="hljs-comment">// 标志位</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">sigaction</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>sa_handler<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 信号处理函数</span>
+    <span class="token class-name">sigset_t</span> sa_mask<span class="token punctuation">;</span>         <span class="token comment">// 信号集，在信号处理函数执行期间需要阻塞的信号</span>
+    <span class="token keyword">int</span> sa_flags<span class="token punctuation">;</span>             <span class="token comment">// 标志位</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="24-信号集signal-set和阻塞"><a class="markdownIt-Anchor" href="#24-信号集signal-set和阻塞"></a> 2.4. 信号集（Signal Set）和阻塞</h3>
 <p>当你在处理一个信号时，你可能不希望被其他信号打断。<strong>信号集（<code>sigset_t</code>）</strong> 就是用来管理一组信号的。通过操作信号集，你可以<strong>阻塞（Block）</strong> 某些信号，让它们在进程处理完当前任务后才被传递。</p>
 <h4 id="241-信号集操作函数"><a class="markdownIt-Anchor" href="#241-信号集操作函数"></a> 2.4.1. 信号集操作函数</h4>
@@ -819,7 +883,8 @@ How to use:
 </ul>
 <h4 id="242-阻塞信号sigprocmask"><a class="markdownIt-Anchor" href="#242-阻塞信号sigprocmask"></a> 2.4.2. 阻塞信号：<code>sigprocmask()</code></h4>
 <p><code>sigprocmask()</code> 函数用来设置进程的<strong>信号阻塞掩码（Signal Mask）</strong>。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">sigprocmask</span><span class="hljs-params">(<span class="hljs-type">int</span> how, <span class="hljs-type">const</span> <span class="hljs-type">sigset_t</span> *<span class="hljs-built_in">set</span>, <span class="hljs-type">sigset_t</span> *oldset)</span>;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;signal.h></span></span>
+<span class="token keyword">int</span> <span class="token function">sigprocmask</span><span class="token punctuation">(</span><span class="token keyword">int</span> how<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token class-name">sigset_t</span> <span class="token operator">*</span>set<span class="token punctuation">,</span> <span class="token class-name">sigset_t</span> <span class="token operator">*</span>oldset<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>
 <p><code>how</code>：指定如何修改信号阻塞掩码，有以下几种：</p>
@@ -843,9 +908,49 @@ How to use:
 </li>
 </ul>
 <p><strong>示例</strong>：在处理关键代码段时临时阻塞 <code>SIGINT</code>。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">my_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Caught signal %d\n&quot;</span>, sig);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">sigset_t</span> block_mask, old_mask;<br><br>    <span class="hljs-comment">// 1. 设置要阻塞的信号集</span><br>    sigemptyset(&amp;block_mask);<br>    sigaddset(&amp;block_mask, SIGINT);<br><br>    <span class="hljs-comment">// 2. 阻塞 SIGINT 信号</span><br>    sigprocmask(SIG_BLOCK, &amp;block_mask, &amp;old_mask);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SIGINT is blocked. Press Ctrl+C...\n&quot;</span>);<br>    sleep(<span class="hljs-number">10</span>); <span class="hljs-comment">// 在这10秒内，Ctrl+C不会终止进程</span><br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Unblocking SIGINT...\n&quot;</span>);<br>    <span class="hljs-comment">// 3. 解除阻塞，恢复旧的信号掩码</span><br>    sigprocmask(SIG_SETMASK, &amp;old_mask, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;SIGINT is unblocked. Press Ctrl+C again.\n&quot;</span>);<br><br>    <span class="hljs-comment">// 4. 注册一个信号处理函数</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sigaction</span> <span class="hljs-title">sa</span>;</span><br>    sa.sa_handler = my_handler;<br>    sigemptyset(&amp;sa.sa_mask);<br>    sa.sa_flags = <span class="hljs-number">0</span>;<br>    sigaction(SIGINT, &amp;sa, <span class="hljs-literal">NULL</span>);<br><br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Running...\n&quot;</span>);<br>        sleep(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;signal.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+
+<span class="token keyword">void</span> <span class="token function">my_handler</span><span class="token punctuation">(</span><span class="token keyword">int</span> sig<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Caught signal %d\n"</span><span class="token punctuation">,</span> sig<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">sigset_t</span> block_mask<span class="token punctuation">,</span> old_mask<span class="token punctuation">;</span>
+
+    <span class="token comment">// 1. 设置要阻塞的信号集</span>
+    <span class="token function">sigemptyset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_mask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sigaddset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block_mask<span class="token punctuation">,</span> SIGINT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 2. 阻塞 SIGINT 信号</span>
+    <span class="token function">sigprocmask</span><span class="token punctuation">(</span>SIG_BLOCK<span class="token punctuation">,</span> <span class="token operator">&amp;</span>block_mask<span class="token punctuation">,</span> <span class="token operator">&amp;</span>old_mask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"SIGINT is blocked. Press Ctrl+C...\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 在这10秒内，Ctrl+C不会终止进程</span>
+
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Unblocking SIGINT...\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 3. 解除阻塞，恢复旧的信号掩码</span>
+    <span class="token function">sigprocmask</span><span class="token punctuation">(</span>SIG_SETMASK<span class="token punctuation">,</span> <span class="token operator">&amp;</span>old_mask<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"SIGINT is unblocked. Press Ctrl+C again.\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 4. 注册一个信号处理函数</span>
+    <span class="token keyword">struct</span> <span class="token class-name">sigaction</span> sa<span class="token punctuation">;</span>
+    sa<span class="token punctuation">.</span>sa_handler <span class="token operator">=</span> my_handler<span class="token punctuation">;</span>
+    <span class="token function">sigemptyset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sa<span class="token punctuation">.</span>sa_mask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    sa<span class="token punctuation">.</span>sa_flags <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">sigaction</span><span class="token punctuation">(</span>SIGINT<span class="token punctuation">,</span> <span class="token operator">&amp;</span>sa<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Running...\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>运行这段代码，你会看到在阻塞期间，<code>Ctrl+C</code> 无法终止进程。当解除阻塞后，<code>Ctrl+C</code> 才能触发信号处理函数。</p>
-<h3 id="25-system-v-ipc-system-v-ipc"><a class="markdownIt-Anchor" href="#25-system-v-ipc-system-v-ipc"></a> 2.5. System V IPC (System V IPC)</h3>
+<h3 id="25-system-v-ipc-system-v-ipc"><a class="markdownIt-Anchor" href="#25-system-v-ipc-system-v-ipc"></a> 2.5. System V IPC (System V IPC)<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h3>
 <p>System V IPC 是 Linux 系统中一组更高级、更强大的 IPC 机制，包括消息队列、信号量和共享内存。它们都是<strong>基于内核</strong>的，需要一个唯一的键值（key）来标识。</p>
 <h4 id="251-消息队列message-queues"><a class="markdownIt-Anchor" href="#251-消息队列message-queues"></a> 2.5.1. 消息队列（Message Queues）</h4>
 <p>消息队列就像一个链表，允许进程向其中添加消息或从中读取消息。</p>
@@ -1005,285 +1110,78 @@ How to use:
 </li>
 </ul>
 <p>了解这些 IPC 机制，就如同掌握了进程之间“沟通”的多种语言。在开发时，选择合适的“语言”能让你的程序更加健壮、高效。现在，你可以尝试用这些机制来解决你遇到的实际问题了！</p>
-<h2 id="3-posix-ipcsystem-v-的继任者"><a class="markdownIt-Anchor" href="#3-posix-ipcsystem-v-的继任者"></a> 3. POSIX IPC：System V 的继任者</h2>
-<p><strong>POSIX IPC</strong>（Portable Operating System Interface）是一套新的 IPC 标准，旨在解决 <strong>System V IPC</strong> 的一些局限性。它提供了一套更统一、更现代的 API，使用<strong>文件名</strong>作为标识符，而不是 System V 的<strong>键值</strong>，这使得 IPC 资源的管理更加直观。</p>
-<h3 id="31-posix-消息队列"><a class="markdownIt-Anchor" href="#31-posix-消息队列"></a> 3.1. POSIX 消息队列</h3>
-<p>与 System V 消息队列类似，但 API 更简洁。</p>
-<ul>
-<li>
-<p><strong>特点</strong>：</p>
-<ul>
-<li>
-<p><strong>基于文件</strong>：通过 <code>/dev/mqueue</code> 目录下的文件名来标识。</p>
-</li>
-<li>
-<p><strong>优先级</strong>：支持消息优先级，高优先级的消息会被优先处理。</p>
-</li>
-<li>
-<p><strong>非阻塞模式</strong>：可以设置消息队列为非阻塞模式，防止 <code>mq_send</code> 或 <code>mq_receive</code> 阻塞进程。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>使用</strong>：</p>
-<ul>
-<li>
-<p><strong><code>mq_open()</code></strong>：创建或打开一个消息队列。</p>
-</li>
-<li>
-<p><strong><code>mq_send()</code></strong>：发送消息。</p>
-</li>
-<li>
-<p><strong><code>mq_receive()</code></strong>：接收消息。</p>
-</li>
-<li>
-<p><strong><code>mq_close()</code></strong>：关闭消息队列。</p>
-</li>
-<li>
-<p><strong><code>mq_unlink()</code></strong>：删除消息队列。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="32-posix-信号量"><a class="markdownIt-Anchor" href="#32-posix-信号量"></a> 3.2. POSIX 信号量</h3>
-<p>用于进程间的同步，功能与 System V 信号量类似，但提供了更简单的接口。</p>
-<ul>
-<li>
-<p><strong>特点</strong>：</p>
-<ul>
-<li>
-<p><strong>有名信号量</strong>：通过一个文件名标识，可以用于非亲缘进程。</p>
-</li>
-<li>
-<p><strong>无名信号量</strong>：常用于线程间的同步，存放在共享内存中，只能用于有亲缘关系的进程。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>使用</strong>：</p>
-<ul>
-<li>
-<p><strong><code>sem_open()</code></strong>：创建或打开有名信号量。</p>
-</li>
-<li>
-<p><strong><code>sem_wait()</code></strong>：原子性地减少信号量计数器，如果为0则阻塞。</p>
-</li>
-<li>
-<p><strong><code>sem_post()</code></strong>：原子性地增加信号量计数器。</p>
-</li>
-<li>
-<p><strong><code>sem_close()</code></strong>：关闭信号量。</p>
-</li>
-<li>
-<p><strong><code>sem_unlink()</code></strong>：删除信号量。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="33-posix-共享内存"><a class="markdownIt-Anchor" href="#33-posix-共享内存"></a> 3.3. POSIX 共享内存</h3>
-<p>和 System V 共享内存一样，都是最快的 IPC 方式，但 POSIX 版本使用了文件描述符。</p>
-<ul>
-<li>
-<p><strong>特点</strong>：</p>
-<ul>
-<li>
-<p><strong>基于文件</strong>：通过 <code>shm_open</code> 创建或打开一个共享内存对象，返回一个文件描述符。</p>
-</li>
-<li>
-<p><strong>内存映射</strong>：通过 <code>mmap()</code> 将文件描述符对应的内存映射到进程的地址空间。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>使用</strong>：</p>
-<ul>
-<li>
-<p><strong><code>shm_open()</code></strong>：创建或打开共享内存对象。</p>
-</li>
-<li>
-<p><strong><code>ftruncate()</code></strong>：调整共享内存对象的大小。</p>
-</li>
-<li>
-<p><strong><code>mmap()</code></strong>：将共享内存映射到进程地址空间。</p>
-</li>
-<li>
-<p><strong><code>munmap()</code></strong>：解除映射。</p>
-</li>
-<li>
-<p><strong><code>shm_unlink()</code></strong>：删除共享内存对象。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="4-套接字socket网络通信的基石"><a class="markdownIt-Anchor" href="#4-套接字socket网络通信的基石"></a> 4. 套接字（Socket）：网络通信的基石</h2>
-<p><strong>套接字（Socket）</strong> 是一种更通用的 IPC 机制，它不仅可以在同一台机器上的进程间通信，更重要的能力是实现<strong>跨网络</strong>、不同主机上的进程通信。它是网络通信的基石。</p>
-<h3 id="41-套接字类型"><a class="markdownIt-Anchor" href="#41-套接字类型"></a> 4.1. 套接字类型</h3>
-<ul>
-<li>
-<p><strong>流式套接字（SOCK_STREAM）</strong>：</p>
-<ul>
-<li>
-<p><strong>特点</strong>：提供可靠的、面向连接的、全双工的数据流。</p>
-</li>
-<li>
-<p><strong>协议</strong>：通常使用 <strong>TCP</strong> 协议。</p>
-</li>
-<li>
-<p><strong>适用场景</strong>：需要保证数据完整性和顺序的通信，如文件传输、HTTP 请求等。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>数据报套接字（SOCK_DGRAM）</strong>：</p>
-<ul>
-<li>
-<p><strong>特点</strong>：提供不可靠的、无连接的数据报服务。</p>
-</li>
-<li>
-<p><strong>协议</strong>：通常使用 <strong>UDP</strong> 协议。</p>
-</li>
-<li>
-<p><strong>适用场景</strong>：对实时性要求高、少量数据、不严格要求可靠性的通信，如在线游戏、DNS 查询等。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>原始套接字（SOCK_RAW）</strong>：</p>
-<ul>
-<li><strong>特点</strong>：允许直接访问底层网络协议，通常用于网络监控或特殊应用。</li>
-</ul>
-</li>
-</ul>
-<h3 id="42-套接字通信流程以-tcp-为例"><a class="markdownIt-Anchor" href="#42-套接字通信流程以-tcp-为例"></a> 4.2. 套接字通信流程（以 TCP 为例）</h3>
-<p><strong>服务器端：</strong></p>
-<ol>
-<li>
-<p><strong><code>socket()</code></strong>：创建一个套接字。</p>
-</li>
-<li>
-<p><strong><code>bind()</code></strong>：将套接字与一个 IP 地址和端口号绑定。</p>
-</li>
-<li>
-<p><strong><code>listen()</code></strong>：监听来自客户端的连接请求。</p>
-</li>
-<li>
-<p><strong><code>accept()</code></strong>：接受客户端连接，返回一个新的套接字用于与该客户端通信。</p>
-</li>
-<li>
-<p><strong><code>read()</code>/<code>write()</code></strong>：通过新的套接字与客户端进行数据交换。</p>
-</li>
-<li>
-<p><strong><code>close()</code></strong>：关闭套接字。</p>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>作了解，重点使用POSIX IPC。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
-<p><strong>客户端：</strong></p>
-<ol>
-<li>
-<p><strong><code>socket()</code></strong>：创建一个套接字。</p>
-</li>
-<li>
-<p><strong><code>connect()</code></strong>：连接到服务器指定的 IP 地址和端口号。</p>
-</li>
-<li>
-<p><strong><code>write()</code>/<code>read()</code></strong>：向服务器发送数据或接收数据。</p>
-</li>
-<li>
-<p><strong><code>close()</code></strong>：关闭套接字。</p>
-</li>
-</ol>
-<h3 id="43-套接字域socket-domain"><a class="markdownIt-Anchor" href="#43-套接字域socket-domain"></a> 4.3. 套接字域（Socket Domain）</h3>
-<p>除了我们熟悉的网络套接字（<code>AF_INET</code>），还有一种特别的 IPC 机制：<strong>UNIX 域套接字（AF_UNIX）</strong>。</p>
-<ul>
-<li>
-<p><strong>UNIX 域套接字</strong>：</p>
-<ul>
-<li>
-<p><strong>特点</strong>：只在<strong>同一台机器上</strong>的进程间通信。它使用文件系统路径作为地址，而非 IP 地址和端口。</p>
-</li>
-<li>
-<p><strong>优点</strong>：相比于网络套接字，它<strong>不涉及网络协议栈</strong>，因此通信效率更高，且安全性更好。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="44-总结与选择"><a class="markdownIt-Anchor" href="#44-总结与选择"></a> 4.4. 总结与选择</h3>
-<ul>
-<li>
-<p><strong>POSIX IPC</strong> 是 <strong>System V IPC</strong> 的现代版本，如果你正在编写新的应用程序，<strong>推荐优先使用 POSIX IPC</strong>，因为它提供了更简洁、更标准化的接口。</p>
-</li>
-<li>
-<p><strong>套接字</strong> 是最通用的通信方式。如果你需要<strong>跨网络</strong>通信，<strong>套接字是唯一的选择</strong>。</p>
-</li>
-<li>
-<p>如果你的通信只限于<strong>同一台机器</strong>上，但需要像网络通信一样<strong>客户端-服务器模式</strong>，且追求更高的效率，那么 <strong>UNIX 域套接字</strong> 是一个非常好的替代方案。</p>
-</li>
-</ul>
-<p>掌握这些 IPC 机制，你就能够让你的程序在不同维度上进行“对话”，无论是同一台机器上的协作，还是跨越网络边界的协同工作。</p>
-   
-        <script src="/js/foldpost.js"></script> 
+</section>
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">深入浅出 Linux IPC：进程间通信的艺术</h1>
             <p>创建时间：9月 12, 2025 </p>
             <p>最后更新：9月 15, 2025</p>
-            <p>字数统计：5.1k字</p>
-            <p>预计阅读：19min</p>
-            
-            <div class="catgrs">文章分类：
+            <p>字数统计：3.7k字</p>
+            <p>预计阅读：14min</p>
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
-                            -内核编程  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
+                                -内核编程
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/IPC/" id="tgs">
-                            #IPC  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/IPC/" id="tgs">
+                                #IPC
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-number">1.</span> <span class="toc-text"> 1. 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text"> 2. 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%AE%A1%E9%81%93pipes"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.3.</span> <span class="toc-text"> 2.3. 信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 2.3.1. 信号的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-%E4%BF%A1%E5%8F%B7%E4%B8%8E-ipc-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 2.3.2. 信号与 IPC 的关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%89%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 2.3.3. 信号的三种处理方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.3.4.</span> <span class="toc-text"> 2.3.4. 如何使用信号？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2341-%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7kill-%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.4.1.</span> <span class="toc-text"> 2.3.4.1. 发送信号：kill() 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2342-%E6%B3%A8%E5%86%8C%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0signal-%E5%92%8C-sigaction"><span class="toc-number">2.3.4.2.</span> <span class="toc-text"> 2.3.4.2. 注册信号处理函数：signal() 和 sigaction()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%BF%A1%E5%8F%B7%E9%9B%86signal-set%E5%92%8C%E9%98%BB%E5%A1%9E"><span class="toc-number">2.4.</span> <span class="toc-text"> 2.4. 信号集（Signal Set）和阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E4%BF%A1%E5%8F%B7%E9%9B%86%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.1.</span> <span class="toc-text"> 2.4.1. 信号集操作函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask"><span class="toc-number">2.4.2.</span> <span class="toc-text"> 2.4.2. 阻塞信号：sigprocmask()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-system-v-ipc-system-v-ipc"><span class="toc-number">2.5.</span> <span class="toc-text"> 2.5. System V IPC (System V IPC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-number">2.5.1.</span> <span class="toc-text"> 2.5.1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-number">2.5.2.</span> <span class="toc-text"> 2.5.2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#253-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-number">2.5.3.</span> <span class="toc-text"> 2.5.3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">2.6.</span> <span class="toc-text"> 2.6. IPC 总结与选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-posix-ipcsystem-v-%E7%9A%84%E7%BB%A7%E4%BB%BB%E8%80%85"><span class="toc-number">3.</span> <span class="toc-text"> 3. POSIX IPC：System V 的继任者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-posix-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.1.</span> <span class="toc-text"> 3.1. POSIX 消息队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-posix-%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.2.</span> <span class="toc-text"> 3.2. POSIX 信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-posix-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.3.</span> <span class="toc-text"> 3.3. POSIX 共享内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A5%97%E6%8E%A5%E5%AD%97socket%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%9F%B3"><span class="toc-number">4.</span> <span class="toc-text"> 4. 套接字（Socket）：网络通信的基石</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 套接字类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%A5%97%E6%8E%A5%E5%AD%97%E9%80%9A%E4%BF%A1%E6%B5%81%E7%A8%8B%E4%BB%A5-tcp-%E4%B8%BA%E4%BE%8B"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2. 套接字通信流程（以 TCP 为例）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%9F%9Fsocket-domain"><span class="toc-number">4.3.</span> <span class="toc-text"> 4.3. 套接字域（Socket Domain）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-number">4.4.</span> <span class="toc-text"> 4.4. 总结与选择</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-text"> 1. 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-text"> 2. 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%AE%A1%E9%81%93pipes"><span class="toc-text"> 2.1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text"> 2.2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 2.3. 信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text"> 2.3.1. 信号的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-%E4%BF%A1%E5%8F%B7%E4%B8%8E-ipc-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text"> 2.3.2. 信号与 IPC 的关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%89%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-text"> 2.3.3. 信号的三种处理方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 2.3.4. 如何使用信号？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2341-%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7kill-%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.3.4.1. 发送信号：kill() 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2342-%E6%B3%A8%E5%86%8C%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0signal-%E5%92%8C-sigaction"><span class="toc-text"> 2.3.4.2. 注册信号处理函数：signal() 和 sigaction()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%BF%A1%E5%8F%B7%E9%9B%86signal-set%E5%92%8C%E9%98%BB%E5%A1%9E"><span class="toc-text"> 2.4. 信号集（Signal Set）和阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E4%BF%A1%E5%8F%B7%E9%9B%86%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.4.1. 信号集操作函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask"><span class="toc-text"> 2.4.2. 阻塞信号：sigprocmask()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-system-v-ipc-system-v-ipc"><span class="toc-text"> 2.5. System V IPC (System V IPC)[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-text"> 2.5.1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-text"> 2.5.2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#253-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-text"> 2.5.3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-text"> 2.6. IPC 总结与选择</span></a></li></ol></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -1305,7 +1203,7 @@ How to use:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -1431,7 +1329,7 @@ How to use:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -1468,7 +1366,7 @@ How to use:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -1483,7 +1381,7 @@ How to use:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -1505,13 +1403,13 @@ How to use:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1560,7 +1458,7 @@ How to use:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -1608,6 +1506,13 @@ How to use:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1619,5 +1524,6 @@ How to use:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

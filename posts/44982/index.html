@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -414,88 +411,505 @@ Behavior:
 </details>
 <hr />
 <h2 id="时间片轮询调度"><a class="markdownIt-Anchor" href="#时间片轮询调度"></a> 时间片轮询调度</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">uint8_t</span> TaskCount = <span class="hljs-number">0</span>;<span class="hljs-comment">//用于记录任务数量</span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">enum</span> &#123;</span><br>	run,wait,stop<br>&#125;TaskStatus;<span class="hljs-comment">//任务状态</span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>	<span class="hljs-type">uint8_t</span> TaskRunTime;<br>	<span class="hljs-type">uint8_t</span> TaskTimer;<br>	TaskStatus Status;<br>	<span class="hljs-type">void</span> (*FC)();<br>&#125;TaskStrust;<span class="hljs-comment">//任务信息块：注意两点1.注意Timer和runtime的数据类型为uchar，最大为255 2.时间片为2ms</span><br>TaskStrust TaskList[]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">OS_Init</span><span class="hljs-params">(TIM_HandleTypeDef* htim)</span>&#123;<br>	HAL_TIM_Base_Start_IT(htim);<br>	TaskCount = <span class="hljs-keyword">sizeof</span>(TaskList)/<span class="hljs-keyword">sizeof</span>(TaskList[<span class="hljs-number">1</span>]);<br>	<span class="hljs-keyword">if</span>(TaskCount &gt; MAX_TASK) <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">OS_IT_Run</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>	<span class="hljs-type">uint8_t</span> i;<br>	<span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>;i &lt; TaskCount;i++)&#123;<br>		<span class="hljs-keyword">if</span>(TaskList[i].Status == wait)&#123;<br>			<span class="hljs-keyword">if</span>(++TaskList[i].TaskTimer &gt;= TaskList[i].TaskRunTime)&#123;<br>				TaskList[i].TaskTimer = <span class="hljs-number">0</span>;<br>				TaskList[i].Status = run;<br>			&#125;		<br>		&#125;<br>	&#125;<br><br>&#125;<br><span class="hljs-comment">//自带死循环，主函数里运行</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">OS_Run</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>	<span class="hljs-type">uint8_t</span> j = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)&#123;<br>		<span class="hljs-keyword">if</span>(TaskList[j].Status == run)&#123;<br>			TaskList[j].FC();<br>			TaskList[j].Status = wait;<br>		&#125;<br>		<span class="hljs-keyword">if</span>(++j &gt;= TaskCount) j = <span class="hljs-number">0</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token class-name">uint8_t</span> TaskCount <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token comment">//用于记录任务数量</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token punctuation">&#123;</span>
+	run<span class="token punctuation">,</span>wait<span class="token punctuation">,</span>stop
+<span class="token punctuation">&#125;</span>TaskStatus<span class="token punctuation">;</span><span class="token comment">//任务状态</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+	<span class="token class-name">uint8_t</span> TaskRunTime<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span> TaskTimer<span class="token punctuation">;</span>
+	TaskStatus Status<span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>FC<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>TaskStrust<span class="token punctuation">;</span><span class="token comment">//任务信息块：注意两点1.注意Timer和runtime的数据类型为uchar，最大为255 2.时间片为2ms</span>
+TaskStrust TaskList<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">OS_Init</span><span class="token punctuation">(</span>TIM_HandleTypeDef<span class="token operator">*</span> htim<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	<span class="token function">HAL_TIM_Base_Start_IT</span><span class="token punctuation">(</span>htim<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	TaskCount <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>TaskList<span class="token punctuation">)</span><span class="token operator">/</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>TaskList<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span>TaskCount <span class="token operator">></span> MAX_TASK<span class="token punctuation">)</span> <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">OS_IT_Run</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	<span class="token class-name">uint8_t</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i <span class="token operator">&lt;</span> TaskCount<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span><span class="token punctuation">(</span>TaskList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Status <span class="token operator">==</span> wait<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+			<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">++</span>TaskList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>TaskTimer <span class="token operator">>=</span> TaskList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>TaskRunTime<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+				TaskList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>TaskTimer <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+				TaskList<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>Status <span class="token operator">=</span> run<span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>		
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//自带死循环，主函数里运行</span>
+<span class="token keyword">void</span> <span class="token function">OS_Run</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	<span class="token class-name">uint8_t</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span><span class="token punctuation">(</span>TaskList<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>Status <span class="token operator">==</span> run<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+			TaskList<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">FC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			TaskList<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>Status <span class="token operator">=</span> wait<span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+		<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">++</span>j <span class="token operator">>=</span> TaskCount<span class="token punctuation">)</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="频率测量"><a class="markdownIt-Anchor" href="#频率测量"></a> 频率测量</h2>
 <p>核心思路：</p>
 <p>1/（（这一次的计数值-上一次记录的计数值）x （1/时钟频率））= 时钟频率/（记录差值）</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint8_t</span> i;<span class="hljs-comment">//记录当前是第几次。</span><br>    <span class="hljs-type">int</span> former;<span class="hljs-comment">//前一次记录的计数值</span><br>    <span class="hljs-type">int</span> now;<span class="hljs-comment">//现在记录的计数值</span><br>    <span class="hljs-type">int</span> result;<span class="hljs-comment">//频率结果</span><br>    <span class="hljs-type">uint8_t</span> ElapsedTime;<span class="hljs-comment">//定时器溢出次数</span><br>&#125;FreqInfo;<br><br>reqInfo F1 = &#123;<span class="hljs-number">0</span>&#125;;<br>FreqInfo F2 = &#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-comment">//启动频率测量</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Freq_Start</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    HAL_TIM_Base_Start_IT(&amp;htim3);<span class="hljs-comment">//对应F1</span><br>    HAL_TIM_IC_Start_IT(&amp;htim3,TIM_CHANNEL_1);<br>    HAL_TIM_Base_Start_IT(&amp;htim8);<span class="hljs-comment">//对应F2</span><br>    HAL_TIM_IC_Start_IT(&amp;htim8,TIM_CHANNEL_1);<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">Freq_Measure</span><span class="hljs-params">(FreqInfo* Fx,TIM_HandleTypeDef *htim)</span>&#123;<br>    <span class="hljs-keyword">if</span>(Fx-&gt;i == <span class="hljs-number">0</span>)&#123;<br>        Fx-&gt;result = <span class="hljs-number">1000000</span>/(Fx-&gt;now - Fx-&gt;former);<br>        __HAL_TIM_ENABLE(htim);<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Freq_Fuc</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    Freq_Measure(&amp;F1,&amp;htim3);<br>	Freq_Measure(&amp;F2,&amp;htim8);<br>&#125;<br>	<br><span class="hljs-comment">//中断</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_TIM_IC_CaptureCallback</span><span class="hljs-params">(TIM_HandleTypeDef *htim)</span>&#123;<br><br>    <span class="hljs-keyword">if</span>(htim-&gt;Instance == TIM3)&#123;<br>        <span class="hljs-keyword">switch</span>(F1.i)&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: <br>                F1.former = HAL_TIM_ReadCapturedValue(&amp;htim3,TIM_CHANNEL_1) + <span class="hljs-number">65535</span> * F1.ElapsedTime;<br>                F1.i = <span class="hljs-number">1</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                F1.now = HAL_TIM_ReadCapturedValue(&amp;htim3,TIM_CHANNEL_1) + <span class="hljs-number">65535</span> * F1.ElapsedTime;<br>                __HAL_TIM_DISABLE(&amp;htim3);<br>                F1.ElapsedTime = <span class="hljs-number">0</span>;<br>                F1.i = <span class="hljs-number">0</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(htim-&gt;Instance == TIM8)&#123;<br>        <span class="hljs-keyword">switch</span>(F2.i)&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>                F2.former = HAL_TIM_ReadCapturedValue(&amp;htim8,TIM_CHANNEL_1) + <span class="hljs-number">65535</span> * F2.ElapsedTime;<br>                F2.i = <span class="hljs-number">1</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                F2.now = HAL_TIM_ReadCapturedValue(&amp;htim8,TIM_CHANNEL_1) + <span class="hljs-number">65535</span> * F2.ElapsedTime;<br>                __HAL_TIM_DISABLE(&amp;htim8);<br>                F2.ElapsedTime = <span class="hljs-number">0</span>;<br>                F2.i = <span class="hljs-number">0</span>;<br>                <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//在溢出中断中记录溢出次数</span><br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint8_t</span> i<span class="token punctuation">;</span><span class="token comment">//记录当前是第几次。</span>
+    <span class="token keyword">int</span> former<span class="token punctuation">;</span><span class="token comment">//前一次记录的计数值</span>
+    <span class="token keyword">int</span> now<span class="token punctuation">;</span><span class="token comment">//现在记录的计数值</span>
+    <span class="token keyword">int</span> result<span class="token punctuation">;</span><span class="token comment">//频率结果</span>
+    <span class="token class-name">uint8_t</span> ElapsedTime<span class="token punctuation">;</span><span class="token comment">//定时器溢出次数</span>
+<span class="token punctuation">&#125;</span>FreqInfo<span class="token punctuation">;</span>
+
+reqInfo F1 <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+FreqInfo F2 <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">//启动频率测量</span>
+<span class="token keyword">void</span> <span class="token function">Freq_Start</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">HAL_TIM_Base_Start_IT</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//对应F1</span>
+    <span class="token function">HAL_TIM_IC_Start_IT</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">HAL_TIM_Base_Start_IT</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//对应F2</span>
+    <span class="token function">HAL_TIM_IC_Start_IT</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">Freq_Measure</span><span class="token punctuation">(</span>FreqInfo<span class="token operator">*</span> Fx<span class="token punctuation">,</span>TIM_HandleTypeDef <span class="token operator">*</span>htim<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>Fx<span class="token operator">-></span>i <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        Fx<span class="token operator">-></span>result <span class="token operator">=</span> <span class="token number">1000000</span><span class="token operator">/</span><span class="token punctuation">(</span>Fx<span class="token operator">-></span>now <span class="token operator">-</span> Fx<span class="token operator">-></span>former<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">__HAL_TIM_ENABLE</span><span class="token punctuation">(</span>htim<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">Freq_Fuc</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">Freq_Measure</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>F1<span class="token punctuation">,</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">Freq_Measure</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>F2<span class="token punctuation">,</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+	
+<span class="token comment">//中断</span>
+<span class="token keyword">void</span> <span class="token function">HAL_TIM_IC_CaptureCallback</span><span class="token punctuation">(</span>TIM_HandleTypeDef <span class="token operator">*</span>htim<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>htim<span class="token operator">-></span>Instance <span class="token operator">==</span> TIM3<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">switch</span><span class="token punctuation">(</span>F1<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">case</span> <span class="token number">0</span><span class="token operator">:</span> 
+                F1<span class="token punctuation">.</span>former <span class="token operator">=</span> <span class="token function">HAL_TIM_ReadCapturedValue</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">65535</span> <span class="token operator">*</span> F1<span class="token punctuation">.</span>ElapsedTime<span class="token punctuation">;</span>
+                F1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">1</span><span class="token operator">:</span>
+                F1<span class="token punctuation">.</span>now <span class="token operator">=</span> <span class="token function">HAL_TIM_ReadCapturedValue</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">65535</span> <span class="token operator">*</span> F1<span class="token punctuation">.</span>ElapsedTime<span class="token punctuation">;</span>
+                <span class="token function">__HAL_TIM_DISABLE</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                F1<span class="token punctuation">.</span>ElapsedTime <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                F1<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token operator">:</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>htim<span class="token operator">-></span>Instance <span class="token operator">==</span> TIM8<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">switch</span><span class="token punctuation">(</span>F2<span class="token punctuation">.</span>i<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">case</span> <span class="token number">0</span><span class="token operator">:</span>
+                F2<span class="token punctuation">.</span>former <span class="token operator">=</span> <span class="token function">HAL_TIM_ReadCapturedValue</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">65535</span> <span class="token operator">*</span> F2<span class="token punctuation">.</span>ElapsedTime<span class="token punctuation">;</span>
+                F2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">1</span><span class="token operator">:</span>
+                F2<span class="token punctuation">.</span>now <span class="token operator">=</span> <span class="token function">HAL_TIM_ReadCapturedValue</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">,</span>TIM_CHANNEL_1<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">65535</span> <span class="token operator">*</span> F2<span class="token punctuation">.</span>ElapsedTime<span class="token punctuation">;</span>
+                <span class="token function">__HAL_TIM_DISABLE</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>htim8<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                F2<span class="token punctuation">.</span>ElapsedTime <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                F2<span class="token punctuation">.</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">default</span><span class="token operator">:</span><span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//在溢出中断中记录溢出次数</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="共享变量"><a class="markdownIt-Anchor" href="#共享变量"></a> 共享变量</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;SharedData.h&quot;</span></span><br><br><span class="hljs-comment">//初始化</span><br><span class="hljs-type">static</span> Data1 shareddata1 = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-comment">//获取Data1指针的接口</span><br>Data1* <span class="hljs-title function_">get_shared_data</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> &#123;<br>    <span class="hljs-keyword">return</span> &amp;shareddata1;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"SharedData.h"</span></span>
+
+<span class="token comment">//初始化</span>
+<span class="token keyword">static</span> Data1 shareddata1 <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">//获取Data1指针的接口</span>
+Data1<span class="token operator">*</span> <span class="token function">get_shared_data</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>shareddata1<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="按键"><a class="markdownIt-Anchor" href="#按键"></a> 按键</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">uint8_t</span> <span class="hljs-title function_">KeyBit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    <span class="hljs-type">uint8_t</span> keybit = <span class="hljs-number">0x00</span>;<br>    <span class="hljs-comment">//读取B1的电平状态并把他左移到bit0位</span><br>    keybit |= HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin) &lt;&lt; <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">//同上</span><br>    keybit |= HAL_GPIO_ReadPin(B2_GPIO_Port,B2_Pin) &lt;&lt; <span class="hljs-number">1</span>;<br>    keybit |= HAL_GPIO_ReadPin(B3_GPIO_Port,B3_Pin) &lt;&lt; <span class="hljs-number">2</span>;<br>    keybit |= HAL_GPIO_ReadPin(B4_GPIO_Port,B4_Pin) &lt;&lt; <span class="hljs-number">3</span>;<br>    <span class="hljs-keyword">return</span> keybit;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">task_Key</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>	<span class="hljs-type">static</span> <span class="hljs-type">uint8_t</span> Trg,Cont;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> ReadData = KeyBit() ^ <span class="hljs-number">0x0f</span>;   	<span class="hljs-comment">// 取反：在没有按键按下的情况下，其始终为0x00</span><br>    Trg = ReadData &amp; (ReadData ^ Cont);             <span class="hljs-comment">// 2</span><br>    Cont = ReadData; <br>    <span class="hljs-keyword">if</span>(Trg &amp;&amp; Cont)&#123;&#125;;<br>    <span class="hljs-keyword">if</span>(Trg &amp;&amp; Cont == <span class="hljs-number">0</span>)&#123;&#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">uint8_t</span> <span class="token function">KeyBit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint8_t</span> keybit <span class="token operator">=</span> <span class="token number">0x00</span><span class="token punctuation">;</span>
+    <span class="token comment">//读取B1的电平状态并把他左移到bit0位</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B1_GPIO_Port<span class="token punctuation">,</span>B1_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">//同上</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B2_GPIO_Port<span class="token punctuation">,</span>B2_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B3_GPIO_Port<span class="token punctuation">,</span>B3_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    keybit <span class="token operator">|=</span> <span class="token function">HAL_GPIO_ReadPin</span><span class="token punctuation">(</span>B4_GPIO_Port<span class="token punctuation">,</span>B4_Pin<span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> keybit<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">task_Key</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	<span class="token keyword">static</span> <span class="token class-name">uint8_t</span> Trg<span class="token punctuation">,</span>Cont<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> ReadData <span class="token operator">=</span> <span class="token function">KeyBit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">0x0f</span><span class="token punctuation">;</span>   	<span class="token comment">// 取反：在没有按键按下的情况下，其始终为0x00</span>
+    Trg <span class="token operator">=</span> ReadData <span class="token operator">&amp;</span> <span class="token punctuation">(</span>ReadData <span class="token operator">^</span> Cont<span class="token punctuation">)</span><span class="token punctuation">;</span>             <span class="token comment">// 2</span>
+    Cont <span class="token operator">=</span> ReadData<span class="token punctuation">;</span> 
+    <span class="token keyword">if</span><span class="token punctuation">(</span>Trg <span class="token operator">&amp;&amp;</span> Cont<span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>Trg <span class="token operator">&amp;&amp;</span> Cont <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="lcd"><a class="markdownIt-Anchor" href="#lcd"></a> LCD</h2>
 <p>引脚初始化为全低就行</p>
 <h2 id="led"><a class="markdownIt-Anchor" href="#led"></a> LED</h2>
 <p>LD口 为 PD2 低电平不允许写入，高电平允许写入。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;LED.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;SharedData.h&quot;</span></span><br><br><span class="hljs-type">uint16_t</span> LD_state = <span class="hljs-number">0</span>;  <span class="hljs-comment">//记录LD各位状态</span><br><span class="hljs-type">uint16_t</span> LD_state_before = <span class="hljs-number">0</span>; <br><br><span class="hljs-type">void</span> <span class="hljs-title function_">LED_init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>	HAL_GPIO_WritePin(LD1_GPIO_Port,GPIO_PIN_All,GPIO_PIN_SET);<br>	HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_SET);<br>	HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_RESET);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">LED_lightLD</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> LDnum)</span>&#123;<br>		<br>	LD_state |= (LD1_Pin &lt;&lt; LDnum); <span class="hljs-comment">//其他位不变，需要改变的位变为1</span><br>		<br>	<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">LED_closeLD</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> LDnum)</span>&#123; <br><br>	LD_state &amp;= ~(LD1_Pin &lt;&lt; LDnum); <span class="hljs-comment">//其他位不变，需改变的位变为0</span><br>	<br>&#125;<br><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">Call_ChangeLD</span><span class="hljs-params">(<span class="hljs-type">void</span>(*fc)(<span class="hljs-type">uint8_t</span>),<span class="hljs-type">uint8_t</span> LDnum)</span>&#123;<br>	<br>	LDnum -= <span class="hljs-number">1</span>;<br>	fc(LDnum);<br>	<span class="hljs-keyword">if</span>(LD_state_before != LD_state)&#123;<br>		HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_SET);<br>		HAL_GPIO_WritePin(LD1_GPIO_Port,GPIO_PIN_All,GPIO_PIN_SET);<br>		HAL_GPIO_WritePin(LD1_GPIO_Port,LD_state,GPIO_PIN_RESET);<br>		HAL_GPIO_WritePin(LD_load_GPIO_Port,LD_load_Pin,GPIO_PIN_RESET);<br>		LD_state_before = LD_state;<br>	&#125;<br>	<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span>;<br>	<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">LED_Fuc</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>	<span class="hljs-keyword">if</span>(Read_Show_index(<span class="hljs-number">0</span>)) &#123;<br>		Call_ChangeLD(LED_closeLD,<span class="hljs-number">1</span>);<br>		Call_ChangeLD(LED_lightLD,<span class="hljs-number">2</span>);<br>	&#125;<br>	<span class="hljs-keyword">else</span> &#123;	<br>		Call_ChangeLD(LED_closeLD,<span class="hljs-number">2</span>);<br>		Call_ChangeLD(LED_lightLD,<span class="hljs-number">1</span>);<br>	&#125;<br>	<span class="hljs-keyword">if</span>(Read_Show_index(<span class="hljs-number">1</span>))&#123;<br>		Call_ChangeLD(LED_lightLD,<span class="hljs-number">8</span>);<br>	&#125;<br>	<span class="hljs-keyword">else</span> Call_ChangeLD(LED_closeLD,<span class="hljs-number">8</span>);<br>	<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"LED.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"SharedData.h"</span></span>
+
+<span class="token class-name">uint16_t</span> LD_state <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">//记录LD各位状态</span>
+<span class="token class-name">uint16_t</span> LD_state_before <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+
+<span class="token keyword">void</span> <span class="token function">LED_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD1_GPIO_Port<span class="token punctuation">,</span>GPIO_PIN_All<span class="token punctuation">,</span>GPIO_PIN_SET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD_load_GPIO_Port<span class="token punctuation">,</span>LD_load_Pin<span class="token punctuation">,</span>GPIO_PIN_SET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD_load_GPIO_Port<span class="token punctuation">,</span>LD_load_Pin<span class="token punctuation">,</span>GPIO_PIN_RESET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">LED_lightLD</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span> LDnum<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		
+	LD_state <span class="token operator">|=</span> <span class="token punctuation">(</span>LD1_Pin <span class="token operator">&lt;&lt;</span> LDnum<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//其他位不变，需要改变的位变为1</span>
+		
+	
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">LED_closeLD</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span> LDnum<span class="token punctuation">)</span><span class="token punctuation">&#123;</span> 
+
+	LD_state <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span>LD1_Pin <span class="token operator">&lt;&lt;</span> LDnum<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//其他位不变，需改变的位变为0</span>
+	
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">void</span> <span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">(</span><span class="token operator">*</span>fc<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token class-name">uint8_t</span> LDnum<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+	
+	LDnum <span class="token operator">-=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token function">fc</span><span class="token punctuation">(</span>LDnum<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span>LD_state_before <span class="token operator">!=</span> LD_state<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD_load_GPIO_Port<span class="token punctuation">,</span>LD_load_Pin<span class="token punctuation">,</span>GPIO_PIN_SET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD1_GPIO_Port<span class="token punctuation">,</span>GPIO_PIN_All<span class="token punctuation">,</span>GPIO_PIN_SET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD1_GPIO_Port<span class="token punctuation">,</span>LD_state<span class="token punctuation">,</span>GPIO_PIN_RESET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">HAL_GPIO_WritePin</span><span class="token punctuation">(</span>LD_load_GPIO_Port<span class="token punctuation">,</span>LD_load_Pin<span class="token punctuation">,</span>GPIO_PIN_RESET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		LD_state_before <span class="token operator">=</span> LD_state<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">else</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+	
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">LED_Fuc</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">Read_Show_index</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_closeLD<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_lightLD<span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>	
+		<span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_closeLD<span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_lightLD<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">Read_Show_index</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+		<span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_lightLD<span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">else</span> <span class="token function">Call_ChangeLD</span><span class="token punctuation">(</span>LED_closeLD<span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="串口重定向与数据处理"><a class="markdownIt-Anchor" href="#串口重定向与数据处理"></a> 串口重定向与数据处理</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUFFER_SIZE 50</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> CMDNUM 6</span><br><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">TF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">TF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">PF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">PF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">returnF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">returnF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><br><br><span class="hljs-type">char</span> rx_DataBuffer[BUFFER_SIZE] = &#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">char</span> tx_DataBuffer[BUFFER_SIZE] = &#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">char</span> cmd[BUFFER_SIZE] = &#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">uint16_t</span> tx_len = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 当前缓冲区数据长度</span><br><span class="hljs-type">uint8_t</span> tx_busy = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 发送状态标志</span><br><br><span class="hljs-type">uint8_t</span> rx_handle = <span class="hljs-number">0</span>; <span class="hljs-comment">//处理接收数据标志</span><br><span class="hljs-type">uint8_t</span> rx_len = <span class="hljs-number">0</span>;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span>&#123;</span><br>    <span class="hljs-type">uint8_t</span>* cmd_str;<br>    <span class="hljs-type">void</span> (*fc)();<br>&#125;cmdinfo;<br><br><br>cmdinfo cmdlist[] = &#123;<br>    &#123;<span class="hljs-string">&quot;TF1&quot;</span>,TF1&#125;,<br>    &#123;<span class="hljs-string">&quot;TF2&quot;</span>,TF2&#125;,<br>    &#123;<span class="hljs-string">&quot;PF1&quot;</span>,PF1&#125;,<br>    &#123;<span class="hljs-string">&quot;PF2&quot;</span>,PF2&#125;,<br>    &#123;<span class="hljs-string">&quot;F1&quot;</span>,returnF1&#125;,<br>    &#123;<span class="hljs-string">&quot;F2&quot;</span>,returnF2&#125;<br>&#125;;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">TheUART_start</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    HAL_UARTEx_ReceiveToIdle_DMA(&amp;huart1,(<span class="hljs-type">uint8_t</span>*)rx_DataBuffer,<span class="hljs-number">0x0f</span>);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">TheUART_dma_transmit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">// 如果 DMA 还在忙，则不启动新的传输</span><br>    <span class="hljs-keyword">if</span> (tx_busy) <span class="hljs-keyword">return</span>;<br><br>    tx_busy = <span class="hljs-number">1</span>;  <span class="hljs-comment">// 标记为发送中</span><br>    HAL_UART_Transmit_DMA(&amp;huart1,(<span class="hljs-type">uint8_t</span>*)tx_DataBuffer,tx_len<span class="hljs-number">-1</span>);<span class="hljs-comment">//-1为了防止傻逼烂桥杯的验证程序不通过</span><br>&#125;<br><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>    <span class="hljs-comment">// 确保缓冲区不会溢出</span><br>    <span class="hljs-keyword">if</span> (tx_len &lt; BUFFER_SIZE - <span class="hljs-number">1</span>)<br>    &#123;<br>        tx_DataBuffer[tx_len++] = (<span class="hljs-type">uint8_t</span>)ch;<br>    &#125;<br><br>    <span class="hljs-comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span><br>    <span class="hljs-comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span><br>    <span class="hljs-comment">// 冲区没满的情况下，如果你想要发送字符串&quot;abc&quot;，printf(&quot;abc&quot;)是没用的，</span><br>    <span class="hljs-comment">// printf(&quot;abc\n&quot;)才有用哦。</span><br><br>    <br>    <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;\n&#x27;</span> || tx_len &gt;= BUFFER_SIZE - <span class="hljs-number">1</span>)<br>    &#123;<br>        TheUART_dma_transmit();<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">TheUART_HandleRxdata</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>    <span class="hljs-keyword">if</span>(rx_handle == <span class="hljs-number">1</span>)&#123;<br><br>        <span class="hljs-type">uint8_t</span> i = <span class="hljs-number">0</span>;<br>        <span class="hljs-built_in">strcpy</span>(cmd,rx_DataBuffer);<br>        cmd[rx_len] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>        <span class="hljs-keyword">if</span>(!Read_Show_index(<span class="hljs-number">1</span>))&#123;<br>            other();<br>            rx_len = <span class="hljs-number">0</span>;<br>            rx_handle = <span class="hljs-number">0</span>;<br>            TheUART_start();<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span>;i &lt; CMDNUM;i++)&#123;<br>            <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>((<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)cmd,(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)cmdlist[i].cmd_str) == <span class="hljs-number">0</span>)&#123;<br>                cmdlist[i].fc();<br>                rx_len = <span class="hljs-number">0</span>;<br>                rx_handle = <span class="hljs-number">0</span>;<br>                TheUART_start();<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>        &#125;<br>        other();<br>        rx_len = <span class="hljs-number">0</span>;<br>        rx_handle = <span class="hljs-number">0</span>;<br>        TheUART_start();<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span>;<br>&#125;<br><br><span class="hljs-comment">//命令函数</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">TF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">TF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">PF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">PF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">returnF1</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">returnF2</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">other</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>&#125;<br><br><span class="hljs-comment">//中断</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_UART_TxCpltCallback</span><span class="hljs-params">(UART_HandleTypeDef *huart)</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(huart-&gt;Instance == USART1)  <span class="hljs-comment">// 确保是目标串口</span><br>    &#123;<br>        tx_len = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 清空缓冲区</span><br>        tx_busy = <span class="hljs-number">0</span>; <span class="hljs-comment">// 标记为可用</span><br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_UARTEx_RxEventCallback</span><span class="hljs-params">(UART_HandleTypeDef *huart, <span class="hljs-type">uint16_t</span> Size)</span>&#123;<br><br>    <span class="hljs-keyword">if</span>(huart-&gt;Instance == USART1)&#123;<br>        rx_len = Size;<br>        rx_handle = <span class="hljs-number">1</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">BUFFER_SIZE</span> <span class="token expression"><span class="token number">50</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">CMDNUM</span> <span class="token expression"><span class="token number">6</span></span></span>
+
+
+<span class="token keyword">void</span> <span class="token function">TF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">TF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">PF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">PF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">returnF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">returnF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">char</span> rx_DataBuffer<span class="token punctuation">[</span>BUFFER_SIZE<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> tx_DataBuffer<span class="token punctuation">[</span>BUFFER_SIZE<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">char</span> cmd<span class="token punctuation">[</span>BUFFER_SIZE<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token class-name">uint16_t</span> tx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 当前缓冲区数据长度</span>
+<span class="token class-name">uint8_t</span> tx_busy <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 发送状态标志</span>
+
+<span class="token class-name">uint8_t</span> rx_handle <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">//处理接收数据标志</span>
+<span class="token class-name">uint8_t</span> rx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint8_t</span><span class="token operator">*</span> cmd_str<span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>fc<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>cmdinfo<span class="token punctuation">;</span>
+
+
+cmdinfo cmdlist<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"TF1"</span><span class="token punctuation">,</span>TF1<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"TF2"</span><span class="token punctuation">,</span>TF2<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"PF1"</span><span class="token punctuation">,</span>PF1<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"PF2"</span><span class="token punctuation">,</span>PF2<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"F1"</span><span class="token punctuation">,</span>returnF1<span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"F2"</span><span class="token punctuation">,</span>returnF2<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">TheUART_start</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">HAL_UARTEx_ReceiveToIdle_DMA</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>huart1<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token operator">*</span><span class="token punctuation">)</span>rx_DataBuffer<span class="token punctuation">,</span><span class="token number">0x0f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">TheUART_dma_transmit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 如果 DMA 还在忙，则不启动新的传输</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>tx_busy<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+    tx_busy <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 标记为发送中</span>
+    <span class="token function">HAL_UART_Transmit_DMA</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>huart1<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token operator">*</span><span class="token punctuation">)</span>tx_DataBuffer<span class="token punctuation">,</span>tx_len<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//-1为了防止傻逼烂桥杯的验证程序不通过</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">int</span> <span class="token function">fputc</span><span class="token punctuation">(</span><span class="token keyword">int</span> ch<span class="token punctuation">,</span> FILE <span class="token operator">*</span>f<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 确保缓冲区不会溢出</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>tx_len <span class="token operator">&lt;</span> BUFFER_SIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        tx_DataBuffer<span class="token punctuation">[</span>tx_len<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token punctuation">)</span>ch<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span>
+    <span class="token comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span>
+    <span class="token comment">// 冲区没满的情况下，如果你想要发送字符串"abc"，printf("abc")是没用的，</span>
+    <span class="token comment">// printf("abc\n")才有用哦。</span>
+
+    
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ch <span class="token operator">==</span> <span class="token char">'\n'</span> <span class="token operator">||</span> tx_len <span class="token operator">>=</span> BUFFER_SIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">TheUART_dma_transmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> ch<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">void</span> <span class="token function">TheUART_HandleRxdata</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>rx_handle <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+        <span class="token class-name">uint8_t</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token function">strcpy</span><span class="token punctuation">(</span>cmd<span class="token punctuation">,</span>rx_DataBuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cmd<span class="token punctuation">[</span>rx_len<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token char">'\0'</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">Read_Show_index</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token function">other</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            rx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            rx_handle <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token function">TheUART_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i <span class="token operator">&lt;</span> CMDNUM<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span>cmd<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span><span class="token punctuation">)</span>cmdlist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>cmd_str<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                cmdlist<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">fc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                rx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                rx_handle <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token function">TheUART_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">other</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        rx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        rx_handle <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token function">TheUART_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//命令函数</span>
+<span class="token keyword">void</span> <span class="token function">TF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">TF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">PF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">PF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">returnF1</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">returnF2</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">other</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//中断</span>
+<span class="token keyword">void</span> <span class="token function">HAL_UART_TxCpltCallback</span><span class="token punctuation">(</span>UART_HandleTypeDef <span class="token operator">*</span>huart<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>huart<span class="token operator">-></span>Instance <span class="token operator">==</span> USART1<span class="token punctuation">)</span>  <span class="token comment">// 确保是目标串口</span>
+    <span class="token punctuation">&#123;</span>
+        tx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 清空缓冲区</span>
+        tx_busy <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// 标记为可用</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">HAL_UARTEx_RxEventCallback</span><span class="token punctuation">(</span>UART_HandleTypeDef <span class="token operator">*</span>huart<span class="token punctuation">,</span> <span class="token class-name">uint16_t</span> Size<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>huart<span class="token operator">-></span>Instance <span class="token operator">==</span> USART1<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        rx_len <span class="token operator">=</span> Size<span class="token punctuation">;</span>
+        rx_handle <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="adc使用定时器trgo信号触发adc转换"><a class="markdownIt-Anchor" href="#adc使用定时器trgo信号触发adc转换"></a> ADC：使用定时器TRGO信号触发ADC转换</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">double</span> ADC_Data = .<span class="hljs-number">0</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">ADCFuc_Init</span><span class="hljs-params">(ADC_HandleTypeDef *hadc)</span>&#123;<br>    HAL_ADCEx_Calibration_Start(hadc,ADC_SINGLE_ENDED);<span class="hljs-comment">//校准</span><br>    HAL_ADC_Start_IT(hadc);<br>&#125;<br><br><br><span class="hljs-type">char</span> <span class="hljs-title function_">ADCFuc_ReturnResult</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    <span class="hljs-type">double</span> result = ADC_Data;<br>    result = (result / <span class="hljs-number">4095.0</span>) * <span class="hljs-number">3.3</span>;<br>&#125;<br><br><br><span class="hljs-comment">//中断-------------------------------------------------------------//</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_ADC_ConvCpltCallback</span><span class="hljs-params">(ADC_HandleTypeDef *hadc)</span>&#123;<br><br>    <span class="hljs-keyword">if</span>(hadc-&gt;Instance == ADC2)&#123;<br>        ADC_Data = HAL_ADC_GetValue(&amp;hadc2);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">double</span> ADC_Data <span class="token operator">=</span> <span class="token number">.0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">ADCFuc_Init</span><span class="token punctuation">(</span>ADC_HandleTypeDef <span class="token operator">*</span>hadc<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">HAL_ADCEx_Calibration_Start</span><span class="token punctuation">(</span>hadc<span class="token punctuation">,</span>ADC_SINGLE_ENDED<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//校准</span>
+    <span class="token function">HAL_ADC_Start_IT</span><span class="token punctuation">(</span>hadc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">char</span> <span class="token function">ADCFuc_ReturnResult</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">double</span> result <span class="token operator">=</span> ADC_Data<span class="token punctuation">;</span>
+    result <span class="token operator">=</span> <span class="token punctuation">(</span>result <span class="token operator">/</span> <span class="token number">4095.0</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">3.3</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token comment">//中断-------------------------------------------------------------//</span>
+<span class="token keyword">void</span> <span class="token function">HAL_ADC_ConvCpltCallback</span><span class="token punctuation">(</span>ADC_HandleTypeDef <span class="token operator">*</span>hadc<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>hadc<span class="token operator">-></span>Instance <span class="token operator">==</span> ADC2<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        ADC_Data <span class="token operator">=</span> <span class="token function">HAL_ADC_GetValue</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>hadc2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="at24c02"><a class="markdownIt-Anchor" href="#at24c02"></a> at24c02</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c">include <span class="hljs-string">&quot;i2c_hal.h&quot;</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> COMMAND_W   0xA0</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> COMMAND_R   0xA1</span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">at24c02_Init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>&#123;<br>    I2CInit();<br>&#125;<br><br><span class="hljs-comment">/// @brief at24c02写数据</span><br><span class="hljs-comment">/// @param address 要写入的地址</span><br><span class="hljs-comment">/// @param data 要写入的数据</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">at24c02_Write</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> address,<span class="hljs-type">uint8_t</span> data)</span>&#123;<br>    <br>    I2CStart();<br><br>    I2CSendByte(COMMAND_W);<br>    I2CWaitAck();<br><br>    I2CSendByte(address);<br>    I2CWaitAck();<br><br>    I2CSendByte(data);<br>    I2CWaitAck(); <br><br>    I2CStop();<br>&#125;<br><br><span class="hljs-comment">/// @brief at24c02读数据</span><br><span class="hljs-comment">/// @param address 要读数据的地址</span><br><span class="hljs-comment">/// @return 读出的数据</span><br><span class="hljs-type">uint8_t</span> <span class="hljs-title function_">at24c02_Read</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> address)</span>&#123;<br>    <span class="hljs-type">uint8_t</span> data = <span class="hljs-number">0</span>;<br>    I2CStart();<br><br>    I2CSendByte(COMMAND_W);<br>    I2CWaitAck();<br><br>    I2CSendByte(address);<br>    I2CWaitAck();<br><br>    I2CStart();<span class="hljs-comment">//不释放总线的情况下重启通信，发送读命令。</span><br><br>    I2CSendByte(COMMAND_R);<br>    I2CWaitAck();<br><br>    data = I2CReceiveByte();<br>    I2CSendNotAck();<span class="hljs-comment">//通知从机不再发送数据</span><br><br>    I2CStop();<br><br>    <span class="hljs-keyword">return</span> data;<br>&#125;   <br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">include <span class="token string">"i2c_hal.h"</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">COMMAND_W</span>   <span class="token expression"><span class="token number">0xA0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">COMMAND_R</span>   <span class="token expression"><span class="token number">0xA1</span></span></span>
+
+<span class="token keyword">void</span> <span class="token function">at24c02_Init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">I2CInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/// @brief at24c02写数据</span>
+<span class="token comment">/// @param address 要写入的地址</span>
+<span class="token comment">/// @param data 要写入的数据</span>
+<span class="token keyword">void</span> <span class="token function">at24c02_Write</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span> address<span class="token punctuation">,</span><span class="token class-name">uint8_t</span> data<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    
+    <span class="token function">I2CStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>COMMAND_W<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>address<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+    <span class="token function">I2CStop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/// @brief at24c02读数据</span>
+<span class="token comment">/// @param address 要读数据的地址</span>
+<span class="token comment">/// @return 读出的数据</span>
+<span class="token class-name">uint8_t</span> <span class="token function">at24c02_Read</span><span class="token punctuation">(</span><span class="token class-name">uint8_t</span> address<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">uint8_t</span> data <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">I2CStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>COMMAND_W<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>address<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">I2CStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//不释放总线的情况下重启通信，发送读命令。</span>
+
+    <span class="token function">I2CSendByte</span><span class="token punctuation">(</span>COMMAND_R<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CWaitAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    data <span class="token operator">=</span> <span class="token function">I2CReceiveByte</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">I2CSendNotAck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//通知从机不再发送数据</span>
+
+    <span class="token function">I2CStop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> data<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>   
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="韩信在干嘛韩信在偷塔能做到吗哇他出了一个名刀司命猫雷"><a class="markdownIt-Anchor" href="#韩信在干嘛韩信在偷塔能做到吗哇他出了一个名刀司命猫雷"></a> 韩信在干嘛？韩信在偷塔！能做到吗？哇他出了一个名刀·司命！猫雷！</h2>
 <p>挂一张梦老师保佑！<br />
 <img src="https://tiebapic.baidu.com/forum/w%3D580%3B/sign=770517cb7fdbb6fd255be52e391faa18/8326cffc1e178a829fdedc90b003738da977e824.jpg?tbpicau=2025-04-12-05_1fd40d1758be922db3d2562ec3e230c3" alt="" /></p>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">[自用]16届烂桥杯嵌入式赛道模块代码整理</h1>
             <p>创建时间：4月 10, 2025 </p>
             <p>最后更新：6月 08, 2025</p>
-            <p>字数统计：1.6k字</p>
-            <p>预计阅读：8min</p>
-            
-            <div class="catgrs">文章分类：
+            <p>字数统计：1.5k字</p>
+            <p>预计阅读：7min</p>
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
-                            -嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
-                            -程序架构  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
+                                -嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
+                                -程序架构
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" id="tgs">
-                            #蓝桥杯  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" id="tgs">
+                                #蓝桥杯
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2%E8%B0%83%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text"> 时间片轮询调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%91%E7%8E%87%E6%B5%8B%E9%87%8F"><span class="toc-number">2.</span> <span class="toc-text"> 频率测量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F"><span class="toc-number">3.</span> <span class="toc-text"> 共享变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%94%AE"><span class="toc-number">4.</span> <span class="toc-text"> 按键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lcd"><span class="toc-number">5.</span> <span class="toc-text"> LCD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#led"><span class="toc-number">6.</span> <span class="toc-text"> LED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-number">7.</span> <span class="toc-text"> 串口重定向与数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adc%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8trgo%E4%BF%A1%E5%8F%B7%E8%A7%A6%E5%8F%91adc%E8%BD%AC%E6%8D%A2"><span class="toc-number">8.</span> <span class="toc-text"> ADC：使用定时器TRGO信号触发ADC转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at24c02"><span class="toc-number">9.</span> <span class="toc-text"> at24c02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%B9%B2%E5%98%9B%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%81%B7%E5%A1%94%E8%83%BD%E5%81%9A%E5%88%B0%E5%90%97%E5%93%87%E4%BB%96%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%90%8D%E5%88%80%E5%8F%B8%E5%91%BD%E7%8C%AB%E9%9B%B7"><span class="toc-number">10.</span> <span class="toc-text"> 韩信在干嘛？韩信在偷塔！能做到吗？哇他出了一个名刀·司命！猫雷！</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%AF%A2%E8%B0%83%E5%BA%A6"><span class="toc-text"> 时间片轮询调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%91%E7%8E%87%E6%B5%8B%E9%87%8F"><span class="toc-text"> 频率测量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F"><span class="toc-text"> 共享变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%89%E9%94%AE"><span class="toc-text"> 按键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lcd"><span class="toc-text"> LCD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#led"><span class="toc-text"> LED</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B2%E5%8F%A3%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-text"> 串口重定向与数据处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adc%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8trgo%E4%BF%A1%E5%8F%B7%E8%A7%A6%E5%8F%91adc%E8%BD%AC%E6%8D%A2"><span class="toc-text"> ADC：使用定时器TRGO信号触发ADC转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#at24c02"><span class="toc-text"> at24c02</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%B9%B2%E5%98%9B%E9%9F%A9%E4%BF%A1%E5%9C%A8%E5%81%B7%E5%A1%94%E8%83%BD%E5%81%9A%E5%88%B0%E5%90%97%E5%93%87%E4%BB%96%E5%87%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%90%8D%E5%88%80%E5%8F%B8%E5%91%BD%E7%8C%AB%E9%9B%B7"><span class="toc-text"> 韩信在干嘛？韩信在偷塔！能做到吗？哇他出了一个名刀·司命！猫雷！</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -517,7 +931,7 @@ Behavior:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -643,7 +1057,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -680,7 +1094,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -695,7 +1109,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -717,13 +1131,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -772,7 +1186,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -820,6 +1234,13 @@ Behavior:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -831,5 +1252,6 @@ Behavior:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

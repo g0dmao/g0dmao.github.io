@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -483,19 +480,84 @@ Behavior:
 <h2 id="3-汇编语言实现"><a class="markdownIt-Anchor" href="#3-汇编语言实现"></a> 3. 汇编语言实现</h2>
 <p>在了解上述内容后我们可以正式开始写代码了，在Linux环境下新建<code>led.s</code>汇编文件。<br />
 内容可以参考如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs asm">/* 点亮led汇编代码 */<br><br>.global _start @全局标号<br><br>_start:<br><br>@1.使能时钟<br>    @查找原理图和参考手册可知，LED1连接GPIO1-io4，GPIO1的时钟属于CCM_CCGR1 CG13（26-27位）<br><br>ldr r0, =0x020c406c @将寄存器地址加载到r0<br>ldr r1, =0xFFFFFFF  @为了方便打开全部时钟，相应的功耗也有所增加<br>str r1, [r0] @将r1中的值存入以r0中的值为地址的寄存器中<br>  <br>2.设置io引脚复用为gpio<br>  <br>ldr r0, =0x020e006c @将寄存器地址加载到r0<br>mov r1, #5 @将寄存器要设置的值加载到r1<br>str r1, [r0]<br><br><br>@3.设置io电气属性<br><br>    /*<br><br>     * bit0     SRE压摆率       0       disable<br><br>     * bit5:3   DSE io驱动能力  110     R0/6<br><br>     * bit7:6   speed          10      100MHz<br><br>     * bit11    ODE 开路输出     0      disable<br><br>     * bit12    PKE 使能pull/keeper 1   enable<br><br>     * bit13    PUE pull or keeper 0   keeper<br><br>     * bit15:14 上下拉电阻       00      100K下拉<br><br>     * bit16    HYS             0       disable<br><br>     */<br><br>ldr r0, =0x020e02f8<br>ldr r1, =0x10b0 @将寄存器要设置的值加载到r1<br>str r1, [r0]<br> <br>@4.设置GPIO功能<br>    @设置为输出 GDIR寄存器<br><br>ldr r0, =0x0209c004<br>mov r1, #16<br>str r1, [r0] @将GPIO1组的第4个io口设置为输出模式<br><br>    @设置为输出低电平 DR寄存器<br><br>ldr r0, =0x0209c000<br>mov r1, #0<br>str r1, [r0] @将GPIO1组的第4个io口设置为输出低电平  <br><br>@5.防止CPU进入未知状态<br><br>    @写入死循环<br>loop:<br>    b loop<br>    <br>/* Finally! END! */<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">&#x2F;* 点亮led汇编代码 *&#x2F;
+
+.global _start @全局标号
+
+_start:
+
+@1.使能时钟
+    @查找原理图和参考手册可知，LED1连接GPIO1-io4，GPIO1的时钟属于CCM_CCGR1 CG13（26-27位）
+
+ldr r0, &#x3D;0x020c406c @将寄存器地址加载到r0
+ldr r1, &#x3D;0xFFFFFFF  @为了方便打开全部时钟，相应的功耗也有所增加
+str r1, [r0] @将r1中的值存入以r0中的值为地址的寄存器中
+  
+2.设置io引脚复用为gpio
+  
+ldr r0, &#x3D;0x020e006c @将寄存器地址加载到r0
+mov r1, #5 @将寄存器要设置的值加载到r1
+str r1, [r0]
+
+
+@3.设置io电气属性
+
+    &#x2F;*
+
+     * bit0     SRE压摆率       0       disable
+
+     * bit5:3   DSE io驱动能力  110     R0&#x2F;6
+
+     * bit7:6   speed          10      100MHz
+
+     * bit11    ODE 开路输出     0      disable
+
+     * bit12    PKE 使能pull&#x2F;keeper 1   enable
+
+     * bit13    PUE pull or keeper 0   keeper
+
+     * bit15:14 上下拉电阻       00      100K下拉
+
+     * bit16    HYS             0       disable
+
+     *&#x2F;
+
+ldr r0, &#x3D;0x020e02f8
+ldr r1, &#x3D;0x10b0 @将寄存器要设置的值加载到r1
+str r1, [r0]
+ 
+@4.设置GPIO功能
+    @设置为输出 GDIR寄存器
+
+ldr r0, &#x3D;0x0209c004
+mov r1, #16
+str r1, [r0] @将GPIO1组的第4个io口设置为输出模式
+
+    @设置为输出低电平 DR寄存器
+
+ldr r0, &#x3D;0x0209c000
+mov r1, #0
+str r1, [r0] @将GPIO1组的第4个io口设置为输出低电平  
+
+@5.防止CPU进入未知状态
+
+    @写入死循环
+loop:
+    b loop
+    
+&#x2F;* Finally! END! *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="4-链接与格式转换"><a class="markdownIt-Anchor" href="#4-链接与格式转换"></a> 4. 链接与格式转换</h2>
 <blockquote>
 <p>默认已安装了<code>arm-linux-gnueabihf</code>编译套件</p>
 </blockquote>
 <h3 id="41-链接"><a class="markdownIt-Anchor" href="#41-链接"></a> 4.1. 链接</h3>
 <p>使用命令</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">arm-linux-gnueabihf-ld -Ttext 0X80000000 led.o -o led.elf<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">arm-linux-gnueabihf-ld -Ttext 0X80000000 led.o -o led.elf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>上述命令中-Ttext 就是指定链接起始地址，“-o”，我理解为output，指定链接生成的 elf 文件名，这里我们命名为 led.elf。上述命令执行完以后就会在工程目录下多一个 led.elf 文件。<br />
 这个elf相当于win中的exe，是一个可执行文件。</p>
 <h3 id="42-格式转换"><a class="markdownIt-Anchor" href="#42-格式转换"></a> 4.2. 格式转换</h3>
 <p>使用命令</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">arm-linux-gnueabihf-objcopy -O binary -S -g led.elf led.bin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>上述命令中，“-O”选项指定以什么格式输出，后面的“binary”表示以二进制格式输出，<br />
 选项“-S”表示不要复制源文件中的重定位信息和符号信息，“-g”表示不复制源文件中的调试<br />
 信息。<br />
@@ -519,7 +581,7 @@ ROM 中按照固定的地址存放着。</li>
 <p>第二个可从NXP官网获取。</p>
 <h2 id="6-安装sdk包"><a class="markdownIt-Anchor" href="#6-安装sdk包"></a> 6. 安装SDK包</h2>
 <p>使用共享文件夹将“SDK_2.2_MCIM6ULL_RFP_Linux.run” 拷贝到Linux下，存放位置自定。用chmod添加权限。然后运行.run文件生成SDK，linux下的源文件命令如下：</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">./SDK_2.2_MCIM6ULL_RFP_Linux.run<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">.&#x2F;SDK_2.2_MCIM6ULL_RFP_Linux.run<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="61-build-sdk"><a class="markdownIt-Anchor" href="#61-build-sdk"></a> 6.1. build SDK</h3>
 <p>此步所需软件：<br />
 :::success</p>
@@ -530,14 +592,25 @@ ROM 中按照固定的地址存放着。</li>
 在Linux环境下，<br />
 添加临时环境变量，执行以下命令：</li>
 </ul>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh"><span class="hljs-built_in">export</span> ARMGCC_DIR=/usr<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">export ARMGCC_DIR&#x3D;&#x2F;usr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>进入工程文件<strong>SDK_2.2_MCIM6ULL/boards/evkmcimx6ull/demo_apps/hello_world/armgcc</strong> 运行build_ddr_release.sh脚本</p>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">./build_ddr_release.sh<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">.&#x2F;build_ddr_release.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="62-生成镜像文件"><a class="markdownIt-Anchor" href="#62-生成镜像文件"></a> 6.2. 生成镜像文件</h3>
 <p>进入工程文件<strong>SDK_2.2_MCIM6ULL/tools/imgutil/evkmcimx6ull</strong><br />
 查看readme.txt 查看使用教程<br />
 readme.txt内容如下：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs txt">IMGUTIL User Guide<br>  <br>======================================<br><br>1. Build SDK2.0 application<br>2. Copy built binary (.bin file) to imgutil/&lt;board&gt; folder and rename to sdk20-app.bin<br>3. In imgutil/&lt;board&gt; folder, run mkimage.sh in mingw32 shell to get bootable image file sdk20-app.img<br>    a. If the image is built with ram link file, use &quot;mkimage.sh ram&quot; to make the bootable image.<br>    b. If the image is built with flash link file, use &quot;mkimage.sh flash&quot; to make the bootable XIP image.<br>    c. If the image is built with ram link file and want to boot from MicroSD card, use &quot;mkimage.sh sd&quot; to make the bootable image.<br><br>======================================<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">IMGUTIL User Guide
+  
+======================================
+
+1. Build SDK2.0 application
+2. Copy built binary (.bin file) to imgutil/&lt;board> folder and rename to sdk20-app.bin
+3. In imgutil/&lt;board> folder, run mkimage.sh in mingw32 shell to get bootable image file sdk20-app.img
+    a. If the image is built with ram link file, use "mkimage.sh ram" to make the bootable image.
+    b. If the image is built with flash link file, use "mkimage.sh flash" to make the bootable XIP image.
+    c. If the image is built with ram link file and want to boot from MicroSD card, use "mkimage.sh sd" to make the bootable image.
+
+======================================<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>大致意思：</p>
 <ol>
 <li>build SDK（前面已经做了）</li>
@@ -556,7 +629,7 @@ readme.txt内容如下：</p>
 </ul>
 </li>
 </ol>
-<figure class="highlight zsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs zsh">./mkimage sd<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-zsh" data-language="zsh"><code class="language-zsh">.&#x2F;mkimage sd<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>运行后，生成了<code>sdk20-app.img</code>文件</p>
 <h2 id="7-烧录到sd卡"><a class="markdownIt-Anchor" href="#7-烧录到sd卡"></a> 7. 烧录到SD卡</h2>
 <p>由于我使用的是WSL环境，WSL访问USB比较不方便所以改在win下烧录。</p>
@@ -585,71 +658,71 @@ readme.txt内容如下：</p>
 </li>
 </ol>
 </section>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">【点灯大师】点亮I.MX6ULL开发板的LED灯</h1>
             <p>创建时间：6月 30, 2025 </p>
             <p>最后更新：7月 28, 2025</p>
-            <p>字数统计：2.2k字</p>
-            <p>预计阅读：8min</p>
-            
-            <div class="catgrs">文章分类：
+            <p>字数统计：2.3k字</p>
+            <p>预计阅读：9min</p>
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/%E8%AE%B0%E5%BD%95/" id="catgrs">
-                            -记录  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E8%AE%B0%E5%BD%95/" id="catgrs">
+                                -记录
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
-                            #嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
+                                #嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%B1%87%E7%BC%96led%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text"> 1. 汇编LED原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text"> 2. 初始化流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-stm32%E7%9A%84%E5%A4%A7%E8%87%B4io%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1. STM32的大致IO初始化流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-imx6ull-io%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2. I.MX6ULL IO初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text"> 3. 汇编语言实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%93%BE%E6%8E%A5%E4%B8%8E%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.</span> <span class="toc-text"> 4. 链接与格式转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E9%93%BE%E6%8E%A5"><span class="toc-number">4.1.</span> <span class="toc-text"> 4.1. 链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-number">4.2.</span> <span class="toc-text"> 4.2. 格式转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9sdk%E5%8C%85%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text"> 5. 使用官方SDK包生成镜像文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%89%E8%A3%85sdk%E5%8C%85"><span class="toc-number">6.</span> <span class="toc-text"> 6. 安装SDK包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#61-build-sdk"><span class="toc-number">6.1.</span> <span class="toc-text"> 6.1. build SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-number">6.2.</span> <span class="toc-text"> 6.2. 生成镜像文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%83%A7%E5%BD%95%E5%88%B0sd%E5%8D%A1"><span class="toc-number">7.</span> <span class="toc-text"> 7. 烧录到SD卡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E8%BE%BE%E6%88%90%E6%88%90%E5%B0%B1%E7%82%B9%E7%81%AF%E5%A4%A7%E5%B8%88"><span class="toc-number">8.</span> <span class="toc-text"> 8. 达成成就【点灯大师】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">9.</span> <span class="toc-text"> 9. 参考资料</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%B1%87%E7%BC%96led%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="toc-text"> 1. 汇编LED原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-text"> 2. 初始化流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-stm32%E7%9A%84%E5%A4%A7%E8%87%B4io%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-text"> 2.1. STM32的大致IO初始化流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-imx6ull-io%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text"> 2.2. I.MX6ULL IO初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0"><span class="toc-text"> 3. 汇编语言实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%93%BE%E6%8E%A5%E4%B8%8E%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text"> 4. 链接与格式转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E9%93%BE%E6%8E%A5"><span class="toc-text"> 4.1. 链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-text"> 4.2. 格式转换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9sdk%E5%8C%85%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text"> 5. 使用官方SDK包生成镜像文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%89%E8%A3%85sdk%E5%8C%85"><span class="toc-text"> 6. 安装SDK包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#61-build-sdk"><span class="toc-text"> 6.1. build SDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E7%94%9F%E6%88%90%E9%95%9C%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text"> 6.2. 生成镜像文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%83%A7%E5%BD%95%E5%88%B0sd%E5%8D%A1"><span class="toc-text"> 7. 烧录到SD卡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E8%BE%BE%E6%88%90%E6%88%90%E5%B0%B1%E7%82%B9%E7%81%AF%E5%A4%A7%E5%B8%88"><span class="toc-text"> 8. 达成成就【点灯大师】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 9. 参考资料</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -671,7 +744,7 @@ readme.txt内容如下：</p>
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -797,7 +870,7 @@ readme.txt内容如下：</p>
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -834,7 +907,7 @@ readme.txt内容如下：</p>
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -849,7 +922,7 @@ readme.txt内容如下：</p>
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -871,13 +944,13 @@ readme.txt内容如下：</p>
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -926,7 +999,7 @@ readme.txt内容如下：</p>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -974,6 +1047,13 @@ readme.txt内容如下：</p>
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -985,5 +1065,6 @@ readme.txt内容如下：</p>
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

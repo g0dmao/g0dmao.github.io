@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -415,7 +412,22 @@ Behavior:
 <hr />
 <h2 id="常用方式"><a class="markdownIt-Anchor" href="#常用方式"></a> 常用方式</h2>
 <p>有时我们需要串口打印信息到上位机，最便捷的方法是重定向 <code>printf()</code>，网上的常用方法如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span>&#123;    <br>	HAL_UART_Transmit(&amp;huart1, (<span class="hljs-type">uint8_t</span> *)&amp;ch, <span class="hljs-number">1</span>, <span class="hljs-number">0xffff</span>);<br>    <br>	<span class="hljs-keyword">return</span> ch;   <br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">fgetc</span><span class="hljs-params">(FILE *f)</span>&#123;<br>    <br>	<span class="hljs-type">uint8_t</span> ch = <span class="hljs-number">0</span>;<br>	    <br>	HAL_UART_Receive(&amp;huart1, &amp;ch, <span class="hljs-number">1</span>, <span class="hljs-number">0xffff</span>);<br>	    <br>	<span class="hljs-keyword">return</span> ch;   <br>&#125;<br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token keyword">int</span> <span class="token function">fputc</span><span class="token punctuation">(</span><span class="token keyword">int</span> ch<span class="token punctuation">,</span> FILE <span class="token operator">*</span>f<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>    
+	<span class="token function">HAL_UART_Transmit</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>huart1<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>ch<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0xffff</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+	<span class="token keyword">return</span> ch<span class="token punctuation">;</span>   
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">fgetc</span><span class="token punctuation">(</span>FILE <span class="token operator">*</span>f<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    
+	<span class="token class-name">uint8_t</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	    
+	<span class="token function">HAL_UART_Receive</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>huart1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>ch<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0xffff</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	    
+	<span class="token keyword">return</span> ch<span class="token punctuation">;</span>   
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="这样做的缺点"><a class="markdownIt-Anchor" href="#这样做的缺点"></a> 这样做的缺点</h3>
 <ul>
 <li>这是 <strong>阻塞模式</strong>，每次 <code>printf()</code> 都要等待数据发送完毕，影响 CPU 执行效率。</li>
@@ -425,13 +437,57 @@ Behavior:
 <p>我们使用DMA非阻塞发送。具体步骤如下：</p>
 <h3 id="1-定义缓冲区"><a class="markdownIt-Anchor" href="#1-定义缓冲区"></a> 1. 定义缓冲区。</h3>
 <p>根据fputc()的特性（这里先按下不表），使用 DMA 发送时，<code>printf()</code> 需要先把数据存到 <strong>一个缓冲区</strong>，然后一次性使用 DMA 发送出去。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> TX_BUFFER_SIZE 256  <span class="hljs-comment">// 发送缓冲区大小</span></span><br><span class="hljs-type">uint8_t</span> uart_tx_buffer[TX_BUFFER_SIZE];  <span class="hljs-comment">// 串口发送缓冲区</span><br><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint16_t</span> tx_len = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 当前缓冲区数据长度</span><br><span class="hljs-keyword">volatile</span> <span class="hljs-type">uint8_t</span> tx_busy = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 发送状态标志</span><br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">TX_BUFFER_SIZE</span> <span class="token expression"><span class="token number">256</span>  </span><span class="token comment">// 发送缓冲区大小</span></span>
+<span class="token class-name">uint8_t</span> uart_tx_buffer<span class="token punctuation">[</span>TX_BUFFER_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// 串口发送缓冲区</span>
+<span class="token keyword">volatile</span> <span class="token class-name">uint16_t</span> tx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 当前缓冲区数据长度</span>
+<span class="token keyword">volatile</span> <span class="token class-name">uint8_t</span> tx_busy <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 发送状态标志</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="2-重定向-fputc使用缓冲区"><a class="markdownIt-Anchor" href="#2-重定向-fputc使用缓冲区"></a> 2. 重定向 <code>fputc()</code>，使用缓冲区</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">int</span> <span class="hljs-title function_">fputc</span><span class="hljs-params">(<span class="hljs-type">int</span> ch, FILE *f)</span><br>&#123;<br>    <span class="hljs-comment">// 确保缓冲区不会溢出</span><br>    <span class="hljs-keyword">if</span> (tx_len &lt; TX_BUFFER_SIZE - <span class="hljs-number">1</span>)<br>    &#123;<br>        uart_tx_buffer[tx_len++] = (<span class="hljs-type">uint8_t</span>)ch;<br>    &#125;<br><br>    <span class="hljs-comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span><br>    <span class="hljs-comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span><br>    <span class="hljs-comment">// 冲区没满的情况下，如果你想要发送字符串&quot;abc&quot;，printf(&quot;abc&quot;)是没用的，</span><br>    <span class="hljs-comment">// printf(&quot;abc\n&quot;)才有用哦。</span><br>    <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;\n&#x27;</span> || tx_len &gt;= TX_BUFFER_SIZE - <span class="hljs-number">1</span>)<br>    &#123;<br>        uart_dma_transmit();<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> ch;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token keyword">int</span> <span class="token function">fputc</span><span class="token punctuation">(</span><span class="token keyword">int</span> ch<span class="token punctuation">,</span> FILE <span class="token operator">*</span>f<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 确保缓冲区不会溢出</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>tx_len <span class="token operator">&lt;</span> TX_BUFFER_SIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        uart_tx_buffer<span class="token punctuation">[</span>tx_len<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token punctuation">)</span>ch<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 如果遇到换行符，或者缓冲区接近满，就启动 DMA 发送</span>
+    <span class="token comment">// 注意咯，如果缓冲区没满的情况下，只有检测到/n才会触发DMA的发送。所以在缓</span>
+    <span class="token comment">// 冲区没满的情况下，如果你想要发送字符串"abc"，printf("abc")是没用的，</span>
+    <span class="token comment">// printf("abc\n")才有用哦。</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ch <span class="token operator">==</span> <span class="token char">'\n'</span> <span class="token operator">||</span> tx_len <span class="token operator">>=</span> TX_BUFFER_SIZE <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">uart_dma_transmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> ch<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="3-定义dma-发送函数"><a class="markdownIt-Anchor" href="#3-定义dma-发送函数"></a> 3. 定义DMA 发送函数</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">void</span> <span class="hljs-title function_">uart_dma_transmit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-comment">// 如果 DMA 还在忙，则不启动新的传输</span><br>    <span class="hljs-keyword">if</span> (tx_busy) <span class="hljs-keyword">return</span>;<br><br>    tx_busy = <span class="hljs-number">1</span>;  <span class="hljs-comment">// 标记为发送中</span><br>    HAL_UART_Transmit_DMA(&amp;huart1, uart_tx_buffer, tx_len);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token keyword">void</span> <span class="token function">uart_dma_transmit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 如果 DMA 还在忙，则不启动新的传输</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>tx_busy<span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+
+    tx_busy <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 标记为发送中</span>
+    <span class="token function">HAL_UART_Transmit_DMA</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>huart1<span class="token punctuation">,</span> uart_tx_buffer<span class="token punctuation">,</span> tx_len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="4-dma-传输完成回调"><a class="markdownIt-Anchor" href="#4-dma-传输完成回调"></a> 4. DMA 传输完成回调</h3>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">void</span> <span class="hljs-title function_">HAL_UART_TxCpltCallback</span><span class="hljs-params">(UART_HandleTypeDef *huart)</span><br>&#123;<br>    <span class="hljs-keyword">if</span> (huart-&gt;Instance == USART1)  <span class="hljs-comment">// 确保是目标串口</span><br>    &#123;<br>        tx_len = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 清空缓冲区</span><br>        tx_busy = <span class="hljs-number">0</span>; <span class="hljs-comment">// 标记为可用</span><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token keyword">void</span> <span class="token function">HAL_UART_TxCpltCallback</span><span class="token punctuation">(</span>UART_HandleTypeDef <span class="token operator">*</span>huart<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>huart<span class="token operator">-></span>Instance <span class="token operator">==</span> USART1<span class="token punctuation">)</span>  <span class="token comment">// 确保是目标串口</span>
+    <span class="token punctuation">&#123;</span>
+        tx_len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 清空缓冲区</span>
+        tx_busy <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment">// 标记为可用</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="一些疑惑的解答"><a class="markdownIt-Anchor" href="#一些疑惑的解答"></a> 一些疑惑的解答</h2>
 <p>Q: 茂神茂神，你的说的非阻塞方式的确很不错，但是还是太吃操作了，我就不能直接在 <code>fputc()</code>里写 <code>HAL_UART_Transmit_DMA</code>吗？<br />
 <br />
@@ -439,83 +495,83 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
 <blockquote>
 <p><code>fputc()</code>打电话给DMA的秘书说我要发这个字符，然后他就认为我已经给DMA说了叫它发送这个字符啦，所以这个字符就发出去啦，剩下就不关我的事啦。结果DMA秘书看到DMA此时还在忙于上次发送，于是判断DMA为<code>HAL_BUSY</code>没有办法把字符交给DMA。这个字符信息就丢失了。。。。</p>
 </blockquote>
-   
-        <script src="/js/foldpost.js"></script> 
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
             <h1 style="text-align: center;">串口重定向的非阻塞方法</h1>
             <p>创建时间：3月 17, 2025 </p>
             <p>最后更新：3月 17, 2025</p>
-            <p>字数统计：761字</p>
-            <p>预计阅读：3min</p>
-            
-            <div class="catgrs">文章分类：
+            <p>字数统计：750字</p>
+            <p>预计阅读：2min</p>
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
-                            -嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
-                            -程序架构  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="catgrs">
+                                -嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="catgrs">
+                                -程序架构
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/STM32/" id="tgs">
-                            #STM32  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
-                            #嵌入式  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="tgs">
-                            #程序架构  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E4%B8%B2%E5%8F%A3/" id="tgs">
-                            #串口  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/STM32/" id="tgs">
+                                #STM32
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%B5%8C%E5%85%A5%E5%BC%8F/" id="tgs">
+                                #嵌入式
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/" id="tgs">
+                                #程序架构
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E4%B8%B2%E5%8F%A3/" id="tgs">
+                                #串口
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text"> 常用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%81%9A%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text"> 这样做的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%9A%84%E6%96%B9%E5%BC%8F%E7%81%B5%E6%B4%BB%E8%BF%90%E7%94%A8dma"><span class="toc-number">2.</span> <span class="toc-text"> 使用非阻塞的方式：灵活运用DMA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">2.1.</span> <span class="toc-text"> 1. 定义缓冲区。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E5%AE%9A%E5%90%91-fputc%E4%BD%BF%E7%94%A8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-number">2.2.</span> <span class="toc-text"> 2. 重定向 fputc()，使用缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89dma-%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.</span> <span class="toc-text"> 3. 定义DMA 发送函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-dma-%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83"><span class="toc-number">2.4.</span> <span class="toc-text"> 4. DMA 传输完成回调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E6%83%91%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="toc-number">3.</span> <span class="toc-text"> 一些疑惑的解答</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text"> 常用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E6%A0%B7%E5%81%9A%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="toc-text"> 这样做的缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%9A%84%E6%96%B9%E5%BC%8F%E7%81%B5%E6%B4%BB%E8%BF%90%E7%94%A8dma"><span class="toc-text"> 使用非阻塞的方式：灵活运用DMA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 1. 定义缓冲区。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%87%8D%E5%AE%9A%E5%90%91-fputc%E4%BD%BF%E7%94%A8%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text"> 2. 重定向 fputc()，使用缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89dma-%E5%8F%91%E9%80%81%E5%87%BD%E6%95%B0"><span class="toc-text"> 3. 定义DMA 发送函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-dma-%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%88%90%E5%9B%9E%E8%B0%83"><span class="toc-text"> 4. DMA 传输完成回调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E7%96%91%E6%83%91%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="toc-text"> 一些疑惑的解答</span></a></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -537,7 +593,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -663,7 +719,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -700,7 +756,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -715,7 +771,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -737,13 +793,13 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -792,7 +848,7 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -840,6 +896,13 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -851,5 +914,6 @@ A: 可以的兄弟可以的。<code>fputc()</code> 是发送一个字符对吧�
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 

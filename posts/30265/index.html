@@ -7,43 +7,41 @@
         <meta name="Description" content="GoDm@'s blog">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
-        
+
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
 
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
-        <script src="//cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
-        <script>hljs.highlightAll();</script>
-
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-        
-        
-            
+
+
+
         <style>
             html{
                 scrollbar-width: thin;
                 scrollbar-color: #2a2a2a #121212 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif; 
+                font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
                 background-color: #121212;
-                color: #cacaca;     
+                color: #cacaca;
                 cursor:default;
             }
 
             a {
                 color: #60A5FA;
                 text-decoration: none;
-                
+
             }
 
             a:hover{
                 color: #3B82F6;
-                
+
             }
 
             nav{
@@ -64,8 +62,8 @@
                         color: #3B82F6;
                     }
                 }
-                
-                
+
+
             }
             #time{
                 text-align: center;
@@ -156,36 +154,35 @@
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：                              
+        ║    接收到一条消息：
         ║       Bro来查我成分了吗？                                       ║
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <body>
-        
-        <nav>
+    <nav>
 
-            
-            <div style="display: inline-block; margin: 5px;">
-                <span id="date" style="margin:5px;"></span>
-                <span id="clock" style="margin: 5px;"></span>
-            </div><span><strong>  Welcome to my blog :) </strong></span>
-            
-                <div id="p_btn">
-                <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>  
-                </div>
-                <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-            
-            
-            
-        </nav>
-        <script src="/js/clock.js"></script>
-        <script src="/js/btn.js"></script>
+        <div style="display: inline-block; margin: 5px;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+        </div><span><strong>  Welcome to my blog :) </strong></span>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </nav>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
         <!-- 博客详情 -->
 <div id="reading-progress"></div>
 <script src="/js/page_line.js"></script>
 <div class="a_container">
-    <div class="article">      
+    <div class="article">
         <!--<div style="height: 50px;"></div>-->
         
             <!--
@@ -441,20 +438,29 @@ Behavior:
 <p>如果是U盘可以挂载在<code>/dev/media/</code>目录或<code>/dev/mnt/</code>目录</p>
 <h4 id="1查看u盘设备名"><a class="markdownIt-Anchor" href="#1查看u盘设备名"></a> 1.查看u盘设备名</h4>
 <p>在使用usbipd使WSL读取到u盘后，运行如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">lsblk<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lsblk<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>会看到类似这样的输出：</p>
-<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs tap">sdb      8:16  <span class="hljs-number"> 1 </span> 29.8G <span class="hljs-number"> 0 </span>disk<br>├─sdb1   8:17  <span class="hljs-number"> 1 </span> 10.0G <span class="hljs-number"> 0 </span>part<br>├─sdb2   8:18  <span class="hljs-number"> 1 </span>  9.8G <span class="hljs-number"> 0 </span>part<br>└─sdb3   8:19  <span class="hljs-number"> 1 </span> 10.0G <span class="hljs-number"> 0 </span>part<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">sdb      8:16   1  29.8G  0 disk
+├─sdb1   8:17   1  10.0G  0 part
+├─sdb2   8:18   1   9.8G  0 part
+└─sdb3   8:19   1  10.0G  0 part<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这里 <code>sdb1</code> 是U盘的分区名。磁盘可能有很多分区嘛。</p>
 <h4 id="2为每个分区创建挂载点目录"><a class="markdownIt-Anchor" href="#2为每个分区创建挂载点目录"></a> 2.为每个分区创建挂载点目录</h4>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /mnt/usb1 /mnt/usb2 /mnt/usb3<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /mnt/usb1 /mnt/usb2 /mnt/usb3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h4 id="3逐个挂载"><a class="markdownIt-Anchor" href="#3逐个挂载"></a> 3.逐个挂载</h4>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mount /dev/sdb1 /mnt/usb1<br><span class="hljs-built_in">sudo</span> mount /dev/sdb2 /mnt/usb2<br><span class="hljs-built_in">sudo</span> mount /dev/sdb3 /mnt/usb3<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mount</span> /dev/sdb1 /mnt/usb1
+<span class="token function">sudo</span> <span class="token function">mount</span> /dev/sdb2 /mnt/usb2
+<span class="token function">sudo</span> <span class="token function">mount</span> /dev/sdb3 /mnt/usb3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>如果某个分区的文件系统不是自动识别的（报错），你可以指定类型挂载，例如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mount -t vfat /dev/sdb1 /mnt/usb1<br><span class="hljs-built_in">sudo</span> mount -t ext4 /dev/sdb2 /mnt/usb2<br><span class="hljs-built_in">sudo</span> mount -t ntfs /dev/sdb3 /mnt/usb3<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mount</span> <span class="token parameter variable">-t</span> vfat /dev/sdb1 /mnt/usb1
+<span class="token function">sudo</span> <span class="token function">mount</span> <span class="token parameter variable">-t</span> ext4 /dev/sdb2 /mnt/usb2
+<span class="token function">sudo</span> <span class="token function">mount</span> <span class="token parameter variable">-t</span> ntfs /dev/sdb3 /mnt/usb3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>如果不清楚类型运行如下命令可以查看：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> blkid /dev/sdb1 /dev/sdb2 /dev/sdb3<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> blkid /dev/sdb1 /dev/sdb2 /dev/sdb3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="卸载"><a class="markdownIt-Anchor" href="#卸载"></a> 卸载</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> umount /mnt/usb1<br><span class="hljs-built_in">sudo</span> umount /mnt/usb2<br><span class="hljs-built_in">sudo</span> umount /mnt/usb3<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">umount</span> /mnt/usb1
+<span class="token function">sudo</span> <span class="token function">umount</span> /mnt/usb2
+<span class="token function">sudo</span> <span class="token function">umount</span> /mnt/usb3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h2 id="磁盘分区"><a class="markdownIt-Anchor" href="#磁盘分区"></a> 磁盘分区</h2>
 <h3 id="fdisk命令常用选项"><a class="markdownIt-Anchor" href="#fdisk命令常用选项"></a> fdisk命令常用选项</h3>
 <table>
@@ -534,21 +540,24 @@ Behavior:
 </tbody>
 </table>
 <h3 id="用fdisk打开要分区的磁盘"><a class="markdownIt-Anchor" href="#用fdisk打开要分区的磁盘"></a> 用fdisk打开要分区的磁盘</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> fdisk /dev/sde<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">fdisk</span> /dev/sde<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>:::warning<br />
 千万不要误选，否则可能破坏你的数据。<br />
 :::</p>
 <h3 id="删除分区"><a class="markdownIt-Anchor" href="#删除分区"></a> 删除分区</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): p        ← 查看当前分区情况（确认要删哪个）<br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): d        ← 删除分区<br>Partition number (1,2,...): 2  ← 选择你要删除的分区编号（比如 2 表示 /dev/sdb2）<br>Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): w        ← 保存更改并退出<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: p        ← 查看当前分区情况（确认要删哪个）
+Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: d        ← 删除分区
+Partition number <span class="token punctuation">(</span><span class="token number">1,2</span>,<span class="token punctuation">..</span>.<span class="token punctuation">)</span>: <span class="token number">2</span>  ← 选择你要删除的分区编号（比如 <span class="token number">2</span> 表示 /dev/sdb2）
+Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: w        ← 保存更改并退出<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="创建分区"><a class="markdownIt-Anchor" href="#创建分区"></a> 创建分区</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): n<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: n<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="Snipaste_2025-06-12_17-21-39.png" alt="" /></p>
 <p>1：分区编号，直接回车接受默认编号。<br />
 2：起始扇区，默认值通常合适，直接回车即可。<br />
 3：结束扇区 or 分区大小，可以输入：扇区编号（直接回车使用剩余空间）或者手动输入大小（例如：<code>+1G</code>、<code>+512M</code>）</p>
 <h3 id="写出"><a class="markdownIt-Anchor" href="#写出"></a> 写出</h3>
 <p>保存并退出。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Command (m <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span>): w<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Command <span class="token punctuation">(</span>m <span class="token keyword">for</span> <span class="token builtin class-name">help</span><span class="token punctuation">)</span>: w<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="格式化分区"><a class="markdownIt-Anchor" href="#格式化分区"></a> 格式化分区</h2>
 <p>当用 <code>fdisk</code> 创建完一个分区后，这个分区只是“逻辑划分好了”，但<strong>还不能使用</strong>，必须要**格式化（创建文件系统）**才能真正读写数据。</p>
 <h3 id="为什么要格式化"><a class="markdownIt-Anchor" href="#为什么要格式化"></a> 为什么要格式化？</h3>
@@ -586,19 +595,22 @@ Behavior:
 </table>
 <h3 id="2执行格式化命令"><a class="markdownIt-Anchor" href="#2执行格式化命令"></a> 2.执行格式化命令</h3>
 <p><em>make file system</em> -type</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mkfs.vfat -f 32 /dev/sde2<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> mkfs.vfat <span class="token parameter variable">-f</span> <span class="token number">32</span> /dev/sde2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>没有mkfs的先安装，不然报错：</p>
-<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs smali">failed to<span class="hljs-built_in"> execute </span>mkfs.vfat: No such file<span class="hljs-built_in"> or </span>directory<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">failed to execute mkfs.vfat: No such file or directory<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>安装：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install dosfstools<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> dosfstools<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h3 id="检查"><a class="markdownIt-Anchor" href="#检查"></a> 检查</h3>
 <p>可以输入命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> blkid /dev/sde1 /dev/sde2<br></code></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> blkid /dev/sde1 /dev/sde2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>检查type<br />
 输出：</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">sde1: <span class="hljs-attribute">UUID</span>=<span class="hljs-string">&quot;FBD5-E06C&quot;</span> <span class="hljs-attribute">BLOCK_SIZE</span>=<span class="hljs-string">&quot;512&quot;</span> <span class="hljs-attribute">TYPE</span>=<span class="hljs-string">&quot;vfat&quot;</span> <span class="hljs-attribute">PARTUUID</span>=<span class="hljs-string">&quot;3b15f93b-f163-491d-9f0f-94be96692beb&quot;</span><br>sde2: <span class="hljs-attribute">UUID</span>=<span class="hljs-string">&quot;FC22-7890&quot;</span> <span class="hljs-attribute">BLOCK_SIZE</span>=<span class="hljs-string">&quot;512&quot;</span> <span class="hljs-attribute">TYPE</span>=<span class="hljs-string">&quot;vfat&quot;</span> <span class="hljs-attribute">PARTUUID</span>=<span class="hljs-string">&quot;248a2fdb-2255-4a7a-802e-e5a11bb87c53&quot;</span><br></code></pre></td></tr></table></figure>
-   
-        <script src="/js/foldpost.js"></script> 
+<pre class="line-numbers language-none"><code class="language-none">sde1: UUID&#x3D;&quot;FBD5-E06C&quot; BLOCK_SIZE&#x3D;&quot;512&quot; TYPE&#x3D;&quot;vfat&quot; PARTUUID&#x3D;&quot;3b15f93b-f163-491d-9f0f-94be96692beb&quot;
+sde2: UUID&#x3D;&quot;FC22-7890&quot; BLOCK_SIZE&#x3D;&quot;512&quot; TYPE&#x3D;&quot;vfat&quot; PARTUUID&#x3D;&quot;248a2fdb-2255-4a7a-802e-e5a11bb87c53&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
     </div>
     <div class="info">
         <div class="textinfo">
@@ -607,67 +619,66 @@ Behavior:
             <p>最后更新：6月 14, 2025</p>
             <p>字数统计：1.4k字</p>
             <p>预计阅读：5min</p>
-            
-            <div class="catgrs">文章分类：
+
+            <div class="catgrs">
                 
-                    <span>
-                        <a href="/categories/Linux/" id="catgrs">
-                            -Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/categories/Linux/Ubuntu/" id="catgrs">
-                            -Ubuntu  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/Ubuntu/" id="catgrs">
+                                -Ubuntu
+                            </a>
+                        </span>
+                    
                 
             </div>
             <div class="tgs">
                 
-                    <span>
-                        <a href="/Tags/Linux/" id="tgs">
-                            #Linux  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/Ubuntu/" id="tgs">
-                            #Ubuntu  
-                        </a>
-                    </span>
-                
-                    <span>
-                        <a href="/Tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" id="tgs">
-                            #磁盘管理  
-                        </a>
-                    </span>
+                    
+                        <span>
+                            <a href="/Tags/Linux/" id="tgs">
+                                #Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/Ubuntu/" id="tgs">
+                                #Ubuntu
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/" id="tgs">
+                                #磁盘管理
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
 
         <div class="toc">
-            
-            
+
+
             <details>
                 <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%92%8C%E7%9B%AE%E5%BD%95%E7%9A%84%E5%AE%B9%E9%87%8F%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text"> 磁盘和目录的容量查询命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%9A%84%E6%8C%82%E8%BD%BD%E5%8D%B8%E8%BD%BD"><span class="toc-number">2.</span> <span class="toc-text"> 磁盘的挂载卸载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8C%82%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text"> 什么是挂载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88linux%E8%A6%81%E6%8C%82%E8%BD%BDwindows%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%9C%80%E8%A6%81"><span class="toc-number">2.2.</span> <span class="toc-text"> 为什么Linux要挂载？Windows为什么不需要？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E4%B8%8B%E5%A6%82%E4%BD%95%E6%89%8B%E5%8A%A8%E6%8C%82%E8%BD%BDu%E7%9B%98"><span class="toc-number">2.3.</span> <span class="toc-text"> Linux下如何手动挂载u盘？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E6%9F%A5%E7%9C%8Bu%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 1.查看u盘设备名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E4%B8%BA%E6%AF%8F%E4%B8%AA%E5%88%86%E5%8C%BA%E5%88%9B%E5%BB%BA%E6%8C%82%E8%BD%BD%E7%82%B9%E7%9B%AE%E5%BD%95"><span class="toc-number">2.3.2.</span> <span class="toc-text"> 2.为每个分区创建挂载点目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E9%80%90%E4%B8%AA%E6%8C%82%E8%BD%BD"><span class="toc-number">2.3.3.</span> <span class="toc-text"> 3.逐个挂载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD"><span class="toc-number">2.4.</span> <span class="toc-text"> 卸载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-number">3.</span> <span class="toc-text"> 磁盘分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fdisk%E5%91%BD%E4%BB%A4%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9"><span class="toc-number">3.1.</span> <span class="toc-text"> fdisk命令常用选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8fdisk%E6%89%93%E5%BC%80%E8%A6%81%E5%88%86%E5%8C%BA%E7%9A%84%E7%A3%81%E7%9B%98"><span class="toc-number">3.2.</span> <span class="toc-text"> 用fdisk打开要分区的磁盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E5%8C%BA"><span class="toc-number">3.3.</span> <span class="toc-text"> 删除分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%8C%BA"><span class="toc-number">3.4.</span> <span class="toc-text"> 创建分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%87%BA"><span class="toc-number">3.5.</span> <span class="toc-text"> 写出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-number">4.</span> <span class="toc-text"> 格式化分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">4.1.</span> <span class="toc-text"> 为什么要格式化？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E9%80%89%E6%8B%A9%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.2.</span> <span class="toc-text"> 1.选择格式化类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E6%89%A7%E8%A1%8C%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%91%BD%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text"> 2.执行格式化命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5"><span class="toc-number">4.4.</span> <span class="toc-text"> 检查</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%92%8C%E7%9B%AE%E5%BD%95%E7%9A%84%E5%AE%B9%E9%87%8F%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="toc-text"> 磁盘和目录的容量查询命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%9A%84%E6%8C%82%E8%BD%BD%E5%8D%B8%E8%BD%BD"><span class="toc-text"> 磁盘的挂载卸载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8C%82%E8%BD%BD"><span class="toc-text"> 什么是挂载？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88linux%E8%A6%81%E6%8C%82%E8%BD%BDwindows%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%9C%80%E8%A6%81"><span class="toc-text"> 为什么Linux要挂载？Windows为什么不需要？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linux%E4%B8%8B%E5%A6%82%E4%BD%95%E6%89%8B%E5%8A%A8%E6%8C%82%E8%BD%BDu%E7%9B%98"><span class="toc-text"> Linux下如何手动挂载u盘？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E6%9F%A5%E7%9C%8Bu%E7%9B%98%E8%AE%BE%E5%A4%87%E5%90%8D"><span class="toc-text"> 1.查看u盘设备名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E4%B8%BA%E6%AF%8F%E4%B8%AA%E5%88%86%E5%8C%BA%E5%88%9B%E5%BB%BA%E6%8C%82%E8%BD%BD%E7%82%B9%E7%9B%AE%E5%BD%95"><span class="toc-text"> 2.为每个分区创建挂载点目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E9%80%90%E4%B8%AA%E6%8C%82%E8%BD%BD"><span class="toc-text"> 3.逐个挂载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD"><span class="toc-text"> 卸载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-text"> 磁盘分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fdisk%E5%91%BD%E4%BB%A4%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9"><span class="toc-text"> fdisk命令常用选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8fdisk%E6%89%93%E5%BC%80%E8%A6%81%E5%88%86%E5%8C%BA%E7%9A%84%E7%A3%81%E7%9B%98"><span class="toc-text"> 用fdisk打开要分区的磁盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%88%86%E5%8C%BA"><span class="toc-text"> 删除分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%88%86%E5%8C%BA"><span class="toc-text"> 创建分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%87%BA"><span class="toc-text"> 写出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-text"> 格式化分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text"> 为什么要格式化？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E9%80%89%E6%8B%A9%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 1.选择格式化类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E6%89%A7%E8%A1%8C%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%91%BD%E4%BB%A4"><span class="toc-text"> 2.执行格式化命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5"><span class="toc-text"> 检查</span></a></li></ol></li></ol>
             </details>
         </div>
-        
-    </div>    
+
+    </div>
 </div>
 
 
 
 
 
-        <footer>
-            <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-            <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-            <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p> 
-        </footer>
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
@@ -689,7 +700,7 @@ Behavior:
                         return result;
                     };
                     
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
                     
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -815,7 +826,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,7],
+                            data: [6,2,10,4,11,2,4,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -852,7 +863,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -867,7 +878,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":20},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -889,13 +900,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"程序架构","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -944,7 +955,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":4,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":21,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -992,6 +1003,13 @@ Behavior:
         </script>
     
     </body>
+    <!--000-->
+    <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer>
     <script src="/js/background.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1003,5 +1021,6 @@ Behavior:
             console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
         });
     </script>
+
 </html>
 
