@@ -23,12 +23,12 @@
         <style>
             html{
                 scrollbar-width: thin;
-                scrollbar-color: #2a2a2a #121212 ;
+                scrollbar-color: #2a2a2a #101418 ;
                 font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
-                background-color: #121212;
+                background-color: #101418;
                 color: #cacaca;
                 cursor:default;
             }
@@ -48,7 +48,7 @@
                 text-align: center;
                 position: sticky;
                 top: 0;
-                background-color: #121212;
+                background-color: #101418;
                 padding: 5px;
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
@@ -67,7 +67,7 @@
             }
             #time{
                 text-align: center;
-                background-color: #121212;
+                background-color: inherit;
                 color: #cacaca;
             }
 
@@ -946,18 +946,14 @@ run: all
             </div>
         </div>
 
-        <div class="toc">
-
-
-            <details>
-                <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-text"> 1. 基础用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91"><span class="toc-text"> 2. 执行逻辑[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-text"> 2.1. 🔄 执行流程示意图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BC%AA%E7%9B%AE%E6%A0%87-phony"><span class="toc-text"> 3. 伪目标 .PHONY</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%98%E9%87%8F"><span class="toc-text"> 4. 变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E8%B5%8B%E5%80%BC%E7%AC%A6%E5%8F%B7"><span class="toc-text"> 4.1. 赋值符号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%9A%90%E5%90%AB%E8%A7%84%E5%88%99%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-text"> 5. 隐含规则与通配符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF"><span class="toc-text"> 6. 条件分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#61-%E8%AF%AD%E6%B3%95"><span class="toc-text"> 6.1. 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E7%A4%BA%E4%BE%8B%E4%B8%80%E6%A0%B9%E6%8D%AE%E5%B9%B3%E5%8F%B0%E9%80%89%E6%8B%A9clean%E6%89%A7%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="toc-text"> 6.2. 示例一：根据平台选择clean执行方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#63-%E7%A4%BA%E4%BE%8B%E4%BA%8C%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 6.3. 示例二：调试模式与发布模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%87%BD%E6%95%B0"><span class="toc-text"> 7. 函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#71-subst-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2"><span class="toc-text"> 7.1. subst —— 字符串替换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#72-patsubst-%E6%A8%A1%E5%BC%8F%E6%9B%BF%E6%8D%A2"><span class="toc-text"> 7.2. patsubst —— 模式替换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#73-wildcard-%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="toc-text"> 7.3. wildcard —— 获取文件列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#74-notdir-%E5%8E%BB%E6%8E%89%E8%B7%AF%E5%BE%84%E5%8F%AA%E4%BF%9D%E7%95%99%E6%96%87%E4%BB%B6%E5%90%8D"><span class="toc-text"> 7.4. notdir —— 去掉路径，只保留文件名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#75-dir-%E8%8E%B7%E5%8F%96%E8%B7%AF%E5%BE%84%E9%83%A8%E5%88%86"><span class="toc-text"> 7.5. dir —— 获取路径部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76-basename-addsuffix-%E5%92%8C-addprefix-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E5%90%8D"><span class="toc-text"> 7.6. basename 、 addsuffix 和 addprefix —— 批量处理文件名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#77-shell-%E6%89%A7%E8%A1%8C-shell-%E5%91%BD%E4%BB%A4"><span class="toc-text"> 7.7. shell —— 执行 shell 命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F"><span class="toc-text"> 8. 完整示例程序</span></a></li></ol>
-            </details>
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
         </div>
 
     </div>
 </div>
-
+<script src="/js/toc.js"></script>
 
 
 
@@ -971,7 +967,7 @@ run: all
                 if(heatmapChartDom){
                     const heatmapChart = echarts.init(heatmapChartDom, 'light');
                     const cellSize = 15;
-                    
+
                     const groupByYear = (data) => {
                         const result = {};
                         data.forEach(([date, value]) => {
@@ -983,10 +979,10 @@ run: all
                         });
                         return result;
                     };
-                    
+
                     const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
-                    
+
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
                     const minYear = years[years.length - 1];
                     const maxYear = years[0];
@@ -994,27 +990,27 @@ run: all
                         initYear = maxYear;
                     }
                     console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
-                    
+
                     heatmapChart.setOption({
                         grid: {},
-                        tooltip: { 
-                            position: 'top', 
-                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
                         },
-                        calendar: { 
+                        calendar: {
                             top: '10%',
                             range: initYear,
-                            cellSize: cellSize, 
-                            splitLine: { lineStyle: { color: '#121212', width: 4 } }, 
-                            itemStyle: { borderWidth: 4, borderColor: '#121212', color: '#1e1e1e'}, 
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
                             dayLabel: { show: false },
                             monthLabel: { show: true ,color: '#7b7b7b'},
                             yearLabel: { show: false },
-                            
-        
+
+
                         },
-                        
-                        visualMap: { 
+
+                        visualMap: {
                             show: true,
                             right: '8%',
                             bottom: '5%',
@@ -1039,7 +1035,7 @@ run: all
                             pageIconSize: 10,
                             pageTextStyle: { fontSize: 14,},
                             selectedMode: 'single',
-                            
+
                         },
                         series: years.map(year => ({
                             type: 'heatmap',
@@ -1052,13 +1048,13 @@ run: all
                             silent: year !== initYear,
                         })),
                     });
-                    
+
                     // init selected year
                     heatmapChart.dispatchAction({
                         type: 'legendSelect',
                         name: initYear,
                     });
-                    
+
                     heatmapChart.on('legendselectchanged', function(params) {
                         console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
                         const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
@@ -1083,7 +1079,7 @@ run: all
                             });
                         }
                     });
-                    
+
                     heatmapChart.on('click', function (params) {
                         if (params.componentType === 'series') {
                             const [year, month] = params.value[0].split('-');
@@ -1239,7 +1235,7 @@ run: all
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

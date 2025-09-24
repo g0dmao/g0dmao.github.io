@@ -67,7 +67,7 @@ div.posts_container{
 }
 
 #toggle-btn {
-    background-color: #121212;
+    background-color: inherit;
     color: #7b7b7b;
     border: none;
     padding: 12px 24px;

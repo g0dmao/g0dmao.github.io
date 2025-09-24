@@ -47,10 +47,11 @@
 }
 
 .article hr{
-  height: 4px;              /* 控制粗细 */
+  height: 3px;              /* 控制粗细 */
   border: none;             /* 移除默认边框 */
   background-color: #444;   /* 颜色 */
   border-radius: 2px;       /* 圆角，让线条更柔和 */
+
 }
 
 .article blockquote {
@@ -58,7 +59,7 @@
   margin: 1rem 0;
   padding: .5rem 1rem;
   color: #ccc;
-  background: #1a1a1a;
+  background: #202122;
   border-radius: 4px;
 }
 
@@ -83,13 +84,14 @@
 }
 .article h2 {
   font-size: 1.6rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #666;
   padding-bottom: .2rem;
   color: #fff;
+  font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif 4', serif;
+  font-weight:normal
 }
 .article h3 {
   font-size: 1.3rem;
-  color: #ffcc66;
 }
 .article h4 {
   font-size: 1.1rem;
@@ -133,9 +135,9 @@
 
 
 .article pre {
-  background: #1e1e1e;
+  background: #202122 !important;
   color: #dcdcdc;
-  border: 1px solid #333;
+  border: 1px solid #484848;
   border-radius: 6px;
   padding: 1rem;
   overflow-x: auto;       /* 横向滚动而不是溢出 */
@@ -145,6 +147,8 @@
   box-sizing: border-box;
   white-space: pre;       /* 保留格式 */
   -webkit-overflow-scrolling: touch; /* 移动端顺滑滚动 */
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
 }
 
 /* 内联代码 */
@@ -179,7 +183,7 @@
   padding: 10px;
   margin-bottom: 40px;
 }
-.info .toc{
+/*.info .toc{
 
 
   padding: 10px;
@@ -194,9 +198,50 @@
   list-style: none;
   overflow: auto;
 
+}*/
+
+/* TOC 标题 */
+#toc-container {
+  padding: 10px;
+  max-height: 600px;
+  position: sticky;
+  top: 80px;
+  overflow: auto;
 }
 
+#toc li {
+    list-style: none;
+    margin: 5px 0;
+}
 
+ul#toc {
+    padding-left: 1.2rem ;
+}
+
+ul.toc-sublist{
+    padding-left: 1.2rem ;
+}
+
+.toc-toggle-btn {
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+    width: 10px; /* 固定宽度，保证占位 */
+    text-align: center;
+    margin-right: 3px;
+    user-select: none;
+    display: inline-block;
+}
+
+.toc-sublist {
+    margin-left: 15px;
+    display: none;
+}
+
+.toc-active > a {
+    color: #ff5722;
+    font-weight: bold;
+}
 
 #sumtoc{
   font-size: 20px;

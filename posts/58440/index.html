@@ -23,12 +23,12 @@
         <style>
             html{
                 scrollbar-width: thin;
-                scrollbar-color: #2a2a2a #121212 ;
+                scrollbar-color: #2a2a2a #101418 ;
                 font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
-                background-color: #121212;
+                background-color: #101418;
                 color: #cacaca;
                 cursor:default;
             }
@@ -48,7 +48,7 @@
                 text-align: center;
                 position: sticky;
                 top: 0;
-                background-color: #121212;
+                background-color: #101418;
                 padding: 5px;
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
@@ -67,7 +67,7 @@
             }
             #time{
                 text-align: center;
-                background-color: #121212;
+                background-color: inherit;
                 color: #cacaca;
             }
 
@@ -589,18 +589,14 @@ SharedData<span class="token operator">*</span> <span class="token function">get
             </div>
         </div>
 
-        <div class="toc">
-
-
-            <details>
-                <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%90%E5%87%BA"><span class="toc-text"> 问题的提出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E4%BB%80%E4%B9%88%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88%E5%90%97"><span class="toc-text"> 有什么更好的方案吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%B0%81%E8%A3%85%E6%8C%87%E9%92%88%E4%BC%A0%E9%80%92"><span class="toc-text"> 结构体封装+指针传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h%E6%96%87%E4%BB%B6"><span class="toc-text"> .h文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c%E6%96%87%E4%BB%B6"><span class="toc-text"> .c文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%85%B6%E4%BB%96%E6%A8%A1%E5%9D%97%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-text"> 在其他模块中使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%87%BD%E6%95%B0%E6%8F%90%E4%BE%9B%E8%AF%BB%E5%8F%96%E5%92%8C%E4%BF%AE%E6%94%B9%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="toc-text"> 通过函数提供读取和修改的接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h%E6%96%87%E4%BB%B6-2"><span class="toc-text"> .h文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c%E6%96%87%E4%BB%B6-2"><span class="toc-text"> .c文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%85%B6%E4%BB%96%E6%A8%A1%E5%9D%97%E4%B8%AD%E4%BD%BF%E7%94%A8-2"><span class="toc-text"> 在其他模块中使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%94%E5%90%88%E8%B5%B7%E6%9D%A5"><span class="toc-text"> 联合起来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%96%E5%9D%91"><span class="toc-text"> 挖坑</span></a></li></ol>
-            </details>
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
         </div>
 
     </div>
 </div>
-
+<script src="/js/toc.js"></script>
 
 
 
@@ -614,7 +610,7 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                 if(heatmapChartDom){
                     const heatmapChart = echarts.init(heatmapChartDom, 'light');
                     const cellSize = 15;
-                    
+
                     const groupByYear = (data) => {
                         const result = {};
                         data.forEach(([date, value]) => {
@@ -626,10 +622,10 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                         });
                         return result;
                     };
-                    
+
                     const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
-                    
+
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
                     const minYear = years[years.length - 1];
                     const maxYear = years[0];
@@ -637,27 +633,27 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                         initYear = maxYear;
                     }
                     console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
-                    
+
                     heatmapChart.setOption({
                         grid: {},
-                        tooltip: { 
-                            position: 'top', 
-                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
                         },
-                        calendar: { 
+                        calendar: {
                             top: '10%',
                             range: initYear,
-                            cellSize: cellSize, 
-                            splitLine: { lineStyle: { color: '#121212', width: 4 } }, 
-                            itemStyle: { borderWidth: 4, borderColor: '#121212', color: '#1e1e1e'}, 
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
                             dayLabel: { show: false },
                             monthLabel: { show: true ,color: '#7b7b7b'},
                             yearLabel: { show: false },
-                            
-        
+
+
                         },
-                        
-                        visualMap: { 
+
+                        visualMap: {
                             show: true,
                             right: '8%',
                             bottom: '5%',
@@ -682,7 +678,7 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                             pageIconSize: 10,
                             pageTextStyle: { fontSize: 14,},
                             selectedMode: 'single',
-                            
+
                         },
                         series: years.map(year => ({
                             type: 'heatmap',
@@ -695,13 +691,13 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                             silent: year !== initYear,
                         })),
                     });
-                    
+
                     // init selected year
                     heatmapChart.dispatchAction({
                         type: 'legendSelect',
                         name: initYear,
                     });
-                    
+
                     heatmapChart.on('legendselectchanged', function(params) {
                         console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
                         const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
@@ -726,7 +722,7 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                             });
                         }
                     });
-                    
+
                     heatmapChart.on('click', function (params) {
                         if (params.componentType === 'series') {
                             const [year, month] = params.value[0].split('-');
@@ -882,7 +878,7 @@ SharedData<span class="token operator">*</span> <span class="token function">get
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

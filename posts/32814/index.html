@@ -23,12 +23,12 @@
         <style>
             html{
                 scrollbar-width: thin;
-                scrollbar-color: #2a2a2a #121212 ;
+                scrollbar-color: #2a2a2a #101418 ;
                 font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
-                background-color: #121212;
+                background-color: #101418;
                 color: #cacaca;
                 cursor:default;
             }
@@ -48,7 +48,7 @@
                 text-align: center;
                 position: sticky;
                 top: 0;
-                background-color: #121212;
+                background-color: #101418;
                 padding: 5px;
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
@@ -67,7 +67,7 @@
             }
             #time{
                 text-align: center;
-                background-color: #121212;
+                background-color: inherit;
                 color: #cacaca;
             }
 
@@ -557,18 +557,14 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
             </div>
         </div>
 
-        <div class="toc">
-
-
-            <details>
-                <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6"><span class="toc-text"> 前提条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text"> 基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E8%AE%BE%E5%A4%87%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81%E5%8F%8Aip%E5%9C%B0%E5%9D%80"><span class="toc-text"> 查询设备网络连接状态及ip地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%B5%8B%E8%AF%95"><span class="toc-text"> 连接测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8Dip%E4%B8%BB%E5%8A%A8%E7%94%B3%E8%AF%B7ip%E5%9C%B0%E5%9D%80"><span class="toc-text"> 动态分配ip&#x2F;主动申请ip地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E8%AE%BE%E7%BD%AE%E8%AE%BE%E5%A4%87ip%E5%9C%B0%E5%9D%80"><span class="toc-text"> 手动设置设备ip地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2ssh%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AF"><span class="toc-text"> 查询ssh是否开启</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AFssh%E6%9C%8D%E5%8A%A1"><span class="toc-text"> 开启ssh服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ssh%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="toc-text"> ssh远程连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87mobaxterm%E8%BF%9E%E6%8E%A5"><span class="toc-text"> 通过MobaXterm连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5"><span class="toc-text"> 方式一：无线网络连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E4%B8%80%E7%BD%91%E7%BB%9C%E4%B8%8B"><span class="toc-text"> 同一网络下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%BD%91%E7%BB%9C%E4%B8%8B"><span class="toc-text"> 不同网络下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E9%80%9A%E8%BF%87%E7%BD%91%E7%BA%BF%E4%B8%8Ewin%E7%94%B5%E8%84%91%E8%BF%9E%E6%8E%A5"><span class="toc-text"> 方式二：通过网线与Win电脑连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E9%80%9A%E4%BF%A1%E6%97%A0%E9%9C%80%E5%85%B1%E4%BA%AB%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C"><span class="toc-text"> 点对点通信（无需共享电脑网络）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E9%80%9A%E4%BF%A1%E5%B9%B6%E5%85%B1%E4%BA%AB%E7%94%B5%E8%84%91%E7%BD%91%E7%BB%9C%E7%94%B5%E8%84%91%E6%88%90%E7%BD%91%E5%85%B3"><span class="toc-text"> 点对点通信并共享电脑网络（电脑成网关）</span></a></li></ol></li></ol>
-            </details>
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
         </div>
 
     </div>
 </div>
-
+<script src="/js/toc.js"></script>
 
 
 
@@ -582,7 +578,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                 if(heatmapChartDom){
                     const heatmapChart = echarts.init(heatmapChartDom, 'light');
                     const cellSize = 15;
-                    
+
                     const groupByYear = (data) => {
                         const result = {};
                         data.forEach(([date, value]) => {
@@ -594,10 +590,10 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         });
                         return result;
                     };
-                    
+
                     const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
-                    
+
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
                     const minYear = years[years.length - 1];
                     const maxYear = years[0];
@@ -605,27 +601,27 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         initYear = maxYear;
                     }
                     console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
-                    
+
                     heatmapChart.setOption({
                         grid: {},
-                        tooltip: { 
-                            position: 'top', 
-                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
                         },
-                        calendar: { 
+                        calendar: {
                             top: '10%',
                             range: initYear,
-                            cellSize: cellSize, 
-                            splitLine: { lineStyle: { color: '#121212', width: 4 } }, 
-                            itemStyle: { borderWidth: 4, borderColor: '#121212', color: '#1e1e1e'}, 
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
                             dayLabel: { show: false },
                             monthLabel: { show: true ,color: '#7b7b7b'},
                             yearLabel: { show: false },
-                            
-        
+
+
                         },
-                        
-                        visualMap: { 
+
+                        visualMap: {
                             show: true,
                             right: '8%',
                             bottom: '5%',
@@ -650,7 +646,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                             pageIconSize: 10,
                             pageTextStyle: { fontSize: 14,},
                             selectedMode: 'single',
-                            
+
                         },
                         series: years.map(year => ({
                             type: 'heatmap',
@@ -663,13 +659,13 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                             silent: year !== initYear,
                         })),
                     });
-                    
+
                     // init selected year
                     heatmapChart.dispatchAction({
                         type: 'legendSelect',
                         name: initYear,
                     });
-                    
+
                     heatmapChart.on('legendselectchanged', function(params) {
                         console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
                         const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
@@ -694,7 +690,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                             });
                         }
                     });
-                    
+
                     heatmapChart.on('click', function (params) {
                         if (params.componentType === 'series') {
                             const [year, month] = params.value[0].split('-');
@@ -850,7 +846,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

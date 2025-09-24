@@ -23,12 +23,12 @@
         <style>
             html{
                 scrollbar-width: thin;
-                scrollbar-color: #2a2a2a #121212 ;
+                scrollbar-color: #2a2a2a #101418 ;
                 font-family: "Trebuchet MS", Helvetica, sans-serif;
             }
 
             body{
-                background-color: #121212;
+                background-color: #101418;
                 color: #cacaca;
                 cursor:default;
             }
@@ -48,7 +48,7 @@
                 text-align: center;
                 position: sticky;
                 top: 0;
-                background-color: #121212;
+                background-color: #101418;
                 padding: 5px;
                 border-bottom-style: dotted;
                 border-color: #2a2a2a;
@@ -67,7 +67,7 @@
             }
             #time{
                 text-align: center;
-                background-color: #121212;
+                background-color: inherit;
                 color: #cacaca;
             }
 
@@ -1165,18 +1165,14 @@ How to use:
             </div>
         </div>
 
-        <div class="toc">
-
-
-            <details>
-                <summary id="sumtoc">TOC(自动生成)</summary>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ipc"><span class="toc-text"> 1. 为什么需要 IPC？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84-linux-ipc-%E6%9C%BA%E5%88%B6"><span class="toc-text"> 2. 常见的 Linux IPC 机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%AE%A1%E9%81%93pipes"><span class="toc-text"> 2.1. 管道（Pipes）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-fifo%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93"><span class="toc-text"> 2.2. FIFO（命名管道）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 2.3. 信号</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#231-%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text"> 2.3.1. 信号的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#232-%E4%BF%A1%E5%8F%B7%E4%B8%8E-ipc-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text"> 2.3.2. 信号与 IPC 的关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#233-%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%89%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-text"> 2.3.3. 信号的三种处理方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#234-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 2.3.4. 如何使用信号？</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2341-%E5%8F%91%E9%80%81%E4%BF%A1%E5%8F%B7kill-%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.3.4.1. 发送信号：kill() 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2342-%E6%B3%A8%E5%86%8C%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0signal-%E5%92%8C-sigaction"><span class="toc-text"> 2.3.4.2. 注册信号处理函数：signal() 和 sigaction()</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%BF%A1%E5%8F%B7%E9%9B%86signal-set%E5%92%8C%E9%98%BB%E5%A1%9E"><span class="toc-text"> 2.4. 信号集（Signal Set）和阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#241-%E4%BF%A1%E5%8F%B7%E9%9B%86%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.4.1. 信号集操作函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#242-%E9%98%BB%E5%A1%9E%E4%BF%A1%E5%8F%B7sigprocmask"><span class="toc-text"> 2.4.2. 阻塞信号：sigprocmask()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-system-v-ipc-system-v-ipc"><span class="toc-text"> 2.5. System V IPC (System V IPC)[1]</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#251-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97message-queues"><span class="toc-text"> 2.5.1. 消息队列（Message Queues）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#252-%E4%BF%A1%E5%8F%B7%E9%87%8Fsemaphores"><span class="toc-text"> 2.5.2. 信号量（Semaphores）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#253-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98shared-memory"><span class="toc-text"> 2.5.3. 共享内存（Shared Memory）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-ipc-%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="toc-text"> 2.6. IPC 总结与选择</span></a></li></ol></li></ol>
-            </details>
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
         </div>
 
     </div>
 </div>
-
+<script src="/js/toc.js"></script>
 
 
 
@@ -1190,7 +1186,7 @@ How to use:
                 if(heatmapChartDom){
                     const heatmapChart = echarts.init(heatmapChartDom, 'light');
                     const cellSize = 15;
-                    
+
                     const groupByYear = (data) => {
                         const result = {};
                         data.forEach(([date, value]) => {
@@ -1202,10 +1198,10 @@ How to use:
                         });
                         return result;
                     };
-                    
+
                     const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
                     const years = Object.keys(groupedData).reverse();
-                    
+
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
                     const minYear = years[years.length - 1];
                     const maxYear = years[0];
@@ -1213,27 +1209,27 @@ How to use:
                         initYear = maxYear;
                     }
                     console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
-                    
+
                     heatmapChart.setOption({
                         grid: {},
-                        tooltip: { 
-                            position: 'top', 
-                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles` 
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
                         },
-                        calendar: { 
+                        calendar: {
                             top: '10%',
                             range: initYear,
-                            cellSize: cellSize, 
-                            splitLine: { lineStyle: { color: '#121212', width: 4 } }, 
-                            itemStyle: { borderWidth: 4, borderColor: '#121212', color: '#1e1e1e'}, 
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
                             dayLabel: { show: false },
                             monthLabel: { show: true ,color: '#7b7b7b'},
                             yearLabel: { show: false },
-                            
-        
+
+
                         },
-                        
-                        visualMap: { 
+
+                        visualMap: {
                             show: true,
                             right: '8%',
                             bottom: '5%',
@@ -1258,7 +1254,7 @@ How to use:
                             pageIconSize: 10,
                             pageTextStyle: { fontSize: 14,},
                             selectedMode: 'single',
-                            
+
                         },
                         series: years.map(year => ({
                             type: 'heatmap',
@@ -1271,13 +1267,13 @@ How to use:
                             silent: year !== initYear,
                         })),
                     });
-                    
+
                     // init selected year
                     heatmapChart.dispatchAction({
                         type: 'legendSelect',
                         name: initYear,
                     });
-                    
+
                     heatmapChart.on('legendselectchanged', function(params) {
                         console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
                         const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
@@ -1302,7 +1298,7 @@ How to use:
                             });
                         }
                     });
-                    
+
                     heatmapChart.on('click', function (params) {
                         if (params.componentType === 'series') {
                             const [year, month] = params.value[0].split('-');
@@ -1458,7 +1454,7 @@ How to use:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
