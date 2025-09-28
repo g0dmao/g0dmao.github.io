@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
+        <link rel="stylesheet" href="/css/layout.css">
 
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
@@ -20,71 +21,6 @@
 
 
 
-        <style>
-            html{
-                scrollbar-width: thin;
-                scrollbar-color: #2a2a2a #101418 ;
-                font-family: "Trebuchet MS", Helvetica, sans-serif;
-            }
-
-            body{
-                background-color: #101418;
-                color: #cacaca;
-                cursor:default;
-            }
-
-            a {
-                color: #60A5FA;
-                text-decoration: none;
-
-            }
-
-            a:hover{
-                color: #3B82F6;
-
-            }
-
-            nav{
-                text-align: center;
-                position: sticky;
-                top: 0;
-                background-color: #101418;
-                padding: 5px;
-                border-bottom-style: dotted;
-                border-color: #2a2a2a;
-                z-index: 99;
-                #p_btn{
-                    span{
-                    color: #60A5FA;
-                    text-decoration-line: underline;
-                    }
-                    span:hover{
-                        color: #3B82F6;
-                    }
-                }
-
-
-            }
-            #time{
-                text-align: center;
-                background-color: inherit;
-                color: #cacaca;
-            }
-
-            footer{
-                text-align: center;
-                color: #333333;
-                border-top-style:dotted;
-                font-size: 14px;
-                p{
-                    margin: 5px;
-                }
-                a{
-                    color: #7b7b7b;
-                }
-            }
-
-        </style>
     <!-- hexo injector head_end start --><style>/* 布局样式 */
 .hexo-tips-layout {
     margin: 1.5rem 0;
@@ -159,12 +95,12 @@
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
-    <nav>
+    <header>
 
         <div style="display: inline-block; margin: 5px;">
             <span id="date" style="margin:5px;"></span>
             <span id="clock" style="margin: 5px;"></span>
-        </div><span><strong>  Welcome to my blog :) </strong></span>
+        </div><span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
         
             <div id="p_btn">
             <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
@@ -172,7 +108,7 @@
             <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
         
 
-    </nav>
+    </header>
     <script src="/js/clock.js"></script>
     <script src="/js/btn.js"></script>
     <!--000-->
@@ -204,7 +140,7 @@ How to use:
 
 <section class="copyright-notice" aria-labelledby="copyright-heading">
   <style>
-    :root{ --cn-text:#dfe6ea; --cn-muted:#9aa0a6; --cn-accent:#6ee7b7 }
+    :root{ --cn-text:#dfe6ea; --cn-muted:#9aa0a6; --cn-accent:#00c6ff }
     .copyright-notice{
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       color:var(--cn-text);
@@ -303,7 +239,7 @@ Behavior:
       --bg: rgba(250,250,250,0.03);
       --muted: #9aa0a6;
       --text: #dfe6ea;
-      --accent: #6ee7b7;
+      --accent: #00c6ff;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       font-size: 13px;
       line-height: 1.3;
@@ -338,7 +274,7 @@ Behavior:
     .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
 
     .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
-    .ai-attrib__toggle:focus{ outline:2px solid rgba(110,231,183,0.22); outline-offset:2px }
+    .ai-attrib__toggle:focus{outline-offset:2px }
 
     .ai-attrib__details{ margin-top:8px; color:var(--muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
     .ai-attrib__details a{ color:var(--accent); text-decoration:none }
@@ -1036,7 +972,7 @@ loop:
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -1162,7 +1098,7 @@ loop:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,9],
+                            data: [6,2,10,4,11,2,4,10],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -1236,13 +1172,13 @@ loop:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":7},{"name":"CubeMX配置功能","value":5},{"name":"内核编程","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1291,7 +1227,7 @@ loop:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":7,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"Shell","children":[],"count":2,"path":"Linux/Shell"},{"name":"Ubuntu","children":[],"count":4,"path":"Linux/Ubuntu"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"ArchLinux","children":[],"count":1,"path":"Linux/ArchLinux"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"web前端","children":[],"count":2,"path":"web前端"},{"name":"其他","children":[],"count":2,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -1340,11 +1276,26 @@ loop:
     
     </body>
     <!--000-->
-    <footer>
+    <!-- <footer>
         <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
         <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
         <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
         <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer> -->
+    <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-left">
+        <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        </div>
+        <div class="footer-right">
+        <a href="/about">About</a>
+        <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+        <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
+        <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
+        <a href="/data">数据统计</a>
+        </div>
+    </div>
     </footer>
     <script src="/js/background.js"></script>
     <script>

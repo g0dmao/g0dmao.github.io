@@ -21,7 +21,72 @@
 
 
 
-    <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
     <!--
         ╔══════════════════════════════════════════════════════════════╗
@@ -37,6 +102,11 @@
             <span id="clock" style="margin: 5px;"></span>
         </div><span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
         
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
 
     </header>
     <script src="/js/clock.js"></script>
@@ -44,43 +114,301 @@
     <!--000-->
     <body>
 
-        <!--标签-->
+        <!-- 博客详情 -->
+<div id="reading-progress"></div>
+<script src="/js/page_line.js"></script>
+<div class="a_container">
+    <div class="article">
+        <!--<div style="height: 50px;"></div>-->
+        
+        
 
-<div class="i_container">
-    
-    <div class="i_ava">
-    <img src="/img/CJ.png">
-    
-</div> 
-    
-    <h1 class="i_h1">Find:Tag#web</h1>
+        
+            <!--
+Author Note Module - same style & structure as Ai-assisted Attribution Module (ailogo)
+Copy the <section>...</section> into your article template where you want the author note to appear.
 
-    <p class="i_bar">
-        <a href="javascript:history.back(-1);"><strong><-Back</strong></a>
-    </p>
-    
-    <div class="posts_container">
-        <div class="i_posts">
-            <div class="i_lsposts">
-                <ul class="i_posts">
-                    
-                        <li class="i_posts">
-                            2025/03/01 - 
-                            <a href="/posts/38456/">
-                                属于自己的引导页 
-                            </a>  
-                        </li>
-                    
-                </ul>
+Behavior:
+- Matches the exact styling, spacing, accessibility, and toggle behavior of the AILOGO module
+- Default text: "本文为学习记录，不保证严谨性"
+- Supports data-author attribute on the section to specify the author's name (falls back to '作者')
+- No color changes from the original AILOGO module
+-->
+
+<section class="ai-attrib author-note" aria-labelledby="author-note-heading" data-author="GoDm@">
+  <style>
+    /* Exact styling copied from AILOGO module */
+    .ai-attrib{
+      --bg: rgba(250,250,250,0.03);
+      --muted: #9aa0a6;
+      --text: #dfe6ea;
+      --accent: #00c6ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--text);
+      margin: 24px 0 8px 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.03);
+      max-width: 820px;
+    }
+
+    .ai-attrib__logo{
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+    .ai-attrib__logo svg{ width:28px; height:28px; display:block }
+
+    .ai-attrib__body{ flex:1; min-width:0 }
+    .ai-attrib__heading{ display:flex; gap:8px; align-items:center; justify-content:space-between }
+    .ai-attrib__title{ font-weight:600; font-size:13px; color:var(--text); }
+    .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
+
+    .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
+    .ai-attrib__toggle:focus{outline-offset:2px }
+
+    .ai-attrib__details{ margin-top:8px; color:var(--muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
+    .ai-attrib__details a{ color:var(--accent); text-decoration:none }
+
+    .ai-attrib__pill{ background: rgba(255,255,255,0.02); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+
+    @media (max-width:540px){ .ai-attrib{ padding:10px; gap:10px } .ai-attrib__logo{ width:38px; height:38px } }
+  </style>
+
+  <div class="ai-attrib__logo" aria-hidden="true">
+    <!-- reuse simple SVG mark as placeholder -->
+    <svg viewBox="0 0 64 64" role="img" aria-label="author-note">
+      <rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.9" stroke-width="2"></rect>
+      <path d="M20 28h24M20 36h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+
+  <div class="ai-attrib__body">
+    <div class="ai-attrib__heading">
+      <div>
+        <div id="author-note-heading" class="ai-attrib__title">作者说明 · 学习记录</div>
+        <div class="ai-attrib__summary">本站作为作者的学习记录站，不保证文章内容严谨或完全正确。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="ai-attrib__toggle" aria-expanded="false" aria-controls="author-note-details" id="author-note-toggle">查看详情</button>
+      </div>
+    </div>
+
+    <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
+      <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
+      <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
+      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：god_mao@foxmail.com</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('author-note-toggle');
+      const det = document.getElementById('author-note-details');
+      const section = btn && btn.closest('.author-note');
+      const authorPill = document.getElementById('author-note-author');
+      // initialize author from data attribute if provided
+      try{
+        const dataAuthor = section && section.getAttribute('data-author');
+        if(dataAuthor && authorPill) authorPill.textContent = dataAuthor;
+      }catch(e){}
+
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看详情' : '收起';
+      });
+
+      // keyboard toggle with 'o' key when focused
+      section && section.addEventListener('keydown', (e)=>{ if(e.key === 'o' || e.key === 'O') btn.click(); });
+    })();
+  </script>
+</section>
+        
+
+        
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<div class="admonition note"><p class="admonition-title">note</p><p>本篇摘自野火嵌入式Linux系列教程驱动开发篇</p>
+</div>
+<h2 id="内核模块基本概念"><a class="markdownIt-Anchor" href="#内核模块基本概念"></a> 内核模块基本概念</h2>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
+<p>解决linux内核可扩展性和可维护性相对较差的缺陷</p>
+<h3 id="现代内核派系"><a class="markdownIt-Anchor" href="#现代内核派系"></a> 现代内核派系</h3>
+<p>宏内核：关键功能和服务功能均在内核空间提供</p>
+<ul>
+<li>运行效率高</li>
+<li>扩展性较差</li>
+</ul>
+<p>微内核：内核空间只提供关键功能，服务功能在用户空间提供</p>
+<ul>
+<li>运行效率较低</li>
+<li>安全性、扩展性较高</li>
+</ul>
+<h3 id="内核模块加载卸载"><a class="markdownIt-Anchor" href="#内核模块加载卸载"></a> 内核模块加载/卸载</h3>
+<ul>
+<li>
+<p>使用insmod命令加载</p>
+</li>
+<li>
+<p>使用rmmod命令卸载</p>
+</li>
+</ul>
+<h3 id="内核模块入口出口"><a class="markdownIt-Anchor" href="#内核模块入口出口"></a> 内核模块入口/出口</h3>
+<ul>
+<li>module_init()：加载模块式该函数自动执行，进行初始化操作</li>
+<li>module_exit()：卸载模块时函数自动执行，进行清理操作</li>
+</ul>
+<h3 id="内核模块信息声明"><a class="markdownIt-Anchor" href="#内核模块信息声明"></a> 内核模块信息声明</h3>
+<ul>
+<li>MODULE_LICENSE()：表示模块代码接受的软件许可协议，Linux内核遵循GPL V2开源协议，内核模块与linux内核保持一致即可。</li>
+<li>MODULE_AUTHOR()：描述模块的作者信息</li>
+<li>MODULE_DESCRIPTION()：对模块的简单介绍</li>
+<li>MODULE_ALIAS()：给模块设置一个别名</li>
+</ul>
+<h2 id="内核模块实验1"><a class="markdownIt-Anchor" href="#内核模块实验1"></a> 内核模块实验1</h2>
+<h3 id="实验环境"><a class="markdownIt-Anchor" href="#实验环境"></a> 实验环境</h3>
+<ul>
+<li>开发板烧录好Debian镜像</li>
+<li>启动开发板，搭建好nfs客户端，挂载共享文件夹</li>
+<li>获取Debian镜像的内核源码并编译</li>
+</ul>
+<h3 id="编译41971版本内核"><a class="markdownIt-Anchor" href="#编译41971版本内核"></a> 编译4.19.71版本内核</h3>
+<p>内核模块的功能需要依赖内核提供的各种底层接口</p>
+<p>1.下载linux内核源码</p>
+<p>​	github:</p>
+<pre class="line-numbers language-none"><code class="language-none">git clone https:&#x2F;&#x2F;github.com&#x2F;Embedfire&#x2F;ebf-buster-linux.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>​	gitee:</p>
+<pre class="line-numbers language-none"><code class="language-none">git clone https:&#x2F;&#x2F;gitee.com&#x2F;Embedfire&#x2F;ebf-buster-linux.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>2.安装必要环境工具库</p>
+<pre class="line-numbers language-none"><code class="language-none">sudo apt install make gcc-arm-linux-gnueabihf gcc bison flex libssl-dev dpkg-dev lzop<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>3.一键编译内核</p>
+<pre class="line-numbers language-none"><code class="language-none">sudo .&#x2F;make_deb.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>4.获取编译出来的内核相关文件</p>
+<pre class="line-numbers language-none"><code class="language-none">...&#x2F;ebf_linux_kernel_6ull_depth1&#x2F;build_image&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="内核模块头文件"><a class="markdownIt-Anchor" href="#内核模块头文件"></a> 内核模块头文件</h3>
+<ul>
+<li><code>#include &lt;linux/module.h&gt;</code>：包含内核模块信息声明的相关函数</li>
+<li><code>#include &lt;linux/init.h&gt;</code>：包含了 module_init()和 module_exit()函数的声明</li>
+<li><code>#include &lt;linux/kernel.h&gt;</code>：包含内核提供的各种函数，如printk</li>
+</ul>
+<h3 id="内核模块打印函数"><a class="markdownIt-Anchor" href="#内核模块打印函数"></a> 内核模块打印函数</h3>
+<ul>
+<li>
+<p><code>printf</code>：glibc实现的打印函数，工作于用户空间，不可在内核使用</p>
+</li>
+<li>
+<p><code>printk</code>：内核模块无法使用glibc库函数，内核自身实现的一个类printf函数，但是需要指定打印等级。</p>
+<ul>
+<li><code>#define KERN_EMERG</code> 	“&lt;0&gt;” 通常是系统崩溃前的信息</li>
+<li><code>#define KERN_ALERT</code>          “&lt;1&gt;” 需要立即处理的消息</li>
+<li><code>#define KERN_CRIT</code>             “&lt;2&gt;” 严重情况</li>
+<li><code>#define KERN_ERR</code>              “&lt;3&gt;” 错误情况</li>
+<li><code>#define KERN_WARNING</code>      “&lt;4&gt;” 有问题的情况</li>
+<li><code>#define KERN_NOTICE</code>       “&lt;5&gt;” 注意信息</li>
+<li><code>#define KERN_INFO</code>            “&lt;6&gt;” 普通消息</li>
+<li><code>#define KERN_DEBUG</code>        “&lt;7&gt;” 调试信息</li>
+</ul>
+</li>
+</ul>
+<p>查看当前系统printk打印等级：<code>cat /proc/sys/kernel/printk</code><br />
+输出</p>
+<pre class="line-numbers language-none"><code class="language-none">7       4       1       7<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>表示：</p>
+<ul>
+<li>当前控制台日志级别</li>
+<li>默认消息日志级别</li>
+<li>最小的控制台级别</li>
+<li>默认控制台日志级别</li>
+</ul>
+<p>打印内核所有打印信息：dmesg</p>
+<ul>
+<li>内核log缓冲区大小有限制，缓冲区数据可能被冲掉</li>
+</ul>
+<h3 id="makefile分析"><a class="markdownIt-Anchor" href="#makefile分析"></a> Makefile分析</h3>
+<ul>
+<li>
+<p><code>KERNEL_DIR</code>：指向linux内核具体路径</p>
+</li>
+<li>
+<p><code>export</code>：导出变量给子Makefile使用</p>
+</li>
+<li>
+<p><code>obj-m</code> := &lt;模块名&gt;.o：定义要生成的模块</p>
+</li>
+<li>
+<p><code>$(MAKE)</code>：Makefile的默认变量，值为make</p>
+</li>
+<li>
+<p><code>选项”-C”</code>：让make工具跳转到linux内核目录下读取顶层Makefile</p>
+</li>
+<li>
+<p><code>M=</code>：表示内核模块源码目录</p>
+</li>
+<li>
+<p><code>$(CURDIR)</code>：Makefile默认变量，值为当前目录所在路径</p>
+</li>
+<li>
+<p><code>make modules</code>：执行Linux顶层Makefile的伪目标，它实现内核模块的源码读取并编译为.ko文件</p>
+</li>
+</ul>
+<h3 id="编译内核模块"><a class="markdownIt-Anchor" href="#编译内核模块"></a> 编译内核模块</h3>
+<pre class="line-numbers language-none"><code class="language-none">make<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="把生成的内核模块拷贝到nfs共享目录"><a class="markdownIt-Anchor" href="#把生成的内核模块拷贝到nfs共享目录"></a> 把生成的内核模块拷贝到nfs共享目录</h3>
+<pre class="line-numbers language-none"><code class="language-none">make copy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="开发板加载内核模块"><a class="markdownIt-Anchor" href="#开发板加载内核模块"></a> 开发板加载内核模块</h3>
+<pre class="line-numbers language-none"><code class="language-none">insmod xxx.ko<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
+    </div>
+    <div class="info">
+        <div class="textinfo">
+            <h1 style="text-align: center;">Linux内核模块初体验</h1>
+            <p>创建时间：9月 27, 2025 </p>
+            <p>最后更新：9月 28, 2025</p>
+            <p>字数统计：957字</p>
+            <p>预计阅读：3min</p>
+
+            <div class="catgrs">
+                
             </div>
-            <div class="i_paginator">
-                <!--分页器暂时不需要-->
+            <div class="tgs">
+                
             </div>
         </div>
-        
+
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
+        </div>
+
     </div>
-    
 </div>
+<script src="/js/toc.js"></script>
+
+
+
+
 
     <script src="/vendor/js/echarts.min.js"></script>
         

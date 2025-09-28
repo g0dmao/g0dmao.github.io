@@ -1,0 +1,138 @@
+html{
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a2a #101418 ;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+body{
+    background-color: #101418;
+    color: #cacaca;
+    cursor:default;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #60A5FA;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;                  /* 必须：让伪元素定位 */
+    padding-bottom: 4px;                 /* 预留下划线空间 */
+}
+
+a:hover{
+    color: #3B82F6;
+
+}
+
+header{
+    text-align: center;
+    position: sticky;
+    width: 100%;
+    top: 0;
+    background: rgb(16, 20, 24, 0.5);
+    /* background-color: #ffffff00; */
+    backdrop-filter: blur(1px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 5px;
+    border-bottom-style: dotted;
+    border-color: #2a2a2a;
+    z-index: 99;
+    #p_btn{
+        span{
+        color: #60A5FA;
+        text-decoration-line: underline;
+        }
+        span:hover{
+            color: #3B82F6;
+        }
+    }
+}
+
+
+
+#time{
+    text-align: center;
+    background-color: inherit;
+    color: #cacaca;
+}
+
+/* footer{
+    text-align: center;
+    color: #333333;
+    border-top-style:dotted;
+    font-size: 14px;
+    p{
+        margin: 5px;
+    }
+    a{
+        color: #7b7b7b;
+    }
+} */
+
+.footer {
+bottom: 0;
+left: 0;
+width: 100%;
+background: #101418;              /* 深色背景 */
+color: #bbb;                      /* 默认文字颜色 */
+padding: 1rem 1rem;               /* 内边距 */
+font-size: 0.9rem;
+border-top: 1px solid rgba(255, 255, 255, 0.08); /* 顶部分隔线 */
+}
+
+.footer-container {
+max-width: 800px;
+margin: 0 auto;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;                  /* 小屏幕自动换行 */
+}
+
+.footer-left {
+margin-bottom: 0.5rem;
+}
+
+.footer-right a {
+color: #bbb;
+margin-left: 1.2rem;
+text-decoration: none;
+position: relative;
+transition: color 0.3s ease;
+}
+
+.footer-right a:hover {
+color: #fff;                      /* 悬停变亮 */
+}
+
+.footer-right a::after {
+content: "";
+position: absolute;
+left: 0;
+bottom: -3px;
+width: 0;
+height: 1px;
+background: #fff;
+transition: width 0.3s ease;
+}
+
+.footer-right a:hover::after {
+width: 100%;                      /* 悬停时出现下划线 */
+}
+
+/* 📱 响应式：小屏幕下居中排列 */
+@media (max-width: 600px) {
+.footer-container {
+    flex-direction: column;
+    text-align: center;
+}
+
+.footer-right a {
+    margin: 0 0.8rem;
+}
+
+.footer-left {
+    margin-bottom: 0.8rem;
+}
+}

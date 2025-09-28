@@ -1,9 +1,5 @@
 @media screen and (max-width: 768px) {
 
-    .chart{
-      display: none;
-    }
-
     /* 文章中 */
     .article{
       width: 100%;

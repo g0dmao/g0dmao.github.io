@@ -7,6 +7,7 @@ div.posts_container{
     display: flex;
     flex-direction: row;
     margin-top: 30px;
+    margin-bottom: 50px;
     justify-content: center;
 
     div.i_posts{
@@ -57,14 +58,6 @@ div.posts_container{
     margin: 5px;
 }
 
-.i_bar{
-    a{
-        color:lightseagreen;
-    }
-    a:hover{
-        color:darkcyan;
-    }
-}
 
 #toggle-btn {
     background-color: inherit;
