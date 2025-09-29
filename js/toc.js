@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const tocContainer = document.getElementById("toc");
-    const headers = Array.from(document.querySelectorAll("h2, h3, h4, h5, h6"));
+    const postContent = document.querySelector(".article");
+    const headers = Array.from(postContent.querySelectorAll("h2, h3, h4, h5, h6"));
     const tocStack = [];
 
     headers.forEach((header, index) => {
@@ -23,17 +24,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // 判断是否有直接下级标题（比自己层级大的第一个标题）
         let subUl = null;
+        let hasChildOrPlaceholder = false;
         for (let i = index + 1; i < headers.length; i++) {
             const nextLevel = parseInt(headers[i].tagName[1]);
-            if (nextLevel <= level){
+            if (nextLevel <= level) {
+                // 遇到同级或更高级标题，插入占位
                 const placeholder = document.createElement("span");
                 placeholder.className = "toc-toggle-btn";
                 placeholder.textContent = "";
                 li.insertBefore(placeholder, a);
-                break; // 遇到同级或更高级标题停止
+                hasChildOrPlaceholder = true;
+                break;
             }
             if (nextLevel > level) {
-                // 找到下级标题，说明当前有子标题
+                // 找到下级标题
                 subUl = document.createElement("ul");
                 subUl.className = "toc-sublist";
                 li.appendChild(subUl);
@@ -51,8 +55,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 };
                 li.insertBefore(btn, a);
-                break; // 只需要第一个下级标题就添加按钮
+                hasChildOrPlaceholder = true;
+                break;
             }
+        }
+
+        // 如果循环结束都没有插入按钮/占位，说明是最后一个标题或者没有子标题
+        if (!hasChildOrPlaceholder) {
+            const placeholder = document.createElement("span");
+            placeholder.className = "toc-toggle-btn";
+            placeholder.textContent = "";
+            li.insertBefore(placeholder, a);
         }
 
         tocStack.push({ ul: subUl || li, level: level });

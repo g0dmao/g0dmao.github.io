@@ -19,7 +19,13 @@
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/monokai.min.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script> -->
 
+        <!-- and it's easy to individually load additional languages -->
+        <!-- <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
+
+        <script>hljs.highlightAll();</script> -->
 
     <!-- hexo injector head_end start --><style>/* 布局样式 */
 .hexo-tips-layout {
@@ -345,17 +351,17 @@ Behavior:
 </div>
 </details>
 <hr />
-<div class="admonition info"><p class="admonition-title">info</p><p>本文旨在记录自己的IMX6ULL开发板上位机连接的过程。~~为什么感觉是后端这一块呢？~~</p>
-</div>
+<blockquote>
+<p>本文旨在记录自己的IMX6ULL开发板上位机连接的过程。<s>为什么感觉是后端这一块呢？</s></p>
+</blockquote>
 <h2 id="1-前提条件"><a class="markdownIt-Anchor" href="#1-前提条件"></a> 1. 前提条件</h2>
-<div class="admonition note"><p class="admonition-title">设备
-</p><p>装有Debian/Ubuntu系统的、安装了ssh服务的、带有网络设备及驱动的开发板</p>
-</div>
-<div class="admonition note"><p class="admonition-title">工具
-</p><p>MobaXterm工具</p>
-</div>
-<div class="admonition todo"><p class="admonition-title">todo</p><p>目前使用的上位机是Win11平台，后续再研究Linux平台。</p>
-</div>
+<blockquote>
+<ul>
+<li>装有Debian/Ubuntu系统的、安装了ssh服务的、带有网络设备及驱动的开发板</li>
+<li>MobaXterm工具</li>
+<li>目前使用的上位机是Win11平台，后续再研究Linux平台。</li>
+</ul>
+</blockquote>
 <h2 id="2-基本操作"><a class="markdownIt-Anchor" href="#2-基本操作"></a> 2. 基本操作</h2>
 <h3 id="21-查询设备网络连接状态及ip地址"><a class="markdownIt-Anchor" href="#21-查询设备网络连接状态及ip地址"></a> 2.1. 查询设备网络连接状态及ip地址</h3>
 <p><code>ifconfig</code> 命令</p>
@@ -394,31 +400,26 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
 <img src="Snipaste_2025-09-07_19-20-07.png" alt="" /></p>
 <p><code>hostname</code> 可以输入同名指令查看。</p>
 <h2 id="3-方式一无线网络连接"><a class="markdownIt-Anchor" href="#3-方式一无线网络连接"></a> 3. 方式一：无线网络连接</h2>
-<div class="admonition note"><p class="admonition-title">优点
-</p><p>无线通信。</p>
-</div>
-<div class="admonition error"><p class="admonition-title">缺点
-</p><p>延迟可能较高。</p>
-</div>
+<blockquote>
+<p>“优点”：无线通信。<br />
+“缺点”：延迟可能较高。</p>
+</blockquote>
 <h3 id="31-同一网络下"><a class="markdownIt-Anchor" href="#31-同一网络下"></a> 3.1. 同一网络下</h3>
 <p>在同一网段下（连接同一个WIFI），通过ssh建立连接。简简单单。</p>
 <h3 id="32-不同网络下"><a class="markdownIt-Anchor" href="#32-不同网络下"></a> 3.2. 不同网络下</h3>
-<div class="admonition todo"><p class="admonition-title">todo</p><p>待补充。</p>
-</div>
+<blockquote>
+<p>待补充。</p>
+</blockquote>
 <h2 id="4-方式二通过网线与win电脑连接"><a class="markdownIt-Anchor" href="#4-方式二通过网线与win电脑连接"></a> 4. 方式二：通过网线与Win电脑连接</h2>
-<div class="admonition note"><p class="admonition-title">优点
-</p><p>延迟低。</p>
-</div>
-<div class="admonition error"><p class="admonition-title">缺点
-</p><p>有线通信。</p>
-</div>
+<blockquote>
+<p>“优点”：延迟低。<br />
+“缺点”：有线通信。</p>
+</blockquote>
 <h3 id="41-点对点通信无需共享电脑网络"><a class="markdownIt-Anchor" href="#41-点对点通信无需共享电脑网络"></a> 4.1. 点对点通信（无需共享电脑网络）</h3>
-<div class="admonition note"><p class="admonition-title">优点
-</p><p>操作简单。</p>
-</div>
-<div class="admonition error"><p class="admonition-title">缺点
-</p><p>开发板不能共享电脑网络。</p>
-</div>
+<blockquote>
+<p>“优点”：操作简单。<br />
+“缺点”：开发板不能共享电脑网络。</p>
+</blockquote>
 <p>将开发板网口和电脑网口用网线连接，进入电脑<code>网络和Internet</code>设置，选择<code>以太网</code></p>
 <p>ip分配改为手动，ip地址可以分配为<code>192.168.10.1</code><br />
 掩码为<code>255.255.255.0</code><br />
@@ -426,12 +427,10 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
 <p>开发板端同样指定ip地址和掩码，须在同一网段，例如<code>192.168.10.7</code> 。这样两个设备就能互相找到了。<br />
 再在电脑上进行ping测试。能ping通用ssh/MobaXterm连接即可。</p>
 <h3 id="42-点对点通信并共享电脑网络电脑成网关"><a class="markdownIt-Anchor" href="#42-点对点通信并共享电脑网络电脑成网关"></a> 4.2. 点对点通信并共享电脑网络（电脑成网关）</h3>
-<div class="admonition note"><p class="admonition-title">优点
-</p><p>开发板不仅可以与电脑建立通信，还能共享电脑网络。</p>
-</div>
-<div class="admonition error"><p class="admonition-title">缺点
-</p><p>操作较复杂。</p>
-</div>
+<blockquote>
+<p>“优点”：开发板不仅可以与电脑建立通信，还能共享电脑网络。<br />
+“缺点”：操作较复杂。</p>
+</blockquote>
 <p>电脑通过wifi连接网络，通过以太网接口连接开发板。<br />
 在电脑控制面板&gt;网络和Internet&gt;网络和共享中心 右侧更改适配器设置，双击无线网卡设备（连接网络的那个设备）选择属性&gt; 共享选项卡 勾选<br />
 <img src="Snipaste_2025-09-07_19-41-42.png" alt="" /></p>
@@ -447,8 +446,8 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
         <div class="textinfo">
             <h1 style="text-align: center;">关于Linux开发板与上位机的连接方式</h1>
             <p>创建时间：9月 07, 2025 </p>
-            <p>最后更新：9月 27, 2025</p>
-            <p>字数统计：942字</p>
+            <p>最后更新：9月 29, 2025</p>
+            <p>字数统计：937字</p>
             <p>预计阅读：3min</p>
 
             <div class="catgrs">
@@ -527,7 +526,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -653,7 +652,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,10],
+                            data: [6,2,10,4,11,2,4,15],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -690,7 +689,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -705,7 +704,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4},{"name":"内核","value":3}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -782,7 +781,7 @@ udhcpc: lease of <span class="token number">192.168</span>.137.2 obtained, lease
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
