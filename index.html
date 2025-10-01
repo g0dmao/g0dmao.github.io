@@ -36,12 +36,14 @@
         ║                                                              ║
         ╚══════════════════════════════════════════════════════════════╝
     -->
+
     <header>
 
-        <div style="display: inline-block; margin: 5px;">
+        <div style="display: inline-block; margin: auto;">
             <span id="date" style="margin:5px;"></span>
             <span id="clock" style="margin: 5px;"></span>
-        </div><span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
+            <span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
+        </div>
         
 
     </header>
@@ -54,18 +56,53 @@
 
 <div class="i_container">
 
-    <div class="i_ava">
+    <!-- <div class="i_ava">
     <img src="/img/CJ.png">
     
-</div>
+</div> -->
 
     <!--<h1 class="i_h1">GoDm@'s Blog</h1>-->
-    <img style="max-width: 100%;" src="/img/GoDm@'s Blog.png">
-    <p style="color: #7b7b7b; margin: 0;">个人记录站 记录自己所爱。</p>
+    <!-- <img style="max-width: 100%;" src="/img/GoDm@'s Blog.png"> -->
+    <!-- <p style="color: #7b7b7b; margin: 0;">个人记录站 记录自己所爱。</p> -->
+    <div id="info_container">
+        <div style="backdrop-filter: blur(10px); width: fit-content; margin: auto; padding: 7px;">
+        <div id="head">
+            <img class="ava" src="/img/CJ.png">
+            <div class="blogname">
+                <p style="margin: 0; font-size: 30px; text-align: left;">GoDm@'s Blog</p>
+                <p style="margin: 5px; text-align: left;"><a href="/about">About & Contact</a></p>
+            </div>
+        </div>
+        <div class="descri">
+            <!-- <p>🌿 Welcome to My Little Corner</p> -->
+            <p>🌿 欢迎来到我的小站</p>
 
-    <p class="i_bar">
-        <a href="/about"><strong>about & contact</strong></a>
-    </p>
+
+            <!-- <p>This is a small space I built in a quiet corner of the internet — a place
+                to record my steps along the journey of learning and exploration.
+                The purpose of this site is simple: I want to leave traces of the knowledge,
+                ideas, and thoughts that spark my curiosity — not only to review and reflect,
+                but also to witness my own growth over time.</p> -->
+            <p>这里是我在互联网角落里搭建的一方天地，记录着我在学习与探索道路上的点滴足迹。建站的初衷很简单：
+                我想把那些让我心动的知识、技术与思考留下痕迹——不仅是为了复盘与回顾，也是希望在不断记录的过程中，
+                让自己看见成长的轨迹。</p>
+
+
+            <!-- <p>I believe that passion is worth recording, and growth is worth cherishing.
+                Perhaps these writings are neither profound nor perfect, but they are real —
+                and they are part of my story. I hope they will not only help my future self,
+                but also offer a bit of inspiration and insight to you, a passerby who happens to stop by.</p> -->
+            <p>我相信，热爱值得被记录，成长值得被珍惜。或许这些文字并不深刻，也不完美，但它们都是真实的、
+                属于我的旅程。希望它们不仅能帮助未来的自己，也能为偶然路过的你，带去一点启发与灵感。</p>
+
+
+            <!-- <p>May we keep moving forward, guided by the things we love. 🚀</p> -->
+            <p>愿我们都能在热爱中不断前行。🚀</p>
+        </div>
+        </div>
+    </div>
+
+
     <div id="search-container" style="max-width:600px;margin:20px auto;">
   <input id="search-input" type="text" placeholder="搜索文章..."
          style="width:100%;padding:10px 15px;font-size:16px;border-radius:8px;
@@ -86,6 +123,7 @@
             <h3>时间查找/archives</h3>
             <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/09/">九月 2025</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">八月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/07/">七月 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">三月 2025</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">二月 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/01/">一月 2025</a><span class="archive-list-count">6</span></li></ul>
         </div>
+
         <div class="i_posts">
             <div class="i_lsposts">
                 <ul class="i_posts">
@@ -866,7 +904,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -922,7 +960,9 @@
         <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
     </footer> -->
     <footer class="footer">
+
     <div class="footer-container">
+
         <div class="footer-left">
         <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
         <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
@@ -935,6 +975,7 @@
         <a href="/data">数据统计</a>
         </div>
     </div>
+
     </footer>
     <script src="/js/background.js"></script>
     <script>
