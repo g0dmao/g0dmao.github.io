@@ -256,8 +256,9 @@ Behavior:
 </div>
 </details>
 <hr />
-<div class="admonition note"><p class="admonition-title">note</p><p>本篇摘自野火嵌入式Linux系列教程驱动开发篇</p>
-</div>
+<blockquote>
+<p>本篇摘自野火嵌入式Linux系列教程驱动开发篇</p>
+</blockquote>
 <h2 id="内核模块基本概念"><a class="markdownIt-Anchor" href="#内核模块基本概念"></a> 内核模块基本概念</h2>
 <h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
 <p>解决linux内核可扩展性和可维护性相对较差的缺陷</p>
@@ -296,9 +297,10 @@ Behavior:
 <h2 id="内核模块实验1"><a class="markdownIt-Anchor" href="#内核模块实验1"></a> 内核模块实验1</h2>
 <h3 id="实验环境"><a class="markdownIt-Anchor" href="#实验环境"></a> 实验环境</h3>
 <ul>
-<li>开发板烧录好Debian镜像</li>
-<li>启动开发板，搭建好nfs客户端，挂载共享文件夹</li>
-<li>获取Debian镜像的内核源码并编译</li>
+<li>开发板烧录好Debian镜像。</li>
+<li>SSH连接MobaXterm</li>
+<li>启动开发板，搭建好SFTP。</li>
+<li>获取Debian镜像的内核源码并编译。</li>
 </ul>
 <h3 id="编译41971版本内核"><a class="markdownIt-Anchor" href="#编译41971版本内核"></a> 编译4.19.71版本内核</h3>
 <p>内核模块的功能需要依赖内核提供的各种底层接口</p>
@@ -309,10 +311,20 @@ Behavior:
 <pre class="line-numbers language-none"><code class="language-none">git clone https:&#x2F;&#x2F;gitee.com&#x2F;Embedfire&#x2F;ebf-buster-linux.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>2.安装必要环境工具库</p>
 <pre class="line-numbers language-none"><code class="language-none">sudo apt install make gcc-arm-linux-gnueabihf gcc bison flex libssl-dev dpkg-dev lzop<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li>gcc-arm-linux-gnueabihf 交叉编译器</li>
+<li>bison 语法分析器</li>
+<li>flex 词法分析器</li>
+<li>libssl-dev OpenSSL通用库</li>
+<li>lzop LZO压缩库的压缩软件</li>
+</ul>
 <p>3.一键编译内核</p>
 <pre class="line-numbers language-none"><code class="language-none">sudo .&#x2F;make_deb.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>如果在电脑上编译不成功且无法解决，可以选择在开发板上编译，代价就是。。。嗯 it takes a long time</p>
+</blockquote>
 <p>4.获取编译出来的内核相关文件</p>
-<pre class="line-numbers language-none"><code class="language-none">...&#x2F;ebf_linux_kernel_6ull_depth1&#x2F;build_image&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">YOURPATH&#x2F;ebf_linux_kernel_6ull_depth1&#x2F;build_image&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="内核模块头文件"><a class="markdownIt-Anchor" href="#内核模块头文件"></a> 内核模块头文件</h3>
 <ul>
 <li><code>#include &lt;linux/module.h&gt;</code>：包含内核模块信息声明的相关函数</li>
@@ -348,41 +360,62 @@ Behavior:
 <li>最小的控制台级别</li>
 <li>默认控制台日志级别</li>
 </ul>
-<p>打印内核所有打印信息：dmesg</p>
+<p>小于等于设定打印等级的消息不会被打印。<br />
+打印内核所有打印信息：dmesg</p>
 <ul>
 <li>内核log缓冲区大小有限制，缓冲区数据可能被冲掉</li>
 </ul>
+<h3 id="源码展示"><a class="markdownIt-Anchor" href="#源码展示"></a> 源码展示</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">hello_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_EMERG<span class="token string">"[KERN_EMERG]Hello Kernel!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"[DEFAULT]Hello Kernel!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> __exit <span class="token function">hello_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"[DEFAULT]Goodbye Kernel!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">module_init</span><span class="token punctuation">(</span>hello_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>hello_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"MIT"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_AUTHOR</span><span class="token punctuation">(</span><span class="token string">"gdm"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_DESCRIPTION</span><span class="token punctuation">(</span><span class="token string">"print: hello kernel"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_ALIAS</span><span class="token punctuation">(</span><span class="token string">"test_module"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="makefile分析"><a class="markdownIt-Anchor" href="#makefile分析"></a> Makefile分析</h3>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token comment"># 定义内核路径</span>
+KERNEL_DIR<span class="token operator">:=</span>/home/debian/linux/driver_learning/ebf_linux_kernel_6ull_depth1/build_image/build
+<span class="token comment"># 定义编译工具集</span>
+ARCH<span class="token operator">:=</span>arm
+CROSS_COMPILE<span class="token operator">:=</span>arm-linux-gnueabihf-
+<span class="token comment"># 将变量导出，相当于作为环境变量，让内核Makefile继承此变量 否则变量只在当前文件可见。</span>
+<span class="token keyword">export</span> ARCH CROSS_COMPILE
+<span class="token comment"># 内核模块编译的标准变量，告诉内核编译哪个模块。</span>
+obj-m<span class="token operator">:=</span>hellokernal.o
+<span class="token comment"># -C 命令指切换到目标目录的makefile</span>
+<span class="token comment"># M= 可以理解为module，指定模块所在路径</span>
+<span class="token comment"># modules 是内核makefile定义的目标，触发“构建外部模块”完整规则</span>
+<span class="token target symbol">all</span><span class="token punctuation">:</span>
+    <span class="token variable">$</span><span class="token punctuation">(</span>MAKE<span class="token punctuation">)</span> -C <span class="token variable">$</span><span class="token punctuation">(</span>KERNEL_DIR<span class="token punctuation">)</span> M<span class="token operator">=</span><span class="token variable">$</span><span class="token punctuation">(</span>CURDIR<span class="token punctuation">)</span> moudules
+<span class="token builtin-target builtin">.PHONY</span><span class="token punctuation">:</span>clean
+<span class="token target symbol">clean</span><span class="token punctuation">:</span>
+    <span class="token variable">$</span><span class="token punctuation">(</span>MAKE<span class="token punctuation">)</span> -C <span class="token variable">$</span><span class="token punctuation">(</span>KERNEL_DIR<span class="token punctuation">)</span> M<span class="token operator">=</span><span class="token variable">$</span><span class="token punctuation">(</span>CURDIR<span class="token punctuation">)</span> clean<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
-<li>
-<p><code>KERNEL_DIR</code>：指向linux内核具体路径</p>
-</li>
-<li>
-<p><code>export</code>：导出变量给子Makefile使用</p>
-</li>
-<li>
-<p><code>obj-m</code> := &lt;模块名&gt;.o：定义要生成的模块</p>
-</li>
-<li>
-<p><code>$(MAKE)</code>：Makefile的默认变量，值为make</p>
-</li>
-<li>
-<p><code>选项”-C”</code>：让make工具跳转到linux内核目录下读取顶层Makefile</p>
-</li>
-<li>
-<p><code>M=</code>：表示内核模块源码目录</p>
-</li>
-<li>
-<p><code>$(CURDIR)</code>：Makefile默认变量，值为当前目录所在路径</p>
-</li>
-<li>
-<p><code>make modules</code>：执行Linux顶层Makefile的伪目标，它实现内核模块的源码读取并编译为.ko文件</p>
-</li>
+<li><code>KERNEL_DIR</code>：指向linux内核具体路径</li>
+<li><code>export</code>：导出变量给子Makefile使用</li>
+<li><code>obj-m</code> := &lt;模块名&gt;.o：定义要生成的模块</li>
+<li><code>$(MAKE)</code>：Makefile的默认变量，值为make</li>
+<li><code>选项”-C”</code>：让make工具跳转到linux内核目录下读取顶层Makefile</li>
+<li><code>M=</code>：表示内核模块源码目录</li>
+<li><code>$(CURDIR)</code>：Makefile默认变量，值为当前目录所在路径</li>
+<li><code>make modules</code>：执行Linux顶层Makefile的伪目标，它实现内核模块的源码读取并编译为.ko文件</li>
 </ul>
 <h3 id="编译内核模块"><a class="markdownIt-Anchor" href="#编译内核模块"></a> 编译内核模块</h3>
 <pre class="line-numbers language-none"><code class="language-none">make<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="把生成的内核模块拷贝到nfs共享目录"><a class="markdownIt-Anchor" href="#把生成的内核模块拷贝到nfs共享目录"></a> 把生成的内核模块拷贝到nfs共享目录</h3>
-<pre class="line-numbers language-none"><code class="language-none">make copy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="开发板加载内核模块"><a class="markdownIt-Anchor" href="#开发板加载内核模块"></a> 开发板加载内核模块</h3>
 <pre class="line-numbers language-none"><code class="language-none">insmod xxx.ko<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -393,14 +426,42 @@ Behavior:
         <div class="textinfo">
             <h1 style="text-align: center;">Linux内核模块初体验</h1>
             <p>创建时间：9月 27, 2025 </p>
-            <p>最后更新：9月 28, 2025</p>
-            <p>字数统计：957字</p>
-            <p>预计阅读：3min</p>
+            <p>最后更新：10月 01, 2025</p>
+            <p>字数统计：1.2k字</p>
+            <p>预计阅读：5min</p>
 
             <div class="catgrs">
                 
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="catgrs">
+                                -内核编程
+                            </a>
+                        </span>
+                    
+                
             </div>
             <div class="tgs">
+                
+                    
+                        <span>
+                            <a href="/Tags/%E5%86%85%E6%A0%B8/" id="tgs">
+                                #内核
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/Tags/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/" id="tgs">
+                                #内核编程
+                            </a>
+                        </span>
+                    
                 
             </div>
         </div>
@@ -602,7 +663,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -617,7 +678,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -639,13 +700,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":6},{"name":"入门","value":6}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":6},{"name":"入门","value":6}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -694,7 +755,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":6,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":24,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

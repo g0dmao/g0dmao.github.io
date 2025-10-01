@@ -709,7 +709,7 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}],
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -724,7 +724,7 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"程序架构","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":21},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -746,13 +746,13 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":6},{"name":"入门","value":6}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":23},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"入门","value":6},{"name":"CubeMX配置功能","value":5}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":6},{"name":"入门","value":6}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -801,7 +801,7 @@ SMBus 为系统和电源管理这样的任务提供了一条控制总线，使�
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":5,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":23,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":6,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":24,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
