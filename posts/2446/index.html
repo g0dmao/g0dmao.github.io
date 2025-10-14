@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/post.css">
+        <link rel="stylesheet" href="/css/view.css">
+        <link rel="stylesheet" href="/css/admonition.css">
+        <link rel="stylesheet" href="/css/search.css">
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/monokai.min.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script> -->
+
+        <!-- and it's easy to individually load additional languages -->
+        <!-- <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
+
+        <script>hljs.highlightAll();</script> -->
+
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+    <!--
+        ╔══════════════════════════════════════════════════════════════╗
+        ║    接收到一条消息：
+        ║       Bro来查我成分了吗？                                       ║
+        ║                                                              ║
+        ╚══════════════════════════════════════════════════════════════╝
+    -->
+
+    <header>
+
+        <div style="display: inline-block; margin: auto;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+            <span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
+        </div>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </header>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
+        <!-- 博客详情 -->
+<div id="reading-progress"></div>
+<script src="/js/page_line.js"></script>
+<div class="a_container">
+    <div class="article">
+        <!--<div style="height: 50px;"></div>-->
+        
+            <!--
+Copyright Notice Module - Single-file HTML
+Copy the <section>...</section> into your article template where you want the copyright notice to appear.
+
+Features:
+- Minimal, dark-friendly design matching the AI-attribution module
+- Shows copyright year (auto-updates), author, and license name
+- Expandable details (license text / contact / link)
+- Accessible (aria) and keyboard-friendly
+- Small JS for toggle; no external libs
+
+How to use:
+- Replace AUTHOR_NAME, LICENSE_NAME, and LICENSE_URL placeholders with your own values.
+- If using a static site generator (Hexo), render this snippet conditionally using front-matter (e.g., `copyright: true`).
+- You can extract the <style> to your global CSS for consistency.
+-->
+
+<section class="copyright-notice" aria-labelledby="copyright-heading">
+  <style>
+    :root{ --cn-text:#dfe6ea; --cn-muted:#9aa0a6; --cn-accent:#00c6ff }
+    .copyright-notice{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--cn-text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      border-radius:10px; padding:12px 14px; margin:18px 0; display:flex; gap:12px; align-items:flex-start; max-width:820px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.12); border:1px solid rgba(255,255,255,0.03)
+    }
+    .copyright-notice__mark{ flex:0 0 44px; width:44px; height:44px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,0.02) }
+    .copyright-notice__mark svg{ width:28px; height:28px }
+    .copyright-notice__body{ flex:1; min-width:0 }
+    .copyright-notice__title{ font-weight:600; font-size:13px }
+    .copyright-notice__summary{ color:var(--cn-muted); margin-top:4px; font-size:12px }
+    .copyright-notice__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--cn-accent); font-weight:600 }
+    .copyright-notice__details{ margin-top:8px; color:var(--cn-muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
+    .copyright-notice__details a{ color:var(--cn-accent); text-decoration:none }
+    .copyright-notice__pill{ background: rgba(255,255,255,0.02); color:var(--cn-muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+    @media (max-width:540px){ .copyright-notice{ padding:10px; gap:10px } .copyright-notice__mark{ width:38px; height:38px } }
+  </style>
+
+  <div class="copyright-notice__mark" aria-hidden="true">
+    <!-- simple © mark -->
+    <svg viewBox="0 0 24 24" role="img" aria-label="copyright"><text x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" font-size="25" fill="currentColor">©</text></svg>
+  </div>
+
+  <div class="copyright-notice__body">
+    <div style="display:flex; justify-content:space-between; align-items:center">
+      <div>
+        <div id="copyright-heading" class="copyright-notice__title">版权声明 · 版权所有</div>
+        <div class="copyright-notice__summary">本文 © <span id="cn-author">AUTHOR_NAME</span> <span id="cn-year">year</span>。保留所有权利。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="copyright-notice__toggle" aria-expanded="false" aria-controls="copyright-details" id="cn-toggle">查看许可</button>
+      </div>
+    </div>
+
+    <div id="copyright-details" class="copyright-notice__details" role="region" aria-hidden="true">
+      <div><span class="copyright-notice__pill">许可：<span id="cn-license">LICENSE_NAME</span></span></div>
+      <div style="margin-top:8px">本文章为博主原创文章。遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</div>
+      <div style="margin-top:8px"><a href="LICENSE_URL" id="cn-license-link" target="_blank" rel="noopener">查看完整许可条款</a></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Fill placeholders if developer sets data attributes on the section
+      const section = document.currentScript && document.currentScript.parentElement || document.querySelector('.copyright-notice');
+      try{
+        const author = section.getAttribute('data-author') || 'GoDm@';
+        const license = section.getAttribute('data-license') || 'CC BY-SA 4.0';
+        const licenseUrl = section.getAttribute('data-license-url') || 'https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans';
+        const yearEl = document.getElementById('cn-year');
+        const authorEl = document.getElementById('cn-author');
+        const licenseEl = document.getElementById('cn-license');
+        const licenseLink = document.getElementById('cn-license-link');
+        const now = new Date();
+        const year = now.getFullYear();
+        if(yearEl) yearEl.textContent = year;
+        if(authorEl) authorEl.textContent = author;
+        if(licenseEl) licenseEl.textContent = license;
+        if(licenseLink) licenseLink.href = licenseUrl;
+      }catch(e){/* ignore */}
+
+      const btn = document.getElementById('cn-toggle');
+      const det = document.getElementById('copyright-details');
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看许可' : '收起';
+      });
+
+    })();
+  </script>
+</section>
+
+        
+
+        
+            <!--
+Author Note Module - same style & structure as Ai-assisted Attribution Module (ailogo)
+Copy the <section>...</section> into your article template where you want the author note to appear.
+
+Behavior:
+- Matches the exact styling, spacing, accessibility, and toggle behavior of the AILOGO module
+- Default text: "本文为学习记录，不保证严谨性"
+- Supports data-author attribute on the section to specify the author's name (falls back to '作者')
+- No color changes from the original AILOGO module
+-->
+
+<section class="ai-attrib author-note" aria-labelledby="author-note-heading" data-author="GoDm@">
+  <style>
+    /* Exact styling copied from AILOGO module */
+    .ai-attrib{
+      --bg: rgba(250,250,250,0.03);
+      --muted: #9aa0a6;
+      --text: #dfe6ea;
+      --accent: #00c6ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--text);
+      margin: 24px 0 8px 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.03);
+      max-width: 820px;
+    }
+
+    .ai-attrib__logo{
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+    .ai-attrib__logo svg{ width:28px; height:28px; display:block }
+
+    .ai-attrib__body{ flex:1; min-width:0 }
+    .ai-attrib__heading{ display:flex; gap:8px; align-items:center; justify-content:space-between }
+    .ai-attrib__title{ font-weight:600; font-size:13px; color:var(--text); }
+    .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
+
+    .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
+    .ai-attrib__toggle:focus{outline-offset:2px }
+
+    .ai-attrib__details{ margin-top:8px; color:var(--muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
+    .ai-attrib__details a{ color:var(--accent); text-decoration:none }
+
+    .ai-attrib__pill{ background: rgba(255,255,255,0.02); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+
+    @media (max-width:540px){ .ai-attrib{ padding:10px; gap:10px } .ai-attrib__logo{ width:38px; height:38px } }
+  </style>
+
+  <div class="ai-attrib__logo" aria-hidden="true">
+    <!-- reuse simple SVG mark as placeholder -->
+    <svg viewBox="0 0 64 64" role="img" aria-label="author-note">
+      <rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.9" stroke-width="2"></rect>
+      <path d="M20 28h24M20 36h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+
+  <div class="ai-attrib__body">
+    <div class="ai-attrib__heading">
+      <div>
+        <div id="author-note-heading" class="ai-attrib__title">作者说明 · 学习记录</div>
+        <div class="ai-attrib__summary">本站作为作者的学习记录站，不保证文章内容严谨或完全正确。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="ai-attrib__toggle" aria-expanded="false" aria-controls="author-note-details" id="author-note-toggle">查看详情</button>
+      </div>
+    </div>
+
+    <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
+      <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
+      <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
+      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：xlm_work@outlook.com</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('author-note-toggle');
+      const det = document.getElementById('author-note-details');
+      const section = btn && btn.closest('.author-note');
+      const authorPill = document.getElementById('author-note-author');
+      // initialize author from data attribute if provided
+      try{
+        const dataAuthor = section && section.getAttribute('data-author');
+        if(dataAuthor && authorPill) authorPill.textContent = dataAuthor;
+      }catch(e){}
+
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看详情' : '收起';
+      });
+
+      // keyboard toggle with 'o' key when focused
+      section && section.addEventListener('keydown', (e)=>{ if(e.key === 'o' || e.key === 'O') btn.click(); });
+    })();
+  </script>
+</section>
+        
+
+        
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<ul>
+<li><a href="#1-%E5%89%8D%E8%A8%80">1. 前言</a></li>
+<li><a href="#2-%E6%93%8D%E4%BD%9C%E4%B9%A0%E6%83%AF%E9%83%A8%E5%88%86">2. 操作习惯部分</a>
+<ul>
+<li><a href="#21-%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA%E5%90%8D">2.1. 修改主机名</a></li>
+<li><a href="#22-%E9%85%8D%E7%BD%AE%E6%97%B6%E5%8C%BA">2.2. 配置时区</a></li>
+</ul>
+</li>
+<li><a href="#3-%E5%AE%89%E5%85%A8%E9%83%A8%E5%88%86">3. 🔐安全部分</a>
+<ul>
+<li><a href="#31-%E9%87%8D%E6%96%B0%E8%AE%BE%E7%BD%AEroot%E5%AF%86%E7%A0%81%E4%B8%BA%E5%BC%BA%E5%AF%86%E7%A0%81">3.1. 重新设置root密码为强密码</a></li>
+<li><a href="#32-%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%B9%B6%E8%AE%BE%E7%BD%AE%E5%BC%BA%E5%AF%86%E7%A0%81">3.2. 添加用户并设置强密码</a></li>
+<li><a href="#33-%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7">3.3. 系统升级</a></li>
+<li><a href="#34-%E4%BD%BF%E7%94%A8ssh-key%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E8%80%8C%E4%B8%8D%E6%98%AF%E5%AF%86%E7%A0%81">3.4. 使用SSH Key远程登录而不是密码</a>
+<ul>
+<li><a href="#341-%E5%9C%A8%E6%9C%AC%E5%9C%B0%E7%94%B5%E8%84%91%E4%B8%8A%E7%94%9F%E6%88%90%E5%AF%86%E5%8C%99%E5%AF%B9">3.4.1. 在本地电脑上生成密匙对：</a></li>
+<li><a href="#342-%E5%88%9B%E5%BB%BAconfig%E6%96%87%E4%BB%B6">3.4.2. 创建config文件</a></li>
+<li><a href="#343-%E5%A4%8D%E5%88%B6%E5%85%AC%E5%8C%99%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8">3.4.3. 复制公匙到服务器</a></li>
+<li><a href="#344-%E7%99%BB%E5%BD%95">3.4.4. 登录</a></li>
+</ul>
+</li>
+<li><a href="#35-%E6%94%B9ssh%E7%AB%AF%E5%8F%A3%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99">3.5. 改ssh端口&amp;配置防火墙</a>
+<ul>
+<li><a href="#351-%E5%88%9D%E6%AD%A5%E9%85%8D%E7%BD%AE">3.5.1. 初步配置</a></li>
+<li><a href="#352-%E6%94%B9ssh%E7%AB%AF%E5%8F%A3">3.5.2. 改SSH端口</a></li>
+<li><a href="#353-%E5%85%B3%E9%97%AD22%E7%AB%AF%E5%8F%A3">3.5.3. 关闭22端口</a></li>
+</ul>
+</li>
+<li><a href="#36-ssh%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">3.6. ssh配置文件</a>
+<ul>
+<li><a href="#361-%E7%A6%81%E7%94%A8-root%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95">3.6.1. 禁用 root远程登录&amp;密码登录</a></li>
+<li><a href="#362-%E4%BD%BF%E7%94%A8ssh2">3.6.2. 使用SSH2</a></li>
+<li><a href="#363-%E9%87%8D%E5%90%AFssh">3.6.3. 重启ssh</a></li>
+</ul>
+</li>
+<li><a href="#37-fail2ban%E5%B7%A5%E5%85%B7%E9%98%B2%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3">3.7. Fail2ban工具防暴力破解</a>
+<ul>
+<li><a href="#371-%E9%85%8D%E7%BD%AEfail2ban">3.7.1. 配置fail2ban</a></li>
+<li><a href="#372-%E6%9F%A5%E7%9C%8B%E7%8A%B6%E6%80%81">3.7.2. 查看状态</a></li>
+<li><a href="#373-%E8%A7%A3%E5%B0%81ip">3.7.3. 解封ip</a></li>
+<li><a href="#374-%E5%90%AF%E7%94%A8fail2ban">3.7.4. 启用fail2ban</a></li>
+<li><a href="#375-%E5%B0%8F%E8%B4%B4%E5%A3%AB">3.7.5. 小贴士</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-%E7%B3%BB%E7%BB%9F%E7%BB%B4%E6%8A%A4%E9%83%A8%E5%88%86">4. 系统维护部分</a>
+<ul>
+<li><a href="#41-%E4%BD%BF%E7%94%A8expkg">4.1. <s>使用expkg</s></a></li>
+</ul>
+</li>
+<li><a href="#5-%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E9%83%A8%E5%88%86">5. 系统运行部分</a></li>
+</ul>
+<h2 id="1-前言"><a class="markdownIt-Anchor" href="#1-前言"></a> 1. 前言</h2>
+<p>前几天在七牛云租了一台轻量应用级服务器，2c4gb，足够满足玩具的需求了。第一次玩服务器，现在把自己的搭建环境的过程记录一下，方便日后操作。</p>
+<p>云服务器系统：Ubuntu 24.04 LTS<br />
+云服务器厂商：七牛云<br />
+云服务器规格：轻量型 T1 2C4GB CPU型</p>
+<h2 id="2-操作习惯部分"><a class="markdownIt-Anchor" href="#2-操作习惯部分"></a> 2. 操作习惯部分</h2>
+<h3 id="21-修改主机名"><a class="markdownIt-Anchor" href="#21-修改主机名"></a> 2.1. 修改主机名</h3>
+<p>ssh登录到服务器后，发现主机名是一坨乱码，看着太难受了，必须改了。<br />
+<img src="Snipaste_2025-10-14_14-17-13.png" alt="" /></p>
+<p>永久修改主机名命令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> hostnamectl set-hostname myserver<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>重启生效。</p>
+<h3 id="22-配置时区"><a class="markdownIt-Anchor" href="#22-配置时区"></a> 2.2. 配置时区</h3>
+<p>输入 <code>date</code> 命令，发现服务器使用的世界协调时（UTC），改为中国标准时（UTC+8），符合习惯。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> timedatectl set-timezone Asia/Shanghai<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>运行后，使用  <code>timedatectl</code> 命令确认是否修改成功，并查看 <code>NTP service</code> 是否启用，这是自动同步网络时间，可保持时间精准。若未启用则需查询相关教程启用。</p>
+<h2 id="3-安全部分"><a class="markdownIt-Anchor" href="#3-安全部分"></a> 3. 🔐安全部分</h2>
+<p>此部分需格外重视！</p>
+<h3 id="31-重新设置root密码为强密码"><a class="markdownIt-Anchor" href="#31-重新设置root密码为强密码"></a> 3.1. 重新设置root密码为强密码</h3>
+<p>不用多说，<code>passwd</code> 命令即可。</p>
+<h3 id="32-添加用户并设置强密码"><a class="markdownIt-Anchor" href="#32-添加用户并设置强密码"></a> 3.2. 添加用户并设置强密码</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">adduser yourname<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>添加到sudo组：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">sudo</span> yourname<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>查看用户组：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /etc/group<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>查看当前用户所属组：<code>groups</code>命令。</p>
+<blockquote>
+<p>设置完成后，退出root用户登录，用SSH以普通用户重新登录到服务器。</p>
+</blockquote>
+<h3 id="33-系统升级"><a class="markdownIt-Anchor" href="#33-系统升级"></a> 3.3. 系统升级</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> upgrade<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="34-使用ssh-key远程登录而不是密码"><a class="markdownIt-Anchor" href="#34-使用ssh-key远程登录而不是密码"></a> 3.4. 使用SSH Key远程登录而不是密码</h3>
+<p>SSH Key 登录比密码安全很多，几乎无法破解。本质就是让服务器识别你的电脑，只有你的电脑才能登录到服务器。</p>
+<h4 id="341-在本地电脑上生成密匙对"><a class="markdownIt-Anchor" href="#341-在本地电脑上生成密匙对"></a> 3.4.1. 在本地电脑上生成密匙对：</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa <span class="token parameter variable">-b</span> <span class="token number">4096</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><code>-t</code>：指定密匙类型，rsa是经典算法，兼容性好。</li>
+<li><code>-b</code>：指定密匙长度为4096位。</li>
+</ul>
+<p>它会提示你几个问题：</p>
+<pre class="line-numbers language-none"><code class="language-none">Generating public&#x2F;private rsa key pair. Enter file in which to save the key (&#x2F;home&#x2F;yourname&#x2F;.ssh&#x2F;id_rsa):<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这时候：</p>
+<ul>
+<li><strong>直接回车</strong> 就会把密钥生成在默认位置：
+<ul>
+<li>私钥：<code>~/.ssh/id_rsa</code> ，<strong>绝对不能泄露！</strong></li>
+<li>公钥：`~/.ssh/id_rsa.pub</li>
+</ul>
+</li>
+<li><strong>或者</strong>指定位置及文件名。<br />
+接着会提示：</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">Enter passphrase (empty for no passphrase):<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这里你可以选择：</p>
+<ul>
+<li><strong>直接回车</strong>：不设置密码，登录更方便；</li>
+<li><strong>输入密码短语</strong>：多一层保护（每次用私钥登录都要输入这串密码）。</li>
+</ul>
+<h4 id="342-创建config文件"><a class="markdownIt-Anchor" href="#342-创建config文件"></a> 3.4.2. 创建config文件</h4>
+<p>有时，我们不只有一个ssh密匙对，比如我为github生成了一个密匙对，也给服务器生成了一个。如果使用了非默认名称的密钥文件，需要在 <em>~/.ssh/config</em> 文件中进行配置。</p>
+<p>在本地保存ssh密匙对文件的文件夹里，打开或创建名为 <code>config</code> 的文件，无需后缀名。编辑该文件，示例：</p>
+<pre class="line-numbers language-none"><code class="language-none"># GitHub（常见）
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~&#x2F;.ssh&#x2F;id_ed25519_github
+  IdentitiesOnly yes
+
+# 我的服务器
+Host myserver #你的主机名
+  HostName 1.2.3.4 #主机ip地址&#x2F;域名
+  User someone #你要登录的用户
+  Port 22        # 如果你改过SSH端口就写上，默认22
+  IdentityFile ~&#x2F;.ssh&#x2F;id_rsa_server
+  IdentitiesOnly yes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Host</code></td>
+<td>自定义的别名（可以随意起名）</td>
+</tr>
+<tr>
+<td><code>HostName</code></td>
+<td>实际的服务器域名或 IP 地址</td>
+</tr>
+<tr>
+<td><code>User</code></td>
+<td>登录用户名</td>
+</tr>
+<tr>
+<td><code>Port</code></td>
+<td>SSH 端口（没改的话默认 22）</td>
+</tr>
+<tr>
+<td><code>IdentityFile</code></td>
+<td>私钥文件路径</td>
+</tr>
+<tr>
+<td><code>IdentitiesOnly yes</code></td>
+<td>只使用指定的私钥，避免自动尝试其他 key 导致拒绝</td>
+</tr>
+</tbody>
+</table>
+<h4 id="343-复制公匙到服务器"><a class="markdownIt-Anchor" href="#343-复制公匙到服务器"></a> 3.4.3. 复制公匙到服务器</h4>
+<p>方式1</p>
+<hr />
+<p>在服务器创建一个文件夹保存ssh公匙，服务器用它来识别远程登录到它的电脑。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> ~/.ssh
+<span class="token function">touch</span> ~/.ssh/authorized_keys
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">700</span> ~/.ssh
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> ~/.ssh/authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>之后使用nano编辑器，将本地的.pub文件里的内容复制到authorized_keys即可。</p>
+<blockquote>
+<ul>
+<li><strong>千万别上传私钥</strong>（例如 <code>id_rsa</code>、<code>id_ed25519</code>）。只传 <code>*.pub</code>。</li>
+<li><strong>权限必须正确</strong>：- 确保服务器 <code>~/.ssh</code> 权限是 <code>700</code>，<code>~/.ssh/authorized_keys</code> 权限是 <code>600</code>，否则 SSH 会拒绝使用密钥。</li>
+<li><strong>每个公钥一行</strong>，不要插入换行或空格。<code>authorized_keys</code> 可包含多把公钥（多台电脑可共用）。</li>
+</ul>
+</blockquote>
+<p>方式2</p>
+<hr />
+<p>window可使用gitbash。linux直接输入：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-copy-id <span class="token parameter variable">-i</span> ~/.ssh/id_rsa_server.pub root@SERVER_IP<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><code>-i</code> 后面是你本地的公钥文件（比如 <code>~/.ssh/id_rsa_server.pub</code>）。</li>
+<li>运行会提示输入服务器密码，然后把公钥追加到服务器 <code>~/.ssh/authorized_keys</code>。<br />
+<strong>注意不要错传成私匙！</strong></li>
+</ul>
+<hr />
+<h4 id="344-登录"><a class="markdownIt-Anchor" href="#344-登录"></a> 3.4.4. 登录</h4>
+<p>尝试在本地ssh登录。正常的话不用输密码就可以直接登陆上：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> Host<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="35-改ssh端口配置防火墙"><a class="markdownIt-Anchor" href="#35-改ssh端口配置防火墙"></a> 3.5. 改ssh端口&amp;配置防火墙</h3>
+<blockquote>
+<p>警告：此步操作需要谨慎，至少保留一个已登录的ssh终端，否则如果操作不当会导致被锁（无法登录到服务器），正确配置之前先不要启用防火墙。</p>
+</blockquote>
+<h4 id="351-初步配置"><a class="markdownIt-Anchor" href="#351-初步配置"></a> 3.5.1. 初步配置</h4>
+<p>Ubuntu 内置了UFW防火墙。通过防火墙，尽可能少的暴露端口，提升安全性。</p>
+<p>我们首先允许以下端口：</p>
+<ul>
+<li>22端口：SSH默认端口</li>
+<li>80端口：HTTP服务，如果你在服务器上架网站，这个端口必须开放。</li>
+<li>443端口：HTTPS服务</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw default deny incoming
+<span class="token function">sudo</span> ufw default allow outgoing
+<span class="token function">sudo</span> ufw allow <span class="token number">22</span>/tcp    <span class="token comment"># SSH端口</span>
+<span class="token function">sudo</span> ufw allow <span class="token number">80</span>/tcp      <span class="token comment"># HTTP</span>
+<span class="token function">sudo</span> ufw allow <span class="token number">443</span>/tcp     <span class="token comment"># HTTPS</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>sudo ufw default deny incoming</code>：默认拒绝所有进入服务器的流量（incoming traffic）。除非你明确允许某个端口，否则外部无法连接到你的服务器。<br />
+<code>sudo ufw default allow outgoing</code>：默认允许服务器发出的所有流量（outgoing traffic）。服务器可以自由访问外部网络（比如下载更新、访问 API 等）。</p>
+<h4 id="352-改ssh端口"><a class="markdownIt-Anchor" href="#352-改ssh端口"></a> 3.5.2. 改SSH端口</h4>
+<blockquote>
+<p><strong>注意</strong>：保留一个已经登录的 SSH 窗口，先测试新端口可用再关闭旧窗口，避免自己被锁。</p>
+</blockquote>
+<p>不使用默认SSH端口登录，提高安全性。</p>
+<ol>
+<li>编辑 SSH 配置：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /etc/ssh/sshd_config<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>找到：<code>#Port 22</code><br />
+修改为：<code>Port your_ssh_port</code></p>
+<blockquote>
+<p>建议 SSH 改到 <strong>1024 以上，最好 2000~65000 的范围</strong>，例如 2222、22022、55222。</p>
+</blockquote>
+<ol start="2">
+<li>防火墙允许该端口并启用防火墙</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow your_ssh_port/tcp
+<span class="token function">sudo</span> ufw <span class="token builtin class-name">enable</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>运行 <code>sudo ufw status</code> 命令检查防火墙规则。<br />
+应该显示：</p>
+<pre class="line-numbers language-none"><code class="language-none">To                         Action      From
+--                         ------      ----
+22&#x2F;tcp                     ALLOW       Anywhere
+80&#x2F;tcp                     ALLOW       Anywhere
+443&#x2F;tcp                    ALLOW       Anywhere
+your_ssh_port&#x2F;tcp          ALLOW       Anywhere
+22&#x2F;tcp (v6)                ALLOW       Anywhere (v6)
+80&#x2F;tcp (v6)                ALLOW       Anywhere (v6)
+443&#x2F;tcp (v6)               ALLOW       Anywhere (v6)
+your_ssh_port&#x2F;tcp (v6)     ALLOW       Anywhere (v6)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>
+<p>重启 SSH：<br />
+<code>sudo systemctl restart ssh</code></p>
+</li>
+<li>
+<p>测试新端口：<br />
+<code>ssh -p your_ssh_port root@SERVER_IP</code></p>
+</li>
+</ol>
+<p>如果第四步访问被拒绝，别慌，使用命令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> sshd <span class="token parameter variable">-T</span> <span class="token operator">|</span> <span class="token function">grep</span> port<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果输出的是你设定的端口号，<strong>且ufw中允许了设定端口</strong>，那么可以忽略保留ssh窗口的note，直接重启云服务器，重新以新端口号登录，应该可以成功。</p>
+<h4 id="353-关闭22端口"><a class="markdownIt-Anchor" href="#353-关闭22端口"></a> 3.5.3. 关闭22端口</h4>
+<p>成功登录后，可以关闭22端口了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw delete allow <span class="token number">22</span>/tcp
+<span class="token function">sudo</span> ufw reload
+<span class="token function">sudo</span> ufw status<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3 id="36-ssh配置文件"><a class="markdownIt-Anchor" href="#36-ssh配置文件"></a> 3.6. ssh配置文件</h3>
+<p>依旧：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /etc/ssh/sshd_config<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="361-禁用-root远程登录密码登录"><a class="markdownIt-Anchor" href="#361-禁用-root远程登录密码登录"></a> 3.6.1. 禁用 root远程登录&amp;密码登录</h4>
+<p>配置文件中设置：</p>
+<pre class="line-numbers language-none"><code class="language-none">PermitRootLogin no # 禁用root登录
+PasswordAuthentication no # 禁用密码登录<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>对于第二个选项，请自行决定。至于暴力破解，用Fail2ban工具可以防暴力破解。</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>优势</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PasswordAuthentication yes</td>
+<td>可以用密码登录（灵活）</td>
+<td>容易被暴力破解，安全性低</td>
+</tr>
+<tr>
+<td>PasswordAuthentication no</td>
+<td>安全性高，防止暴力攻击</td>
+<td>如果 SSH Key 配置有问题，可能登录不上</td>
+</tr>
+</tbody>
+</table>
+<h4 id="362-使用ssh2"><a class="markdownIt-Anchor" href="#362-使用ssh2"></a> 3.6.2. 使用SSH2</h4>
+<ul>
+<li><code>Protocol</code> 指定 SSH 使用的协议版本：
+<ul>
+<li><strong>Protocol 1</strong>：SSH-1，存在严重安全漏洞，不再推荐</li>
+<li><strong>Protocol 2</strong>：SSH-2，更安全，更稳定</li>
+</ul>
+</li>
+<li>现代 Linux 发行版默认使用 <strong>Protocol 2</strong>，但最好确认配置文件里明确指定。</li>
+</ul>
+<p>在配置文件中修改或在适当位置添加：</p>
+<pre class="line-numbers language-none"><code class="language-none">Protocol 2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="363-重启ssh"><a class="markdownIt-Anchor" href="#363-重启ssh"></a> 3.6.3. 重启ssh</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart <span class="token function">ssh</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="37-fail2ban工具防暴力破解"><a class="markdownIt-Anchor" href="#37-fail2ban工具防暴力破解"></a> 3.7. Fail2ban工具防暴力破解</h3>
+<p>该工具可以自动封禁暴力破解 IP。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> fail2ban
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> fail2ban
+<span class="token function">sudo</span> systemctl start fail2ban<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="371-配置fail2ban"><a class="markdownIt-Anchor" href="#371-配置fail2ban"></a> 3.7.1. 配置fail2ban</h4>
+<pre class="line-numbers language-none"><code class="language-none">sudo nano &#x2F;etc&#x2F;fail2ban&#x2F;jail.local
+# 添加：
+[sshd]
+enabled &#x3D; true
+maxretry &#x3D; 5
+findtime &#x3D; 86400
+bantime &#x3D; 86400<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>enabled</strong> → 是否启用该 jail</li>
+<li><strong>port</strong> → SSH 服务端口（可用逗号指定多个端口，如 22,2222）</li>
+<li><strong>maxretry</strong> → 超过多少次失败被 ban</li>
+<li><strong>bantime</strong> → 封禁持续时间，可改为 <code>-1</code> 永久封禁</li>
+<li><strong>findtime</strong> → 在findtime时间内输入maxretry次错误密码即被封禁。</li>
+</ul>
+<h4 id="372-查看状态"><a class="markdownIt-Anchor" href="#372-查看状态"></a> 3.7.2. 查看状态</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> fail2ban-client status<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">Status for the jail: sshd
+|- Filter
+|  |- Currently failed: 3
+|  |- Total failed: 15
+|  &#96;- File list: &#x2F;var&#x2F;log&#x2F;auth.log
+&#96;- Actions
+   |- Currently banned: 1
+   |- Total banned: 5
+   &#96;- Banned IP list: 123.45.67.89<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>Banned IP list</code> → 被封禁的 IP</li>
+<li><code>Currently banned</code> → 当前封禁数量</li>
+</ul>
+<h4 id="373-解封ip"><a class="markdownIt-Anchor" href="#373-解封ip"></a> 3.7.3. 解封ip</h4>
+<p>如果自己被 ban，可以在服务器端解封（假设你的 IP 是 <code>1.2.3.4</code>）：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> fail2ban-client <span class="token builtin class-name">set</span> sshd unbanip <span class="token number">1.2</span>.3.4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>解封后你可以正常 SSH 登录。</p>
+<h4 id="374-启用fail2ban"><a class="markdownIt-Anchor" href="#374-启用fail2ban"></a> 3.7.4. 启用fail2ban</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> <span class="token parameter variable">--now</span> fail2ban<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="375-小贴士"><a class="markdownIt-Anchor" href="#375-小贴士"></a> 3.7.5. 小贴士</h4>
+<ol>
+<li><strong>改规则前保持一个活动 SSH 会话</strong>，测试新规则生效再退出</li>
+<li><strong>先小范围测试</strong>：例如 <code>maxretry = 3, bantime = 60</code>，确认不会误锁自己</li>
+<li><strong>定期检查</strong>：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> fail2ban-client status sshd
+<span class="token function">sudo</span> fail2ban-client status<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<blockquote>
+<p>做完上面部分后，在云服务器后台创建一个自定义镜像，备份一下，方便日后快速恢复。</p>
+</blockquote>
+<h2 id="4-系统维护部分"><a class="markdownIt-Anchor" href="#4-系统维护部分"></a> 4. 系统维护部分</h2>
+<h3 id="41-使用expkg"><a class="markdownIt-Anchor" href="#41-使用expkg"></a> 4.1. <s>使用expkg</s></h3>
+<h2 id="5-系统运行部分"><a class="markdownIt-Anchor" href="#5-系统运行部分"></a> 5. 系统运行部分</h2>
+
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
+    </div>
+    <div class="info">
+        <div class="textinfo">
+            <h1 style="text-align: center;">记录搭建一台云服务器环境的过程</h1>
+            <p>创建时间：10月 14, 2025 </p>
+            <p>最后更新：10月 14, 2025</p>
+            <p>字数统计：2.6k字</p>
+            <p>预计阅读：10min</p>
+
+            <div class="catgrs">
+                
+                    
+                        <span>
+                            <a href="/categories/VPS/" id="catgrs">
+                                -VPS
+                            </a>
+                        </span>
+                    
+                
+            </div>
+            <div class="tgs">
+                
+                    
+                        <span>
+                            <a href="/Tags/VPS/" id="tgs">
+                                #VPS
+                            </a>
+                        </span>
+                    
+                
+            </div>
+        </div>
+
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
+        </div>
+
+    </div>
+</div>
+<script src="/js/toc.js"></script>
+
+
+
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,3],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":27,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <!--000-->
+    <!-- <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer> -->
+    <footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-left">
+        <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        </div>
+        <div class="footer-right">
+        <a href="/about">About</a>
+        <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+        <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
+        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3bqyuYKwvLKdu7KlsLy0sfO_srA" style="text-decoration:none;">E-mail</a>
+        <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
+        <a href="/data">数据统计</a>
+
+        </div>
+    </div>
+
+    </footer>
+    <script src="/js/background.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 彩色控制台信息（更容易被看到）
+            console.log('%c 发现隐藏彩蛋 🎉 ', 'background:#2b2b2b;color:#fff;padding:6px 10px;border-radius:6px;font-weight:bold;');
+            console.log('%c 喵喵喵！欢迎来到本站。', 'color:#9d7ff5;');
+
+            // 可选：输出多行 ASCII（仿终端风）
+            console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
+        });
+    </script>
+
+</html>
+

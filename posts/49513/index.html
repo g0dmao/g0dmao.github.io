@@ -218,7 +218,7 @@ Behavior:
     <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
       <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
       <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
-      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：god_mao@foxmail.com</div>
+      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：xlm_work@outlook.com</div>
     </div>
   </div>
 
@@ -260,10 +260,8 @@ Behavior:
 <p>本篇摘自野火嵌入式Linux系列教程驱动开发篇</p>
 </blockquote>
 <h2 id="内核模块基本概念"><a class="markdownIt-Anchor" href="#内核模块基本概念"></a> 内核模块基本概念</h2>
-<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
-<p>解决linux内核可扩展性和可维护性相对较差的缺陷</p>
 <h3 id="现代内核派系"><a class="markdownIt-Anchor" href="#现代内核派系"></a> 现代内核派系</h3>
-<p>宏内核：关键功能和服务功能均在内核空间提供</p>
+<p>单内核：关键功能和服务功能均在内核空间提供</p>
 <ul>
 <li>运行效率高</li>
 <li>扩展性较差</li>
@@ -273,14 +271,11 @@ Behavior:
 <li>运行效率较低</li>
 <li>安全性、扩展性较高</li>
 </ul>
+<p>linux属于单内核，按理来说扩展性不好，但其的模块化设计又弥补了这一点。</p>
 <h3 id="内核模块加载卸载"><a class="markdownIt-Anchor" href="#内核模块加载卸载"></a> 内核模块加载/卸载</h3>
 <ul>
-<li>
-<p>使用insmod命令加载</p>
-</li>
-<li>
-<p>使用rmmod命令卸载</p>
-</li>
+<li>使用insmod命令加载</li>
+<li>使用rmmod命令卸载</li>
 </ul>
 <h3 id="内核模块入口出口"><a class="markdownIt-Anchor" href="#内核模块入口出口"></a> 内核模块入口/出口</h3>
 <ul>
@@ -426,8 +421,8 @@ obj-m<span class="token operator">:=</span>hellokernal.o
         <div class="textinfo">
             <h1 style="text-align: center;">Linux内核模块初体验</h1>
             <p>创建时间：9月 27, 2025 </p>
-            <p>最后更新：10月 01, 2025</p>
-            <p>字数统计：1.2k字</p>
+            <p>最后更新：10月 11, 2025</p>
+            <p>字数统计：1.3k字</p>
             <p>预计阅读：5min</p>
 
             <div class="catgrs">
@@ -500,7 +495,7 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -626,7 +621,7 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,1],
+                            data: [6,2,10,4,11,2,4,15,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -663,7 +658,7 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":22},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -678,7 +673,7 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":22},{"name":"嵌入式","value":14},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -700,13 +695,13 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":7},{"name":"入门","value":6}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":12},{"name":"记录","value":8},{"name":"内核编程","value":7},{"name":"入门","value":6}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -755,7 +750,7 @@ obj-m<span class="token operator">:=</span>hellokernal.o
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":8,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":7,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":25,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":27,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -822,8 +817,10 @@ obj-m<span class="token operator">:=</span>hellokernal.o
         <a href="/about">About</a>
         <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
         <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
+        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3bqyuYKwvLKdu7KlsLy0sfO_srA" style="text-decoration:none;">E-mail</a>
         <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
         <a href="/data">数据统计</a>
+
         </div>
     </div>
 
