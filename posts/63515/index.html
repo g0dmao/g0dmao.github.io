@@ -10,10 +10,10 @@
 
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
-        <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
         <link rel="stylesheet" href="/css/layout.css">
+        <link rel="stylesheet" href="/css/view.css">
 
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
@@ -485,235 +485,229 @@ How to use:
 </div>
 </details>
 <hr />
-<h1 id="python-pathlib-模块常用函数速查表"><a class="markdownIt-Anchor" href="#python-pathlib-模块常用函数速查表"></a> Python pathlib 模块常用函数速查表</h1>
 <h2 id="path"><a class="markdownIt-Anchor" href="#path"></a> Path()</h2>
-<p>描述：创建一个路径对象<br />
-语法：</p>
+<p>描述：创建路径对象<br />
+语法：<code>Path(path_str)</code><br />
+示例：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
-p <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">"path/to/file"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">"/home/user/test.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="exists"><a class="markdownIt-Anchor" href="#exists"></a> .exists()</h2>
+p <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">'/home/user/docs'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="cwd"><a class="markdownIt-Anchor" href="#cwd"></a> cwd()</h2>
+<p>描述：获取当前工作目录<br />
+语法：<code>Path.cwd()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>cwd<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="home"><a class="markdownIt-Anchor" href="#home"></a> home()</h2>
+<p>描述：获取用户主目录路径<br />
+语法：<code>Path.home()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>home<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="exists"><a class="markdownIt-Anchor" href="#exists"></a> exists()</h2>
 <p>描述：判断路径是否存在<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>exists<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="is_file"><a class="markdownIt-Anchor" href="#is_file"></a> .is_file()</h2>
-<p>描述：判断路径是否为文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>is_file<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>is_file<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="is_dir"><a class="markdownIt-Anchor" href="#is_dir"></a> .is_dir()</h2>
-<p>描述：判断路径是否为目录<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>is_dir<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>is_dir<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="is_symlink"><a class="markdownIt-Anchor" href="#is_symlink"></a> .is_symlink()</h2>
-<p>描述：判断路径是否为符号链接<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>is_symlink<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>is_symlink<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="iterdir"><a class="markdownIt-Anchor" href="#iterdir"></a> .iterdir()</h2>
-<p>描述：遍历目录下的所有文件和文件夹<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>iterdir<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> child <span class="token keyword">in</span> p<span class="token punctuation">.</span>iterdir<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>child<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="glob"><a class="markdownIt-Anchor" href="#glob"></a> .glob()</h2>
+语法：<code>path.exists()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'test.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>exists<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="is_file"><a class="markdownIt-Anchor" href="#is_file"></a> is_file()</h2>
+<p>描述：判断是否为文件<br />
+语法：<code>path.is_file()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'test.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_file<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="is_dir"><a class="markdownIt-Anchor" href="#is_dir"></a> is_dir()</h2>
+<p>描述：判断是否为目录<br />
+语法：<code>path.is_dir()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/etc'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_dir<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="is_symlink"><a class="markdownIt-Anchor" href="#is_symlink"></a> is_symlink()</h2>
+<p>描述：判断是否为符号链接<br />
+语法：<code>path.is_symlink()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'link'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>is_symlink<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="iterdir"><a class="markdownIt-Anchor" href="#iterdir"></a> iterdir()</h2>
+<p>描述：列出目录内容（生成器）<br />
+语法：<code>path.iterdir()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> item <span class="token keyword">in</span> Path<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>iterdir<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="glob"><a class="markdownIt-Anchor" href="#glob"></a> glob()</h2>
 <p>描述：使用通配符匹配文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>glob<span class="token punctuation">(</span>pattern<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> <span class="token builtin">file</span> <span class="token keyword">in</span> p<span class="token punctuation">.</span>glob<span class="token punctuation">(</span><span class="token string">"*.txt"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="rglob"><a class="markdownIt-Anchor" href="#rglob"></a> .rglob()</h2>
+语法：<code>path.glob(pattern)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token builtin">list</span><span class="token punctuation">(</span>Path<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>glob<span class="token punctuation">(</span><span class="token string">'*.py'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="rglob"><a class="markdownIt-Anchor" href="#rglob"></a> rglob()</h2>
 <p>描述：递归匹配文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>rglob<span class="token punctuation">(</span>pattern<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> <span class="token builtin">file</span> <span class="token keyword">in</span> p<span class="token punctuation">.</span>rglob<span class="token punctuation">(</span><span class="token string">"*.py"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">file</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="mkdir"><a class="markdownIt-Anchor" href="#mkdir"></a> .mkdir()</h2>
+语法：<code>path.rglob(pattern)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token builtin">list</span><span class="token punctuation">(</span>Path<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rglob<span class="token punctuation">(</span><span class="token string">'*.py'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="mkdir"><a class="markdownIt-Anchor" href="#mkdir"></a> mkdir()</h2>
 <p>描述：创建目录<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="rmdir"><a class="markdownIt-Anchor" href="#rmdir"></a> .rmdir()</h2>
+语法：<code>path.mkdir(parents=False, exist_ok=False)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'new_dir'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="rmdir"><a class="markdownIt-Anchor" href="#rmdir"></a> rmdir()</h2>
 <p>描述：删除空目录<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>rmdir<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>rmdir<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="unlink"><a class="markdownIt-Anchor" href="#unlink"></a> .unlink()</h2>
-<p>描述：删除文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>unlink<span class="token punctuation">(</span>missing_ok<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>unlink<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="rename"><a class="markdownIt-Anchor" href="#rename"></a> .rename()</h2>
-<p>描述：重命名或移动文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>target<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>rename<span class="token punctuation">(</span><span class="token string">"new_name.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="replace"><a class="markdownIt-Anchor" href="#replace"></a> .replace()</h2>
-<p>描述：重命名并覆盖目标文件<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>replace<span class="token punctuation">(</span>target<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"existing_file.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="read_text"><a class="markdownIt-Anchor" href="#read_text"></a> .read_text()</h2>
+语法：<code>path.rmdir()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'empty_dir'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rmdir<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="unlink"><a class="markdownIt-Anchor" href="#unlink"></a> unlink()</h2>
+<p>描述：删除文件或符号链接<br />
+语法：<code>path.unlink(missing_ok=False)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'file.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>unlink<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="rename"><a class="markdownIt-Anchor" href="#rename"></a> rename()</h2>
+<p>描述：重命名文件或目录<br />
+语法：<code>path.rename(target)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'old.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>rename<span class="token punctuation">(</span><span class="token string">'new.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="replace"><a class="markdownIt-Anchor" href="#replace"></a> replace()</h2>
+<p>描述：重命名（如目标存在则覆盖）<br />
+语法：<code>path.replace(target)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'b.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="resolve"><a class="markdownIt-Anchor" href="#resolve"></a> resolve()</h2>
+<p>描述：返回绝对路径（解析符号链接）<br />
+语法：<code>path.resolve()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'..'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>resolve<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="absolute"><a class="markdownIt-Anchor" href="#absolute"></a> absolute()</h2>
+<p>描述：返回绝对路径（不解析符号链接）<br />
+语法：<code>path.absolute()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'file.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>absolute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="stat"><a class="markdownIt-Anchor" href="#stat"></a> stat()</h2>
+<p>描述：获取文件状态信息<br />
+语法：<code>path.stat()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">info <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">'file.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>stat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span>st_size<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="read_text"><a class="markdownIt-Anchor" href="#read_text"></a> read_text()</h2>
 <p>描述：读取文本文件内容<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>read_text<span class="token punctuation">(</span>encoding<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">content <span class="token operator">=</span> p<span class="token punctuation">.</span>read_text<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="write_text"><a class="markdownIt-Anchor" href="#write_text"></a> .write_text()</h2>
+语法：<code>path.read_text(encoding=None)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read_text<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="write_text"><a class="markdownIt-Anchor" href="#write_text"></a> write_text()</h2>
 <p>描述：写入文本内容<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>write_text<span class="token punctuation">(</span>data<span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>write_text<span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="read_bytes"><a class="markdownIt-Anchor" href="#read_bytes"></a> .read_bytes()</h2>
+语法：<code>path.write_text(data, encoding=None)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write_text<span class="token punctuation">(</span><span class="token string">'Hello World'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="read_bytes"><a class="markdownIt-Anchor" href="#read_bytes"></a> read_bytes()</h2>
 <p>描述：读取二进制文件内容<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>read_bytes<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> p<span class="token punctuation">.</span>read_bytes<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="write_bytes"><a class="markdownIt-Anchor" href="#write_bytes"></a> .write_bytes()</h2>
-<p>描述：写入二进制内容<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>write_bytes<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>write_bytes<span class="token punctuation">(</span><span class="token string">b"binary data"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="joinpath"><a class="markdownIt-Anchor" href="#joinpath"></a> .joinpath()</h2>
-<p>描述：拼接子路径<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token operator">*</span>other<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">new_path <span class="token operator">=</span> p<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">"subdir"</span><span class="token punctuation">,</span> <span class="token string">"file.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="with_name"><a class="markdownIt-Anchor" href="#with_name"></a> .with_name()</h2>
-<p>描述：返回同目录下更换名称的路径<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>with_name<span class="token punctuation">(</span>name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">new_p <span class="token operator">=</span> p<span class="token punctuation">.</span>with_name<span class="token punctuation">(</span><span class="token string">"new.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="with_suffix"><a class="markdownIt-Anchor" href="#with_suffix"></a> .with_suffix()</h2>
-<p>描述：更改文件后缀<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>with_suffix<span class="token punctuation">(</span>suffix<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">new_p <span class="token operator">=</span> p<span class="token punctuation">.</span>with_suffix<span class="token punctuation">(</span><span class="token string">".md"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="with_stem"><a class="markdownIt-Anchor" href="#with_stem"></a> .with_stem()</h2>
-<p>描述：更改文件主名<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>with_stem<span class="token punctuation">(</span>stem<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">new_p <span class="token operator">=</span> p<span class="token punctuation">.</span>with_stem<span class="token punctuation">(</span><span class="token string">"newfile"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="resolve"><a class="markdownIt-Anchor" href="#resolve"></a> .resolve()</h2>
-<p>描述：返回绝对路径<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>resolve<span class="token punctuation">(</span>strict<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">abs_path <span class="token operator">=</span> p<span class="token punctuation">.</span>resolve<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="absolute"><a class="markdownIt-Anchor" href="#absolute"></a> .absolute()</h2>
-<p>描述：获取绝对路径（不解析符号链接）<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>absolute<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">abs_path <span class="token operator">=</span> p<span class="token punctuation">.</span>absolute<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="parent"><a class="markdownIt-Anchor" href="#parent"></a> .parent</h2>
-<p>描述：返回父目录路径<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>parent<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">parent_dir <span class="token operator">=</span> p<span class="token punctuation">.</span>parent<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="parents"><a class="markdownIt-Anchor" href="#parents"></a> .parents</h2>
+语法：<code>path.read_bytes()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">'a.bin'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read_bytes<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="write_bytes"><a class="markdownIt-Anchor" href="#write_bytes"></a> write_bytes()</h2>
+<p>描述：写入二进制数据<br />
+语法：<code>path.write_bytes(data)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.bin'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write_bytes<span class="token punctuation">(</span><span class="token string">b'\x00\x01'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="joinpath"><a class="markdownIt-Anchor" href="#joinpath"></a> joinpath()</h2>
+<p>描述：拼接路径<br />
+语法：<code>path.joinpath(*other)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/home'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'docs'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="with_name"><a class="markdownIt-Anchor" href="#with_name"></a> with_name()</h2>
+<p>描述：返回更改文件名的新路径<br />
+语法：<code>path.with_name(name)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>with_name<span class="token punctuation">(</span><span class="token string">'b.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="with_suffix"><a class="markdownIt-Anchor" href="#with_suffix"></a> with_suffix()</h2>
+<p>描述：修改文件扩展名<br />
+语法：<code>path.with_suffix(suffix)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>with_suffix<span class="token punctuation">(</span><span class="token string">'.md'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="suffix"><a class="markdownIt-Anchor" href="#suffix"></a> suffix</h2>
+<p>描述：返回路径后缀<br />
+语法：<code>path.suffix</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>suffix
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="suffixes"><a class="markdownIt-Anchor" href="#suffixes"></a> suffixes</h2>
+<p>描述：返回所有后缀（列表）<br />
+语法：<code>path.suffixes</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'archive.tar.gz'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>suffixes
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="stem"><a class="markdownIt-Anchor" href="#stem"></a> stem</h2>
+<p>描述：返回不带后缀的文件名<br />
+语法：<code>path.stem</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>stem
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="name"><a class="markdownIt-Anchor" href="#name"></a> name</h2>
+<p>描述：返回文件名<br />
+语法：<code>path.name</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/home/user/a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="parent"><a class="markdownIt-Anchor" href="#parent"></a> parent</h2>
+<p>描述：返回父路径<br />
+语法：<code>path.parent</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/home/user/a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>parent
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="parents"><a class="markdownIt-Anchor" href="#parents"></a> parents</h2>
 <p>描述：返回所有上级目录<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>parents<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> parent <span class="token keyword">in</span> p<span class="token punctuation">.</span>parents<span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>parent<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="name"><a class="markdownIt-Anchor" href="#name"></a> .name</h2>
-<p>描述：获取文件名（含后缀）<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>name<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="stem"><a class="markdownIt-Anchor" href="#stem"></a> .stem</h2>
-<p>描述：获取文件主名（不含后缀）<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>stem<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>stem<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="suffix"><a class="markdownIt-Anchor" href="#suffix"></a> .suffix</h2>
-<p>描述：获取文件后缀<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>suffix<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>suffix<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="suffixes"><a class="markdownIt-Anchor" href="#suffixes"></a> .suffixes</h2>
-<p>描述：获取所有后缀（适用于多重后缀）<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>suffixes<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>suffixes<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="as_posix"><a class="markdownIt-Anchor" href="#as_posix"></a> .as_posix()</h2>
-<p>描述：转换为POSIX风格路径字符串<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>as_posix<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>as_posix<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="as_uri"><a class="markdownIt-Anchor" href="#as_uri"></a> .as_uri()</h2>
-<p>描述：转换为文件URI<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>as_uri<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>as_uri<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="relative_to"><a class="markdownIt-Anchor" href="#relative_to"></a> .relative_to()</h2>
-<p>描述：计算相对路径<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>relative_to<span class="token punctuation">(</span><span class="token operator">*</span>other<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">rel <span class="token operator">=</span> p<span class="token punctuation">.</span>relative_to<span class="token punctuation">(</span><span class="token string">"/home/user"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="expanduser"><a class="markdownIt-Anchor" href="#expanduser"></a> .expanduser()</h2>
-<p>描述：展开 <code>~</code> 为用户主目录<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>expanduser<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> Path<span class="token punctuation">(</span><span class="token string">"~/file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>expanduser<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="match"><a class="markdownIt-Anchor" href="#match"></a> .match()</h2>
-<p>描述：路径是否匹配指定模式<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span>pattern<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span><span class="token string">"*.txt"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="chmod"><a class="markdownIt-Anchor" href="#chmod"></a> .chmod()</h2>
-<p>描述：修改文件权限<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>chmod<span class="token punctuation">(</span>mode<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>chmod<span class="token punctuation">(</span><span class="token number">0o755</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="stat"><a class="markdownIt-Anchor" href="#stat"></a> .stat()</h2>
-<p>描述：获取文件的状态信息（大小、权限等）<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>stat<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">info <span class="token operator">=</span> p<span class="token punctuation">.</span>stat<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span>st_size<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="touch"><a class="markdownIt-Anchor" href="#touch"></a> .touch()</h2>
+语法：<code>path.parents</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> p <span class="token keyword">in</span> Path<span class="token punctuation">(</span><span class="token string">'/a/b/c'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>parents<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="as_posix"><a class="markdownIt-Anchor" href="#as_posix"></a> as_posix()</h2>
+<p>描述：以 POSIX 格式返回路径字符串<br />
+语法：<code>path.as_posix()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'C:\\a\\b'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>as_posix<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="as_uri"><a class="markdownIt-Anchor" href="#as_uri"></a> as_uri()</h2>
+<p>描述：返回文件URI<br />
+语法：<code>path.as_uri()</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/home/user/a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>as_uri<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="relative_to"><a class="markdownIt-Anchor" href="#relative_to"></a> relative_to()</h2>
+<p>描述：返回相对路径<br />
+语法：<code>path.relative_to(base)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'/home/user/docs/a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>relative_to<span class="token punctuation">(</span><span class="token string">'/home/user'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="match"><a class="markdownIt-Anchor" href="#match"></a> match()</h2>
+<p>描述：判断路径是否匹配模式<br />
+语法：<code>path.match(pattern)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span><span class="token string">'*.txt'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="touch"><a class="markdownIt-Anchor" href="#touch"></a> touch()</h2>
 <p>描述：创建空文件或更新修改时间<br />
-语法：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">.</span>touch<span class="token punctuation">(</span>exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>示例：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">p<span class="token punctuation">.</span>touch<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+语法：<code>path.touch(exist_ok=True)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>touch<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="open"><a class="markdownIt-Anchor" href="#open"></a> open()</h2>
+<p>描述：打开文件（与内置 open 类似）<br />
+语法：<code>path.open(mode='r', encoding=None)</code><br />
+示例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> Path<span class="token punctuation">(</span><span class="token string">'a.txt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'w'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
         <script src="/js/foldpost.js"></script>
         <script src="/js/prism_copy.js"></script>
@@ -722,8 +716,8 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
         <div class="textinfo">
             <h1 style="text-align: center;">大蟒蛇-pathlib库</h1>
             <p>创建时间：9月 28, 2025 </p>
-            <p>最后更新：9月 28, 2025</p>
-            <p>字数统计：875字</p>
+            <p>最后更新：10月 28, 2025</p>
+            <p>字数统计：890字</p>
             <p>预计阅读：3min</p>
 
             <div class="catgrs">
@@ -790,7 +784,7 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-21",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -916,7 +910,7 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,3],
+                            data: [6,2,10,4,11,2,4,15,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -953,7 +947,7 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -968,7 +962,7 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -990,13 +984,13 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1045,7 +1039,7 @@ p <span class="token operator">=</span> Path<span class="token punctuation">(</s
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":27,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":2,"path":"Linux/系统移植"}],"count":30,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

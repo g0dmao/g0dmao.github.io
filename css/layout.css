@@ -1,6 +1,5 @@
 html{
     scrollbar-width: thin;
-    scrollbar-color: #2a2a2a #101418 ;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
@@ -10,6 +9,7 @@ body{
     cursor:default;
     margin: 0;
     padding: 0;
+    scrollbar-color: #2a2a2a #101418 ;
 }
 
 a {
@@ -75,7 +75,7 @@ header{
 bottom: 0;
 left: 0;
 width: 100%;
-background: #101418;              /* 深色背景 */
+background: inherit;              /* 深色背景 */
 color: #bbb;                      /* 默认文字颜色 */
 padding: 1rem 1rem;               /* 内边距 */
 font-size: 0.9rem;

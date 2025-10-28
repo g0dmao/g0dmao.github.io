@@ -10,10 +10,10 @@
 
         <link rel="stylesheet" href="/css/index.css">
         <link rel="stylesheet" href="/css/post.css">
-        <link rel="stylesheet" href="/css/view.css">
         <link rel="stylesheet" href="/css/admonition.css">
         <link rel="stylesheet" href="/css/search.css">
         <link rel="stylesheet" href="/css/layout.css">
+        <link rel="stylesheet" href="/css/view.css">
 
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
@@ -697,20 +697,316 @@ Behavior:
 </tbody>
 </table>
 <h2 id="grep"><a class="markdownIt-Anchor" href="#grep"></a> grep</h2>
-<p>-r  递归子目录<br />
--l  列出文件内容符合指定的样式的文件名称。<br />
--i  不区分大小写<br />
--n 字符串在哪一行</p>
+<p><code>grep</code> 是 Linux 系统中一个强大的文本搜索工具，用于在文件中查找符合条件的字符串或正则表达式，并打印匹配的行。它的名字来源于 “Global Regular Expression Print”。</p>
+<h3 id="基本语法"><a class="markdownIt-Anchor" href="#基本语法"></a> 基本语法</h3>
+<p><code>grep [选项] &quot;搜索内容&quot; 文件名</code></p>
+<h3 id="常用选项"><a class="markdownIt-Anchor" href="#常用选项"></a> 常用选项</h3>
+<ol>
+<li>
+<p><strong><code>-i</code></strong>：忽略大小写。</p>
+<p><code>grep -i &quot;hello&quot; file.txt</code></p>
+<ul>
+<li>匹配 <code>hello</code>、<code>HELLO</code> 等。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>-n</code></strong>：显示匹配行的行号。</p>
+<p><code>grep -n &quot;hello&quot; file.txt</code></p>
+<ul>
+<li>输出匹配行及其行号。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>-v</code></strong>：反向匹配，显示不包含搜索内容的行。</p>
+<p><code>grep -v &quot;hello&quot; file.txt</code></p>
+</li>
+<li>
+<p><strong><code>-c</code></strong>：仅显示匹配的行数。</p>
+<p><code>grep -c &quot;hello&quot; file.txt</code></p>
+</li>
+<li>
+<p><strong><code>-r</code> 或 <code>-R</code></strong>：递归搜索目录中的文件。</p>
+<p><code>grep -r &quot;hello&quot; /path/to/directory</code></p>
+</li>
+<li>
+<p><strong><code>-l</code></strong>：仅显示包含匹配内容的文件名。</p>
+<p><code>grep -l &quot;hello&quot; *.txt</code></p>
+</li>
+<li>
+<p><strong><code>-w</code></strong>：匹配整个单词。</p>
+<p><code>grep -w &quot;hello&quot; file.txt</code></p>
+</li>
+<li>
+<p><strong><code>-A</code> 和 <code>-B</code></strong>：显示匹配行的上下文。</p>
+<ul>
+<li>
+<p><strong><code>-A</code></strong>：显示匹配行后面的若干行。<br />
+<code>grep -A 2 &quot;hello&quot; file.txt</code></p>
+</li>
+<li>
+<p><strong><code>-B</code></strong>：显示匹配行前面的若干行。<br />
+<code>grep -B 2 &quot;hello&quot; file.txt</code></p>
+</li>
+<li>
+<p><strong><code>-C</code></strong>：同时显示匹配行的前后若干行。<br />
+<code>grep -C 2 &quot;hello&quot; file.txt</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="正则表达式支持"><a class="markdownIt-Anchor" href="#正则表达式支持"></a> 正则表达式支持</h3>
+<p><code>grep</code> 支持基本正则表达式（BRE）和扩展正则表达式（ERE，需使用 <code>egrep</code> 或 <code>grep -E</code>）。</p>
+<ul>
+<li><strong>匹配任意字符</strong>：<code>grep &quot;h.llo&quot; file.txt</code> 匹配 <code>hello</code>、<code>hallo</code> 等。</li>
+<li><strong>匹配开头</strong>：<code>grep &quot;^hello&quot; file.txt</code> 匹配以 <code>hello</code> 开头的行。</li>
+<li><strong>匹配结尾</strong>：<code>grep &quot;hello$&quot; file.txt</code> 匹配以 <code>hello</code> 结尾的行。</li>
+<li><strong>匹配多个选项</strong>：<code>grep -E &quot;hello|world&quot; file.txt</code> 匹配 <code>hello</code> 或 <code>world</code>。</li>
+</ul>
+<h3 id="实例"><a class="markdownIt-Anchor" href="#实例"></a> 实例</h3>
+<ol>
+<li>
+<p>查找文件中包含 “error” 的行并显示行号：</p>
+<p><code>grep -n &quot;error&quot; log.txt</code></p>
+</li>
+<li>
+<p>在当前目录及子目录中查找包含 “TODO” 的文件：</p>
+<p><code>grep -r &quot;TODO&quot; .</code></p>
+</li>
+<li>
+<p>查找以 “INFO” 开头的日志行：</p>
+<p><code>grep &quot;^INFO&quot; log.txt</code></p>
+</li>
+<li>
+<p>查找不包含 “DEBUG” 的行：</p>
+<p><code>grep -v &quot;DEBUG&quot; log.txt</code></p>
+</li>
+</ol>
 <h2 id="du"><a class="markdownIt-Anchor" href="#du"></a> du</h2>
 <p>-s 只显示指定目录总大小<br />
 -h 以单位k、m、g显示</p>
 <h2 id="tar"><a class="markdownIt-Anchor" href="#tar"></a> tar</h2>
-<p>-c 创建新归档，压缩<br />
--x 从归档中解出文件，解压缩<br />
--j 使用bzip2压缩格式<br />
--z 使用gzip压缩格式<br />
--v 打印命令执行过程<br />
--f 以什么名字归档</p>
+<p><code>tar [选项] -f 归档文件名 [文件或目录]</code></p>
+<h3 id="选项"><a class="markdownIt-Anchor" href="#选项"></a> 选项：</h3>
+<ul>
+<li>-c：创建新的归档文件。</li>
+<li>-x：解压归档文件。</li>
+<li>-t：列出归档文件的内容。</li>
+<li>-v：显示详细操作过程。</li>
+<li>-z：使用 gzip 压缩或解压。</li>
+<li>-j：使用 bzip2 压缩或解压。</li>
+<li>-J：使用 xz 压缩或解压。</li>
+<li>–delete：从归档文件中删除指定文件（仅限 GNU tar）。</li>
+</ul>
+<h3 id="常见操作示例"><a class="markdownIt-Anchor" href="#常见操作示例"></a> 常见操作示例：</h3>
+<ol>
+<li>
+<p><strong>创建归档文件</strong></p>
+<p>将文件 <em>file1</em> 和 <em>file2</em> 以及目录 <em>dir</em> 打包成 <em>archive.tar</em>：<br />
+<code>tar -cvf archive.tar file1 file2 dir</code></p>
+</li>
+<li>
+<p><strong>解压归档文件</strong></p>
+<p>解压 <em>archive.tar</em> 到当前目录：<br />
+<code>tar -xvf archive.tar</code></p>
+</li>
+<li>
+<p><strong>压缩归档文件</strong></p>
+<p>将目录 <em>dir</em> 打包并使用 gzip 压缩为 <em>archive.tar.gz</em>：<br />
+<code>tar -czvf archive.tar.gz dir</code></p>
+</li>
+<li>
+<p><strong>解压压缩归档文件</strong></p>
+<p>解压 <em>archive.tar.gz</em>：<br />
+<code>tar -zxvf archive.tar.gz</code></p>
+</li>
+<li>
+<p><strong>列出归档文件内容</strong></p>
+<p>查看 <em>archive.tar</em> 中的文件和目录：<br />
+<code>tar -tvf archive.tar</code></p>
+</li>
+<li>
+<p><strong>向归档文件追加文件</strong></p>
+<p>将 <em>newfile</em> 添加到已存在的 <em>archive.tar</em> 中：<br />
+<code>tar -rvf archive.tar newfile</code></p>
+</li>
+<li>
+<p><strong>删除归档文件中的文件</strong></p>
+<p>从 <em>archive.tar</em> 中删除 <em>file1</em>：<br />
+<code>tar --delete -f archive.tar file1</code></p>
+</li>
+<li>
+<p><strong>解压到指定目录</strong></p>
+<p>将 <em>archive.tar.gz</em> 解压到 <em>/tmp/files</em> 目录：<br />
+<code>tar -zxvf archive.tar.gz -C /tmp/files</code></p>
+</li>
+</ol>
+<h3 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> <strong>注意事项</strong></h3>
+<ul>
+<li>使用 <em>-v</em> 可以查看详细的操作过程。</li>
+<li>解压时，<em>-C</em> 选项可以指定目标目录。</li>
+<li>压缩时，建议根据文件类型选择合适的压缩算法（如 gzip、bzip2 或 xz）。</li>
+</ul>
+<h2 id="dd"><a class="markdownIt-Anchor" href="#dd"></a> dd</h2>
+<h3 id="dd-命令简介"><a class="markdownIt-Anchor" href="#dd-命令简介"></a> dd 命令简介</h3>
+<p><code>dd</code> 是 Linux 和类 UNIX 系统中一个功能强大的命令行工具，主要用于低级别的数据复制和转换操作。它可以处理设备文件、磁盘、分区、文件等，常用于备份、恢复、创建磁盘镜像等任务。</p>
+<p><code>dd if=&lt;输入文件&gt; of=&lt;输出文件&gt; [参数...]</code></p>
+<ul>
+<li><strong>if</strong>：指定输入文件（input file），如 <code>/dev/zero</code>、磁盘设备或普通文件。</li>
+<li><strong>of</strong>：指定输出文件（output file），如磁盘设备或普通文件。</li>
+<li><strong>参数</strong>：用于控制块大小、数据量等。</li>
+</ul>
+<h3 id="常用参数"><a class="markdownIt-Anchor" href="#常用参数"></a> 常用参数</h3>
+<ul>
+<li><strong>bs=大小</strong>：设置块大小（如 <code>bs=1M</code> 表示每次读写 1MB 数据）。</li>
+<li><strong>count=数量</strong>：指定复制的块数。</li>
+<li><strong>skip=数量</strong>：跳过输入文件的前若干块。</li>
+<li><strong>seek=数量</strong>：跳过输出文件的前若干块。</li>
+<li><strong>status=progress</strong>：显示进度信息。</li>
+</ul>
+<h3 id="常见用法"><a class="markdownIt-Anchor" href="#常见用法"></a> 常见用法</h3>
+<ol>
+<li>
+<p><strong>创建空文件</strong></p>
+<p><code>dd if=/dev/zero of=empty_file bs=1M count=10</code></p>
+<ul>
+<li>创建一个大小为 10MB 的空文件。</li>
+</ul>
+</li>
+<li>
+<p><strong>制作磁盘镜像</strong></p>
+<p><code>dd if=/dev/sda of=/path/to/image.img bs=1M</code></p>
+<ul>
+<li>将整个磁盘 <code>/dev/sda</code> 制作成镜像文件。</li>
+</ul>
+</li>
+<li>
+<p><strong>恢复磁盘镜像</strong></p>
+<p><code>dd if=/path/to/image.img of=/dev/sda bs=1M</code></p>
+<ul>
+<li>将镜像文件写回磁盘。</li>
+</ul>
+</li>
+<li>
+<p><strong>清空磁盘数据</strong></p>
+<p><code>dd if=/dev/zero of=/dev/sda bs=1M</code></p>
+<ul>
+<li>用零填充整个磁盘 <code>/dev/sda</code>，清空数据。</li>
+</ul>
+</li>
+<li>
+<p><strong>测试磁盘读写速度</strong></p>
+<p><code>dd if=/dev/zero of=testfile bs=1G count=1 oflag=direct</code></p>
+<ul>
+<li>创建一个 1GB 的文件，测试写入速度。</li>
+</ul>
+</li>
+</ol>
+<h3 id="注意事项-2"><a class="markdownIt-Anchor" href="#注意事项-2"></a> 注意事项</h3>
+<ul>
+<li><code>dd</code> 是一个强大的工具，但操作不当可能导致数据丢失，尤其是涉及磁盘设备时，请务必确认输入和输出路径。</li>
+<li>使用 <code>status=progress</code> 参数可以实时查看操作进度。</li>
+</ul>
+<h2 id="find"><a class="markdownIt-Anchor" href="#find"></a> find</h2>
+<p><code>find</code> 是 Linux 中非常强大的命令，用于在指定目录下递归查找文件或目录，并支持多种条件过滤和操作。以下是它的基本用法和常见示例：</p>
+<h3 id="基本语法-2"><a class="markdownIt-Anchor" href="#基本语法-2"></a> 基本语法</h3>
+<p><code>find [路径] [选项] [表达式]</code></p>
+<ul>
+<li><strong>路径</strong>：指定查找的目录（如 <code>/</code>, <code>.</code> 表示当前目录）。</li>
+<li><strong>选项</strong>：控制查找行为（如按文件名、大小、时间等）。</li>
+<li><strong>表达式</strong>：定义匹配条件或操作（如执行命令）。</li>
+</ul>
+<h3 id="常用选项-2"><a class="markdownIt-Anchor" href="#常用选项-2"></a> 常用选项</h3>
+<ol>
+<li>
+<p><strong>按文件名查找</strong></p>
+<p><code>find /path -name &quot;filename&quot;</code></p>
+<ul>
+<li>区分大小写：<code>-name</code></li>
+<li>不区分大小写：<code>-iname</code></li>
+</ul>
+</li>
+<li>
+<p><strong>按文件类型查找</strong></p>
+<p><code>find /path -type [f|d|l]</code></p>
+<ul>
+<li><code>f</code>：普通文件</li>
+<li><code>d</code>：目录</li>
+<li><code>l</code>：符号链接</li>
+</ul>
+</li>
+<li>
+<p><strong>按文件大小查找</strong></p>
+<p><code>find /path -size [+|-]N[c|k|M|G]</code></p>
+<ul>
+<li><code>+N</code>：大于 N 单位</li>
+<li><code>-N</code>：小于 N 单位</li>
+<li><code>N</code>：等于 N 单位</li>
+<li>单位：<code>c</code>（字节）、<code>k</code>（KB）、<code>M</code>（MB）、<code>G</code>（GB）</li>
+</ul>
+</li>
+<li>
+<p><strong>按修改时间查找</strong></p>
+<p><code>find /path -mtime [+|-]N</code></p>
+<ul>
+<li><code>+N</code>：N 天前修改</li>
+<li><code>-N</code>：N 天内修改</li>
+<li><code>N</code>：正好 N 天前修改</li>
+<li>访问时间：<code>-atime</code>，状态更改时间：<code>-ctime</code></li>
+</ul>
+</li>
+<li>
+<p><strong>按权限查找</strong></p>
+<p><code>find /path -perm [mode]</code></p>
+<ul>
+<li>精确匹配：<code>-perm 644</code></li>
+<li>至少包含权限：<code>-perm -644</code></li>
+</ul>
+</li>
+<li>
+<p><strong>按用户或组查找</strong></p>
+<p><code>find /path -user username find /path -group groupname</code></p>
+</li>
+</ol>
+<h3 id="执行操作"><a class="markdownIt-Anchor" href="#执行操作"></a> 执行操作</h3>
+<ol>
+<li>
+<p><strong>删除匹配的文件</strong></p>
+<p><code>find /path -name &quot;*.log&quot; -delete</code></p>
+<p>或</p>
+<p><code>find /path -name &quot;*.log&quot; -exec rm -f &#123;&#125; \;</code></p>
+</li>
+<li>
+<p><strong>查找并执行命令</strong></p>
+<p><code>find /path -type f -name &quot;*.txt&quot; -exec cat &#123;&#125; \;</code></p>
+<ul>
+<li><code>&#123;&#125;</code>：表示当前匹配的文件</li>
+<li><code>\;</code>：表示命令结束</li>
+</ul>
+</li>
+<li>
+<p><strong>查找并移动文件</strong></p>
+<p><code>find /path -name &quot;*.jpg&quot; -exec mv &#123;&#125; /new/path/ \;</code></p>
+</li>
+</ol>
+<h3 id="综合示例"><a class="markdownIt-Anchor" href="#综合示例"></a> 综合示例</h3>
+<ol>
+<li>
+<p>查找当前目录下所有 <code>.txt</code> 文件：</p>
+<p><code>find . -name &quot;*.txt&quot;</code></p>
+</li>
+<li>
+<p>查找 <code>/var/log</code> 目录下最近 7 天修改的文件：</p>
+<p><code>find /var/log -mtime -7</code></p>
+</li>
+<li>
+<p>查找 <code>/home</code> 目录下大于 100MB 的文件：</p>
+<p><code>find /home -size +100M</code></p>
+</li>
+<li>
+<p>查找 <code>/tmp</code> 目录下权限为 777 的文件并删除：</p>
+<p><code>find /tmp -perm 777 -delete</code></p>
+</li>
+</ol>
 
         <script src="/js/foldpost.js"></script>
         <script src="/js/prism_copy.js"></script>
@@ -719,9 +1015,9 @@ Behavior:
         <div class="textinfo">
             <h1 style="text-align: center;">Linux常用的命令总结</h1>
             <p>创建时间：6月 11, 2025 </p>
-            <p>最后更新：6月 18, 2025</p>
-            <p>字数统计：1k字</p>
-            <p>预计阅读：3min</p>
+            <p>最后更新：10月 28, 2025</p>
+            <p>字数统计：2.7k字</p>
+            <p>预计阅读：10min</p>
 
             <div class="catgrs">
                 
@@ -729,6 +1025,12 @@ Behavior:
                         <span>
                             <a href="/categories/Linux/" id="catgrs">
                                 -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E5%85%A5%E9%97%A8/" id="catgrs">
+                                -入门
                             </a>
                         </span>
                     
@@ -787,7 +1089,7 @@ Behavior:
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-21",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -913,7 +1215,7 @@ Behavior:
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,3],
+                            data: [6,2,10,4,11,2,4,15,9],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -950,7 +1252,7 @@ Behavior:
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -965,7 +1267,7 @@ Behavior:
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":24},{"name":"嵌入式","value":15},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"python","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -987,13 +1289,13 @@ Behavior:
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":6}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -1042,7 +1344,7 @@ Behavior:
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":6,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"}],"count":27,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":5,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":2,"path":"Linux/系统移植"}],"count":30,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

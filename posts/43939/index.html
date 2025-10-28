@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/post.css">
+        <link rel="stylesheet" href="/css/admonition.css">
+        <link rel="stylesheet" href="/css/search.css">
+        <link rel="stylesheet" href="/css/layout.css">
+        <link rel="stylesheet" href="/css/view.css">
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/monokai.min.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script> -->
+
+        <!-- and it's easy to individually load additional languages -->
+        <!-- <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
+
+        <script>hljs.highlightAll();</script> -->
+
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+    <!--
+        ╔══════════════════════════════════════════════════════════════╗
+        ║    接收到一条消息：
+        ║       Bro来查我成分了吗？                                       ║
+        ║                                                              ║
+        ╚══════════════════════════════════════════════════════════════╝
+    -->
+
+    <header>
+
+        <div style="display: inline-block; margin: auto;">
+            <span id="date" style="margin:5px;"></span>
+            <span id="clock" style="margin: 5px;"></span>
+            <span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
+        </div>
+        
+            <div id="p_btn">
+            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
+            </div>
+            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
+        
+
+    </header>
+    <script src="/js/clock.js"></script>
+    <script src="/js/btn.js"></script>
+    <!--000-->
+    <body>
+
+        <!-- 博客详情 -->
+<div id="reading-progress"></div>
+<script src="/js/page_line.js"></script>
+<div class="a_container">
+    <div class="article">
+        <!--<div style="height: 50px;"></div>-->
+        
+            <!--
+Copyright Notice Module - Single-file HTML
+Copy the <section>...</section> into your article template where you want the copyright notice to appear.
+
+Features:
+- Minimal, dark-friendly design matching the AI-attribution module
+- Shows copyright year (auto-updates), author, and license name
+- Expandable details (license text / contact / link)
+- Accessible (aria) and keyboard-friendly
+- Small JS for toggle; no external libs
+
+How to use:
+- Replace AUTHOR_NAME, LICENSE_NAME, and LICENSE_URL placeholders with your own values.
+- If using a static site generator (Hexo), render this snippet conditionally using front-matter (e.g., `copyright: true`).
+- You can extract the <style> to your global CSS for consistency.
+-->
+
+<section class="copyright-notice" aria-labelledby="copyright-heading">
+  <style>
+    :root{ --cn-text:#dfe6ea; --cn-muted:#9aa0a6; --cn-accent:#00c6ff }
+    .copyright-notice{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--cn-text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      border-radius:10px; padding:12px 14px; margin:18px 0; display:flex; gap:12px; align-items:flex-start; max-width:820px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.12); border:1px solid rgba(255,255,255,0.03)
+    }
+    .copyright-notice__mark{ flex:0 0 44px; width:44px; height:44px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,0.02) }
+    .copyright-notice__mark svg{ width:28px; height:28px }
+    .copyright-notice__body{ flex:1; min-width:0 }
+    .copyright-notice__title{ font-weight:600; font-size:13px }
+    .copyright-notice__summary{ color:var(--cn-muted); margin-top:4px; font-size:12px }
+    .copyright-notice__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--cn-accent); font-weight:600 }
+    .copyright-notice__details{ margin-top:8px; color:var(--cn-muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
+    .copyright-notice__details a{ color:var(--cn-accent); text-decoration:none }
+    .copyright-notice__pill{ background: rgba(255,255,255,0.02); color:var(--cn-muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+    @media (max-width:540px){ .copyright-notice{ padding:10px; gap:10px } .copyright-notice__mark{ width:38px; height:38px } }
+  </style>
+
+  <div class="copyright-notice__mark" aria-hidden="true">
+    <!-- simple © mark -->
+    <svg viewBox="0 0 24 24" role="img" aria-label="copyright"><text x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" font-size="25" fill="currentColor">©</text></svg>
+  </div>
+
+  <div class="copyright-notice__body">
+    <div style="display:flex; justify-content:space-between; align-items:center">
+      <div>
+        <div id="copyright-heading" class="copyright-notice__title">版权声明 · 版权所有</div>
+        <div class="copyright-notice__summary">本文 © <span id="cn-author">AUTHOR_NAME</span> <span id="cn-year">year</span>。保留所有权利。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="copyright-notice__toggle" aria-expanded="false" aria-controls="copyright-details" id="cn-toggle">查看许可</button>
+      </div>
+    </div>
+
+    <div id="copyright-details" class="copyright-notice__details" role="region" aria-hidden="true">
+      <div><span class="copyright-notice__pill">许可：<span id="cn-license">LICENSE_NAME</span></span></div>
+      <div style="margin-top:8px">本文章为博主原创文章。遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</div>
+      <div style="margin-top:8px"><a href="LICENSE_URL" id="cn-license-link" target="_blank" rel="noopener">查看完整许可条款</a></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // Fill placeholders if developer sets data attributes on the section
+      const section = document.currentScript && document.currentScript.parentElement || document.querySelector('.copyright-notice');
+      try{
+        const author = section.getAttribute('data-author') || 'GoDm@';
+        const license = section.getAttribute('data-license') || 'CC BY-SA 4.0';
+        const licenseUrl = section.getAttribute('data-license-url') || 'https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans';
+        const yearEl = document.getElementById('cn-year');
+        const authorEl = document.getElementById('cn-author');
+        const licenseEl = document.getElementById('cn-license');
+        const licenseLink = document.getElementById('cn-license-link');
+        const now = new Date();
+        const year = now.getFullYear();
+        if(yearEl) yearEl.textContent = year;
+        if(authorEl) authorEl.textContent = author;
+        if(licenseEl) licenseEl.textContent = license;
+        if(licenseLink) licenseLink.href = licenseUrl;
+      }catch(e){/* ignore */}
+
+      const btn = document.getElementById('cn-toggle');
+      const det = document.getElementById('copyright-details');
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看许可' : '收起';
+      });
+
+    })();
+  </script>
+</section>
+
+        
+
+        
+            <!--
+Author Note Module - same style & structure as Ai-assisted Attribution Module (ailogo)
+Copy the <section>...</section> into your article template where you want the author note to appear.
+
+Behavior:
+- Matches the exact styling, spacing, accessibility, and toggle behavior of the AILOGO module
+- Default text: "本文为学习记录，不保证严谨性"
+- Supports data-author attribute on the section to specify the author's name (falls back to '作者')
+- No color changes from the original AILOGO module
+-->
+
+<section class="ai-attrib author-note" aria-labelledby="author-note-heading" data-author="GoDm@">
+  <style>
+    /* Exact styling copied from AILOGO module */
+    .ai-attrib{
+      --bg: rgba(250,250,250,0.03);
+      --muted: #9aa0a6;
+      --text: #dfe6ea;
+      --accent: #00c6ff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--text);
+      margin: 24px 0 8px 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+      border: 1px solid rgba(255,255,255,0.03);
+      max-width: 820px;
+    }
+
+    .ai-attrib__logo{
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      overflow: hidden;
+    }
+    .ai-attrib__logo svg{ width:28px; height:28px; display:block }
+
+    .ai-attrib__body{ flex:1; min-width:0 }
+    .ai-attrib__heading{ display:flex; gap:8px; align-items:center; justify-content:space-between }
+    .ai-attrib__title{ font-weight:600; font-size:13px; color:var(--text); }
+    .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
+
+    .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
+    .ai-attrib__toggle:focus{outline-offset:2px }
+
+    .ai-attrib__details{ margin-top:8px; color:var(--muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
+    .ai-attrib__details a{ color:var(--accent); text-decoration:none }
+
+    .ai-attrib__pill{ background: rgba(255,255,255,0.02); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
+
+    @media (max-width:540px){ .ai-attrib{ padding:10px; gap:10px } .ai-attrib__logo{ width:38px; height:38px } }
+  </style>
+
+  <div class="ai-attrib__logo" aria-hidden="true">
+    <!-- reuse simple SVG mark as placeholder -->
+    <svg viewBox="0 0 64 64" role="img" aria-label="author-note">
+      <rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.9" stroke-width="2"></rect>
+      <path d="M20 28h24M20 36h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </div>
+
+  <div class="ai-attrib__body">
+    <div class="ai-attrib__heading">
+      <div>
+        <div id="author-note-heading" class="ai-attrib__title">作者说明 · 学习记录</div>
+        <div class="ai-attrib__summary">本站作为作者的学习记录站，不保证文章内容严谨或完全正确。</div>
+      </div>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="ai-attrib__toggle" aria-expanded="false" aria-controls="author-note-details" id="author-note-toggle">查看详情</button>
+      </div>
+    </div>
+
+    <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
+      <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
+      <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
+      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：xlm_work@outlook.com</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('author-note-toggle');
+      const det = document.getElementById('author-note-details');
+      const section = btn && btn.closest('.author-note');
+      const authorPill = document.getElementById('author-note-author');
+      // initialize author from data attribute if provided
+      try{
+        const dataAuthor = section && section.getAttribute('data-author');
+        if(dataAuthor && authorPill) authorPill.textContent = dataAuthor;
+      }catch(e){}
+
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        det.style.display = expanded ? 'none' : 'block';
+        det.setAttribute('aria-hidden', String(expanded));
+        btn.textContent = expanded ? '查看详情' : '收起';
+      });
+
+      // keyboard toggle with 'o' key when focused
+      section && section.addEventListener('keydown', (e)=>{ if(e.key === 'o' || e.key === 'O') btn.click(); });
+    })();
+  </script>
+</section>
+        
+
+        
+        <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="ERROR。" data-whm="这个文章不能被校验, 不过你还是能看看解密后的内容。">
+  <script id="hbeData" type="hbeData" data-hmacdigest="295baa146c22d26db66d7d3ebb319ea71edae1add2ea011cea86d0716d512627">472f0d2124ee617a2f29ff331422d5d3c786bf02d6cb05b48659c7bd0efc234c66e4d05e5e352805b8be7fb548f5db1dc6ce19185f33969b60366e77544d242a4ad3617be960d1cc6fb50f20f9bc3fa3dc4611c1b7fe65e71a5a3a53a2361ac23d01b5245c304a9c64d1f2d42467b313e7b98b9941501c7f62ba70ae803acc1147cacc437bdd5678ef1810bb19b628c6a4bce1bcb2f217b0631590f4a05267a7a121c769458bb6d0d3a007991a4e5946e6e80bfdd70ada16fe8b7f425cd91ff2fd2c0d96e6a7a61f2a495ff7c5d17f33392096a74bcf83fe0a2a1b47dd5a8cc11585947ae9ce708ca44fe807a441afd12f8304730781830b4f9cc4f4cdf370535e05cecdcdde5fb485d559476d4a130b41d70fc5d6999e8bb9a1105d9fc8bad1acf6b48e4bca65932d62ce795949be362d42d3c4aa5b1a3df4213ed5be2d1da2e61473992a40a821237717333de4627358fc2994316e97947ee4226e077242b9ef6fed4c2eb68ba4b07403c4291bd534be01cf7fe005e4de9846e978f63252c82bbd0db488871822aae97233e526cf73b54de47890093c658e0353f81952f411f4773edd469000a901d93f3937001fca2c58153c98a8b3b8106a9f895392048d4e9b92f7ab1cd52cf9cd00bff1d34fee382fdc8d28957ae800dc769f2ce6aad7013e29783ffc18cb56b1f10076c2aca6f5af5345405939260df4a042cc8f918c7a094ea6e2a1271d595843b232607f20d4a383883e91957b2ee254c8d11cc75210f5fd8cb4cb1ce2c324c0ddd385f31a9ff9e6efc43462717099393da0ede81d632e74e29095d34ddbba246b4fc91d0ec67fb84155b224902e4db9c4fe3c9741a5493475f1a4bcdd2b856941458ba3e936736c3a4676fff9a5c0d8a87976a0b4e32da8650ccd37908505ae827597a779db80a3ee4a26f90b807c1a1c28035a289acb93bb2563faf0afed72b5bc603055e936ecfb99712add62d215188c9f55afe2311c3cef6632447fa84361538994c41e25ab2c14a419fe63ff184c048d0b6c6dc71e80475d75e0b791bbfbdd242f022fad2abb3c80f4c9a360262a6042592f69d74a0096f7c6bacd09251ceb119bdd0b59dbe3e2584e2cf41abda24f0e3c531acd56d273aa6d69871357ac625fe538e64e896cf635255d9432ed8ff394994f82293c9dcfd69970cbf99755987794fe338cef01ada90bcbb9f1db0c0601725e64adf10abbababead2ea32afd3b51deafdebb56bb5f22947ac811163de159e6e85b91c5f9b006289b963d0a7058ff8c5e99f5f02a8aca237054c722dc716322857b7ce92c7ebd896c136ef160e938be22e954705fc8e03714380b280e0309214978fe76ca121db3703da318f4a1ebad582feb7758c96ac6e25bcea5c239550390e90133328a5f977c116cdbd4a7a9e61518c25db6ba6bcc6bbbf8d36cdccd45086eab22b47421c408ad4ceabfd90001d58d6c67820da0378d74fffd4ba7b03cb459271dbb465fc38f5cf20176b141d742dd09e72c4939b6d0108ee6d80e36f9405aba506a1a84f7d27917f8257ea912e996692440e18357bc7ce2bf7a91f406ea30b2606079f415cf8a45414f64c5f54862dbd0253b7c2a8671f4f99c6d771d079440f450f5f4dd6ef974efc41b65f45f1e044057e2d0c6bbaac3c42bd4bf62caf82c6edaf6f3fb16e0a21af9f3b0ecddbe9917e4ac38bf9fe91e1ba5e97ec73ae807f092fab04f41c6fd1df975e4ce8f919ff077f6dc8b6b20a2f2ff1fe443432d589c2ef103518849991bc8e5347c0b02729ed17f16e2c2be1262f46054fc77d42b15cdd8672ea2a223924ecdf1ed4606ed615548ed29e86569bcee4d8810dbe1da686b465ca89a8a66121cb07d2a3c9461357f9bdc0ebbf2873af4554f7f0ae0f83ce36b5b2c9ffc719a146bb4eb5e14bec648a61c47d403b3d9107756615523de87fd41bf484407d772d403caea8086343e1d84e323d4de0757ababb90d0fd2b8ce803f5ac760840e23a976f5dd3cc8a843fb5e74cdf368d664ee0b4e0dfa3b3cc8578a32252b2f8af9aeb8cda533705b387d0061e8f1382c6948793790218fe28db7ab504a3d10a47cf2983ca35287c4f274f4659cc10b8d449f999c0de0803d8eb0d96f930bee3e96c8955dcc1ed706c4bcf52877e3dd8f56bdc67e85a8dcce27759c9d542c0b72e64adb79ec2e7b58b628cb55f5efdbb039a1e6e7c0e31fabe808d744d0f93e40481c2eb885630c5e68273a1f022afd09dc0db778b10ea50b132674573b76745b057a38803eefb4de03a5a1e753a0ba3a12dc0ab7ab638f5430bb439ac249663daf6aa41a3afa5de3e817125b851be26a0518834b281d5fc557f2dcc93438f915fd230f471dcb99cb1d221f6ff9c3f8574c4b5a6fbdcd73c70d719f1a6d3951dedf85a171c786b70d7df9e069178ffa61f1eb0a23a3bf75fdaf7c19f798ba1119c55e4e4b084363588ff1064570aa2346b15f8bf8eaddc8236e6e81f164952f1ddea525155bedfa0583ae03a1df5b1ba6d8879c4d6be19373462de7e3111e4d2000079075922c96cb504119d66acac13616ca58d7502aee88d71e2fefdd56eefe93fdb7943f96934b2d81e4bc3635ad36f17fd9fc373c91ba3cdaef3b2dbba8464ce236b43d3536e418e47dc494b47b7267204f182bcf0d2218c706357982b0b78ff12a9d2a3d1a4d2fbe03e997e8b8d9d68257eb9c285caa11d7e16d4017af9b60e19ef016a8f99e7d6fdbd6f27dccf2b91af9241322df4d0ab745637cc0be1bf6cef81c01a6e28786e22c8d17df0536e224f91a1fb2fabfa5cb85a34db1b5962cad668920ab2377b75e1a3991e14e8e5c37dd41a97a416fbfc7eedf994354bc3c91b4be0bb15bee594498589440a3e6218de2e6f778af835c1f0e8da436280c96834ecdcc698f8407efa6416d19278c31938d6deff58fd0574ed542bf1043782cd2b59fa5bc21b595bef3f048f270447e330bec0ab0c1c95564c03b85a485a4b6b6bcac10a3d0c16315aa7979e771a89a31015a9a7239da7d82665c208df64c61996d1d78581e0da3fc934be048ceabb6a29d228ae0cc11eafaf87fd59f2349e17cc9148220d87c57d519b62891b61b94a67bd9aaf2a4589c90aa4ff07e621c3573ba578b62eb6b58d75c8370e52eb01bf5ee5532b9d8186c6e42b9dc0a7bf9948e938f06a6f8ff3943b6d2a04662807fbf7428e9f3229527031874de6001eb4abd8738ad87753d08023c88e01b921802dce2a186c14304581bf196bb5d692f43f5ec9990a1cb68162cd6f355a35aa22b7d5110da91967e917236b50e9d4be83c0a80327cccb6273bdf431d255f324d731a14eeefec0b537a3e3be8a6676911b2db451e7b702b68873878661364d57b9e576a1a3fa866859df9e78fccfb4cb17f89019abd54d4dda14ca07c7babb6450e55dc12da5828adfe18779b4e8cc0d5d1cf3eb3386e201c8f0a22c96c0d686a9dc5eba3846edeac5581e9d16a7903009f822c3079a549a30fd8ca2c0f9118f6f4b7aef65bd311e8925b049632eb699c5fe5bc30bc6ca5ecc22c704e90a2572bca592b3b92f41c2cf548f975d8742ba4b7fa515ae565f42e2752efd0244285dca002a0caa80331ee9d1687fb17d8b5e6d4dc86e438e099f0bdd7c6d61f10160ac74d45d9db5f221a1ee22680ebff73bf070e35aba39d156cd3407c96aae1695ae941b0059f2eb0fee535c3e5c5dbf7833bae6643d3a88012ff1c85e1c6b68b1d173cea3e7684b840a843489be5680e29e6c82baa9511f79bf90ee354c02b374ec9322a7edf3bd848ddddb334f6e90401389a414a97ffadc75bcbe3777a8ec8eee7e8105f8e2cd58707d8e33e9ca6eacdadedcb7995c9bb5a6219347881ed0e75681298f8455cb2bf3f2f97f791e57accd400fbcd3a09712cffa151219ad69be6ff727036351b78d6a55b3498a5dbe9c14d68d42b9ce6dde0de4fa88fe3a778b420ba9399426e005e88bb1e366bb33aa30784f1a641744d48c898f102fb824c0ae1d54c7e16bd6fc362e582e41a82a5010afda8da3515a2545d0d05ce4f566f9ca21cf8ff7785fe596a1488c4f131df52f28223481145a44d951c2e112c7061e35eab36c295d37b07f1d2a29ee7843b8d0d673e4529c16aa0d422f0d201f96a2462dc9abea29c323a1e847464c684816101b5e562c2253c928dfd8389c60ff9368c1d6b7e1bd11699bc7b90b0a10a947c4dd57d82e4bc5f4873cfdf6e9c5c362052734fde0d68d7829c4c8bef63f77fe8a95680dfbb03c355bda5b350cce21ade0bc6d0dff8fd558f5c52673707f52c11e193724b5196da73096f3ce19b004f6e667cffa756cb6824602abca752c3afca03416416ec07651ad07d9a755af386027d5dcc6adca3b9d48f6abaad819d3ac3cecfed7daa80258ebb7e042b4129d1a6836781eaea4ee07d5a0f702aa4706847e0d894b68c91c12e22c629e60487dce538c09b011b84a6122db3fda2b0c210080d173b939bb936f20989f4ad4f087d51a54241ceaabbb4d7f3dd36335683b030c5c5e57e6d0248cef08bbf5ec6e58de307bf2cd6d88d46257a9e3648fc34c211a54186712b3d76ec0d75c576c9f74e2191cfbe23068eb14025e689092dca96b34aeca8478a4cfc670e86143ac6f6e793959378eb121117584370de7f7e9ef3b90d6d3c1252ef261ab33e22938c2dc9f2121748459f35c8b1a8d628a91c1c9f87a448bd2114cbca8f97b3c5bcd46adbac237e0af5793d23c2afc65afccc343002486a7920dd6d34d5f43f66a3ad8286260991fb9ecf3cdea0b0855386442f694a124e6483dd6daf05c45693df320e0744596363c234d9cb9d84cd65aa629ab02ef96e67ca10e55e2cd165372890e78a811798cc238e83e523c0b4d722a322588811ee745370293dfa81dcf974f59b3e958dbf99a5bb8a0a1f2a9388cb0c4c8e8b45b666fc0c89586ea1f52be209b55e0ac659b4d045c0d43b511dbaf8c534c8181189b025916cc3cd30e9fd3a3dfaffe79f46816774008a7e499e4568195720a17d7095a2bb9ad8887d1e4dbf5341433055c2dfc06dba08c7c87eeffe9adcc433c69f7be38da714cfc30b4b2d9e27838f5b44c514539888b0757305cdd1d67801efd09c8aabfcce81987155a41e6c7165b4d087ac0535115927b85cc54d8e7c944e0cc2c0afb2c5586516567956e5fbbd0864313d95415576448939f5b4a9ca59c0515d2af471623ce0d87e45a7dd1b8e8510258a6d7f06cea1548b546425b76558e4bad1997d8c3611d47f8fba080eb3f24cfc849777dae8201399a590264a05f99304fa81bec94baa879697351f331e49aa75ae867f377704a162fe0445b1daa08e8f20f8de35f08f35e9b386e7b9f3cbf7e49cce064f069e307e0ce70dd5f651dc7ba34aa584d4f49024ae6b12255135102c3065b60b84114818df00df9ada96df13c76cc8c712c5a85f92a5af0cb1ffb6ae763c1b16eb737a012aedda25abd28beeb80af2d94d48795b1802f133ecc9350e4add8a52b749accfb40a4d98c8d32a68c54284d7bd555e28bd1537b8ed45087ca1f93d2dbfaf7d0b2205c74fa2940d24f151bf2d50310324bdb2cc60677a773dfb845e7c90752e0ee4da45c09736fd00cd2298f2f9508292d60e3d98a8876bb91df67d548c2a24b83e579f16190be76eee20219374e1df351039f8a73636c54f2154da659001d358f3b038c75e3f9311743cd60f73704e8b3d97c80e3feac79667eff47533983061166f8139c60d96324a2367d5579a4cc8f68c84f7ede69f19ef31da59f77474feecd05f97e1f2df5c2a25eff233c504cc663ebca1c319635311684fc4aef41225d653b843903d7c9ac47a526455b06db5145b8d930c405a64847a1b6a6d91d664bdc764e434a7fe26d78aab1d9911236b9ad734b5c1cdb6200f8153189b06531ebe90b4779846a6f354a032384b8ec9e5005ad09b85336bae8e9f2ab6bf798f404ba974581af1f095723e6deb3c47c43170268bd3c08236ef933db8c9fe6bb71167b9b41fcba89f3302477996d167436ce1582ba14bfefb23125ab88c293b29be0b845ddd417953de5effc5537b3e79007e2464dc2e6850c2a6c5e8c707e410cad84bbee7c794eb5dad15ed11796e33f3de344fb191d07202cb71ed83a5f08a2accca0da57632b60672bc47f72d96b4bf27f952fc2417ee42f5565</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-up">
+      <input class="hbe hbe-input-field hbe-input-field-up" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-up" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-up">文章已被隐藏，可能为私密内容或还未完成。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+        <script src="/js/foldpost.js"></script>
+        <script src="/js/prism_copy.js"></script>
+    </div>
+    <div class="info">
+        <div class="textinfo">
+            <h1 style="text-align: center;">u-boot入门</h1>
+            <p>创建时间：10月 21, 2025 </p>
+            <p>最后更新：10月 27, 2025</p>
+            <p>字数统计：19字</p>
+            <p>预计阅读：1min</p>
+
+            <div class="catgrs">
+                
+                    
+                        <span>
+                            <a href="/categories/Linux/" id="catgrs">
+                                -Linux
+                            </a>
+                        </span>
+                    
+                        <span>
+                            <a href="/categories/Linux/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D/" id="catgrs">
+                                -系统移植
+                            </a>
+                        </span>
+                    
+                
+            </div>
+            <div class="tgs">
+                
+                    
+                        <span>
+                            <a href="/Tags/u-boot/" id="tgs">
+                                #u-boot
+                            </a>
+                        </span>
+                    
+                
+            </div>
+        </div>
+
+        <div id="toc-container">
+            <h2 style="border-bottom: 1px solid #666;">目录</h2>
+            <ul id="toc"></ul>
+        </div>
+
+    </div>
+</div>
+<script src="/js/toc.js"></script>
+
+
+
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-21",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":25},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: { 
+                            type: 'category', 
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":2,"path":"Linux/系统移植"}],"count":30,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <!--000-->
+    <!-- <footer>
+        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
+        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
+    </footer> -->
+    <footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-left">
+        <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
+        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
+        </div>
+        <div class="footer-right">
+        <a href="/about">About</a>
+        <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+        <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
+        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3bqyuYKwvLKdu7KlsLy0sfO_srA" style="text-decoration:none;">E-mail</a>
+        <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
+        <a href="/data">数据统计</a>
+
+        </div>
+    </div>
+
+    </footer>
+    <script src="/js/background.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 彩色控制台信息（更容易被看到）
+            console.log('%c 发现隐藏彩蛋 🎉 ', 'background:#2b2b2b;color:#fff;padding:6px 10px;border-radius:6px;font-weight:bold;');
+            console.log('%c 喵喵喵！欢迎来到本站。', 'color:#9d7ff5;');
+
+            // 可选：输出多行 ASCII（仿终端风）
+            console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
+        });
+    </script>
+
+</html>
+
