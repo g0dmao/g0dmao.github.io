@@ -8,25 +8,16 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
 
-        <link rel="stylesheet" href="/css/index.css">
-        <link rel="stylesheet" href="/css/post.css">
-        <link rel="stylesheet" href="/css/admonition.css">
-        <link rel="stylesheet" href="/css/search.css">
         <link rel="stylesheet" href="/css/layout.css">
-        <link rel="stylesheet" href="/css/view.css">
+        <link rel="stylesheet" href="/css/post.css">
 
-        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/monokai.min.css">
-        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script> -->
-
-        <!-- and it's easy to individually load additional languages -->
-        <!-- <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
-
-        <script>hljs.highlightAll();</script> -->
-
     <!-- hexo injector head_end start --><style>/* 布局样式 */
 .hexo-tips-layout {
     margin: 1.5rem 0;
@@ -94,259 +85,16 @@
 
 </style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
-    <!--
-        ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：
-        ║       Bro来查我成分了吗？                                       ║
-        ║                                                              ║
-        ╚══════════════════════════════════════════════════════════════╝
-    -->
 
-    <header>
-
-        <div style="display: inline-block; margin: auto;">
-            <span id="date" style="margin:5px;"></span>
-            <span id="clock" style="margin: 5px;"></span>
-            <span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
-        </div>
-        
-            <div id="p_btn">
-            <span id="backToTop" onclick="scrollToTop()">返回顶部</span> <span onclick="goHome()">返回首页</span>
-            </div>
-            <div style="font-size: 10px; color: #7b7b7b;">提示：点击标题可以折叠内容哦OvO</div>
-        
-
-    </header>
-    <script src="/js/clock.js"></script>
-    <script src="/js/btn.js"></script>
-    <!--000-->
     <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">markdown渲染器测试</h1>
+</div>
 
-        <!-- 博客详情 -->
-<div id="reading-progress"></div>
-<script src="/js/page_line.js"></script>
-<div class="a_container">
-    <div class="article">
-        <!--<div style="height: 50px;"></div>-->
-        
-            <!--
-Copyright Notice Module - Single-file HTML
-Copy the <section>...</section> into your article template where you want the copyright notice to appear.
-
-Features:
-- Minimal, dark-friendly design matching the AI-attribution module
-- Shows copyright year (auto-updates), author, and license name
-- Expandable details (license text / contact / link)
-- Accessible (aria) and keyboard-friendly
-- Small JS for toggle; no external libs
-
-How to use:
-- Replace AUTHOR_NAME, LICENSE_NAME, and LICENSE_URL placeholders with your own values.
-- If using a static site generator (Hexo), render this snippet conditionally using front-matter (e.g., `copyright: true`).
-- You can extract the <style> to your global CSS for consistency.
--->
-
-<section class="copyright-notice" aria-labelledby="copyright-heading">
-  <style>
-    :root{ --cn-text:#dfe6ea; --cn-muted:#9aa0a6; --cn-accent:#00c6ff }
-    .copyright-notice{
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color:var(--cn-text);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-      border-radius:10px; padding:12px 14px; margin:18px 0; display:flex; gap:12px; align-items:flex-start; max-width:820px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.12); border:1px solid rgba(255,255,255,0.03)
-    }
-    .copyright-notice__mark{ flex:0 0 44px; width:44px; height:44px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,0.02) }
-    .copyright-notice__mark svg{ width:28px; height:28px }
-    .copyright-notice__body{ flex:1; min-width:0 }
-    .copyright-notice__title{ font-weight:600; font-size:13px }
-    .copyright-notice__summary{ color:var(--cn-muted); margin-top:4px; font-size:12px }
-    .copyright-notice__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--cn-accent); font-weight:600 }
-    .copyright-notice__details{ margin-top:8px; color:var(--cn-muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
-    .copyright-notice__details a{ color:var(--cn-accent); text-decoration:none }
-    .copyright-notice__pill{ background: rgba(255,255,255,0.02); color:var(--cn-muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
-    @media (max-width:540px){ .copyright-notice{ padding:10px; gap:10px } .copyright-notice__mark{ width:38px; height:38px } }
-  </style>
-
-  <div class="copyright-notice__mark" aria-hidden="true">
-    <!-- simple © mark -->
-    <svg viewBox="0 0 24 24" role="img" aria-label="copyright"><text x="50%" y="60%" text-anchor="middle" dominant-baseline="middle" font-size="25" fill="currentColor">©</text></svg>
-  </div>
-
-  <div class="copyright-notice__body">
-    <div style="display:flex; justify-content:space-between; align-items:center">
-      <div>
-        <div id="copyright-heading" class="copyright-notice__title">版权声明 · 版权所有</div>
-        <div class="copyright-notice__summary">本文 © <span id="cn-author">AUTHOR_NAME</span> <span id="cn-year">year</span>。保留所有权利。</div>
-      </div>
-
-      <div style="display:flex; gap:8px; align-items:center">
-        <button class="copyright-notice__toggle" aria-expanded="false" aria-controls="copyright-details" id="cn-toggle">查看许可</button>
-      </div>
-    </div>
-
-    <div id="copyright-details" class="copyright-notice__details" role="region" aria-hidden="true">
-      <div><span class="copyright-notice__pill">许可：<span id="cn-license">LICENSE_NAME</span></span></div>
-      <div style="margin-top:8px">本文章为博主原创文章。遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。</div>
-      <div style="margin-top:8px"><a href="LICENSE_URL" id="cn-license-link" target="_blank" rel="noopener">查看完整许可条款</a></div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      // Fill placeholders if developer sets data attributes on the section
-      const section = document.currentScript && document.currentScript.parentElement || document.querySelector('.copyright-notice');
-      try{
-        const author = section.getAttribute('data-author') || 'GoDm@';
-        const license = section.getAttribute('data-license') || 'CC BY-SA 4.0';
-        const licenseUrl = section.getAttribute('data-license-url') || 'https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans';
-        const yearEl = document.getElementById('cn-year');
-        const authorEl = document.getElementById('cn-author');
-        const licenseEl = document.getElementById('cn-license');
-        const licenseLink = document.getElementById('cn-license-link');
-        const now = new Date();
-        const year = now.getFullYear();
-        if(yearEl) yearEl.textContent = year;
-        if(authorEl) authorEl.textContent = author;
-        if(licenseEl) licenseEl.textContent = license;
-        if(licenseLink) licenseLink.href = licenseUrl;
-      }catch(e){/* ignore */}
-
-      const btn = document.getElementById('cn-toggle');
-      const det = document.getElementById('copyright-details');
-      btn.addEventListener('click', ()=>{
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        det.style.display = expanded ? 'none' : 'block';
-        det.setAttribute('aria-hidden', String(expanded));
-        btn.textContent = expanded ? '查看许可' : '收起';
-      });
-
-    })();
-  </script>
-</section>
-
-        
-
-        
-            <!--
-Author Note Module - same style & structure as Ai-assisted Attribution Module (ailogo)
-Copy the <section>...</section> into your article template where you want the author note to appear.
-
-Behavior:
-- Matches the exact styling, spacing, accessibility, and toggle behavior of the AILOGO module
-- Default text: "本文为学习记录，不保证严谨性"
-- Supports data-author attribute on the section to specify the author's name (falls back to '作者')
-- No color changes from the original AILOGO module
--->
-
-<section class="ai-attrib author-note" aria-labelledby="author-note-heading" data-author="GoDm@">
-  <style>
-    /* Exact styling copied from AILOGO module */
-    .ai-attrib{
-      --bg: rgba(250,250,250,0.03);
-      --muted: #9aa0a6;
-      --text: #dfe6ea;
-      --accent: #00c6ff;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      font-size: 13px;
-      line-height: 1.3;
-      color: var(--text);
-      margin: 24px 0 8px 0;
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.14);
-      border: 1px solid rgba(255,255,255,0.03);
-      max-width: 820px;
-    }
-
-    .ai-attrib__logo{
-      flex: 0 0 44px;
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.02);
-      overflow: hidden;
-    }
-    .ai-attrib__logo svg{ width:28px; height:28px; display:block }
-
-    .ai-attrib__body{ flex:1; min-width:0 }
-    .ai-attrib__heading{ display:flex; gap:8px; align-items:center; justify-content:space-between }
-    .ai-attrib__title{ font-weight:600; font-size:13px; color:var(--text); }
-    .ai-attrib__summary{ color:var(--muted); margin-top:4px; font-size:12px }
-
-    .ai-attrib__toggle{ background:none; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-size:12px; color:var(--accent); font-weight:600 }
-    .ai-attrib__toggle:focus{outline-offset:2px }
-
-    .ai-attrib__details{ margin-top:8px; color:var(--muted); font-size:12px; display:none; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.02) }
-    .ai-attrib__details a{ color:var(--accent); text-decoration:none }
-
-    .ai-attrib__pill{ background: rgba(255,255,255,0.02); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:11px; display:inline-flex; gap:6px; align-items:center }
-
-    @media (max-width:540px){ .ai-attrib{ padding:10px; gap:10px } .ai-attrib__logo{ width:38px; height:38px } }
-  </style>
-
-  <div class="ai-attrib__logo" aria-hidden="true">
-    <!-- reuse simple SVG mark as placeholder -->
-    <svg viewBox="0 0 64 64" role="img" aria-label="author-note">
-      <rect x="8" y="12" width="48" height="40" rx="6" fill="none" stroke="currentColor" stroke-opacity="0.9" stroke-width="2"></rect>
-      <path d="M20 28h24M20 36h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-  </div>
-
-  <div class="ai-attrib__body">
-    <div class="ai-attrib__heading">
-      <div>
-        <div id="author-note-heading" class="ai-attrib__title">作者说明 · 学习记录</div>
-        <div class="ai-attrib__summary">本站作为作者的学习记录站，不保证文章内容严谨或完全正确。</div>
-      </div>
-
-      <div style="display:flex; gap:8px; align-items:center">
-        <button class="ai-attrib__toggle" aria-expanded="false" aria-controls="author-note-details" id="author-note-toggle">查看详情</button>
-      </div>
-    </div>
-
-    <div id="author-note-details" class="ai-attrib__details" role="region" aria-hidden="true" >
-      <div>作者：<span id="author-note-author" class="ai-attrib__pill">GoDm@</span></div>
-      <div style="margin-top:8px">用途：本文为作者的学习记录与实践笔记，用于记录学习过程、思考与示例代码（如有）。</div>
-      <div style="margin-top:8px">欢迎朋友指正文章中的错误，联系邮箱：xlm_work@outlook.com</div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const btn = document.getElementById('author-note-toggle');
-      const det = document.getElementById('author-note-details');
-      const section = btn && btn.closest('.author-note');
-      const authorPill = document.getElementById('author-note-author');
-      // initialize author from data attribute if provided
-      try{
-        const dataAuthor = section && section.getAttribute('data-author');
-        if(dataAuthor && authorPill) authorPill.textContent = dataAuthor;
-      }catch(e){}
-
-      btn.addEventListener('click', ()=>{
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        det.style.display = expanded ? 'none' : 'block';
-        det.setAttribute('aria-hidden', String(expanded));
-        btn.textContent = expanded ? '查看详情' : '收起';
-      });
-
-      // keyboard toggle with 'o' key when focused
-      section && section.addEventListener('keydown', (e)=>{ if(e.key === 'o' || e.key === 'O') btn.click(); });
-    })();
-  </script>
-</section>
-        
-
-        
+<div id="a_container">
+    <div id="article">
         <p><ul class="markdownIt-TOC">
 <li><a href="#%E6%A0%87%E9%A2%982">标题2</a>
 <ul>
@@ -548,52 +296,81 @@ time<br />
 </ol>
 </section>
 
-        <script src="/js/foldpost.js"></script>
-        <script src="/js/prism_copy.js"></script>
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small; line-height: .7;">
+<p>共计约359字。于2025/01/18首次发布，最后更新于2025/09/07。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+    
+        <span>
+            <a href="/Tags/%E5%8D%9A%E5%AE%A2/" id="tgs">
+              #博客 |
+            </a>
+        </span>
+    
+
+
+</div>
+
     </div>
-    <div class="info">
-        <div class="textinfo">
-            <h1 style="text-align: center;">markdown渲染器测试</h1>
-            <p>创建时间：1月 18, 2025 </p>
-            <p>最后更新：9月 07, 2025</p>
-            <p>字数统计：359字</p>
-            <p>预计阅读：1min</p>
 
-            <div class="catgrs">
-                
-                    
-                        <span>
-                            <a href="/categories/%E5%85%B6%E4%BB%96/" id="catgrs">
-                                -其他
-                            </a>
-                        </span>
-                    
-                
-            </div>
-            <div class="tgs">
-                
-                    
-                        <span>
-                            <a href="/Tags/%E5%8D%9A%E5%AE%A2/" id="tgs">
-                                #博客
-                            </a>
-                        </span>
-                    
-                
-            </div>
-        </div>
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
 
-        <div id="toc-container">
-            <h2 style="border-bottom: 1px solid #666;">目录</h2>
-            <ul id="toc"></ul>
-        </div>
-
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#markdown-%E6%B5%8B%E8%AF%95%E6%96%87%E6%9C%AC"><span class="toc-text"> Markdown 测试文本</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E9%A2%982"><span class="toc-text"> 标题2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8"><span class="toc-text"> 列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E5%88%97%E8%A1%A8"><span class="toc-text"> 有序列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text"> 链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87"><span class="toc-text"> 图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-text"> 代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-text"> 引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E6%A0%BC"><span class="toc-text"> 表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%92%E7%BA%BF"><span class="toc-text"> 划线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text"> 其他</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%87%E9%A2%98%E5%A4%A7%E5%B0%8F%E5%AF%B9%E6%AF%94"><span class="toc-text"> 标题大小对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E7%BA%A7"><span class="toc-text"> 2级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E7%BA%A7"><span class="toc-text"> 3级</span></a></li></ol></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
     </div>
 </div>
-<script src="/js/toc.js"></script>
 
+<script>
+    const backToTop = document.getElementById("back-to-top");
 
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
 
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
 
 
     <script src="/vendor/js/echarts.min.js"></script>
@@ -617,7 +394,7 @@ time<br />
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -736,14 +513,14 @@ time<br />
                     monthlyChart.setOption({
                         xAxis: { 
                             type: 'category', 
-                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10"], 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"], 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,10],
+                            data: [6,2,10,4,11,2,4,15,10,2],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -780,7 +557,7 @@ time<br />
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -795,7 +572,7 @@ time<br />
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -817,13 +594,13 @@ time<br />
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":31},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":31},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -872,7 +649,7 @@ time<br />
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":3,"path":"Linux/系统移植"}],"count":31,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":5,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -920,44 +697,6 @@ time<br />
         </script>
     
     </body>
-    <!--000-->
-    <!-- <footer>
-        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
-    </footer> -->
-    <footer class="footer">
-
-    <div class="footer-container">
-
-        <div class="footer-left">
-        <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
-        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-        </div>
-        <div class="footer-right">
-        <a href="/about">About</a>
-        <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-        <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
-        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3bqyuYKwvLKdu7KlsLy0sfO_srA" style="text-decoration:none;">E-mail</a>
-        <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
-        <a href="/data">数据统计</a>
-
-        </div>
-    </div>
-
-    </footer>
-    <script src="/js/background.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 彩色控制台信息（更容易被看到）
-            console.log('%c 发现隐藏彩蛋 🎉 ', 'background:#2b2b2b;color:#fff;padding:6px 10px;border-radius:6px;font-weight:bold;');
-            console.log('%c 喵喵喵！欢迎来到本站。', 'color:#9d7ff5;');
-
-            // 可选：输出多行 ASCII（仿终端风）
-            console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
-        });
-    </script>
 
 </html>
 

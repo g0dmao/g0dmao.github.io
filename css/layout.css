@@ -1,139 +1,188 @@
-html{
-    scrollbar-width: thin;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
+/* retro-text.css
+   目标：老式文本网页风格（90s 文本感），但保留现代可访问性。
+   使用：把此文件引入 <head>，或复制到你的主样式里。
+*/
+
+/* ========== 配置变量（便于快速定制） ========== */
+:root{
+  --bg: rgb(241,229,201);            /* 页面背景 */
+  --text: #111111;          /* 主文本颜色 */
+  --link: #0000ee;          /* 经典蓝链接 */
+  --link-visited: #551a8b;  /* 访问过的链接颜色 */
+  --muted: #666666;        /* 次要文字 */
+  --hr: #cccccc;           /* 分割线 */
+  --other: darkcyan;
+  --measure: 70ch;         /* 理想行长 (字符数) */
+  --base-size: 16px;       /* 基准字体大小 */
+  --line-height: 1.6;      /* 行高 */
+  --container-pad: 20px;   /* 页面左右内边距 */
+  --max-width: calc(var(--measure) + 4rem);
+  --mono: "Fira Code", "Consolas", "Courier New", monospace; /* 等宽字体 */
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --kicker-size: 0.92rem;
 }
 
+/* ========== 基本重置（轻量） ========== */
+* { box-sizing: border-box; }
+html,body { height:100%; }
 body{
-    background-color: #101418;
-    color: #cacaca;
-    cursor:default;
-    margin: 0;
-    padding: 0;
-    scrollbar-color: #2a2a2a #101418 ;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: var(--sans);
+  font-size:var(--base-size);
+  line-height:var(--line-height);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding: 0;
 }
 
+/* 链接保留老式下划线语义（可选），但做得更温和 */
 a {
-    color: #60A5FA;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    position: relative;                  /* 必须：让伪元素定位 */
-    padding-bottom: 4px;                 /* 预留下划线空间 */
+  color:var(--link);
+  text-decoration: underline;
+}
+a:visited { color:var(--link-visited); }
+/* a:focus, a:hover { text-decoration: none; outline: 2px solid rgba(0,0,0,0.08); outline-offset: 2px; } */
+
+/* ========== 页面容器与布局 ========== */
+#a_container {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    width: min(100%,1000px);
+    margin: auto;
+    overflow: visible;
 }
 
-a:hover{
-    color: #3B82F6;
-
+.container{
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  width: fit-content;
+  margin: auto;
 }
 
-header{
-    text-align: center;
-    position: sticky;
-    width: 100%;
-    height: auto;
-    top: 0;
-    background: rgb(16, 20, 24, 0.5);
-    /* background-color: #ffffff00; */
-    backdrop-filter: blur(1px);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding: 5px;
-    border-bottom-style: dotted;
-    border-color: #2a2a2a;
-    z-index: 99;
-    #p_btn{
-        span{
-        color: #60A5FA;
-        text-decoration-line: underline;
-        }
-        span:hover{
-            color: #3B82F6;
-        }
+#article {
+
+    width: 90%;
+    height: 100%;
+    padding: 20px;
+    h1,
+    h2,
+    h3,
+    h4 {
+        font-weight: 700;
+        margin-top: 2.2rem;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+        letter-spacing: 0.5px;
+        color: var(--headline_color);
+    }
+
+    h1 {
+    font-size: 1.9rem;
+    padding-bottom: .3rem;
+    }
+    h2 {
+    font-size: 1.6rem;
+    padding-bottom: .2rem;
+    font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif 4', serif;
+    }
+    h3 {
+    font-size: 1.3rem;
+    padding-bottom: .1rem;
+    }
+    h4 {
+    font-size: 1.1rem;
     }
 }
 
+.categories{
+  margin-top:20px;
+  position: sticky;
+  top: 10px;
 
-
-#time{
-    text-align: center;
-    background-color: inherit;
-    color: #cacaca;
 }
 
-/* footer{
-    text-align: center;
-    color: #333333;
-    border-top-style:dotted;
-    font-size: 14px;
-    p{
-        margin: 5px;
-    }
-    a{
-        color: #7b7b7b;
-    }
+p { margin: 0 0 1rem 0; }
+
+/* 元信息（如时间、作者） */
+.meta { color:var(--muted); font-size:0.95rem; margin-bottom:1rem; }
+
+/* ========== 列表、表格、引用 ========== */
+ul, ol { margin: 0 0 1rem 1.25rem; }
+li { margin: 0.25rem 0; }
+
+blockquote {
+  margin: 1rem 0;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--other);
+  color: var(--muted);
+  background: transparent;
+}
+
+/* 极简表格：纯文本感 */
+table {
+  width:100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.98rem;
+}
+th, td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--hr);
+  text-align: left;
+}
+
+/* ========== 代码样式（内联与块） ========== */
+code {
+  font-family: var(--mono);
+  font-size: 0.95em;
+  background: #fdf6e3 !important;
+  padding: 0.08rem 0.25rem;
+  border-radius: 3px;
+  color:var(--other);
+}
+pre {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  background: #fdf6e3 !important;
+  overflow: auto;
+  border: 1px solid var(--hr);
+}
+
+/* ========== 图片（尽量少用） ========== */
+img { display:block; max-width:100%; height:auto; margin: .75rem 0; border: 0; }
+
+/* ========== 水平线 ========== */
+hr { border: none; height:1px; background: var(--hr); margin:1.5rem 0; }
+
+/* ========== 表单与按钮（非常基础） ========== */
+/* input, textarea, select {
+  font: inherit;
+  border:1px solid var(--hr);
+  padding: 0.35rem 0.5rem;
+  border-radius: 3px;
+  background: transparent;
+} */
+button { cursor: pointer; }
+
+/* ========== 小屏响应式（保持单列） ========== */
+/* @media (max-width: 720px) {
+  :root { --base-size: 15px; --container-pad: 14px; --measure: 60ch; }
+  .container { padding: 1.25rem var(--container-pad); }
+  .h1 { font-size:1.4rem; }
 } */
 
-.footer {
-bottom: 0;
-left: 0;
-width: 100%;
-background: inherit;              /* 深色背景 */
-color: #bbb;                      /* 默认文字颜色 */
-padding: 1rem 1rem;               /* 内边距 */
-font-size: 0.9rem;
-border-top: 1px solid rgba(255, 255, 255, 0.08); /* 顶部分隔线 */
-}
+/* ========== 可访问性焦点样式强化 ========== */
+:focus { outline-offset: 3px; }
 
-.footer-container {
-max-width: 800px;
-margin: 0 auto;
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;                  /* 小屏幕自动换行 */
-}
-
-.footer-left {
-margin-bottom: 0.5rem;
-}
-
-.footer-right a {
-color: #bbb;
-margin-left: 1.2rem;
-text-decoration: none;
-position: relative;
-transition: color 0.3s ease;
-}
-
-.footer-right a:hover {
-color: #fff;                      /* 悬停变亮 */
-}
-
-.footer-right a::after {
-content: "";
-position: absolute;
-left: 0;
-bottom: -3px;
-width: 0;
-height: 1px;
-background: #fff;
-transition: width 0.3s ease;
-}
-
-.footer-right a:hover::after {
-width: 100%;                      /* 悬停时出现下划线 */
-}
-
-/* 📱 响应式：小屏幕下居中排列 */
-@media (max-width: 600px) {
-.footer-container {
-    flex-direction: column;
-    text-align: center;
-}
-
-.footer-right a {
-    margin: 0 0.8rem;
-}
-
-.footer-left {
-    margin-bottom: 0.8rem;
-}
+/* ========== 打印优化（保留文本感） ========== */
+@media print {
+  a { text-decoration: underline; color: #000; }
+  nav, .no-print { display:none; }
+  body { background: #fff; color: #000; }
+  .container { padding: 1in; max-width: 6.5in; }
 }

@@ -8,715 +8,413 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
         <title>GoDm@'s blog</title>
 
-        <link rel="stylesheet" href="/css/index.css">
-        <link rel="stylesheet" href="/css/post.css">
-        <link rel="stylesheet" href="/css/admonition.css">
-        <link rel="stylesheet" href="/css/search.css">
         <link rel="stylesheet" href="/css/layout.css">
-        <link rel="stylesheet" href="/css/view.css">
+        <link rel="stylesheet" href="/css/post.css">
 
-        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/monokai.min.css">
-        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script> -->
-
-        <!-- and it's easy to individually load additional languages -->
-        <!-- <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/go.min.js"></script>
-
-        <script>hljs.highlightAll();</script> -->
-
     <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
-    <!--
-        ╔══════════════════════════════════════════════════════════════╗
-        ║    接收到一条消息：
-        ║       Bro来查我成分了吗？                                       ║
-        ║                                                              ║
-        ╚══════════════════════════════════════════════════════════════╝
-    -->
 
-    <header>
-
-        <div style="display: inline-block; margin: auto;">
-            <span id="date" style="margin:5px;"></span>
-            <span id="clock" style="margin: 5px;"></span>
-            <span style="color: #888;"><strong> Notes · Thoughts · Code </strong></span>
-        </div>
-        
-
-    </header>
-    <script src="/js/clock.js"></script>
-    <script src="/js/btn.js"></script>
-    <!--000-->
     <body>
-
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--主页-->
+<style>
+    #description{
+        width: min(700px,90%);
+        margin: auto;
+    }
+</style>
+<div id="description">
+    <h3>关于本站</h3>
+    <p>这是我的学习笔记站，用来记录学习过程、整理知识点与问题解答。
+    这里存放我感兴趣的主题、读书笔记与实验记录，供自己回顾与沉淀。</p>
 
-<div class="i_container">
+    <p>本站所有Posts都是Markdown格式，由<a href="https://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>渲染为HTML，并托管在
+    <a href="https://pages.github.com/" title="Github Pages" target="_blank" rel="noopener">Github Pages</a> 上。
+    </p>
 
-    <!-- <div class="i_ava">
-    <img src="/img/CJ.png">
+    <h3>关于我</h3>
+    <p>我现在还是一名学生，目前主要聚焦于嵌入式、Linux及Linux驱动开发相关领域。</p>
+    <p>Email：<a href="mailto:xlm_work@outlook.com" title="xlm_work@outlook.com">xlm_work@outlook.com</a> |
+     Github：<a href="https://github.com/g0dmao" title="@g0dmao" target="_blank" rel="noopener">@g0dmao</a></p>
+    <p>有关我的详细介绍请访问我的个人主页：
+    <a href="https://hi.godmao.top/" title="https:&#x2F;&#x2F;hi.godmao.top&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;hi.godmao.top&#x2F;</a>（不幸的是它目前正在维护:)）
+    </p>
+
+    <h3>关于本站风格</h3>
+    有一天，我萌生了一个念头：重新设计我的博客主题，把它变得格外“简陋”。
+    虽然说不清具体缘由，但直觉告诉我，这样反而会让我更满意——毕竟我一直钟爱极简风格。
+    因此，我打算尽可能避免多余的装饰，只保留必要的 CSS 样式，把各个元素调整到恰当的位置，
+    让整体看起来既舒服又易读。这些样式全都服务于内容的协调与可读性，让博客回归最本真的状态。
+</div>
+
+<div class="container">
+    <div id="post">
+        
+        <h2> 2025/11 </h2>
+
     
-</div> -->
+        11/02 -
+    
+    <a href="/posts/42114/">编程随想</a><br>
 
-    <!--<h1 class="i_h1">GoDm@'s Blog</h1>-->
-    <!-- <img style="max-width: 100%;" src="/img/GoDm@'s Blog.png"> -->
-    <!-- <p style="color: #7b7b7b; margin: 0;">个人记录站 记录自己所爱。</p> -->
-    <div id="info_container">
-        <div style="backdrop-filter: blur(10px); width: fit-content; margin: auto; padding: 7px;">
-        <div id="head">
-            <img class="ava" src="/img/CJ.png">
-            <div class="blogname">
-                <p style="margin: 0; font-size: 30px; text-align: left;">GoDm@'s Blog</p>
-                <p style="margin: 5px; text-align: left;"><a href="/about">About & Contact</a></p>
-            </div>
-        </div>
-        <div class="descri">
-            <!-- <p>🌿 Welcome to My Little Corner</p> -->
-            <p>🌿 欢迎来到我的小站</p>
+    
+        11/02 -
+    
+    <a href="/posts/30149/">根文件系统构建</a><br>
 
+        <h2> 2025/10 </h2>
 
-            <!-- <p>This is a small space I built in a quiet corner of the internet — a place
-                to record my steps along the journey of learning and exploration.
-                The purpose of this site is simple: I want to leave traces of the knowledge,
-                ideas, and thoughts that spark my curiosity — not only to review and reflect,
-                but also to witness my own growth over time.</p> -->
-            <p>这里是我在互联网角落里搭建的一方天地，记录着我在学习与探索道路上的点滴足迹。建站的初衷很简单：
-                我想把那些让我心动的知识、技术与思考留下痕迹——不仅是为了复盘与回顾，也是希望在不断记录的过程中，
-                让自己看见成长的轨迹。</p>
+    
+        10/31 -
+    
+    <a href="/posts/44016/">Mx6ull开发版移植nxp官方linux内核</a><br>
 
+    
+        10/29 -
+    
+    <a href="/posts/26288/">Mx6ull开发版移植nxp官方u-Boot</a><br>
 
-            <!-- <p>I believe that passion is worth recording, and growth is worth cherishing.
-                Perhaps these writings are neither profound nor perfect, but they are real —
-                and they are part of my story. I hope they will not only help my future self,
-                but also offer a bit of inspiration and insight to you, a passerby who happens to stop by.</p> -->
-            <p>我相信，热爱值得被记录，成长值得被珍惜。或许这些文字并不深刻，也不完美，但它们都是真实的、
-                属于我的旅程。希望它们不仅能帮助未来的自己，也能为偶然路过的你，带去一点启发与灵感。</p>
+    
+        10/28 -
+    
+    <a href="/posts/40650/">大蟒蛇-Typer库</a><br>
 
+    
+        10/28 -
+    
+    <a href="/posts/30447/">大蟒蛇-Rich库</a><br>
 
-            <!-- <p>May we keep moving forward, guided by the things we love. 🚀</p> -->
-            <p>愿我们都能在热爱中不断前行。🚀</p>
-        </div>
-        </div>
+    
+        10/23 -
+    
+    <a href="/posts/50277/">大蟒蛇-Json库</a><br>
+
+    
+        10/22 -
+    
+    <a href="/posts/13859/">U-Boot常见命令</a><br>
+
+    
+        10/20 -
+    
+    <a href="/posts/59269/">在Linux中创建一个字符驱动设备</a><br>
+
+    
+        10/14 -
+    
+    <a href="/posts/2446/">记录搭建一台云服务器环境的过程</a><br>
+
+    
+        10/10 -
+    
+    <a href="/posts/7167/">哈希表与设备号</a><br>
+
+    
+        10/09 -
+    
+    <a href="/posts/31088/">Linux文件操作调用链探究</a><br>
+
+        <h2> 2025/09 </h2>
+
+    
+        09/29 -
+    
+    <a href="/posts/22025/">大蟒蛇-Sys/argparse库</a><br>
+
+    
+        09/29 -
+    
+    <a href="/posts/22415/">大蟒蛇-Shutil库</a><br>
+
+    
+        09/28 -
+    
+    <a href="/posts/63515/">大蟒蛇-Pathlib库</a><br>
+
+    
+        09/28 -
+    
+    <a href="/posts/53459/">Python中元组、列表、字典和集合的区别</a><br>
+
+    
+        09/28 -
+    
+    <a href="/posts/37113/">大蟒蛇-Os库</a><br>
+
+    
+        09/27 -
+    
+    <a href="/posts/49513/">Linux内核模块初体验</a><br>
+
+    
+        09/18 -
+    
+    <a href="/posts/17327/">WSL-Archlinux安装后应该做什么？</a><br>
+
+    
+        09/15 -
+    
+    <a href="/posts/26506/">POSIX IPC：System v 的继任者</a><br>
+
+    
+        09/12 -
+    
+    <a href="/posts/46571/">深入浅出 Linux IPC：进程间通信的艺术</a><br>
+
+    
+        09/10 -
+    
+    <a href="/posts/43741/">Linux-Process</a><br>
+
+    
+        09/09 -
+    
+    <a href="/posts/45385/">Linux C标准IO操作</a><br>
+
+    
+        09/09 -
+    
+    <a href="/posts/7076/">Linux 系统IO编程</a><br>
+
+    
+        09/07 -
+    
+    <a href="/posts/4341/">MakeFile简明指南</a><br>
+
+    
+        09/07 -
+    
+    <a href="/posts/27939/">交叉编译器相关知识梳理</a><br>
+
+    
+        09/07 -
+    
+    <a href="/posts/32814/">关于Linux开发板与上位机的连接方式</a><br>
+
+        <h2> 2025/08 </h2>
+
+    
+        08/25 -
+    
+    <a href="/posts/7593/">无聊随便打点字</a><br>
+
+    
+        08/24 -
+    
+    <a href="/posts/33465/">I-MX6ULL的中断实验（下）</a><br>
+
+    
+        08/11 -
+    
+    <a href="/posts/32440/">I-MX6ULL的中断实验（上）</a><br>
+
+    
+        08/06 -
+    
+    <a href="/posts/33477/">I-MX6ULL主频与时钟配置实验</a><br>
+
+        <h2> 2025/07 </h2>
+
+    
+        07/28 -
+    
+    <a href="/posts/2969/">I-MX6ULL开发板C语言运行环境搭建并点灯</a><br>
+
+    
+        07/14 -
+    
+    <a href="/posts/undefined/">浅析IMX镜像文件结构</a><br>
+
+        <h2> 2025/06 </h2>
+
+    
+        06/30 -
+    
+    <a href="/posts/43400/">【点灯大师】点亮I.MX6ULL开发板的LED灯</a><br>
+
+    
+        06/18 -
+    
+    <a href="/posts/21870/">Shell脚本流程控制简明指南</a><br>
+
+    
+        06/18 -
+    
+    <a href="/posts/27290/">Shell脚本入门</a><br>
+
+    
+        06/14 -
+    
+    <a href="/posts/36626/">Ubuntu下连接文件</a><br>
+
+    
+        06/14 -
+    
+    <a href="/posts/20676/">踩坑记录：WSL下对u盘格式化修改后在win...</a><br>
+
+    
+        06/14 -
+    
+    <a href="/posts/10180/">Ubuntu下文件权限管理</a><br>
+
+    
+        06/12 -
+    
+    <a href="/posts/30265/">Ubuntu下磁盘管理</a><br>
+
+    
+        06/11 -
+    
+    <a href="/posts/13715/">WSL下连接USB设备</a><br>
+
+    
+        06/11 -
+    
+    <a href="/posts/7417/">Ubuntu文件系统结构</a><br>
+
+    
+        06/11 -
+    
+    <a href="/posts/37616/">Linux常用的命令总结</a><br>
+
+    
+        06/07 -
+    
+    <a href="/posts/26155/">如何优雅的在win上运行Linux</a><br>
+
+        <h2> 2025/04 </h2>
+
+    
+        04/10 -
+    
+    <a href="/posts/44982/">[自用]16届烂桥杯嵌入式赛道模块代码整理</a><br>
+
+    
+        04/06 -
+    
+    <a href="/posts/20333/">hexo主题Klise-Enhanced使用文档</a><br>
+
+    
+        04/05 -
+    
+    <a href="/posts/25619/">从C底层到嵌入式驱动开发的学习参考路线</a><br>
+
+    
+        04/04 -
+    
+    <a href="/posts/57146/">Kelly McGonigal, Ph.D....</a><br>
+
+        <h2> 2025/03 </h2>
+
+    
+        03/22 -
+    
+    <a href="/posts/862/">三行代码实现按键的长短按检测</a><br>
+
+    
+        03/22 -
+    
+    <a href="/posts/58440/">嵌入式模块化设计中的数据共享优化方案</a><br>
+
+    
+        03/17 -
+    
+    <a href="/posts/18285/">串口重定向的非阻塞方法</a><br>
+
+    
+        03/12 -
+    
+    <a href="/posts/58129/">CubeMX配置功能系列：iic</a><br>
+
+    
+        03/10 -
+    
+    <a href="/posts/55329/">通信协议：Iic</a><br>
+
+    
+        03/09 -
+    
+    <a href="/posts/55933/">CubeMX配置功能系列：ADC（下）</a><br>
+
+    
+        03/09 -
+    
+    <a href="/posts/16107/">Hello World</a><br>
+
+    
+        03/09 -
+    
+    <a href="/posts/9852/">CubeMX配置功能系列：ADC（上）</a><br>
+
+    
+        03/07 -
+    
+    <a href="/posts/39448/">单片机（伪）多任务处理：时间片轮询法</a><br>
+
+    
+        03/01 -
+    
+    <a href="/posts/38456/">属于自己的引导页</a><br>
+
+        <h2> 2025/02 </h2>
+
+    
+        02/22 -
+    
+    <a href="/posts/48581/">CubeMX配置功能系列：Timer（下）</a><br>
+
+    
+        02/06 -
+    
+    <a href="/posts/16836/">CubeMX配置功能系列：Timer（上）</a><br>
+
+        <h2> 2025/01 </h2>
+
+    
+        01/21 -
+    
+    <a href="/posts/50403/">相机控色</a><br>
+
+    
+        01/19 -
+    
+    <a href="/posts/40301/">构图</a><br>
+
+    
+        01/19 -
+    
+    <a href="/posts/55817/">影调控制</a><br>
+
+    
+        01/19 -
+    
+    <a href="/posts/5778/">机位掌控</a><br>
+
+    
+        01/18 -
+    
+    <a href="/posts/50034/">Markdown渲染器测试</a><br>
+
+    
+        01/18 -
+    
+    <a href="/posts/27350/">曝光三要素</a><br>
+
     </div>
 
-
-    <div id="search-container" style="max-width:600px;margin:20px auto;">
-  <input id="search-input" type="text" placeholder="搜索文章..."
-         style="width:100%;padding:10px 15px;font-size:16px;border-radius:8px;
-                border:none;background-color:#222;color:#e0e0e0;box-shadow:0 2px 6px rgba(0,0,0,0.4);
-                transition: box-shadow 0.3s;">
-  <ul id="search-results" style="list-style:none;padding:0;margin-top:15px;"></ul>
-  <div id="status-message" class="statusmessage" style="color:#888;text-align:center;margin-top:10px;display:none;"></div>
-</div>
-<!-- Fuse.js 库 -->
-<script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
-<script src="/js/search.js"></script>
-
-
-    <div class="posts_container">
-        <div class="find" style="margin-right: 60px;">
-            <h3>分类查找/categories</h3>
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">31</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/WSL2/">WSL2</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%85%A5%E9%97%A8/">入门</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/">内核编程</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D/">系统移植</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E8%AE%B0%E5%BD%95/">记录</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPS/">VPS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式</a><span class="category-list-count">12</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/">CubeMX配置功能</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/">程序架构</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/">通信协议</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%91%84%E5%BD%B1%E5%AD%A6%E4%B9%A0/">摄影学习</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读</a><span class="category-list-count">1</span></li></ul>
-            <h3>时间查找/archives</h3>
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">十月 2025</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/09/">九月 2025</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">八月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/07/">七月 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/04/">四月 2025</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">三月 2025</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">二月 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/01/">一月 2025</a><span class="archive-list-count">6</span></li></ul>
-        </div>
-
-        <div class="i_posts">
-            <div class="i_lsposts">
-                <ul class="i_posts">
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/31 -
-                            
-                            <a href="/posts/44016/">
-                                mx6ull开发版移植nxp官方linux内核
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/29 -
-                            
-                            <a href="/posts/26288/">
-                                mx6ull开发版移植nxp官方u-boot
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/28 -
-                            
-                            <a href="/posts/40650/">
-                                大蟒蛇-typer库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/28 -
-                            
-                            <a href="/posts/30447/">
-                                大蟒蛇-rich库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/23 -
-                            
-                            <a href="/posts/50277/">
-                                大蟒蛇-json库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/22 -
-                            
-                            <a href="/posts/13859/">
-                                u-boot常见命令
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/20 -
-                            
-                            <a href="/posts/59269/">
-                                在Linux中创建一个字符驱动设备
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/14 -
-                            
-                            <a href="/posts/2446/">
-                                记录搭建一台云服务器环境的过程
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/10 -
-                            
-                            <a href="/posts/7167/">
-                                哈希表与设备号
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/10/09 -
-                            
-                            <a href="/posts/31088/">
-                                Linux文件操作调用链探究
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/29 -
-                            
-                            <a href="/posts/22025/">
-                                大蟒蛇-sys/argparse库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/29 -
-                            
-                            <a href="/posts/22415/">
-                                大蟒蛇-shutil库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/28 -
-                            
-                            <a href="/posts/63515/">
-                                大蟒蛇-pathlib库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/28 -
-                            
-                            <a href="/posts/53459/">
-                                Python中元组、列表、字典和集合的区别
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/28 -
-                            
-                            <a href="/posts/37113/">
-                                大蟒蛇-os库
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/27 -
-                            
-                            <a href="/posts/49513/">
-                                Linux内核模块初体验
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/18 -
-                            
-                            <a href="/posts/17327/">
-                                WSL-Archlinux安装后应该做什么？
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/15 -
-                            
-                            <a href="/posts/26506/">
-                                POSIX IPC：System V 的继任者
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/12 -
-                            
-                            <a href="/posts/46571/">
-                                深入浅出 Linux IPC：进程间通信的艺术
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/10 -
-                            
-                            <a href="/posts/43741/">
-                                Linux-Process
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/09 -
-                            
-                            <a href="/posts/45385/">
-                                Linux C标准IO操作
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/09 -
-                            
-                            <a href="/posts/7076/">
-                                Linux 系统IO编程
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/07 -
-                            
-                            <a href="/posts/4341/">
-                                MakeFile简明指南
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/07 -
-                            
-                            <a href="/posts/27939/">
-                                交叉编译器相关知识梳理
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/09/07 -
-                            
-                            <a href="/posts/32814/">
-                                关于Linux开发板与上位机的连接方式
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/08/25 -
-                            
-                            <a href="/posts/7593/">
-                                无聊随便打点字
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/08/24 -
-                            
-                            <a href="/posts/33465/">
-                                I-MX6ULL的中断实验（下）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/08/11 -
-                            
-                            <a href="/posts/32440/">
-                                I-MX6ULL的中断实验（上）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/08/06 -
-                            
-                            <a href="/posts/33477/">
-                                I-MX6ULL主频与时钟配置实验
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/07/28 -
-                            
-                            <a href="/posts/2969/">
-                                I-MX6ULL开发板C语言运行环境搭建并点灯
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/07/14 -
-                            
-                            <a href="/posts/undefined/">
-                                浅析IMX镜像文件结构
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/30 -
-                            
-                            <a href="/posts/43400/">
-                                【点灯大师】点亮I.MX6ULL开发板的LED灯
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/18 -
-                            
-                            <a href="/posts/21870/">
-                                Shell脚本流程控制简明指南
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/18 -
-                            
-                            <a href="/posts/27290/">
-                                shell脚本入门
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/14 -
-                            
-                            <a href="/posts/36626/">
-                                Ubuntu下连接文件
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/14 -
-                            
-                            <a href="/posts/20676/">
-                                踩坑记录：WSL下对u盘格式化修改后在win...
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/14 -
-                            
-                            <a href="/posts/10180/">
-                                Ubuntu下文件权限管理
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/12 -
-                            
-                            <a href="/posts/30265/">
-                                Ubuntu下磁盘管理
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/11 -
-                            
-                            <a href="/posts/13715/">
-                                WSL下连接USB设备
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/11 -
-                            
-                            <a href="/posts/7417/">
-                                Ubuntu文件系统结构
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/11 -
-                            
-                            <a href="/posts/37616/">
-                                Linux常用的命令总结
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/06/07 -
-                            
-                            <a href="/posts/26155/">
-                                如何优雅的在win上运行Linux
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/04/10 -
-                            
-                            <a href="/posts/44982/">
-                                [自用]16届烂桥杯嵌入式赛道模块代码整理
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/04/06 -
-                            
-                            <a href="/posts/20333/">
-                                hexo主题Klise-enhanced使用文档
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/04/05 -
-                            
-                            <a href="/posts/25619/">
-                                从c底层到嵌入式驱动开发的学习参考路线
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/04/04 -
-                            
-                            <a href="/posts/57146/">
-                                Kelly McGonigal, Ph.D....
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/22 -
-                            
-                            <a href="/posts/862/">
-                                三行代码实现按键的长短按检测
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/22 -
-                            
-                            <a href="/posts/58440/">
-                                嵌入式模块化设计中的数据共享优化方案
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/17 -
-                            
-                            <a href="/posts/18285/">
-                                串口重定向的非阻塞方法
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/12 -
-                            
-                            <a href="/posts/58129/">
-                                CubeMX配置功能系列：iic
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/10 -
-                            
-                            <a href="/posts/55329/">
-                                通信协议：iic
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/09 -
-                            
-                            <a href="/posts/55933/">
-                                CubeMX配置功能系列：ADC（下）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/09 -
-                            
-                            <a href="/posts/16107/">
-                                Hello World
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/09 -
-                            
-                            <a href="/posts/9852/">
-                                CubeMX配置功能系列：ADC（上）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/07 -
-                            
-                            <a href="/posts/39448/">
-                                单片机（伪）多任务处理：时间片轮询法
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/03/01 -
-                            
-                            <a href="/posts/38456/">
-                                属于自己的引导页
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/02/22 -
-                            
-                            <a href="/posts/48581/">
-                                CubeMX配置功能系列：Timer（下）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/02/06 -
-                            
-                            <a href="/posts/16836/">
-                                CubeMX配置功能系列：Timer（上）
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/21 -
-                            
-                            <a href="/posts/50403/">
-                                相机控色
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/19 -
-                            
-                            <a href="/posts/40301/">
-                                构图
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/19 -
-                            
-                            <a href="/posts/55817/">
-                                影调控制
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/19 -
-                            
-                            <a href="/posts/5778/">
-                                机位掌控
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/18 -
-                            
-                            <a href="/posts/50034/">
-                                markdown渲染器测试
-                            </a>
-                        </li>
-                    
-                        <li class="i_posts">
-                            
-                               2025/01/18 -
-                            
-                            <a href="/posts/27350/">
-                                曝光三要素
-                            </a>
-                        </li>
-                    
-                </ul>
-            </div>
-        </div>
-            <div class="i_paginator">
-                <!--分页器暂时不需要-->
-            </div>
+    <div class="categories">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><input type="hidden" name="sitesearch" value="https://blog.godmao.top"></form>
+        <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux </a><span class="category-list-count">33</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%86%85%E6%A0%B8%E7%BC%96%E7%A8%8B/">内核编程 </a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E8%AE%B0%E5%BD%95/">记录 </a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E5%85%A5%E9%97%A8/">入门 </a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E7%B3%BB%E7%BB%9F%E7%A7%BB%E6%A4%8D/">系统移植 </a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/WSL2/">WSL2 </a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/">项目管理 </a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/">嵌入式 </a><span class="category-list-count">12</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/CubeMX%E9%85%8D%E7%BD%AE%E5%8A%9F%E8%83%BD/">CubeMX配置功能 </a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E7%A8%8B%E5%BA%8F%E6%9E%B6%E6%9E%84/">程序架构 </a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/">通信协议 </a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python </a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%91%84%E5%BD%B1%E5%AD%A6%E4%B9%A0/">摄影学习 </a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他 </a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%98%85%E8%AF%BB/">阅读 </a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VPS/">VPS </a><span class="category-list-count">1</span></li></ul>
     </div>
 
 </div>
-
-
-
-
 
     <script src="/vendor/js/echarts.min.js"></script>
         
@@ -739,7 +437,7 @@
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -858,14 +556,14 @@
                     monthlyChart.setOption({
                         xAxis: { 
                             type: 'category', 
-                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10"], 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"], 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,10],
+                            data: [6,2,10,4,11,2,4,15,10,2],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -902,7 +600,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -917,7 +615,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":27},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -939,13 +637,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":31},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":31},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -994,7 +692,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":3,"path":"Linux/系统移植"}],"count":31,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":5,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -1042,44 +740,6 @@
         </script>
     
     </body>
-    <!--000-->
-    <!-- <footer>
-        <p>generate by <a target="_blank" rel="noopener" href="https://hexo.io/" >Hexo</a></p>
-        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-        <p> <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> </p>
-        <p> <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">To:文章md源文件仓库</a> </p>
-    </footer> -->
-    <footer class="footer">
-
-    <div class="footer-container">
-
-        <div class="footer-left">
-        <p>© 2025 GoDm@'s Blog. All rights reserved.</p>
-        <p> theme by <a target="_blank" rel="noopener" href="https://hi.godmao.top/">GoDm@</a> </p>
-        </div>
-        <div class="footer-right">
-        <a href="/about">About</a>
-        <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
-        <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a>
-        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3bqyuYKwvLKdu7KlsLy0sfO_srA" style="text-decoration:none;">E-mail</a>
-        <a target="_blank" rel="noopener" href="https://github.com/g0dmao/Blogposts_src">获取文章md源文件</a>
-        <a href="/data">数据统计</a>
-
-        </div>
-    </div>
-
-    </footer>
-    <script src="/js/background.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 彩色控制台信息（更容易被看到）
-            console.log('%c 发现隐藏彩蛋 🎉 ', 'background:#2b2b2b;color:#fff;padding:6px 10px;border-radius:6px;font-weight:bold;');
-            console.log('%c 喵喵喵！欢迎来到本站。', 'color:#9d7ff5;');
-
-            // 可选：输出多行 ASCII（仿终端风）
-            console.log('%c\n  /\\_/\\  \n ( o.o )\n  > ^ <\n', 'color:#b99fff');
-        });
-    </script>
 
 </html>
 
