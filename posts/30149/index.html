@@ -89,10 +89,10 @@
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--文章详情页-->
 <div class="meta" style="margin: auto;">
-    <h1 style="text-align: center;">根文件系统构建</h1>
+    <h1 style="text-align: center;">使用BusyBox构建根文件系统</h1>
 </div>
 
-<div id="a_container">
+<div class="a_container">
     <div id="article">
         <details>
 <summary>版权信息</summary>
@@ -100,13 +100,374 @@
 </div>
 </details>
 <hr />
-<h2 id="下载"><a class="markdownIt-Anchor" href="#下载"></a> 下载</h2>
-<p><a target="_blank" rel="noopener" href="https://busybox.net/">BusyBox</a></p>
+<h2 id="1-前言"><a class="markdownIt-Anchor" href="#1-前言"></a> 1. 前言</h2>
+<h3 id="11-最小根文件系统"><a class="markdownIt-Anchor" href="#11-最小根文件系统"></a> 1.1. 最小根文件系统</h3>
+<p>一个最精简的文件系统包含什么呢？<br />
+我们知道，内核挂载根文件系统后，第一件事是就是启动 /sbin 目录下的 init 程序作为第一个进程，init 程序读取 /etc 目录下的配置文件，再根据配置文件启动其他 app。同时这些app又有可能是动态链接的，所以我们还需要 /lib 文件夹，包含一些头文件。<br />
+此外，bootloader 也会在根文件系统启动内核，内核需要在根文件系统中读取设备树文件以控制硬件，这有了 /boot 文件夹。<br />
+有了设备树，自然少不了 /dev 目录。最小的/dev目录，只要包含 console 与 null。<br />
+综上，我们可以总结出一个最小的根文件系统有什么：</p>
+<ol>
+<li>init 程序</li>
+<li>其他的必要app</li>
+<li>配置文件</li>
+<li>lib库（用于动态链接）</li>
+<li>内核zImage</li>
+<li>dtb设备树文件</li>
+<li>/dev</li>
+</ol>
+<p>1点属于/sbin，2点属于/bin ，3点属于/etc，4点属于/lib，5、6点属于/boot。</p>
+<p>如果更极致的话，甚至可以使用静态链接，静态编译应用程序，这样就不用 /lib ，也不使用其他app，就一个init程序实现想要的功能即可——当然这是理想化的。</p>
+<h3 id="12-关于-systemv-和-systemd"><a class="markdownIt-Anchor" href="#12-关于-systemv-和-systemd"></a> 1.2. 关于 systemV 和 systemd</h3>
+<p>我们上面所说的 init 其实说的就是 system V 的启动方式——串行启动，一个脚本执行完再启动下一个。与 system V 相比，systemd 更加现代化且更好——并行启动，通过依赖关系图同时启动多个服务、启动速度快、依赖关系明确等等…<br />
+但是，在嵌入式linux坏境中却并不一定好用，因为它太重了，依赖也多。而且对于使用 systemd 的嵌入式系统来说，根文件系统也不应该用 busybox 来构建。busybox生成的 init 实际上就是类似于 system V 的 init 实现。</p>
+<h3 id="13-what-is-busybox"><a class="markdownIt-Anchor" href="#13-what-is-busybox"></a> 1.3. What is BusyBox？</h3>
+<p>BusyBox<strong>并不是一个根文件系统制作工具</strong>，它只是极大地简化了 /bin、/sbin 等目录的搭建。<br />
+BusyBox 是一个集成了上百个常用 UNIX 命令的小型可执行文件。</p>
+<p>当你在 shell 中输入：<code>ls</code><br />
+实际上调用：<code>/bin/busybox ls</code><br />
+BusyBox 会根据你执行的命令名自动表现成对应工具的行为。</p>
+<p>它的设计哲学是：</p>
+<ul>
+<li>只实现最核心的功能；</li>
+<li>去掉冗余；</li>
+<li>用最小的代码体积覆盖最大功能。</li>
+</ul>
+<p>从这里可以看出，它非常适合嵌入式系统。</p>
+<h2 id="2-编译busybox"><a class="markdownIt-Anchor" href="#2-编译busybox"></a> 2. 编译BusyBox</h2>
+<p>首先在makefile中指定交叉编译器，避免每次make都要传入编译器参数。</p>
+<p><img src="Snipaste_2025-11-05_18-15-55.png" alt="" /></p>
+<p>使用命令 <code>make help</code> 查看make选项。</p>
+<h3 id="21-生成配置文件"><a class="markdownIt-Anchor" href="#21-生成配置文件"></a> 2.1. 生成配置文件</h3>
+<p>我们先使用默认的配置文件。</p>
+<p>使用命令 <code>make menuconfig</code> 或者 <code>make defconfig</code> 都可以。我们选择menuconfig，方便我们配置一些选项：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> menuconfig<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>进入配置界面后，我们可以指定一下编译器前缀 ：<br />
+将 Settings → Build Options → Cross Compiler prefix 中指定为 <code>arm-none-linux-gnueabihf-</code>。</p>
+<p>也可以启用 Build static binary (no shared libs) 以实现静态编译，不用使用动态共享库省去自己构建库文件的步骤，代价是根文件系统大小大一些。空间换时间（bushi</p>
+<p>其他的根据自己需求修改（如果看得懂的话）。</p>
+<p>同时最好关闭硬件加速项SHA，也就是这两项：</p>
+<p><img src="Snipaste_2025-11-05_18-22-47.png" alt="" /></p>
+<p>我使用的1.37.0版本 busybox，即使使用默认配置文件，什么也不做修改，也无法编译成功，会报错：“libbb/hash_md5_sha.c:1316:35: error: ‘sha1_process_block64_shaNI’ undeclared (first use in this function);”</p>
+<p>查阅后发现可能是CPU不支持硬件加速的问题，所以就将 Settings 选项里的两个硬件加速选项关了。不知道是官方的bug还是什么…</p>
+<h3 id="22-编译并安装busybox"><a class="markdownIt-Anchor" href="#22-编译并安装busybox"></a> 2.2. 编译并安装BusyBox</h3>
+<p>编译没啥好说的，<code>make</code> 即可。</p>
+<p>用 <code>CONFIG_PREFIX</code> 指定文件夹。将busybox 安装到指定文件夹，也就是拟用于构建根文件系统的那个文件夹嘛，前面我们也说了，busybox就相当于把 /sbin /bin 这两块拼图做好了。</p>
+<blockquote>
+<p>安装实际上就是建立软链接，链接到 /bin/busybox 。所以一定要确定好路径，要是不小心指定到本机Linux的根目录下不就废了吗。😦</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> <span class="token assign-left variable">CONFIG_PREFIX</span><span class="token operator">=~</span>/shared/rootfs_tmp  <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="Snipaste_2025-11-05_18-43-14.png" alt="" /></p>
+<p><img src="Snipaste_2025-11-10_14-54-29.png" alt="" /></p>
+<h2 id="3-完善根文件系统"><a class="markdownIt-Anchor" href="#3-完善根文件系统"></a> 3. 完善根文件系统</h2>
+<p>目前根文件系统最基本的操作工具就有了，但是还缺少必要的文件夹，比如dev、sys等。</p>
+<p>但是我们不必在这里创建这些文件夹。还记得之前提到的初始化脚本吗，内核启动并挂载根文件系统后，做的第一件事就是运行 /sbin/init 。而这个程序又在做什么呢，busybox的init程序大概做这三件事：</p>
+<ol>
+<li>读取 <code>/etc/inittab</code>（如果有）；</li>
+<li>启动第一个初始化脚本 <code>/etc/init.d/rcS</code>；</li>
+<li>最后启动 shell。</li>
+</ol>
+<p><code>inittab</code>：init 程序的配置文件</p>
+<p><code>/etc/init.d/rcS</code>：run commands for system。一个普通的 shell 脚本，但它是由 init 启动的第一个脚本，负责初始化系统的环境。</p>
+<p>因此我们可以在rcS脚本中添加这些必要文件。所以我们只需要在现在的根文件系统中添加以下几个文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> etc/init.d/rcS
+<span class="token function">mkdir</span> etc/inittab<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="31-rcs-的编写"><a class="markdownIt-Anchor" href="#31-rcs-的编写"></a> 3.1. rcS 的编写</h3>
+<p>大致内容如下，已附详细注释及常见问题：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token comment"># rcS - minimal BusyBox startup script</span>
+
+<span class="token comment"># 这些文件夹的具体用途可以参见我的另一篇文章《编程随想》</span>
+<span class="token builtin class-name">echo</span> <span class="token string">">>> Create the necessary folder if it does not exist..."</span>
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /sys /dev /proc /tmp /run /var
+
+<span class="token comment"># mount -t &lt;文件系统类型> &lt;设备> &lt;挂载点></span>
+<span class="token comment"># none：占位符。因为这里并不是“挂载某个磁盘”，</span>
+<span class="token comment"># 而是在请求内核“把它内部的数据结构以文件形式呈现出来”</span>
+<span class="token comment"># 文件系统类型 (`proc`, `sysfs`) 是内核内置的。</span>
+<span class="token comment"># 系统并不会去磁盘上找“proc”，</span>
+<span class="token comment"># 它调用的是内核内部的 `procfs_mount()` 函数。</span>
+<span class="token comment"># 这里挂载的并不是设备，而是VFS，所以设备为“none”。</span>
+<span class="token builtin class-name">echo</span> <span class="token string">">>> Mounting proc to /proc..."</span>
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> proc none /proc
+<span class="token builtin class-name">echo</span> <span class="token string">">>> Mounting sysfs to /sys..."</span>
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> sysfs none /sys
+
+<span class="token comment"># devtmpfs介绍：</span>
+<span class="token comment"># 这是一个内核级的临时文件系统，</span>
+<span class="token comment"># 自动由内核在设备注册时创建对应的设备节点。</span>
+<span class="token comment"># 而无需什么mknod，udev，mdev。</span>
+<span class="token comment"># 为什么是“临时”？因为它是重启后就需要重新生成。</span>
+
+<span class="token comment"># 我发现在内核启动过程中已自动挂载devtmpfs，</span>
+<span class="token comment"># 所以就不用再挂一遍。</span>
+<span class="token comment"># --devtmpfs has already auto mounted.--</span>
+<span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">mount</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-q</span> <span class="token string">"on /dev "</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">">>> Mounting devtmpfs to /dev..."</span>
+    <span class="token function">mount</span> <span class="token parameter variable">-t</span> devtmpfs devtmpfs /dev
+<span class="token keyword">else</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">">>> /dev already mounted by kernel"</span>
+<span class="token keyword">fi</span>
+
+<span class="token builtin class-name">echo</span> <span class="token string">">>> Setting up essential directories..."</span>
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> tmpfs tmpfs /tmp
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> tmpfs tmpfs /run
+
+<span class="token comment"># setting hostname</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"mark1"</span> <span class="token operator">></span> /proc/sys/kernel/hostname
+
+<span class="token comment"># exec命令功能：</span>
+<span class="token comment">#- 执行命令并替换掉当前进程（不会新建子进程）；</span>
+<span class="token comment">#- 如果只带重定向而没有命令，</span>
+<span class="token comment">#则会改变当前 shell 的文件描述符绑定。</span>
+<span class="token comment">#这里的作用是把当前脚本进程直接替换为`/bin/sh`。</span>
+<span class="token comment">#不再返回，也不再继续执行后续脚本。</span>
+
+<span class="token comment"># Unix 的进程默认有三条流：</span>
+<span class="token comment">#- `0` — 标准输入（stdin）</span>
+<span class="token comment">#- `1` — 标准输出（stdout）</span>
+<span class="token comment">#- `2` — 标准错误（stderr）</span>
+<span class="token comment">#&lt; /dev/ttymxc0：</span>
+<span class="token comment">#表示把标准输入改为从`/dev/ttymxc0`读取。</span>
+<span class="token comment">#> /dev/ttymxc0：</span>
+<span class="token comment">#表示把标准输出改为写入`/dev/ttymxc0`。</span>
+<span class="token comment">#2>&amp;1：</span>
+<span class="token comment">#表示把标准错误也重定向到标准输出的同一个地方。</span>
+
+<span class="token comment"># 为什么这样做：</span>
+<span class="token comment"># 如果直接exec到sh，则会提示：</span>
+<span class="token comment"># /bin/sh: can't access tty;job control turned off</span>
+<span class="token comment"># 意思是当前 shell 没有绑定到一个真正的终端（tty），</span>
+<span class="token comment"># 所以 Ctrl+C、Ctrl+Z、作业控制等功能无法使用。</span>
+<span class="token builtin class-name">echo</span> <span class="token string">">>> System ready. Starting shell..."</span>
+<span class="token builtin class-name">exec</span> /bin/sh <span class="token operator">&lt;</span> /dev/ttymxc0 <span class="token operator">></span> /dev/ttymxc0 <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="32-inittab的编写"><a class="markdownIt-Anchor" href="#32-inittab的编写"></a> 3.2. inittab的编写</h3>
+<p>当内核启动 <code>/sbin/init</code>（比如 BusyBox 的 init）时，init 会读取这个文件，<br />
+决定应该执行哪些命令、启动哪些脚本、在哪些终端上提供登录。</p>
+<p>换句话说，它定义了：</p>
+<ul>
+<li>系统开机时做什么；</li>
+<li>哪些脚本要执行；</li>
+<li>哪些终端需要打开 shell。<br />
+所以，它就像系统启动的“行动计划表”。</li>
+</ul>
+<h4 id="321-inittab-的基本格式"><a class="markdownIt-Anchor" href="#321-inittab-的基本格式"></a> 3.2.1. <code>inittab</code> 的基本格式</h4>
+<p>每一行是一条指令，格式通常是：</p>
+<p><code>&lt;id&gt;:&lt;runlevels&gt;:&lt;action&gt;:&lt;process&gt;</code></p>
+<p>但在 BusyBox 的简化版本中，<code>runlevels</code> 通常被忽略，<br />
+所以我们常见的是这样的：</p>
+<p><code>::action:/path/to/command</code></p>
+<h4 id="322-常见的-action-类型"><a class="markdownIt-Anchor" href="#322-常见的-action-类型"></a> 3.2.2. 常见的 action 类型</h4>
+<p>让我们来看几个经典例子（尤其在 BusyBox 系统中）：</p>
+<ol>
+<li>
+<p><code>sysinit</code></p>
+<p>系统初始化时运行，通常挂载虚拟文件系统、创建目录等：</p>
+<p><code>::sysinit:/etc/init.d/rcS</code></p>
+<p>表示：在系统启动时，执行 <code>/etc/init.d/rcS</code> 脚本。</p>
+</li>
+<li>
+<p><code>respawn</code></p>
+<p>表示该进程如果退出，init 会重新启动它（循环重启）。<br />
+常用于启动终端或守护进程：</p>
+<p><code>ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100</code></p>
+<p>表示：在串口 ttyS0 上启动一个终端，波特率 115200，终端类型 vt100。</p>
+</li>
+<li>
+<p><code>askfirst</code></p>
+<p>和 <code>respawn</code> 类似，但在启动前会提示 “Press ENTER to activate this console”。<br />
+常用于开发板上的交互式 shell：</p>
+<p><code>tty1::askfirst:/bin/sh</code></p>
+</li>
+<li>
+<p><code>wait</code></p>
+<p>表示执行完后等待命令退出再继续。<br />
+通常在系统初始化阶段使用：</p>
+<p><code>::wait:/etc/init.d/rc.local</code></p>
+</li>
+</ol>
+<h4 id="323-例子"><a class="markdownIt-Anchor" href="#323-例子"></a> 3.2.3. 例子</h4>
+<pre class="line-numbers language-none"><code class="language-none">::sysinit:&#x2F;etc&#x2F;init.d&#x2F;rcS
+::askfirst:-&#x2F;bin&#x2F;sh
+::ctrlaltdel:&#x2F;bin&#x2F;umount -a -r
+::shutdown:&#x2F;bin&#x2F;umount -a -r<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-构建lib目录如果是动态编译"><a class="markdownIt-Anchor" href="#4-构建lib目录如果是动态编译"></a> 4. 构建lib目录（如果是动态编译）</h2>
+<p>busybox默认是动态编译的，当然你可以在menuconfig中指定静态编译。</p>
+<p>那么库在哪里呢？我们在使用工具链编译链接的时候，并没有报错，说明我们使用的工具链中含有这些库。我们从工具链中复制这些库到 /lib 。</p>
+<p>那我们工具链的库又在哪呢？我们可以输入这么一行命令来获取到库路径：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"void main()&#123;&#125;"</span> <span class="token operator">|</span> arm-none-linux-gnueabihf-gcc <span class="token parameter variable">-E</span> <span class="token parameter variable">-v</span> -<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>输出：</p>
+<pre class="line-numbers language-none"><code class="language-none">LIBRARY_PATH&#x3D;&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-Linux&#x2F;arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf&#x2F;bin&#x2F;..&#x2F;lib&#x2F;gcc&#x2F;arm-none-linux-gnueabihf&#x2F;14.3.1&#x2F;:&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-Linux&#x2F;arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf&#x2F;bin&#x2F;..&#x2F;lib&#x2F;gcc&#x2F;:&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-Linux&#x2F;arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf&#x2F;bin&#x2F;..&#x2F;lib&#x2F;gcc&#x2F;arm-none-linux-gnueabihf&#x2F;14.3.1&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;arm-none-linux-gnueabihf&#x2F;lib&#x2F;:&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-Linux&#x2F;arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf&#x2F;bin&#x2F;..&#x2F;arm-none-linux-gnueabihf&#x2F;libc&#x2F;lib&#x2F;:&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-Linux&#x2F;arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf&#x2F;bin&#x2F;..&#x2F;arm-none-linux-gnueabihf&#x2F;libc&#x2F;usr&#x2F;lib&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>他们都是以 /home/gdm/prjts/ARM_TOOLCHAIN/AArch32-Linux/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf/bin/…/ 开头。也就是工具链源路径。</p>
+<p>令 “/home/gdm/prjts/ARM_TOOLCHAIN/AArch32-Linux/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-linux-gnueabihf/bin/…/” = [工具链源路径]</p>
+<p>化简整理得：</p>
+<pre class="line-numbers language-none"><code class="language-none">[工具链源路径]&#x2F;lib&#x2F;gcc&#x2F;arm-none-linux-gnueabihf&#x2F;14.3.1&#x2F;
+
+[工具链源路径]&#x2F;lib&#x2F;gcc&#x2F;
+
+[工具链源路径]&#x2F;lib&#x2F;gcc&#x2F;arm-none-linux-gnueabihf&#x2F;14.3.1&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;arm-none-linux-gnueabihf&#x2F;lib&#x2F;
+
+[工具链源路径]&#x2F;arm-none-linux-gnueabihf&#x2F;libc&#x2F;lib&#x2F;
+
+[工具链源路径]&#x2F;arm-none-linux-gnueabihf&#x2F;libc&#x2F;usr&#x2F;lib&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><code>ldd</code> 命令介绍：<code>ldd</code> 是 Linux 系统中用于显示可执行文件或共享库所依赖的动态链接库的命令行工具。它可以帮助开发者快速了解程序运行时的依赖关系，解决库缺失或版本冲突等问题。</p>
+</blockquote>
+<p>我们使用工具链中提供的 <code>readelf</code> 工具来查看 busybox 所需的动态链接库：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">arm-none-linux-gnueabihf-readelf <span class="token parameter variable">-d</span> bin/busybox <span class="token operator">|</span> <span class="token function">grep</span> NEEDED<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>-d 就是显示动态库。</p>
+</blockquote>
+<p>输出：</p>
+<pre class="line-numbers language-none"><code class="language-none">0x00000001 (NEEDED) Shared library: [libm.so.6]
+0x00000001 (NEEDED) Shared library: [libresolv.so.2]
+0x00000001 (NEEDED) Shared library: [libc.so.6]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>接着就在上面提到的工具链库中找呀找，最后在倒数第二个库中找到了这几个依赖。</p>
+<p><img src="Snipaste_2025-11-05_21-48-39.png" alt="" /></p>
+<p>还要注意的是这些文件是不是软链接，如果是软链接，则需要将链接到的源文件也拷贝到 /lib。并在使用cp命令时加上 <code>-d</code> 选项，使其保持链接特性。</p>
+<p>这里我用 <code>ls -l</code> 查看了，都不是软链接。</p>
+<p>直接cp：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> libc.so.6 libm.so.6 libresolv.so.2 ~/shared/rootfs_tmp/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>还要cp一个链接器：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> ld-linux-armhf.so.3 ~/shared/rootfs_tmp/lib<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<hr />
+<p style="font-size:30px"> <strong>下面的内容已不再适用。但是有一些内容值得做一些参考。</strong></p>
+<hr />
+<h2 id="old5-构建boot目录"><a class="markdownIt-Anchor" href="#old5-构建boot目录"></a> [old]5. 构建boot目录</h2>
+<p>把之前编译好的内核生成的dtb文件和zImage文件拷贝到根文件的 /boot 目录即可。</p>
+<h2 id="old6-构建dev目录"><a class="markdownIt-Anchor" href="#old6-构建dev目录"></a> [old]6. 构建dev目录</h2>
+<p>最小dev目录我们只要满足标准输出就好了，也就是能够输出信息。</p>
+<p>我们可以先查看我们 linux 系统里的 console 设备是怎么创建的：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ls</span> /dev/console <span class="token parameter variable">-l</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>输出：</p>
+<pre class="line-numbers language-none"><code class="language-none">crw------- 1 root root 5, 1 Nov  6 15:35 &#x2F;dev&#x2F;console<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>我们仿照这个用 <code>mknod</code> 命令在rootfs/dev目录创建：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mknod</span> console c <span class="token number">5</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>同理创建 null 设备，</p>
+<p>仿照：</p>
+<pre class="line-numbers language-none"><code class="language-none">crw-rw-rw- 1 root root 1, 3 Nov  6 15:35 &#x2F;dev&#x2F;null<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>创建：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mknod</span> null c <span class="token number">1</span> <span class="token number">3</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="old7-刻录映像文件"><a class="markdownIt-Anchor" href="#old7-刻录映像文件"></a> [old]7. 刻录映像文件</h2>
+<h3 id="71-刻录"><a class="markdownIt-Anchor" href="#71-刻录"></a> 7.1. 刻录</h3>
+<p>使用genimage这个工具来生成image文件。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> genimage<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">image emmc.img&#123;
+
+	hdimage &#123;                 &#x2F;&#x2F;生成DOS分区images。
+
+	&#125;
+
+	partition rootfs-1 &#123;
+		partition-type &#x3D; 0xC
+		bootable &#x3D; &quot;yes&quot;
+		image &#x3D; &quot;boot.vfat&quot;  &#x2F;&#x2F;路径由 $&#123;INPUTPATH&#125; 指定
+		size &#x3D; 12M
+	&#125;
+
+	partition rootfs-2 &#123;
+		partition-type &#x3D; 0x83
+		bootable &#x3D; &quot;yes&quot;
+		image &#x3D; &quot;myrootfs.ext4&quot;
+		size &#x3D; 34M
+	&#125;
+&#125;
+image boot.vfat &#123;
+	vfat &#123;
+		files &#x3D; &#123; &quot;u-boot-dtb.imx&quot; &#125; &#x2F;&#x2F;路径由 &#123;INPUTPATH&#125; 指定
+	&#125;
+	size &#x3D; 10M
+&#125;
+
+image myrootfs.ext4 &#123;
+	ext4&#123;&#125;
+	name &#x3D; &quot;root&quot;
+	size &#x3D; 32M &#x2F;&#x2F;根据自己的根文件系统大小调整
+	mountpoint &#x3D; &quot;&#x2F;&quot; &#x2F;&#x2F;路径由 &#123;ROOTPATH&#125; 指定
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们现在只是测试，可以先随便创建一个&quot;u-boot-dtb.imx&quot;文件，比方说我创建这个文件，并在里面写入一个“test”字符串。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">genimage <span class="token punctuation">\</span>
+<span class="token parameter variable">--rootpath</span> <span class="token string">"/home/gdm/shared/rootfs_tmp"</span> <span class="token punctuation">\</span>
+<span class="token parameter variable">--inputpath</span> <span class="token string">"/home/gdm/shared/gen_image"</span> <span class="token punctuation">\</span>
+<span class="token parameter variable">--outputpath</span> <span class="token string">"/home/gdm/shared/gen_image/output"</span> <span class="token punctuation">\</span>
+<span class="token parameter variable">--tmppath</span> <span class="token string">"/home/gdm/shared/gen_image/tmp"</span> <span class="token punctuation">\</span>
+<span class="token parameter variable">--config</span> <span class="token string">"genimage.cfg"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="711-issue1"><a class="markdownIt-Anchor" href="#711-issue1"></a> 7.1.1. issue#1</h4>
+<p>执行后报错：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;bin&#x2F;sh: 1: genext2fs: not found<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>根据提示安装 genext2fs:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> genext2fs<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="72-验证"><a class="markdownIt-Anchor" href="#72-验证"></a> 7.2. 验证</h3>
+<p>我们可以使用 <code>fdisk</code> 工具验证一下生成的 emmc.img:</p>
+<p><img src="Snipaste_2025-11-06_17-06-12.png" alt="" /></p>
+<p>与配置文件中的如出一辙。</p>
+<p><strong>另外我们学习一下在Linux下装载镜像文件：</strong></p>
+<p><code>losetup</code> 命令允许用户将文件映射到循环设备（如/dev/loop0），从而使文件能够被视为块设备。这种方式常用于挂载ISO镜像文件或其他磁盘映像文件，使其可以像真实的磁盘一样进行访问和操作。</p>
+<p>查看循环设备：<code>losetup</code> 或 <code>losetup -a</code> 。</p>
+<ol>
+<li>创建循环设备文件并映射镜像文件：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">losetup <span class="token parameter variable">-P</span> /dev/loop3 ./emmc.img<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><code>-P</code> 是指扫描镜像文件分区，创建带有分区的循环设备。</p>
+<ol start="2">
+<li>查看循环设备信息：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ls</span> /dev/loop3*
+
+输出：/dev/loop3  /dev/loop3p1  /dev/loop3p2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>挂载分区1：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mount</span> /dev/loop3p1 /mnt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="4">
+<li>查看文件：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ls</span> /mnt
+输出：
+u-boot-dtb.imx
+
+<span class="token function">ls</span> <span class="token parameter variable">-l</span> /mnt
+输出：
+total <span class="token number">2</span>
+-rwxr-xr-x <span class="token number">1</span> root root <span class="token number">5</span> Nov  <span class="token number">7</span>  <span class="token number">2025</span> u-boot-dtb.imx
+
+<span class="token function">cat</span> /mnt/u-boot-dtb.imx
+输出：
+<span class="token builtin class-name">test</span>
+
+<span class="token function">sudo</span> <span class="token function">umount</span> /mnt
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="5">
+<li>同理查看分区2：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mount</span> /dev/loop3p2 /mnt
+
+<span class="token function">ls</span> <span class="token parameter variable">-l</span> /mnt
+
+输出：
+total <span class="token number">27</span>
+drwxr-xr-x <span class="token number">2</span> gdm  gdm   <span class="token number">3072</span> Nov  <span class="token number">5</span> <span class="token number">18</span>:35 bin
+drwxr-xr-x <span class="token number">2</span> gdm  gdm   <span class="token number">1024</span> Nov  <span class="token number">5</span> <span class="token number">22</span>:10 boot
+drwxr-xr-x <span class="token number">2</span> gdm  gdm   <span class="token number">1024</span> Nov  <span class="token number">6</span> <span class="token number">15</span>:45 dev
+drwxr-xr-x <span class="token number">2</span> gdm  gdm   <span class="token number">1024</span> Nov  <span class="token number">5</span> <span class="token number">22</span>:01 lib
+lrwxrwxrwx <span class="token number">1</span> gdm  gdm     <span class="token number">11</span> Nov  <span class="token number">5</span> <span class="token number">18</span>:35 linuxrc -<span class="token operator">></span> bin/busybox
+drwx------ <span class="token number">2</span> root root <span class="token number">16384</span> Nov  <span class="token number">6</span> <span class="token number">17</span>:04 lost+found
+drwxr-xr-x <span class="token number">2</span> gdm  gdm   <span class="token number">3072</span> Nov  <span class="token number">5</span> <span class="token number">18</span>:35 sbin
+drwxr-xr-x <span class="token number">4</span> gdm  gdm   <span class="token number">1024</span> Nov  <span class="token number">5</span> <span class="token number">18</span>:35 usr
+
+<span class="token function">sudo</span> <span class="token function">umount</span> /mnt
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="6">
+<li>卸除循环设备：</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> losetup <span class="token parameter variable">-d</span> /dev/loop3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
         <hr style="margin: 50px; background: #111111">
 
-<div class="meta" style="text-align: end; font-size: small; line-height: .7;">
-<p>共计约44字。于2025/11/02首次发布，最后更新于2025/11/02。 </p>
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约4k字。于2025/11/02首次发布，最后更新于2025/11/13。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -130,6 +491,12 @@
         <span>
             <a href="/Tags/%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" id="tgs">
               #根文件系统 |
+            </a>
+        </span>
+    
+        <span>
+            <a href="/Tags/busybox/" id="tgs">
+              #busybox |
             </a>
         </span>
     
@@ -160,7 +527,7 @@
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD"><span class="toc-text"> 下载</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-text"> 1. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E6%9C%80%E5%B0%8F%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text"> 1.1. 最小根文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%85%B3%E4%BA%8E-systemv-%E5%92%8C-systemd"><span class="toc-text"> 1.2. 关于 systemV 和 systemd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-what-is-busybox"><span class="toc-text"> 1.3. What is BusyBox？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91busybox"><span class="toc-text"> 2. 编译BusyBox</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E7%94%9F%E6%88%90%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text"> 2.1. 生成配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E7%BC%96%E8%AF%91%E5%B9%B6%E5%AE%89%E8%A3%85busybox"><span class="toc-text"> 2.2. 编译并安装BusyBox</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%8C%E5%96%84%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text"> 3. 完善根文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-rcs-%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text"> 3.1. rcS 的编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-inittab%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text"> 3.2. inittab的编写</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9E%84%E5%BB%BAlib%E7%9B%AE%E5%BD%95%E5%A6%82%E6%9E%9C%E6%98%AF%E5%8A%A8%E6%80%81%E7%BC%96%E8%AF%91"><span class="toc-text"> 4. 构建lib目录（如果是动态编译）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#old5-%E6%9E%84%E5%BB%BAboot%E7%9B%AE%E5%BD%95"><span class="toc-text"> [old]5. 构建boot目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#old6-%E6%9E%84%E5%BB%BAdev%E7%9B%AE%E5%BD%95"><span class="toc-text"> [old]6. 构建dev目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#old7-%E5%88%BB%E5%BD%95%E6%98%A0%E5%83%8F%E6%96%87%E4%BB%B6"><span class="toc-text"> [old]7. 刻录映像文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#71-%E5%88%BB%E5%BD%95"><span class="toc-text"> 7.1. 刻录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#72-%E9%AA%8C%E8%AF%81"><span class="toc-text"> 7.2. 验证</span></a></li></ol></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -213,7 +580,7 @@
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-20",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -339,7 +706,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,10,2],
+                            data: [6,2,10,4,11,2,4,15,10,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -376,7 +743,7 @@
                         series: [{
                             type: 'pie',
                             radius: '60%',
-                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
                             label: {
                                 position: 'outside',
                                 formatter: '{b} {c} ({d}%)',
@@ -391,7 +758,7 @@
                         legend: {
                             bottom: '0',
                             left: 'center',
-                            data: [{"name":"Linux","value":29},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
                             textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
                         }
                     });
@@ -413,13 +780,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: { 
                             type: 'category', 
-                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
+                            data: [{"name":"Linux","value":34},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(), 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":34},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -468,7 +835,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":5,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":34,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

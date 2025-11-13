@@ -47,7 +47,7 @@ a:visited { color:var(--link-visited); }
 /* a:focus, a:hover { text-decoration: none; outline: 2px solid rgba(0,0,0,0.08); outline-offset: 2px; } */
 
 /* ========== 页面容器与布局 ========== */
-#a_container {
+.a_container {
     display: flex;
     align-items: flex-start;
     flex-direction: row;
@@ -60,8 +60,10 @@ a:visited { color:var(--link-visited); }
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  width: fit-content;
+  width: min(90%,640px);
   margin: auto;
+  padding: 20px;
+  overflow: visible;
 }
 
 #article {
@@ -101,9 +103,12 @@ a:visited { color:var(--link-visited); }
 
 .categories{
   margin-top:20px;
-  position: sticky;
-  top: 10px;
-
+  width: 10%;
+  ul{
+    width: 200px;
+    margin: 0;
+    padding: 5px 0 5px 25px;
+  }
 }
 
 p { margin: 0 0 1rem 0; }
