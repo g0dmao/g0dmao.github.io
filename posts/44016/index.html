@@ -135,14 +135,7 @@
 GNU ld (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616)
 #1 SMP PREEMPT Fri Oct 31 16:15:58 CST 2025<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>说明这确实是我们编译的内核。</p>
-<h2 id="old4-创建自己的dts文件和config文件"><a class="markdownIt-Anchor" href="#old4-创建自己的dts文件和config文件"></a> [old]4. 创建自己的dts文件和config文件</h2>
-<hr />
-<blockquote>
-<p>2025.11.11更新：<strong>第四节的内容已不推荐</strong>，不用看了，我现在更倾向直接修改对应的dts文件和defconfig文件，只不过你修改哪个文件，就把哪个文件的官方源文件备份一份，以便恢复。这样简单又方便。</p>
-</blockquote>
-<hr />
-<details>
-<summary> 内容已被折叠 </summary>
+<h2 id="4-创建自己的dts文件和config文件"><a class="markdownIt-Anchor" href="#4-创建自己的dts文件和config文件"></a> 4. 创建自己的dts文件和config文件</h2>
 <h3 id="41-dts"><a class="markdownIt-Anchor" href="#41-dts"></a> 4.1. dts</h3>
 <p>打开 <code>arch/arm/boot/dts/nxp/imx/</code> ，可以看到许多dts文件，我们以<br />
 <code>imx6ull-14x14-evk.dts</code> 为模板创建，为什么不用 <code>imx6ull-14x14-evk-emmc.dts</code> 呢？查看文件 <code>imx6ull-14x14-evk-emmc.dts</code>：</p>
@@ -164,7 +157,6 @@ GNU ld (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 2.44.0.20250616)
 <p>同理，以 <code>arch/arm/configs/imx_v7_defconfig</code> 为模板创建。</p>
 <h3 id="43-编译下载启动"><a class="markdownIt-Anchor" href="#43-编译下载启动"></a> 4.3. 编译下载启动</h3>
 <p>重复本篇第2节、第3节的内容。如果 EMMC 里有 rootfs 并正确配置，则可正常启动</p>
-</details>
 <hr />
 <p style="font-size:30px"> <strong>以下为补充部分</strong></p>
 <hr />
@@ -297,7 +289,7 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约1.9k字。于2025/10/31首次发布，最后更新于2025/11/13。 </p>
+<p>共计约1.8k字。于2025/10/31首次发布，最后更新于2025/11/24。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -345,7 +337,7 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 1. 获取内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 2. 编译内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E5%9C%A8uboot%E4%B8%AD%E5%90%AF%E5%8A%A8"><span class="toc-text"> 3. 测试：在uboot中启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#old4-%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84dts%E6%96%87%E4%BB%B6%E5%92%8Cconfig%E6%96%87%E4%BB%B6"><span class="toc-text"> [old]4. 创建自己的dts文件和config文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-dts"><span class="toc-text"> 4.1. dts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-defconfig"><span class="toc-text"> 4.2. defconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%BC%96%E8%AF%91%E4%B8%8B%E8%BD%BD%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.3. 编译下载启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%BB%E9%A2%91%E4%BF%AE%E6%94%B9"><span class="toc-text"> 5. 主频修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95"><span class="toc-text"> 6. 系统网络测试</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 1. 获取内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E6%BA%90%E7%A0%81"><span class="toc-text"> 2. 编译内核源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E5%9C%A8uboot%E4%B8%AD%E5%90%AF%E5%8A%A8"><span class="toc-text"> 3. 测试：在uboot中启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84dts%E6%96%87%E4%BB%B6%E5%92%8Cconfig%E6%96%87%E4%BB%B6"><span class="toc-text"> 4. 创建自己的dts文件和config文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-dts"><span class="toc-text"> 4.1. dts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-defconfig"><span class="toc-text"> 4.2. defconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%BC%96%E8%AF%91%E4%B8%8B%E8%BD%BD%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.3. 编译下载启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%BB%E9%A2%91%E4%BF%AE%E6%94%B9"><span class="toc-text"> 5. 主频修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95"><span class="toc-text"> 6. 系统网络测试</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -398,7 +390,7 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -524,7 +516,7 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,9,5],
+                            data: [6,2,10,4,11,2,4,15,9,8],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -598,13 +590,13 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":35},{"name":"嵌入式","value":12},{"name":"记录","value":10},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":35},{"name":"嵌入式","value":12},{"name":"记录","value":10},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -653,7 +645,7 @@ scaling_available_governors<span aria-hidden="true" class="line-numbers-rows"><s
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":35,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":38,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

@@ -269,6 +269,13 @@ I.MX6ULL 这个 SOC 的板子对应的.dts 文件都会被编译为.dtb。如果
 </ul>
 <p>比如对于 <code>#address-cells</code> 和 <code>#size-cells</code> 都为1，以<code>&lt;0x0  0x10 0x20&gt;</code>为例，表示将 local 的 从 0x0~(0x0 + 0x20) 的地址空间映射到 parent 的 0x10~(0x10 + 0x20)。<br />
 ranges属性值为空的话，表示1:1映射。</p>
+<h3 id="44-追加内容"><a class="markdownIt-Anchor" href="#44-追加内容"></a> 4.4. 追加内容</h3>
+<p>相在某一父节点下添加一个子节点，你可以直接在那个父节点下添加。<br />
+或者直接使用 <code>&amp;</code> 符号+label名，表示在这个节点下追加属性。<br />
+肥肠的煎蛋。</p>
+<pre class="line-numbers language-none"><code class="language-none">&amp;i2c1 &#123;
+&#x2F;* 要追加或修改的内容 *&#x2F;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h2 id="5-设备树的编写规范"><a class="markdownIt-Anchor" href="#5-设备树的编写规范"></a> 5. 设备树的编写规范</h2>
 <h3 id="51-查阅编写规范"><a class="markdownIt-Anchor" href="#51-查阅编写规范"></a> 5.1. 查阅编写规范</h3>
 <p>打开linux源码目录 <code>Documentation/devicetree/bindings</code> 它是设备树（Device Tree）规范的“官方说明书”，里面定义着不同厂商的不同设备的设备树的编写规范。</p>
@@ -399,7 +406,7 @@ of_find_node_by_name</p>
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约2.9k字。于2025/11/19首次发布，最后更新于2025/11/23。 </p>
+<p>共计约3k字。于2025/11/19首次发布，最后更新于2025/11/24。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -453,7 +460,7 @@ of_find_node_by_name</p>
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%AE%80%E4%BB%8B"><span class="toc-text"> 1. 设备树简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-text"> 1.1. 什么是设备树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%9A%84%E7%94%B1%E6%9D%A5"><span class="toc-text"> 1.2. 设备树的由来</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 2. 核心文件类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-text"> 3. 编译设备树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text"> 4. 基本语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E8%8A%82%E7%82%B9"><span class="toc-text"> 4.1. 节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%B8%A4%E4%B8%AA%E7%89%B9%E6%AE%8A%E8%8A%82%E7%82%B9"><span class="toc-text"> 4.2. 两个特殊节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%B1%9E%E6%80%A7"><span class="toc-text"> 4.3. 属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%9A%84%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5. 设备树的编写规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E6%9F%A5%E9%98%85%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.1. 查阅编写规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.2. 为什么有编写规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E7%9C%8B%E6%87%82%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.3. 看懂编写规范</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E6%A0%91%E5%B1%9E%E6%80%A7"><span class="toc-text"> 6. 驱动程序获取设备树属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 7. 参考资料</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%AE%80%E4%BB%8B"><span class="toc-text"> 1. 设备树简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-text"> 1.1. 什么是设备树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%9A%84%E7%94%B1%E6%9D%A5"><span class="toc-text"> 1.2. 设备树的由来</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A0%B8%E5%BF%83%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 2. 核心文件类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-text"> 3. 编译设备树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text"> 4. 基本语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E8%8A%82%E7%82%B9"><span class="toc-text"> 4.1. 节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%B8%A4%E4%B8%AA%E7%89%B9%E6%AE%8A%E8%8A%82%E7%82%B9"><span class="toc-text"> 4.2. 两个特殊节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%B1%9E%E6%80%A7"><span class="toc-text"> 4.3. 属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E8%BF%BD%E5%8A%A0%E5%86%85%E5%AE%B9"><span class="toc-text"> 4.4. 追加内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%AE%BE%E5%A4%87%E6%A0%91%E7%9A%84%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5. 设备树的编写规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E6%9F%A5%E9%98%85%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.1. 查阅编写规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.2. 为什么有编写规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E7%9C%8B%E6%87%82%E7%BC%96%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text"> 5.3. 看懂编写规范</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E6%A0%91%E5%B1%9E%E6%80%A7"><span class="toc-text"> 6. 驱动程序获取设备树属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text"> 7. 参考资料</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -506,7 +513,7 @@ of_find_node_by_name</p>
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1]]);
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -632,7 +639,7 @@ of_find_node_by_name</p>
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [6,2,10,4,11,2,4,15,9,5],
+                            data: [6,2,10,4,11,2,4,15,9,8],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -706,13 +713,13 @@ of_find_node_by_name</p>
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":35},{"name":"嵌入式","value":12},{"name":"记录","value":10},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":35},{"name":"嵌入式","value":12},{"name":"记录","value":10},{"name":"内核编程","value":9},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -761,7 +768,7 @@ of_find_node_by_name</p>
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":9,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":35,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":38,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

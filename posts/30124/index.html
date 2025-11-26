@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">pinctrl子系统</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-linux-内核-pinctrl-子系统简介"><a class="markdownIt-Anchor" href="#1-linux-内核-pinctrl-子系统简介"></a> 1. Linux 内核 Pinctrl 子系统简介</h2>
+<p>现代 SoC 中的 GPIO 引脚通常具有多功能（多路复用）属性，例如一个引脚既可以用作通用 GPIO，也可以用作某个外设（如 UART、I2C、SPI 等）的信号线。传统做法需要驱动直接访问寄存器完成引脚功能和属性配置，但这种方式繁琐且易错。为此，Linux 内核引入了 pinctrl（pin control）子系统，负责解析设备树中的引脚配置，并在系统启动时自动完成引脚的复用和电气属性设置。换言之，开发者只需在设备树中描述引脚功能和特性，pinctrl 子系统就会在后台枚举所有可控引脚、设置对应的复用模式和上下拉、驱动强度等电气特性，从而简化驱动开发过程。</p>
+<p>综上，我们现在总结出 <strong>Pinctrl 的两大核心任务</strong>：</p>
+<ol>
+<li><strong>引脚复用 (Pin Muxing)：</strong> 决定某个物理引脚当前是作为普通 GPIO，还是作为 UART 的 TX 线，或者是 I2C 的 SCL 线。</li>
+<li><strong>引脚配置 (Pin Configuration)：</strong> 设置引脚的电气特性，例如：上拉/下拉电阻、驱动能力（电流大小）、防抖动等。</li>
+</ol>
+<h2 id="2-理解-pinctrl"><a class="markdownIt-Anchor" href="#2-理解-pinctrl"></a> 2. 理解 Pinctrl</h2>
+<p>理解 Pinctrl，需要掌握以下几个关键概念。我们尽量避开复杂的 C 语言结构体，从逻辑层面来理解：</p>
+<h3 id="21-关键术语"><a class="markdownIt-Anchor" href="#21-关键术语"></a> 2.1. 关键术语</h3>
+<ul>
+<li><strong>Pin（引脚）：</strong> 芯片上最小的物理单元。</li>
+<li><strong>Group（引脚组）：</strong> 有些功能需要多个引脚配合（例如 I2C 需要 SCL 和 SDA 两根线）。我们将这两根线打包，称为一个 Group。</li>
+<li><strong>Function（功能）：</strong> 这一组引脚要干什么？是做 <code>i2c0</code>，还是做 <code>uart1</code>？这就是 Function。</li>
+<li><strong>State（状态）：</strong> 这是应用层最常接触的概念。一个设备可能有多种状态，最常见的是：<code>default</code>：设备正常工作时的引脚配置。<code>sleep</code>：设备休眠时，为了省电，将引脚配置为低功耗模式（如断开连接或弱下拉）。</li>
+</ul>
+<h3 id="22-用于pinctrl的设备树节点"><a class="markdownIt-Anchor" href="#22-用于pinctrl的设备树节点"></a> 2.2. 用于Pinctrl的设备树节点</h3>
+<p>一般来说，要使用pinctrl，在设备树里面会有一个节点专门来描述 PIN 的配置信息。</p>
+<p>对于不同厂商，这个节点的命名是不同的，比如有些直接以“pinctrl”命名，而像imx6系列就是以“iomuxc”来命名的。</p>
+<p>我们以 nxp 的 imx6ull 为例，来看看这个节点定义在哪里（本篇均以该SoC为例）。它这个包含关系比较抽象，这个节点的定义在<br />
+<code>arch/arm/boot/dts/nxp/imx/imx6ul.dtsi</code></p>
+<p>具体包含关系是这样的：imx6ull-14x14-evk-emmc.dts(最终使用的设备树文件) -&gt; imx6ull-14x14-evk.dts -&gt; imx6ull.dtsi -&gt; imx6ul.dtsi</p>
+<p>那么在 imx6ul.dtsi 文件中具体代码是这样写的：</p>
+<pre class="line-numbers language-none"><code class="language-none">soc: soc&#123;
+...
+	iomuxc: pinctrl@20e0000 &#123;
+		compatible &#x3D; &quot;fsl,imx6ul-iomuxc&quot;;
+		reg &#x3D; &lt;0x020e0000 0x4000&gt;;
+	&#125;;
+...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们向这个节点添加我们想要的配置，pinctrl 系统就能自动配置引脚属性，我们这个SoC就在 <code>arch/arm/boot/dts/nxp/imx/imx6ul-14x14-evk.dtsi</code> 这个文件里面添加了许多引脚配置信息：</p>
+<pre class="line-numbers language-none"><code class="language-none">...
+&amp;iomuxc &#123;
+    pinctrl-names &#x3D; &quot;default&quot;;
+
+    pinctrl_camera_clock: cameraclockgrp &#123;
+        fsl,pins &#x3D; &lt;
+            MX6UL_PAD_CSI_MCLK__CSI_MCLK        0x1b088
+        &gt;;
+    &#125;;
+   
+    pinctrl_csi1: csi1grp &#123;
+        fsl,pins &#x3D; &lt;
+            MX6UL_PAD_CSI_PIXCLK__CSI_PIXCLK    0x1b088
+            MX6UL_PAD_CSI_VSYNC__CSI_VSYNC      0x1b088
+            MX6UL_PAD_CSI_HSYNC__CSI_HSYNC      0x1b088
+            MX6UL_PAD_CSI_DATA00__CSI_DATA02    0x1b088
+            MX6UL_PAD_CSI_DATA01__CSI_DATA03    0x1b088
+            MX6UL_PAD_CSI_DATA02__CSI_DATA04    0x1b088
+            MX6UL_PAD_CSI_DATA03__CSI_DATA05    0x1b088
+            MX6UL_PAD_CSI_DATA04__CSI_DATA06    0x1b088
+            MX6UL_PAD_CSI_DATA05__CSI_DATA07    0x1b088
+            MX6UL_PAD_CSI_DATA06__CSI_DATA08    0x1b088
+            MX6UL_PAD_CSI_DATA07__CSI_DATA09    0x1b088
+        &gt;;
+    &#125;;
+...
+&#125;;
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="23-pinctrl-的实现"><a class="markdownIt-Anchor" href="#23-pinctrl-的实现"></a> 2.3. Pinctrl 的实现</h3>
+<h4 id="231-pinctrl-provider服务端"><a class="markdownIt-Anchor" href="#231-pinctrl-provider服务端"></a> 2.3.1. Pinctrl Provider（服务端）</h4>
+<p>通常由芯片厂商（如瑞芯微、恩智浦、高通）编写的驱动。它知道芯片底层每一个寄存器怎么写，知道“引脚A”怎么切换成“功能B”。<strong>我们通常不需要写这部分代码，只需使用。</strong></p>
+<p>这部分就相当于 pinctrl 的驱动程序，本质就是使用of函数搜索设备节点，找到用于pinctrl的设备节点，并根据该节点里的子节点信息来配置寄存器，具体的实现我们就不去深究了，附一张调用链图，来自正点原子：</p>
+<p><img src="Snipaste_2025-11-24_15-21-27.png" alt="" /></p>
+<h4 id="232-pinctrl-consumer客户端"><a class="markdownIt-Anchor" href="#232-pinctrl-consumer客户端"></a> 2.3.2. Pinctrl Consumer（客户端）</h4>
+<p>这是我们需要关心的部分。具体的设备驱动（如 UART 驱动、LED 驱动）就是客户端。它们向 Pinctrl 子系统发出申请：“我要用这组引脚，帮我切到 UART 模式。”</p>
+<h4 id="233-总结"><a class="markdownIt-Anchor" href="#233-总结"></a> 2.3.3. 总结</h4>
+<p>从原理上看，pinctrl 子系统分为<strong>核心层（core）</strong> 和 <strong>控制器驱动层（provider）</strong> 、<strong>客户端层（consumer）</strong>。</p>
+<p>内核启动时，pinctrl core 会扫描设备树，收集所有 pin 控制器节点和它们定义的引脚组。</p>
+<p>各 SoC 厂商提供的 pinctrl 驱动（位于 <code>drivers/pinctrl/</code> 目录）负责与具体硬件交互。在驱动 probe 阶段，pin 控制器驱动会根据设备树提供的组配置向硬件寄存器写入正确的复用模式和引脚参数。这样，无论是 GPIO、UART、SPI 等功能，只要设备树指定了 pinctrl 组和状态，内核都会在初始化时调用对应驱动完成配置。</p>
+<p>用户态程序或驱动只需通过抽象好的接口申请和切换状态，而不必关心寄存器细节。</p>
+<p>总体上，pinctrl 子系统实现了“设备树描述 → pin 配置 → 驱动使用”这一流程的统一化管理，让引脚配置从驱动代码中解耦，提升了代码可移植性和可维护性。</p>
+<h3 id="24-pinctrl-的工作流程"><a class="markdownIt-Anchor" href="#24-pinctrl-的工作流程"></a> 2.4. Pinctrl 的工作流程</h3>
+<p>Pinctrl 子系统在内核中起到了“中间人”的作用，它屏蔽了底层硬件的复杂性。</p>
+<p><strong>流程如下：</strong></p>
+<ol>
+<li><strong>系统启动</strong>：Linux 内核解析设备树（DTS）。</li>
+<li><strong>设备加载</strong>：当一个设备驱动（比如 I2C 驱动）加载时，内核会检查该设备在设备树中关联的 Pinctrl 信息。</li>
+<li><strong>自动申请</strong>：在驱动的 <code>probe</code> 阶段，驱动核心（Driver Core）会自动向 Pinctrl 核心申请将该设备的引脚切换到 <code>default</code> 状态。</li>
+<li><strong>底层执行</strong>：Pinctrl 核心找到对应的Pinctrl驱动（Provider），写入寄存器，完成复用和电气配置。 <strong>这就意味着，作为驱动开发者，你甚至不需要在 C 代码里写一行关于配置引脚的代码，一切都已经在设备树加载时自动完成了。</strong></li>
+</ol>
+<h2 id="3-使用-pinctrl-以imx6ull为例"><a class="markdownIt-Anchor" href="#3-使用-pinctrl-以imx6ull为例"></a> 3. 使用 Pinctrl （以IMX6ULL为例）</h2>
+<h3 id="31-step0查阅编写说明书"><a class="markdownIt-Anchor" href="#31-step0查阅编写说明书"></a> 3.1. step0.查阅编写说明书</h3>
+<p>要使用 Pinctrl ，必不可少的就是我们在前面介绍设备树一文中提到的编写规范文档，<strong>必须按照编写规范来写！</strong> 对于本文使用的SoC来说，这个文档就是 <code>Documentation/devicetree/bindings/pinctrl/fsl,imx6ul-pinctrl.txt</code></p>
+<p>原文是这样描述的：</p>
+<pre class="line-numbers language-none"><code class="language-none">* Freescale i.MX6 UltraLite IOMUX Controller
+
+Please refer to fsl,imx-pinctrl.txt in this directory for common binding part
+and usage.
+
+Required properties:
+- compatible: &quot;fsl,imx6ul-iomuxc&quot; for main IOMUX controller or
+  &quot;fsl,imx6ull-iomuxc-snvs&quot; for i.MX 6ULL&#39;s SNVS IOMUX controller.
+- fsl,pins: each entry consists of 6 integers and represents the mux and config
+  setting for one pin.  The first 5 integers &lt;mux_reg conf_reg input_reg mux_val
+  input_val&gt; are specified using a PIN_FUNC_ID macro, which can be found in
+  imx6ul-pinfunc.h under device tree source folder.  The last integer CONFIG is
+  the pad setting value like pull-up on this pin.  Please refer to i.MX6 UltraLite
+  Reference Manual for detailed CONFIG settings.
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>翻译如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">* Freescale i.MX6 UltraLite IOMUX 控制器
+
+本目录中的 fsl,imx-pinctrl.txt 文件提供了通用绑定部分及使用说明，请参考该文档。
+
+必需属性：
+- compatible：
+  主 IOMUX 控制器应使用 &quot;fsl,imx6ul-iomuxc&quot;，
+  i.MX6ULL 的 SNVS IOMUX 控制器则使用 &quot;fsl,imx6ull-iomuxc-snvs&quot;
+- fsl,pins：
+  每个条目由6个整数组成，代表单个引脚的多路复用和配置设置。
+  前5个整数 &lt;mux_reg conf_reg input_reg mux_val input_val&gt;
+  使用 PIN_FUNC_ID 宏定义（该宏定义位于设备树源文件夹下的 imx6ul-pinfunc.h 文件中），
+  最后一个整数 CONFIG 为焊盘配置值（例如该引脚的上拉设置）。
+  详细 CONFIG 设置请参阅 i.MX6 UltraLite 参考手册。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>意思是你要在pinctrl节点下添加你的pin配置，你必须有两个属性：</p>
+<ul>
+<li>compatible：<strong>这是主控制器也就是IOMUXC节点所需属性，子节点无需指定。</strong>
+<ul>
+<li>如果使用主 IOMUX 控制器，值必须为“fsl,imx6ul-iomuxc”。</li>
+<li>如果使用 SNVS IOMUX 控制器，值必须为“fsl,imx6ull-iomuxc-snvs”</li>
+</ul>
+</li>
+<li>fsl,pins：<strong>子节点必需属性。</strong> 由6个寄存器值组成，前5个值已被官方包装为宏定义，最后一个寄存器值需要我们手动设置。</li>
+</ul>
+<p>它还提到这个宏定义就在 <code>imx6ul-pinfunc.h</code>，我们截取一段看看，就拿一个GPIO的配置来看一下吧：</p>
+<pre class="line-numbers language-none"><code class="language-none">#define MX6UL_PAD_GPIO1_IO04__GPIO1_IO04        0x006c 0x02f8 0x0000 5 0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这五个数是这样组织的:</p>
+<table>
+<thead>
+<tr>
+<th><strong>名字</strong></th>
+<th><strong>mux_reg</strong></th>
+<th><strong>conf_reg</strong></th>
+<th><strong>input_reg</strong></th>
+<th><strong>mux_val</strong></th>
+<th><strong>input_val</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>值</strong></td>
+<td>0x006c</td>
+<td>0x02f8</td>
+<td>0</td>
+<td>5</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>意义</strong></td>
+<td>引脚复用寄存器相对偏移地址</td>
+<td>引脚配置寄存器相对偏移地址</td>
+<td>输入选择控制寄存器偏移地址</td>
+<td>引脚复用寄存器值</td>
+<td>输入选择控制寄存器值</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：</strong></p>
+<ol>
+<li>相对 主io控制器 iomuxc 的地址 0x020e0000 偏移。</li>
+<li>输入选择寄存器为0，为无效值，表示这个配置不需要输入选择。</li>
+<li>什么时候需要输入选择寄存器呢？假设芯片内部有一个 UART1_RX（串口1接收）信号。根据芯片设计，这个 UART1_RX 信号可能可以从 GPIO1_IO01 这个引脚输入，也可以从 GPIO1_IO02 这个引脚输入。这两个引脚都具备复用为 UART1_RX 的能力。这个寄存器的作用就是指定输入路径。</li>
+<li>写入寄存器的这些值是厂商帮我们写好了的，填入这些值到相应的寄存器，引脚就能复用为我们想要的功能。我们再也不需要去找寄存器、看位定义了！</li>
+<li>擅长找规律的同学肯定注意到了，第六个值，也就是自己配置的值其实就是 conf_val。</li>
+</ol>
+<p>不同的厂商有不同的编写方式，但通过阅读厂商为我们写好的编写文档，我们就可以很快速的跟上厂商的节奏。</p>
+<h3 id="32-step1在-pinctrl-节点中定义引脚配置"><a class="markdownIt-Anchor" href="#32-step1在-pinctrl-节点中定义引脚配置"></a> 3.2. step1.在 Pinctrl 节点中定义引脚配置</h3>
+<p>首先，在 SoC 厂商提供的 pinctrl 节点下，定义你需要的引脚组。</p>
+<pre class="line-numbers language-DTS" data-language="DTS"><code class="language-DTS">&amp;iomuxc &#123;
+    pinctrl-names &#x3D; &quot;default&quot;;
+	pinctrl_i2c1: i2c1grp &#123;
+		fsl,pins &#x3D; &lt;
+			MX6UL_PAD_UART4_TX_DATA__I2C1_SCL 0x4001b8b0
+			MX6UL_PAD_UART4_RX_DATA__I2C1_SDA 0x4001b8b0
+        &gt;;
+	&#125;;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>不同厂商的语法（如 rockchip,pins 或 fsl,pins）略有不同，但逻辑一致。</p>
+</blockquote>
+<h3 id="33-step2在设备节点中引用-pinctrl"><a class="markdownIt-Anchor" href="#33-step2在设备节点中引用-pinctrl"></a> 3.3. step2.在设备节点中引用 Pinctrl</h3>
+<p>接下来，在你具体的设备节点中，告诉内核：“我要用上面定义的那些引脚”。</p>
+<pre class="line-numbers language-DTS" data-language="DTS"><code class="language-DTS">&amp;i2c1 &#123;
+    status &#x3D; &quot;okay&quot;;
+
+    &#x2F;* 1. 指定引脚配置名称列表 *&#x2F;
+    pinctrl-names &#x3D; &quot;default&quot;;
+
+    &#x2F;* 2. 引用步骤一中定义的句柄 *&#x2F;
+    pinctrl-0 &#x3D; &lt;&amp;pinctrl_i2c1&gt;;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>代码解读：</strong></p>
+<ul>
+<li><code>pinctrl-names = &quot;default&quot;</code>：告诉内核，这组配置叫 “default”。内核加载驱动时，会自动查找并激活名为 “default” 的配置。</li>
+<li><code>pinctrl-0 = &lt;&amp;pinctrl_i2c1&gt;;</code>：这对应着 “default” 状态下具体的硬件引脚设置。</li>
+</ul>
+<h3 id="34-进阶多状态切换休眠模式"><a class="markdownIt-Anchor" href="#34-进阶多状态切换休眠模式"></a> 3.4. 进阶：多状态切换（休眠模式）</h3>
+<p>如果你的设备支持电源管理，你可以定义两个状态：</p>
+<pre class="line-numbers language-DTS" data-language="DTS"><code class="language-DTS">&amp;some_device &#123;
+    pinctrl-names &#x3D; &quot;default&quot;, &quot;sleep&quot;; &#x2F;* 定义了两个名字 *&#x2F;
+    pinctrl-0 &#x3D; &lt;&amp;pin_conf_active&gt;;     &#x2F;* default 对应这组 *&#x2F;
+    pinctrl-1 &#x3D; &lt;&amp;pin_conf_sleep&gt;;      &#x2F;* sleep 对应这组 *&#x2F;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当设备驱动调用 <code>pinctrl_pm_select_sleep_state()</code> 时，引脚会自动切换到 <code>pinctrl-1</code> 指定的配置（例如关闭上拉电阻以省电）。</p>
+<h2 id="4-总结"><a class="markdownIt-Anchor" href="#4-总结"></a> 4. 总结</h2>
+<p>Linux Pinctrl 子系统虽然底层复杂，但对应用和驱动开发者的接口非常友好。</p>
+<ul>
+<li><strong>核心作用：</strong> 管理引脚复用（Mux）和电气配置（Config）。</li>
+<li><strong>工作方式：</strong> 基于设备树（DTS）描述，内核自动在驱动加载时应用。</li>
+<li><strong>你的任务：</strong> 作为开发者，你主要的工作是<strong>查阅芯片手册</strong>，确定引脚功能，然后在<strong>设备树</strong>中正确填写 <code>pinctrl-names</code> 和 <code>pinctrl-0</code>。</li>
+</ul>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3k字。于2025/11/24首次发布，最后更新于2025/11/24。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-linux-%E5%86%85%E6%A0%B8-pinctrl-%E5%AD%90%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B"><span class="toc-text"> 1. Linux 内核 Pinctrl 子系统简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%90%86%E8%A7%A3-pinctrl"><span class="toc-text"> 2. 理解 Pinctrl</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E5%85%B3%E9%94%AE%E6%9C%AF%E8%AF%AD"><span class="toc-text"> 2.1. 关键术语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E7%94%A8%E4%BA%8Epinctrl%E7%9A%84%E8%AE%BE%E5%A4%87%E6%A0%91%E8%8A%82%E7%82%B9"><span class="toc-text"> 2.2. 用于Pinctrl的设备树节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-pinctrl-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text"> 2.3. Pinctrl 的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-pinctrl-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text"> 2.4. Pinctrl 的工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8-pinctrl-%E4%BB%A5imx6ull%E4%B8%BA%E4%BE%8B"><span class="toc-text"> 3. 使用 Pinctrl （以IMX6ULL为例）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-step0%E6%9F%A5%E9%98%85%E7%BC%96%E5%86%99%E8%AF%B4%E6%98%8E%E4%B9%A6"><span class="toc-text"> 3.1. step0.查阅编写说明书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-step1%E5%9C%A8-pinctrl-%E8%8A%82%E7%82%B9%E4%B8%AD%E5%AE%9A%E4%B9%89%E5%BC%95%E8%84%9A%E9%85%8D%E7%BD%AE"><span class="toc-text"> 3.2. step1.在 Pinctrl 节点中定义引脚配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-step2%E5%9C%A8%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9%E4%B8%AD%E5%BC%95%E7%94%A8-pinctrl"><span class="toc-text"> 3.3. step2.在设备节点中引用 Pinctrl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-%E8%BF%9B%E9%98%B6%E5%A4%9A%E7%8A%B6%E6%80%81%E5%88%87%E6%8D%A2%E4%BC%91%E7%9C%A0%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 3.4. 进阶：多状态切换（休眠模式）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-text"> 4. 总结</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9,8],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":38,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">创建一个字符设备与地址映射</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<blockquote>
+<p>本篇文章主要讲解创建字符驱动设备的一个代码框架，配置一个GPIO的方式依然是最原始的配置寄存器方式（配合讲解地址映射）。</p>
+</blockquote>
+<h2 id="1-地址映射介绍"><a class="markdownIt-Anchor" href="#1-地址映射介绍"></a> 1. 地址映射介绍</h2>
+<h3 id="11-地址映射究竟在干什么"><a class="markdownIt-Anchor" href="#11-地址映射究竟在干什么"></a> 1.1. 地址映射究竟在干什么？</h3>
+<p>Linux 世界里，任何外设的寄存器都不允许你“像裸机一样”随便拿地址就写。物理地址只是硬件的地盘，而用户空间、内核空间都活在自己的“虚拟地址”里。</p>
+<p>虚拟地址这个东西，只是对 CPU 说的一套语言；真实的电路是物理地址。所以得靠 MMU（内存管理单元）做翻译，把虚拟地址 → 物理地址挂上关系。这一步就叫 <strong>地址映射（memory mapping）</strong>。</p>
+<p>简单描述一下：</p>
+<p>虚拟地址（进程眼里看到的） → 通过页表（内核维护的一堆数据结构） → 映射到物理地址（板子上的真实寄存器）</p>
+<p><strong>为什么要这么麻烦？</strong></p>
+<p>因为 Linux 要保证：</p>
+<ol>
+<li>每个进程互不干扰，不会互相写爆对方。</li>
+<li>不让用户程序直接摸外设，保证系统稳定。</li>
+<li>内核可以把物理地址重新分布，不影响程序。</li>
+</ol>
+<h3 id="12-那如何访问外设寄存器"><a class="markdownIt-Anchor" href="#12-那如何访问外设寄存器"></a> 1.2. 那如何访问外设寄存器？</h3>
+<p>访问寄存器通常需要两步：</p>
+<ol>
+<li><strong>获得物理地址</strong>（比如 datasheet 会写某个 GPIO 控制寄存器的地址）</li>
+<li><strong>将物理地址映射成虚拟地址</strong> → 才能读写</li>
+</ol>
+<p>在 Linux 内核中，这个动作由 <code>ioremap()</code> 完成。</p>
+<h3 id="13-常用函数"><a class="markdownIt-Anchor" href="#13-常用函数"></a> 1.3. 常用函数</h3>
+<h4 id="131-ioremap"><a class="markdownIt-Anchor" href="#131-ioremap"></a> 1.3.1. ioremap()</h4>
+<p>把“物理地址段”映射到“内核虚拟地址空间” 你传入基地址和大小，它返回一段能访问的虚拟地址。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __iomem <span class="token operator">*</span>virt <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>phys_addr<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="132-iounmap"><a class="markdownIt-Anchor" href="#132-iounmap"></a> 1.3.2. iounmap()</h4>
+<p>释放映射。</p>
+<h4 id="133-readlwritel"><a class="markdownIt-Anchor" href="#133-readlwritel"></a> 1.3.3. readl()/writel()</h4>
+<p>读写 32bit 寄存器的常用函数。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">value <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>virt_addr <span class="token operator">+</span> offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">writel</span><span class="token punctuation">(</span><span class="token number">0x1</span><span class="token punctuation">,</span> virt_addr <span class="token operator">+</span> offset<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>比直接解引用指针更安全。</p>
+<h2 id="2-创建一个字符设备"><a class="markdownIt-Anchor" href="#2-创建一个字符设备"></a> 2. 创建一个字符设备</h2>
+<h3 id="21-step1定义操作集合"><a class="markdownIt-Anchor" href="#21-step1定义操作集合"></a> 2.1. step1.定义操作集合</h3>
+<p>就是大名鼎鼎的 file_operations。让内核知道当用户空间调用open、close等文件操作函数时实际应该怎么操作。</p>
+<p>示例：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> led_fops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span>owner <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>open <span class="token operator">=</span> led_open<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>read <span class="token operator">=</span> led_read<span class="token punctuation">,</span><span class="token comment">// 对应用户空间的 open()</span>
+    <span class="token punctuation">.</span>write <span class="token operator">=</span> led_write<span class="token punctuation">,</span><span class="token comment">// 对应用户空间的 write()</span>
+    <span class="token punctuation">.</span>release <span class="token operator">=</span> led_release<span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token comment">// 对应用户空间的 close()</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要理清楚这些操作函数与对应用户空间的函数的关系。</p>
+<h3 id="22-step2编写实际操作函数"><a class="markdownIt-Anchor" href="#22-step2编写实际操作函数"></a> 2.2. step2.编写实际操作函数</h3>
+<p>我们确定好要编写哪些操作函数后就可以开始编写了，函数名字要和file_operations里的一样。</p>
+<blockquote>
+<p>我们编写实际操作函数时，要填形参，可以进入到“file_operations”的定义里面看操作函数对应的形参。</p>
+</blockquote>
+<h3 id="23-step3四个关键结构体"><a class="markdownIt-Anchor" href="#23-step3四个关键结构体"></a> 2.3. step3.四个关键结构体</h3>
+<p>我们首先定义四个关键结构体：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">dev_t</span> devno<span class="token punctuation">;</span> <span class="token comment">// 用于存储设备号</span>
+<span class="token keyword">struct</span> <span class="token class-name">cdev</span> cdev<span class="token punctuation">;</span> <span class="token comment">//申请一个cdev对象</span>
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>class <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span> <span class="token comment">// 类</span>
+<span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>device <span class="token comment">//设备节点</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们将其统一包装在一个结构体，作为该设备的私有数据，例如：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">dev_t</span> devno<span class="token punctuation">;</span>      <span class="token comment">// 用于存储设备号</span>
+    <span class="token keyword">struct</span> <span class="token class-name">cdev</span> cdev<span class="token punctuation">;</span> <span class="token comment">// 申请一个cdev对象</span>
+    <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>class<span class="token punctuation">;</span> <span class="token comment">// 类</span>
+    <span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>device<span class="token punctuation">;</span> <span class="token comment">//设备节点</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token operator">*</span> led_dev<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="24-step4确定设备号"><a class="markdownIt-Anchor" href="#24-step4确定设备号"></a> 2.4. step4.确定设备号</h3>
+<p>有两种方式：静态和动态。<strong>用到step3的第一个结构体</strong>。</p>
+<p>此步只是 <strong>在内核中预留了数字，没有创建任何对象</strong>；这是字符设备的“身份证号码”。</p>
+<h4 id="241-alloc_chrdev_region"><a class="markdownIt-Anchor" href="#241-alloc_chrdev_region"></a> 2.4.1. alloc_chrdev_region()：</h4>
+<p><strong>动态分配</strong>一个未被占用的主设备号，并注册设备号区域。建议使用此方法，避免与现有设备冲突。</p>
+<p>用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">alloc_chrdev_region</span><span class="token punctuation">(</span><span class="token class-name">dev_t</span> <span class="token operator">*</span>dev<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> baseminor<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> count<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>*dev：用于返回设备号</em></li>
+<li><em>baseminor：指定次设备号起始值</em></li>
+<li><em>count：申请的次设备号个数</em></li>
+<li><em>name: 设备名称</em></li>
+</ul>
+<h4 id="242-register_chrdev_region"><a class="markdownIt-Anchor" href="#242-register_chrdev_region"></a> 2.4.2. register_chrdev_region():</h4>
+<p><strong>静态注册</strong>一个已知的主设备号。如果知道分配给设备的设备号，可以使用此方法.</p>
+<p>用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">register_chrdev_region</span><span class="token punctuation">(</span><span class="token class-name">dev_t</span> from<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> count<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>from：设备号，一般在调用之前就得通过一个主设备号和次设备号得到一个设备号</em></li>
+<li><em>count: 次设备个数 以major为主设备号，以0~0+count的次设备号</em></li>
+<li><em>name: 设备名称</em></li>
+</ul>
+<h3 id="25-step5注册字符设备"><a class="markdownIt-Anchor" href="#25-step5注册字符设备"></a> 2.5. step5.注册字符设备</h3>
+<p>此步包含 初始化cdev结构体 和 将设备添加到内核。</p>
+<h4 id="251-cdev_init"><a class="markdownIt-Anchor" href="#251-cdev_init"></a> 2.5.1. cdev_init()</h4>
+<p>用于初始化我们<strong>step3提供的第二个结构体</strong>，将设备与对应的操作集合（step1、2）绑定。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">cdev_init</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">cdev</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>cdev*：字符设备结构体地址</em></li>
+<li><em>struct file_operations* ：操作集合地址</em></li>
+</ul>
+<h4 id="252-cdev_add"><a class="markdownIt-Anchor" href="#252-cdev_add"></a> 2.5.2. cdev_add()</h4>
+<p>此步正式将设备添加到内核。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">cdev_add</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">cdev</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token class-name">dev_t</span><span class="token punctuation">,</span> <span class="token keyword">unsigned</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>cdev*：字符设备结构体地址</em></li>
+<li><em>dev_t：设备号</em></li>
+<li><em>count：注册的次设备数量</em></li>
+</ul>
+<h3 id="26-step5创建设备节点"><a class="markdownIt-Anchor" href="#26-step5创建设备节点"></a> 2.6. step5.创建设备节点</h3>
+<p>向内核添加字符设备后，在用户空间使用仍然不方便，因为它没有暴露接口，也就是<code>/dev/</code>目录下没有它的身影。</p>
+<h4 id="261-class_create"><a class="markdownIt-Anchor" href="#261-class_create"></a> 2.6.1. class_create()</h4>
+<p>创建设备节点前要求必须有对应的类。它会在在 sysfs 中创建一个类目录。class 本质上只是一个目录 + 一些描述信息。此处用到<strong>step3提供的第三个结构体</strong>。</p>
+<p>用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span><span class="token function">class_create</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>name：类名</em></li>
+<li><em><strong>返回</strong>：类结构体指针</em></li>
+</ul>
+<p><strong>同一类的设备 = 功能相似、统一管理、统一呈现、自动创建节点</strong></p>
+<ul>
+<li>sysfs 中统一目录</li>
+<li>设备节点命名统一</li>
+<li>用户态可自动识别</li>
+<li>驱动文件不同也能加入同一类</li>
+<li>便于 udev/systemd/应用程序管理设备</li>
+</ul>
+<p>tips：</p>
+<p>想要将不同设备添加到同一类，可以在申请类的那个初始化文件里提供一个接口函数然后 <code>extern</code>，例如：</p>
+<p>a.c:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>my_class<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span><span class="token function">get_my_class</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> my_class<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">main_dev_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    my_class <span class="token operator">=</span> <span class="token function">class_create</span><span class="token punctuation">(</span>THIS_MODULE<span class="token punctuation">,</span> <span class="token string">"myclass"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">IS_ERR</span><span class="token punctuation">(</span>my_class<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token function">PTR_ERR</span><span class="token punctuation">(</span>my_class<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>b.c:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">extern</span> <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span><span class="token function">get_my_class</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">device_create</span><span class="token punctuation">(</span><span class="token function">get_my_class</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> devno<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token string">"otherdev"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="262-device_create"><a class="markdownIt-Anchor" href="#262-device_create"></a> 2.6.2. device_create()</h4>
+<p>正式创建设备节点。<strong>用到step3提供的第四个结构体</strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span><span class="token function">device_create</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>cls<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>parent<span class="token punctuation">,</span> <span class="token class-name">dev_t</span> devt<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>drvdata<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>fmt<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><em>cls: 类结构体指针</em><br />
+<em>parent：父设备，一般为 NULL</em><br />
+<em>devt：设备号</em><br />
+<em>drvdata：驱动私有数据，可为 NULL</em><br />
+<em>fmt：设备名格式化字符串，即在dev目录下显示的设备名。</em></p>
+<h2 id="3-销毁一个字符设备"><a class="markdownIt-Anchor" href="#3-销毁一个字符设备"></a> 3. 销毁一个字符设备</h2>
+<p>举一反三，不再过多赘述<br />
+销毁需要按创建时的顺序 反顺序销毁。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//删除设备节点</span>
+<span class="token keyword">void</span> <span class="token function">device_destroy</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>cls<span class="token punctuation">,</span> <span class="token class-name">dev_t</span> devt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//删除类</span>
+<span class="token keyword">void</span> <span class="token function">class_destroy</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>cls<span class="token punctuation">)</span>
+<span class="token comment">//删除字符设备</span>
+<span class="token keyword">void</span> <span class="token function">cdev_del</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">cdev</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//释放设备号</span>
+<span class="token keyword">void</span> <span class="token function">unregister_chrdev_region</span><span class="token punctuation">(</span><span class="token class-name">dev_t</span><span class="token punctuation">,</span> <span class="token keyword">unsigned</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-完整示例程序包含地址映射"><a class="markdownIt-Anchor" href="#4-完整示例程序包含地址映射"></a> 4. 完整示例程序，包含地址映射</h2>
+<p>注意的细节：goto的错误处理，私有数据。</p>
+<p>说明一下使用私有数据后，怎么在open函数中获取这些私有数据：</p>
+<p><code>container_of</code>关键宏：已知某个结构体成员的指针，反推出整个结构体的指针。它定义在 <code>include/linux/kernel.h</code> 中。</p>
+<p>在led_open()中，我们通过<code>container_of</code> 反推出 装有cdev成员的 struct led_dev 结构体指针（因为这里的cdev正好是struct led_dev的成员，为什么cdev不是其他结构体的成员呢？因为我们在cdev_add中指定的就是struct led_dev中的cdev的地址），也就是我们在step3中定义的结构体。即私有数据，并将这个指针指向fp的privatedata成员变量。这样read、write就可以通过fp-&gt;privatedata访问这些数据。</p>
+<p>还有这个常用的函数：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">copy_from_user</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>to<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span> __user <span class="token operator">*</span>from<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><em>to：目标地址（内核空间）</em></li>
+<li><em>from：源地址（用户空间）</em></li>
+<li><em>n：要拷贝的字节数</em></li>
+<li><em>返回值：成功返回0，失败返回未拷贝的字节数</em></li>
+</ul>
+<p>表示从用户空间拷贝到内核空间，防止用户程序直接访问或修改内核数据结构和硬件资源。</p>
+<p>相应的也有</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">copy_to_user</span><span class="token punctuation">(</span><span class="token keyword">void</span> __user <span class="token operator">*</span>to<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>from<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>表示从内核空间复制到用户空间。当目标地址无效时，<code>copy_to_user</code>会将目标内核缓冲区清零，防止信息泄漏。</p>
+<p>除了上述两个主要函数外，Linux还提供了一系列简化函数：</p>
+<p><code>get_user</code>：获取简单变量（char/int/long等）<br />
+<code>put_user</code>：写入简单变量<br />
+<code>get_user/put_user</code>：不进行地址检查的版本<br />
+这些函数适用于简单数据类型的传输，效率更高。</p>
+<p><s>—终于他妈写完了，草— 写得真是依托。。。。。不管了</s></p>
+<p>led.c</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/fs.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/cdev.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/io.h></span> <span class="token comment">//io映射相关</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/uaccess.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;asm-generic/int-ll64.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/string.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">DEV_NAME</span> <span class="token string">"led"</span></span>
+
+<span class="token comment">// 定义开关状态</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">LED_OFF</span> <span class="token expression"><span class="token number">0</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">LED_ON</span> <span class="token expression"><span class="token number">1</span></span></span>
+
+<span class="token comment">// 定义寄存器物理地址</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">CCM_CCGR1_BASE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">0X020C406C</span><span class="token punctuation">)</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SW_MUX_GPIO1_IO03_BASE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">0X020E006C</span><span class="token punctuation">)</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SW_PAD_GPIO1_IO03_BASE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">0X020E02F8</span><span class="token punctuation">)</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GPIO1_DR_BASE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">0X0209C000</span><span class="token punctuation">)</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GPIO1_GDIR_BASE</span> <span class="token expression"><span class="token punctuation">(</span><span class="token number">0X0209C004</span><span class="token punctuation">)</span></span></span>
+
+<span class="token comment">// 定义映射后的虚拟地址</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> __iomem <span class="token operator">*</span>IMX6U_CCM_CCGR1<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> __iomem <span class="token operator">*</span>SW_MUX_GPIO1_IO03<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> __iomem <span class="token operator">*</span>SW_PAD_GPIO1_IO03<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> __iomem <span class="token operator">*</span>GPIO1_DR<span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> __iomem <span class="token operator">*</span>GPIO1_GDIR<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">dev_t</span> devno<span class="token punctuation">;</span>      <span class="token comment">// 用于存储设备号</span>
+    <span class="token keyword">struct</span> <span class="token class-name">cdev</span> cdev<span class="token punctuation">;</span> <span class="token comment">// 申请一个cdev对象</span>
+    <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>class<span class="token punctuation">;</span> <span class="token comment">// 类</span>
+    <span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>device<span class="token punctuation">;</span> <span class="token comment">//设备节点</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token operator">*</span> led_dev<span class="token punctuation">;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">led_switch</span><span class="token punctuation">(</span>u8 sta<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    u32 temp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sta <span class="token operator">==</span> LED_ON<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        temp <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        temp <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">writel</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>sta <span class="token operator">==</span> LED_OFF<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        temp <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        temp <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">writel</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">led_open</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">inode</span> <span class="token operator">*</span>inode<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>fp<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token operator">*</span> this_devp<span class="token punctuation">;</span>
+    <span class="token comment">// container_of:已知某个结构体成员的指针，反推出整个结构体的指针。</span>
+    this_devp <span class="token operator">=</span> <span class="token function">container_of</span><span class="token punctuation">(</span>inode<span class="token operator">-></span>i_cdev<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">led_dev</span><span class="token punctuation">,</span> cdev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 指定私有数据，后续read/write函数均可以直接读取</span>
+    fp<span class="token operator">-></span>private_data <span class="token operator">=</span> this_devp<span class="token punctuation">;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"led dev open!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token class-name">ssize_t</span> <span class="token function">led_write</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>fp<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> __user <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> cnt<span class="token punctuation">,</span> <span class="token class-name">loff_t</span> <span class="token operator">*</span>offt<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> ret<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> databuf<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span><span class="token operator">*</span> ledstat<span class="token punctuation">;</span>
+    ret <span class="token operator">=</span> <span class="token function">copy_from_user</span><span class="token punctuation">(</span>databuf<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> cnt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"kernel write failed!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span>EFAULT<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    ledstat <span class="token operator">=</span> databuf<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>ledstat<span class="token punctuation">,</span> <span class="token string">"on"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token function">led_switch</span><span class="token punctuation">(</span>LED_ON<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>ledstat<span class="token punctuation">,</span> <span class="token string">"off"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        <span class="token function">led_switch</span><span class="token punctuation">(</span>LED_OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"E: only can write \"off\" or \"on\"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">static</span> <span class="token class-name">ssize_t</span> <span class="token function">led_read</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>fp<span class="token punctuation">,</span> <span class="token keyword">char</span> __user <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token class-name">size_t</span> nt<span class="token punctuation">,</span> <span class="token class-name">loff_t</span> <span class="token operator">*</span>offt<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"it's unnecessary to read led!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">led_release</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">inode</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"led dev release!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">file_operations</span> led_fops <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span>owner <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>open <span class="token operator">=</span> led_open<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>read <span class="token operator">=</span> led_read<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>write <span class="token operator">=</span> led_write<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>release <span class="token operator">=</span> led_release<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+   
+<span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">led_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    u32 temp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> ret <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 映射 */</span>
+    IMX6U_CCM_CCGR1 <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>CCM_CCGR1_BASE<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    SW_MUX_GPIO1_IO03 <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>SW_MUX_GPIO1_IO03_BASE<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    SW_PAD_GPIO1_IO03 <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>SW_PAD_GPIO1_IO03_BASE<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    GPIO1_DR <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>GPIO1_DR_BASE<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    GPIO1_GDIR <span class="token operator">=</span> <span class="token function">ioremap</span><span class="token punctuation">(</span>GPIO1_GDIR_BASE<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 设置寄存器值 */</span>
+    <span class="token comment">/* 1. 使能时钟 */</span>
+    <span class="token comment">// 这是通用寄存器，最好不要直接写入，要保证其他值不变，否则可能会影响其他外设,以下同理</span>
+    temp <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>IMX6U_CCM_CCGR1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">&lt;&lt;</span> <span class="token number">26</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 清除设置</span>
+    temp <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">&lt;&lt;</span> <span class="token number">26</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设定26-27为1，使能时钟</span>
+    <span class="token function">writel</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> IMX6U_CCM_CCGR1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 2. 引脚复用为GPIO */</span>
+    <span class="token function">writel</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> SW_MUX_GPIO1_IO03<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 3. 设置电气属性 */</span>
+    <span class="token function">writel</span><span class="token punctuation">(</span><span class="token number">0x10b0</span><span class="token punctuation">,</span> SW_PAD_GPIO1_IO03<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 4. 设置为输出 */</span>
+    temp <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>GPIO1_GDIR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 清除设定</span>
+    temp <span class="token operator">|=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">writel</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> GPIO1_GDIR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 5. 设置为输出低电平（开启LED） */</span>
+    temp <span class="token operator">=</span> <span class="token function">readl</span><span class="token punctuation">(</span>GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">&amp;=</span> <span class="token operator">~</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">writel</span><span class="token punctuation">(</span>temp<span class="token punctuation">,</span> GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    temp <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 向系统添加字符设备 */</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"led load!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 获取设备号 */</span>
+    ret <span class="token operator">=</span> <span class="token function">alloc_chrdev_region</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>led_dev<span class="token operator">-></span>devno<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> DEV_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 成功后，主设备号存储在MAJOR(devno)，次设备号为1</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"Failed to alloc dev number!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">goto</span> err_alloc<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">/* 注册字符设备 */</span>
+    <span class="token function">cdev_init</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>led_dev<span class="token operator">-></span>cdev<span class="token punctuation">,</span> <span class="token operator">&amp;</span>led_fops<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 初始化cdev结构体</span>
+    led_dev<span class="token operator">-></span>cdev<span class="token punctuation">.</span>owner <span class="token operator">=</span> THIS_MODULE<span class="token punctuation">;</span>
+    ret <span class="token operator">=</span> <span class="token function">cdev_add</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>led_dev<span class="token operator">-></span>cdev<span class="token punctuation">,</span> led_dev<span class="token operator">-></span>devno<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 此步正式将设备添加到内核</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"Failed to add cdev!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">goto</span> err_cdev<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">/* 创建设备节点 */</span>
+    led_dev<span class="token operator">-></span>class <span class="token operator">=</span> <span class="token function">class_create</span><span class="token punctuation">(</span><span class="token string">"led"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建设备节点前要求必须有对应的类</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">IS_ERR</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"Failed to create class \n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ret <span class="token operator">=</span> <span class="token function">PTR_ERR</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置返回值，否则返回0</span>
+        <span class="token keyword">goto</span> err_class<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    led_dev<span class="token operator">-></span>device <span class="token operator">=</span> <span class="token function">device_create</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> led_dev<span class="token operator">-></span>devno<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> DEV_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">IS_ERR</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>device<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printk</span><span class="token punctuation">(</span>KERN_ERR <span class="token string">"Failed to create device\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ret <span class="token operator">=</span> <span class="token function">PTR_ERR</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>device<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">goto</span> err_device<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+err_device<span class="token operator">:</span>
+    <span class="token function">class_destroy</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">)</span><span class="token punctuation">;</span>
+err_class<span class="token operator">:</span>
+    <span class="token function">cdev_del</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>led_dev<span class="token operator">-></span>cdev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+err_cdev<span class="token operator">:</span>
+    <span class="token function">unregister_chrdev_region</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>devno<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 释放设备号</span>
+err_alloc<span class="token operator">:</span>
+    <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">static</span> <span class="token keyword">void</span> __exit <span class="token function">led_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>   <span class="token comment">/* 关灯 */</span>
+    <span class="token function">led_switch</span><span class="token punctuation">(</span>LED_OFF<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 取消映射 */</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>IMX6U_CCM_CCGR1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>SW_MUX_GPIO1_IO03<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>SW_PAD_GPIO1_IO03<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>GPIO1_DR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">iounmap</span><span class="token punctuation">(</span>GPIO1_GDIR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 释放资源 */</span>
+    <span class="token function">device_destroy</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">,</span> led_dev<span class="token operator">-></span>devno<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">class_destroy</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>class<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">cdev_del</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>led_dev<span class="token operator">-></span>cdev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">unregister_chrdev_region</span><span class="token punctuation">(</span>led_dev<span class="token operator">-></span>devno<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 释放设备号</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span>KERN_INFO <span class="token string">"led dev closed!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">module_init</span><span class="token punctuation">(</span>led_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>led_exit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_AUTHOR</span><span class="token punctuation">(</span><span class="token string">"gdm"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>测试程序chrdevbaseAPP，用于写入字符串</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> fd<span class="token punctuation">,</span> ret<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> readbuf<span class="token punctuation">[</span><span class="token number">30</span><span class="token punctuation">]</span><span class="token punctuation">,</span> writebuf<span class="token punctuation">[</span><span class="token number">30</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>filename <span class="token operator">=</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 打开 */</span>
+    fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> O_RDWR<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 可读可写打开</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fd <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"E: Can not open %s\n"</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">/* 读取选项 */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">memset</span><span class="token punctuation">(</span>readbuf<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>readbuf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ret <span class="token operator">=</span> <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> readbuf<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>writebuf<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"E: read %s filed!\n"</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"read data with %d byte: %s \n"</span><span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>readbuf<span class="token punctuation">)</span><span class="token punctuation">,</span> readbuf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">/* 写入选项 */</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">memcpy</span><span class="token punctuation">(</span>writebuf<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ret <span class="token operator">=</span> <span class="token function">write</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> writebuf<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>writebuf<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"E: write %s filed!\n"</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"write data with %d byte: %s \n"</span><span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>writebuf<span class="token punctuation">)</span><span class="token punctuation">,</span> writebuf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">/* 关闭 */</span>
+    ret <span class="token operator">=</span> <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ret <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"E: Can't close file %s\n"</span><span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"===%s:now running test APP for chrdevbase===\n"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/* 参数判断 */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token punctuation">(</span><span class="token punctuation">(</span>argc <span class="token operator">==</span> <span class="token number">3</span> <span class="token operator">&amp;&amp;</span> <span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span>argc <span class="token operator">==</span> <span class="token number">4</span> <span class="token operator">&amp;&amp;</span> <span class="token function">strcmp</span><span class="token punctuation">(</span>argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"w"</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"E: wrong usage! now argc = %d! argv[2] = %s\n usage:\n\t read:%s %s r \n\t write:%s %s w [str_data]\n"</span><span class="token punctuation">,</span>
+            argc<span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">test</span><span class="token punctuation">(</span>argv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Makefile</p>
+<pre class="line-numbers language-make" data-language="make"><code class="language-make"># &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+# Makefile for building a Linux Kernel Module
+
+# Module Name: led
+
+# &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+# KERNEL_SOURCE 指向你的内核源码或头文件路径
+# 如果你使用系统默认内核头，直接用 &#x2F;lib&#x2F;modules&#x2F;$(shell uname -r)&#x2F;build
+
+KERNEL_SOURCE :&#x3D; &#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;linux&#x2F;driver_learning&#x2F;kernel&#x2F;linux-imx-lf-6.6.52-2.2.1
+OUTPUT_DIR :&#x3D; $(PWD)&#x2F;..&#x2F;output
+
+# 模块源文件
+obj-m :&#x3D; led.o  
+# obj-m 用于告诉内核模块系统需要编译 chrdevbase.c 成为模块
+
+# 默认目标
+# 使用内核的 Makefile 来构建模块
+# -C 指定内核源码路径
+# M&#x3D;$(PWD) 告诉内核在当前目录下查找源文件
+all:
+    arm-none-linux-gnueabihf-gcc -static chrdevbaseAPP.c -o chrdevbaseAPP
+    $(MAKE) -C $(KERNEL_SOURCE) M&#x3D;$(PWD) modules
+    mv .*.cmd *.mod *mod.c *.o *.symvers *.order $(OUTPUT_DIR)
+
+# 清理生成文件
+clean:
+# 使用内核 Makefile 清理模块相关文件
+    $(MAKE) -C $(KERNEL_SOURCE) M&#x3D;$(PWD) clean
+    rm chrdevbaseAPP
+    rm $(OUTPUT_DIR)&#x2F;* $(OUTPUT_DIR)&#x2F;.*.cmd
+
+app:
+    arm-none-linux-gnueabihf-gcc -static chrdevbaseAPP.c -o chrdevbaseAPP
+
+cleanapp:
+    rm chrdevbaseAPP
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3.7k字。于2025/11/25首次发布，最后更新于2025/11/26。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 1. 地址映射介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84%E7%A9%B6%E7%AB%9F%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88"><span class="toc-text"> 1.1. 地址映射究竟在干什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E9%82%A3%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E5%A4%96%E8%AE%BE%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-text"> 1.2. 那如何访问外设寄存器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-text"> 1.3. 常用函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87"><span class="toc-text"> 2. 创建一个字符设备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-step1%E5%AE%9A%E4%B9%89%E6%93%8D%E4%BD%9C%E9%9B%86%E5%90%88"><span class="toc-text"> 2.1. step1.定义操作集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-step2%E7%BC%96%E5%86%99%E5%AE%9E%E9%99%85%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.2. step2.编写实际操作函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-step3%E5%9B%9B%E4%B8%AA%E5%85%B3%E9%94%AE%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-text"> 2.3. step3.四个关键结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-step4%E7%A1%AE%E5%AE%9A%E8%AE%BE%E5%A4%87%E5%8F%B7"><span class="toc-text"> 2.4. step4.确定设备号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-step5%E6%B3%A8%E5%86%8C%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87"><span class="toc-text"> 2.5. step5.注册字符设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#26-step5%E5%88%9B%E5%BB%BA%E8%AE%BE%E5%A4%87%E8%8A%82%E7%82%B9"><span class="toc-text"> 2.6. step5.创建设备节点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%94%80%E6%AF%81%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87"><span class="toc-text"> 3. 销毁一个字符设备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F%E5%8C%85%E5%90%AB%E5%9C%B0%E5%9D%80%E6%98%A0%E5%B0%84"><span class="toc-text"> 4. 完整示例程序，包含地址映射</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9,8],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":38,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

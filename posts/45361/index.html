@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">gpio子系统</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<blockquote>
+<p>衔接上一篇介绍 Pinctrl 子系统的文章。</p>
+</blockquote>
+<h2 id="1-gpio-子系统简介"><a class="markdownIt-Anchor" href="#1-gpio-子系统简介"></a> 1. GPIO 子系统简介</h2>
+<p>如果说 Pinctrl 子系统是负责把“路”铺好（配置引脚模式、电气属性），那么 GPIO 子系统就是负责在路上“跑车”（控制高低电平、读取输入状态）。</p>
+<p>对于嵌入式工程师来说，GPIO（通用输入输出）是最简单、最基础，但也是使用频率最高的子系统。</p>
+<h2 id="2-gpio-子系统的使用"><a class="markdownIt-Anchor" href="#2-gpio-子系统的使用"></a> 2. GPIO 子系统的使用</h2>
+<h3 id="21-step0查阅规范"><a class="markdownIt-Anchor" href="#21-step0查阅规范"></a> 2.1. step0.查阅规范</h3>
+<p>不多说。上篇文章已经提到过。</p>
+<h3 id="22-step1在设备树-dts-中描述"><a class="markdownIt-Anchor" href="#22-step1在设备树-dts-中描述"></a> 2.2. step1.在设备树 (DTS) 中描述</h3>
+<blockquote>
+<p>我们默认已经配置好了GPIO控制器节点。一般来说也不需要配置，官方已配置好。如果想要配置GPIO控制器节点，请查阅编写规范文档，官方已给出例子和要求。控制器基地址查阅参考手册。</p>
+</blockquote>
+<p>我们需要告诉内核：这个设备用到了哪个 GPIO，以及它是高电平有效还是低电平有效。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;* 例子：一个由 GPIO 控制的蜂鸣器节点 *&#x2F;
+beep_device &#123;
+    compatible &#x3D; &quot;my-beep-driver&quot;;
+
+    &#x2F;* 1. 引用 Pinctrl (先铺路) *&#x2F;
+    pinctrl-names &#x3D; &quot;default&quot;;
+    pinctrl-0 &#x3D; &lt;&amp;beep_gpio_pin&gt;;
+
+    &#x2F;* 2. 定义 GPIO (后跑车) *&#x2F;
+    &#x2F;* 格式：&lt;&amp;gpio控制器 引脚索引 标志位&gt; *&#x2F;
+    enable-gpios &#x3D; &lt;&amp;gpio1 0 GPIO_ACTIVE_HIGH&gt;;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>不同厂商写法不同，请对应的参见规范文档。</p>
+</blockquote>
+<p>关于 <code>enable-gpios</code> 这个名字：</p>
+<ul>
+<li>前缀 “enable” 可以自定义，这是我们后续使用API函数查找这个GPIO的索引关键字。</li>
+<li>后缀“-gpios” 是规范的，固定的。</li>
+</ul>
+<h3 id="23-step2在驱动中调用api函数"><a class="markdownIt-Anchor" href="#23-step2在驱动中调用api函数"></a> 2.3. step2.在驱动中调用API函数</h3>
+<p>请转到第4小节。</p>
+<h2 id="3-gpio子系统的工作原理浅析"><a class="markdownIt-Anchor" href="#3-gpio子系统的工作原理浅析"></a> 3. GPIO子系统的工作原理浅析</h2>
+<h3 id="31-系统结构"><a class="markdownIt-Anchor" href="#31-系统结构"></a> 3.1. 系统结构</h3>
+<p>Linux 内核通过 <strong>gpiolib</strong> 框架统一管理 GPIO。该框架包括三部分：</p>
+<ul>
+<li>
+<p><strong>GPIO 控制器驱动</strong>：芯片厂商提供底层的 GPIO 控制器驱动。硬件相关的代码（位于 <code>drivers/gpio/</code> 目录），负责初始化和操作具体的 GPIO 控制器，实现了“读寄存器、写寄存器”的具体函数。</p>
+</li>
+<li>
+<p><strong>GPIO 核心库（gpiolib）</strong>：处于中间的连接层。gpiolib 是 Linux GPIO 子系统的核心，它管理着一张大表，维护所有 GPIO 控制器（gpio_chip）、所有 GPIO 描述符（gpio_desc）、控制器之间的映射关系。提供API函数并转换为底层驱动的调用。</p>
+</li>
+<li>
+<p><strong>GPIO 字符设备接口驱动</strong>：也就是我们写的设备驱动。</p>
+</li>
+</ul>
+<blockquote>
+<p>Pinctrl 和 GPIO 的底层交互:在某些 SoC 架构中，当你调用<code>gpiod_direction_output()</code> 时，GPIO 子系统会在后台自动调用 Pinctrl 子系统的接口，确保引脚复用被强制切回 GPIO 模式。这是一种保险机制，但我们在写 DTS 时，最好还是显式地写清楚 Pinctrl 配置。</p>
+</blockquote>
+<h3 id="32-工作流程"><a class="markdownIt-Anchor" href="#32-工作流程"></a> 3.2. 工作流程</h3>
+<p>一般来说，gpio控制器节点都会有以下两个属性：</p>
+<ul>
+<li><code>gpio-controller</code>：告诉内核这是一个 GPIO 控制器。</li>
+<li><code>#gpio-cells</code>：告诉内核控制器使用几个参数描述 GPIO（如编号和 flags），用于解析。</li>
+</ul>
+<p>从代码层面看，GPIO 子系统的工作流程其实就是<strong>三个核心结构体</strong>之间的交互：</p>
+<ol>
+<li><strong>struct gpio_chip</strong>：代表<strong>硬件控制器</strong>（Provider，厂商写的）。</li>
+<li><strong>struct gpio_desc</strong>：代表<strong>每一个具体的引脚</strong>（Core，内核维护的）。</li>
+<li><strong>struct gpio_ops</strong>：代表<strong>底层操作方法</strong>（读/写寄存器的函数指针）。</li>
+</ol>
+<h4 id="321-注册阶段硬件上线-provider"><a class="markdownIt-Anchor" href="#321-注册阶段硬件上线-provider"></a> 3.2.1. 注册阶段：硬件上线 (Provider)</h4>
+<p>在系统启动时，芯片厂商的驱动加载。它初始化了一个核心结构体 <code>struct gpio_chip</code> 并注册给内核。</p>
+<p><strong>核心结构体：struct gpio_chip</strong><br />
+这是底层驱动与 GPIO 子系统的接口。它包含了“怎么操作硬件”的所有函数指针。</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct gpio_chip &#123;
+    const char *label;     &#x2F;&#x2F; 芯片名字，如 &quot;gpio-rockchip&quot;
+    struct module *owner;
+
+    &#x2F;&#x2F; 核心操作函数指针（这是它的灵魂）
+    int (*get)(struct gpio_chip *gc, unsigned int offset); &#x2F;&#x2F; 读引脚
+    void (*set)(struct gpio_chip *gc, unsigned int offset, int value); &#x2F;&#x2F; 写引脚
+    int (*direction_output)(struct gpio_chip *gc, unsigned int offset, int value);
+
+    int base;              &#x2F;&#x2F; 全局 GPIO 编号基址（现代内核多用 -1 动态分配）
+    u16 ngpio;             &#x2F;&#x2F; 这个控制器有多少个引脚（比如 32 个）
+    &#x2F;&#x2F; ...
+&#125;;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>动作</strong>：调用 <code>gpiochip_add_data(chip)</code>。</li>
+<li><strong>结果</strong>：内核收到这个 <code>chip</code>，知道有 32 个引脚可用，并为每一个引脚创建了下一步的 <code>struct gpio_desc</code>。</li>
+</ul>
+<h4 id="322-初始化阶段生成描述符-core"><a class="markdownIt-Anchor" href="#322-初始化阶段生成描述符-core"></a> 3.2.2. 初始化阶段：生成描述符 (Core)</h4>
+<p>内核为了管理这 32 个引脚，会分配一个数组，数组里存的就是 <code>struct gpio_desc</code>。</p>
+<p><strong>核心结构体：struct gpio_desc</strong><br />
+这是 GPIO 子系统中<strong>最重要</strong>的对象。每一个物理引脚对应一个 <code>gpio_desc</code>。</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct gpio_desc &#123;
+    struct gpio_device *gdev;  &#x2F;&#x2F; 指回所属的 gpio_chip&#x2F;device
+    unsigned long flags;       &#x2F;&#x2F; 记录状态：是输入还是输出？是 Active Low 吗？有没有被占用？
+    const char *label;         &#x2F;&#x2F; 谁在使用它？(用于 debug 显示)
+    const char *name;          &#x2F;&#x2F; 引脚名字
+    &#x2F;&#x2F; ...
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>状态</strong>：此时这些 <code>desc</code> 都在内存里躺着，<code>flags</code> 是空的，等待被申请。</li>
+</ul>
+<h4 id="323-获取阶段驱动申请-consumer"><a class="markdownIt-Anchor" href="#323-获取阶段驱动申请-consumer"></a> 3.2.3. 获取阶段：驱动申请 (Consumer)</h4>
+<p>现在轮到你的驱动代码运行了。</p>
+<ul>
+<li><strong>你的代码</strong>：<code>desc = devm_gpiod_get(dev, &quot;reset&quot;, GPIOD_OUT_LOW);</code></li>
+<li><strong>内核流程</strong>：
+<ul>
+<li><strong>解析 DTS</strong>：内核依据 <code>#gpio-cells</code> 解析设备树，找到 <code>reset-gpios = &lt;gpio1 5 ...&gt;</code></li>
+<li><strong>定位</strong>：根据 handle 找到对应的 <code>gpio_chip</code>（控制器 1），再根据偏移量（5）在数组中找到第 5 个 <strong>struct gpio_desc</strong>。</li>
+<li><strong>配置 Flags</strong>：读取 DTS 里的 <code>GPIO_ACTIVE_LOW</code>，把这个信息记录在 <code>desc-&gt;flags</code> 里的 <code>FLAG_ACTIVE_LOW</code> 位。</li>
+<li><strong>绑定</strong>：把你的驱动名字填入 <code>desc-&gt;label</code>（标记占用）。</li>
+<li><strong>结果</strong>：你拿到了指向这个 <strong>struct gpio_desc</strong> 的指针。</li>
+</ul>
+</li>
+</ul>
+<h4 id="324-控制阶段函数调用链-runtime"><a class="markdownIt-Anchor" href="#324-控制阶段函数调用链-runtime"></a> 3.2.4. 控制阶段：函数调用链 (Runtime)</h4>
+<p>当你调用 <code>gpiod_set_value(desc, 1)</code> 时，内核发生了一次完整的“结构体跳跃”：</p>
+<ol>
+<li><strong>逻辑判断 (GPIOLIB 层)</strong>：函数 <code>gpiod_set_value</code> 接收到你的 <code>desc</code> 和 <code>1</code>。<br />
+它检查 <code>desc-&gt;flags</code>：</li>
+</ol>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;&#x2F; 伪代码逻辑
+if (test_bit(FLAG_ACTIVE_LOW, &amp;desc-&gt;flags))
+    value &#x3D; !value; &#x2F;&#x2F; 如果是低有效，把逻辑 1 翻转为物理 0
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li><strong>硬件操作 (Driver 层)</strong>：它通过 <code>desc</code> 找到所属的 <code>chip</code>，然后调用 <code>chip</code> 里注册的函数指针：</li>
+</ol>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;&#x2F; 伪代码逻辑
+chip-&gt;set(chip, gpio_index, value);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="3">
+<li><strong>寄存器写入</strong>：最终执行到了厂商驱动里具体的代码（例如 <code>rockchip_gpio_set</code>），向物理地址写入电平。</li>
+</ol>
+<h4 id="325-总结"><a class="markdownIt-Anchor" href="#325-总结"></a> 3.2.5. 总结</h4>
+<p>对于工程师来说，只要记住这个链条：</p>
+<ol>
+<li><strong>Provider</strong> 提供 <strong>struct gpio_chip</strong>（含操作函数 <code>set/get</code>）。</li>
+<li><strong>Core</strong> 维护 <strong>struct gpio_desc</strong>（含状态标志 <code>flags</code>，如 Active Low）。</li>
+<li><strong>Consumer</strong> 持有 **struct gpio_desc ***（句柄）。</li>
+<li><strong>调用链</strong>：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">gpiod_set_value()
+⬇️
+检查 desc-&gt;flags (处理极性)
+⬇️
+调用 desc-&gt;gdev-&gt;chip-&gt;set() (硬件回调)
+⬇️
+writel(REG) (物理生效)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-相关api函数"><a class="markdownIt-Anchor" href="#4-相关api函数"></a> 4. 相关API函数</h2>
+<p>这些 API 定义在头文件 <code>#include &lt;linux/gpio/consumer.h&gt;</code> 中。相比老的 <code>gpio_</code> 接口（基于整数索引），<code>gpiod_</code> 接口（基于描述符）是目前内核推荐的标准用法。</p>
+<h3 id="41-核心头文件"><a class="markdownIt-Anchor" href="#41-核心头文件"></a> 4.1. 核心头文件</h3>
+<p>在驱动代码中，必须包含：</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;linux&#x2F;gpio&#x2F;consumer.h&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="42-获取与释放-acquire-release"><a class="markdownIt-Anchor" href="#42-获取与释放-acquire-release"></a> 4.2. 获取与释放 (Acquire &amp; Release)</h3>
+<p>在驱动的 <code>probe</code> 函数中，我们需要获取 GPIO 的句柄（Descriptor）。</p>
+<h4 id="421-a-资源托管方式-推荐"><a class="markdownIt-Anchor" href="#421-a-资源托管方式-推荐"></a> 4.2.1. A. 资源托管方式 (推荐)</h4>
+<p>使用 <code>devm_</code> 前缀的函数，驱动卸载时内核会自动释放 GPIO，无需手动调用 <code>put</code>，防止内存泄漏。</p>
+<ul>
+<li><strong>devm_gpiod_get</strong>:</li>
+</ul>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct gpio_desc *devm_gpiod_get(struct device *dev, const char *con_id, enum gpiod_flags flags);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>功能</strong>：获取一个 GPIO 描述符。<br />
+<strong>参数</strong>：<br />
+- <strong>dev</strong>: 设备指针 (通常是 &amp;pdev-&gt;dev)。<br />
+- <strong>con_id</strong>: 字符串 ID。对应 DTS 中的 xxx-gpios 中的 xxx。如果传 NULL，则匹配 gpios 属性。<br />
+- <strong>flags</strong>: 初始化标志（见下文）。<br />
+<strong>返回值</strong>：成功返回描述符指针；失败返回 ERR_PTR。</p>
+<ul>
+<li><strong>devm_gpiod_get_optional</strong>:</li>
+</ul>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct gpio_desc *devm_gpiod_get_optional(struct device *dev, const char *con_id, enum gpiod_flags flags);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>功能</strong>：同上，但如果 DTS 里没有定义这个 GPIO，它<strong>不会报错</strong>，而是返回 <code>NULL</code>。<br />
+<strong>场景</strong>：用于某些非必须的功能（例如：有的板子有 LED，有的没有，驱动想兼容两者）。</p>
+<h4 id="422-b-初始化标志-flags"><a class="markdownIt-Anchor" href="#422-b-初始化标志-flags"></a> 4.2.2. B. 初始化标志 (Flags)</h4>
+<p>在获取 GPIO 时，可以直接指定初始状态：</p>
+<ul>
+<li><code>GPIOD_ASIS</code>: 不改变当前状态（保持原样）。</li>
+<li><code>GPIOD_IN</code>: 配置为输入。</li>
+<li><code>GPIOD_OUT_LOW</code>: 配置为输出，且初始值为<strong>逻辑低</strong>（关闭）。</li>
+<li><code>GPIOD_OUT_HIGH</code>: 配置为输出，且初始值为<strong>逻辑高</strong>（开启）。</li>
+</ul>
+<h3 id="43-读写控制-read-write"><a class="markdownIt-Anchor" href="#43-读写控制-read-write"></a> 4.3. 读写控制 (Read &amp; Write)</h3>
+<p>拿到 <code>struct gpio_desc *</code> 指针后，就可以操作它了。</p>
+<h4 id="431-a-设置输出值"><a class="markdownIt-Anchor" href="#431-a-设置输出值"></a> 4.3.1. A. 设置输出值</h4>
+<ul>
+<li><strong>gpiod_set_value</strong></li>
+</ul>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void gpiod_set_value(struct gpio_desc *desc, int value);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>功能</strong>：设置 GPIO 输出电平。<br />
+<strong>参数 value</strong>：<br />
+- 1: 设置为 <strong>逻辑有效 (Active)</strong>。<br />
+- 0: 设置为 <strong>逻辑无效 (Inactive)</strong>。<br />
+<strong>注意</strong>：内核会自动处理“高电平有效”还是“低电平有效”。如果 DTS 定义了 <code>GPIO_ACTIVE_LOW</code>，你写 <code>1</code>，实际物理引脚会输出低电平。</p>
+<h4 id="432-b-读取输入值"><a class="markdownIt-Anchor" href="#432-b-读取输入值"></a> 4.3.2. B. 读取输入值</h4>
+<ul>
+<li><strong>gpiod_get_value</strong></li>
+</ul>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">int gpiod_get_value(const struct gpio_desc *desc);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>功能</strong>：读取 GPIO 当前电平。<br />
+<strong>返回值</strong>：<code>1</code> 表示逻辑有效，<code>0</code> 表示逻辑无效。</p>
+<h4 id="433-c-修改方向"><a class="markdownIt-Anchor" href="#433-c-修改方向"></a> 4.3.3. C. 修改方向</h4>
+<ul>
+<li><code>int gpiod_direction_input(struct gpio_desc *desc)</code></li>
+<li><code>int gpiod_direction_output(struct gpio_desc *desc, int value)</code></li>
+</ul>
+<h3 id="44-睡眠与原子操作-sleeping-vs-atomic"><a class="markdownIt-Anchor" href="#44-睡眠与原子操作-sleeping-vs-atomic"></a> 4.4. 睡眠与原子操作 (Sleeping vs Atomic)</h3>
+<p>这是一个容易踩坑的地方。</p>
+<ul>
+<li><strong>SoC 内部 GPIO</strong>：读写速度极快，可以在中断上下文（Atomic Context）中调用。</li>
+<li><strong>扩展芯片 GPIO (如 I2C/SPI 扩展器)</strong>：读写需要通过 I2C/SPI 总线，耗时较长，<strong>会引起睡眠</strong>，不能在中断或自旋锁中调用。</li>
+</ul>
+<p>为了代码的健壮性，如果你不确定 GPIO 是 SoC 内部的还是外部扩展的，或者你在非原子上下文（如线程化的中断、工作队列、普通进程），<strong>建议使用 cansleep 后缀的函数</strong>：</p>
+<ul>
+<li>
+<p><code>gpiod_set_value_cansleep(desc, value)</code></p>
+</li>
+<li>
+<p><code>gpiod_get_value_cansleep(desc)</code></p>
+</li>
+</ul>
+<blockquote>
+<p>如果你的 GPIO 确实连在 I2C 扩展器上，而你用了普通的 gpiod_set_value，内核会打印警告栈回溯 (WARN_ON)。</p>
+</blockquote>
+<h3 id="45-中断相关-interrupts"><a class="markdownIt-Anchor" href="#45-中断相关-interrupts"></a> 4.5. 中断相关 (Interrupts)</h3>
+<p>如果要把 GPIO 当作中断源（比如按键）：</p>
+<ul>
+<li><strong>gpiod_to_irq</strong></li>
+</ul>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">int gpiod_to_irq(const struct gpio_desc *desc);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>功能</strong>：将 GPIO 描述符转换为 Linux 中断号 (IRQ Number)。<br />
+<strong>用法</strong>：拿到返回值 <code>irq</code> 后，传给 <code>request_irq()</code> 或 <code>devm_request_threaded_irq()</code> 来注册中断服务函数。</p>
+<h3 id="46-常用api函数总结"><a class="markdownIt-Anchor" href="#46-常用api函数总结"></a> 4.6. 常用API函数总结</h3>
+<table>
+<thead>
+<tr>
+<th><strong>功能</strong></th>
+<th><strong>普通 API (原子上下文)</strong></th>
+<th><strong>允许睡眠 API (进程上下文)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>设置值</strong></td>
+<td><code>gpiod_set_value</code></td>
+<td><code>gpiod_set_value_cansleep</code></td>
+</tr>
+<tr>
+<td><strong>读取值</strong></td>
+<td><code>gpiod_get_value</code></td>
+<td><code>gpiod_get_value_cansleep</code></td>
+</tr>
+<tr>
+<td><strong>设置方向</strong></td>
+<td><code>gpiod_direction_output</code></td>
+<td>N/A (通常初始化时设定)</td>
+</tr>
+<tr>
+<td><strong>转中断号</strong></td>
+<td><code>gpiod_to_irq</code></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><strong>获取句柄</strong></td>
+<td><code>devm_gpiod_get</code></td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约2.6k字。于2025/11/25首次发布，最后更新于2025/11/25。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+    <p> AI辅助创作：本文部分内容由 <code>Gemini 3 Pro</code> 生成，最终版本由作者审核与修改。<a target="_blank" rel="noopener" href="https://gemini.google.com/">了解该AI模型</a>。</p>
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-gpio-%E5%AD%90%E7%B3%BB%E7%BB%9F%E7%AE%80%E4%BB%8B"><span class="toc-text"> 1. GPIO 子系统简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-gpio-%E5%AD%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text"> 2. GPIO 子系统的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-step0%E6%9F%A5%E9%98%85%E8%A7%84%E8%8C%83"><span class="toc-text"> 2.1. step0.查阅规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-step1%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91-dts-%E4%B8%AD%E6%8F%8F%E8%BF%B0"><span class="toc-text"> 2.2. step1.在设备树 (DTS) 中描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-step2%E5%9C%A8%E9%A9%B1%E5%8A%A8%E4%B8%AD%E8%B0%83%E7%94%A8api%E5%87%BD%E6%95%B0"><span class="toc-text"> 2.3. step2.在驱动中调用API函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-gpio%E5%AD%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90"><span class="toc-text"> 3. GPIO子系统的工作原理浅析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-text"> 3.1. 系统结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text"> 3.2. 工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%9B%B8%E5%85%B3api%E5%87%BD%E6%95%B0"><span class="toc-text"> 4. 相关API函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E6%A0%B8%E5%BF%83%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-text"> 4.1. 核心头文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E8%8E%B7%E5%8F%96%E4%B8%8E%E9%87%8A%E6%94%BE-acquire-release"><span class="toc-text"> 4.2. 获取与释放 (Acquire &amp; Release)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E8%AF%BB%E5%86%99%E6%8E%A7%E5%88%B6-read-write"><span class="toc-text"> 4.3. 读写控制 (Read &amp; Write)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E7%9D%A1%E7%9C%A0%E4%B8%8E%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C-sleeping-vs-atomic"><span class="toc-text"> 4.4. 睡眠与原子操作 (Sleeping vs Atomic)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E4%B8%AD%E6%96%AD%E7%9B%B8%E5%85%B3-interrupts"><span class="toc-text"> 4.5. 中断相关 (Interrupts)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-%E5%B8%B8%E7%94%A8api%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93"><span class="toc-text"> 4.6. 常用API函数总结</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9,8],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":38},{"name":"嵌入式","value":12},{"name":"记录","value":9},{"name":"内核编程","value":8},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"CubeMX配置功能","children":[],"count":5,"path":"嵌入式/CubeMX配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":12,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":9,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":8,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":38,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+
