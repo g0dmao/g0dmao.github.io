@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">IMX6ULL引脚电气属性配置寄存器浅析</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p><strong>IMX6ULL参考手册中，一个电气属性配置寄存器说明如下，我们来解读一下。</strong></p>
+<p><img src="Snipaste_2025-12-08_21-19-18.png" alt="" /></p>
+<p><img src="Snipaste_2025-12-08_21-19-26.png" alt="" /></p>
+<p>这个寄存器属于 <strong>IOMUXC_SNVS</strong>，作用是：</p>
+<p><strong>配置 SNVS_TAMPER1 引脚的电气特性（如上下拉、电驱动能力、开漏、速度等）</strong>。 它<strong>不负责选择复用功能（MUX）</strong>，只负责“PAD 控制”。</p>
+<h2 id="一-寄存器总体功能概述"><a class="markdownIt-Anchor" href="#一-寄存器总体功能概述"></a> 一. <strong>寄存器总体功能概述</strong></h2>
+<p>SW_PAD_CTL_PAD_SNVS_TAMPER1 提供以下功能配置：</p>
+<table>
+<thead>
+<tr>
+<th>功能方向</th>
+<th>子功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入端</td>
+<td>上下拉、保持、迟滞 Hysteresis</td>
+</tr>
+<tr>
+<td>输出端</td>
+<td>开漏使能、驱动强度、slew rate（边沿速度）</td>
+</tr>
+<tr>
+<td>PAD 行为</td>
+<td>SPEED（在 SNVS 区域通常是固定值）</td>
+</tr>
+<tr>
+<td>保护</td>
+<td>部分位保留不用</td>
+</tr>
+</tbody>
+</table>
+<p>下面按位说明。</p>
+<h2 id="二-逐字段解析由高到低位"><a class="markdownIt-Anchor" href="#二-逐字段解析由高到低位"></a> 二. <strong>逐字段解析（由高到低位）</strong></h2>
+<h3 id="3117reserved"><a class="markdownIt-Anchor" href="#3117reserved"></a> <strong>31–17：Reserved</strong></h3>
+<p>这些位保留，写什么都没用。</p>
+<h3 id="16-hys-输入迟滞hysteresis使能"><a class="markdownIt-Anchor" href="#16-hys-输入迟滞hysteresis使能"></a> <strong>16: HYS — 输入迟滞（Hysteresis）使能</strong></h3>
+<p>作用： 让输入信号增加抗抖动能力，在信号接近阈值边缘时不容易误触发。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>不启用迟滞</strong>（输入信号干净时使用）</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>启用迟滞</strong>（抗干扰更好，推荐给按键/慢信号）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1514pus-上下拉电阻配置"><a class="markdownIt-Anchor" href="#1514pus-上下拉电阻配置"></a> <strong>15–14：PUS — 上下拉电阻配置</strong></h3>
+<p>只对输入有效。</p>
+<table>
+<thead>
+<tr>
+<th>PUS 值</th>
+<th>电阻配置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td>100K 下拉</td>
+<td>拉低</td>
+</tr>
+<tr>
+<td>01</td>
+<td>47K 上拉</td>
+<td>稍强的上拉</td>
+</tr>
+<tr>
+<td>10</td>
+<td>100K 上拉</td>
+<td>弱上拉</td>
+</tr>
+<tr>
+<td>11</td>
+<td>22K 上拉</td>
+<td>强上拉</td>
+</tr>
+</tbody>
+</table>
+<p>要使用这些上下拉，必须配合 <strong>PUE=1</strong> 和/或 <strong>PKE=1</strong>。</p>
+<h3 id="13-pue-pull-keeper-选择"><a class="markdownIt-Anchor" href="#13-pue-pull-keeper-选择"></a> <strong>13: PUE — Pull / Keeper 选择</strong></h3>
+<p>决定启用 <strong>Pull</strong> 还是 <strong>Keeper</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Keeper（保持器）启用：用于保持原状态（不是真上下拉）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Pull（真正的上下拉电阻）启用</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一般如果你希望确定逻辑电平（输入），就把 PUE=1。</strong></p>
+<h3 id="12-pke-pullkeeper-使能"><a class="markdownIt-Anchor" href="#12-pke-pullkeeper-使能"></a> <strong>12: PKE — Pull/Keeper 使能</strong></h3>
+<p>是否启用 pull/keeper 模块。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>禁用 Pull/Keeper</td>
+</tr>
+<tr>
+<td>1</td>
+<td>使能 Pull/Keeper（由 PUE 决定是 Pull 还是 Keeper）</td>
+</tr>
+</tbody>
+</table>
+<p>即：PKE=1 时，PUE 决定到底是“pull”还是“keeper”。</p>
+<h3 id="11-ode-开漏输出使能open-drain-enable"><a class="markdownIt-Anchor" href="#11-ode-开漏输出使能open-drain-enable"></a> <strong>11: ODE — 开漏输出使能（Open Drain Enable）</strong></h3>
+<table>
+<thead>
+<tr>
+<th>ODE</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>普通输出模式</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>开漏模式（Open-drain）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>开漏常用于：</p>
+<ul>
+<li>I²C SDA/SCL</li>
+<li>多设备共享信号线</li>
+<li>需要外拉电阻的场景</li>
+</ul>
+<h3 id="108reserved"><a class="markdownIt-Anchor" href="#108reserved"></a> <strong>10–8：Reserved</strong></h3>
+<p>无意义。</p>
+<h3 id="76-speed-io速度通常-read-onlysnvs区域固定"><a class="markdownIt-Anchor" href="#76-speed-io速度通常-read-onlysnvs区域固定"></a> <strong>7–6: SPEED — I/O速度（通常 Read Only，SNVS区域固定）</strong></h3>
+<p>在 SNVS 区域一般固定为：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10b</td>
+<td>medium (100 MHz)</td>
+</tr>
+</tbody>
+</table>
+<p>但 SNVS 的 tamper pin 本质上通常是低速接口，因此 SPEED 通常不重要。</p>
+<h3 id="53-dse-drive-strength驱动能力"><a class="markdownIt-Anchor" href="#53-dse-drive-strength驱动能力"></a> <strong>5–3: DSE — Drive Strength（驱动能力）</strong></h3>
+<p>配置输出引脚的驱动强度（等效电阻 R0/n）。</p>
+<table>
+<thead>
+<tr>
+<th>DSE</th>
+<th>驱动能力</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>000</td>
+<td>关闭输出驱动</td>
+<td>不输出（禁用）</td>
+</tr>
+<tr>
+<td>001</td>
+<td>R0/1</td>
+<td>最强</td>
+</tr>
+<tr>
+<td>010</td>
+<td>R0/2</td>
+<td>强</td>
+</tr>
+<tr>
+<td>011</td>
+<td>R0/3</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>100</td>
+<td>R0/4</td>
+<td></td>
+</tr>
+<tr>
+<td>101</td>
+<td>R0/5</td>
+<td></td>
+</tr>
+<tr>
+<td>110</td>
+<td>R0/6</td>
+<td></td>
+</tr>
+<tr>
+<td>111</td>
+<td>R0/7</td>
+<td>最弱</td>
+</tr>
+</tbody>
+</table>
+<p>驱动越强，负载越大，下降上升越快，但 EMI 可能会增大。</p>
+<h3 id="21reserved"><a class="markdownIt-Anchor" href="#21reserved"></a> <strong>2–1：Reserved</strong></h3>
+<p>不用配置。</p>
+<h3 id="0-sre-slew-rate输出转换速度"><a class="markdownIt-Anchor" href="#0-sre-slew-rate输出转换速度"></a> <strong>0: SRE — Slew Rate（输出转换速度）</strong></h3>
+<p>控制输出电平变化的快慢：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Slow（慢速）→ EMI 小</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Fast（快速）→ 边沿快、驱动高频信号</td>
+</tr>
+</tbody>
+</table>
+<p>一般：</p>
+<ul>
+<li>高频信号 → <strong>Fast（1）</strong></li>
+<li>普通 GPIO → <strong>Slow（0）</strong></li>
+<li>有 EMI 要求 → <strong>Slow（0）</strong></li>
+</ul>
+<h2 id="三-功能汇总"><a class="markdownIt-Anchor" href="#三-功能汇总"></a> 三. <strong>功能汇总</strong></h2>
+<table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>字段</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>输入配置</strong></td>
+<td>HYS</td>
+<td>输入迟滞（抗干扰）</td>
+</tr>
+<tr>
+<td></td>
+<td>PUS</td>
+<td>使用哪种上下拉电阻</td>
+</tr>
+<tr>
+<td></td>
+<td>PUE/PKE</td>
+<td>启用上下拉或保持器</td>
+</tr>
+<tr>
+<td><strong>输出配置</strong></td>
+<td>ODE</td>
+<td>开漏输出</td>
+</tr>
+<tr>
+<td></td>
+<td>DSE</td>
+<td>驱动强度</td>
+</tr>
+<tr>
+<td></td>
+<td>SRE</td>
+<td>信号边沿速度</td>
+</tr>
+<tr>
+<td><strong>常规</strong></td>
+<td>SPEED</td>
+<td>I/O速度（SNVS一般固定）</td>
+</tr>
+<tr>
+<td></td>
+<td>Reserved</td>
+<td>保留位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="四-典型使用例子"><a class="markdownIt-Anchor" href="#四-典型使用例子"></a> 四. <strong>典型使用例子</strong></h2>
+<h3 id="配置为输入上拉"><a class="markdownIt-Anchor" href="#配置为输入上拉"></a> 配置为输入上拉</h3>
+<p>例如一个按键输入：</p>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">HYS</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 开启迟滞</span>
+<span class="token key attr-name">PKE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 使能 pull/keeper</span>
+<span class="token key attr-name">PUE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 使用 pull 模式</span>
+<span class="token key attr-name">PUS</span> <span class="token punctuation">=</span> <span class="token value attr-value">10       # 100K 上拉</span>
+<span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">0        # 输入不需要开漏</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-配置为-i2c-sdascl开漏-上拉"><a class="markdownIt-Anchor" href="#2-配置为-i2c-sdascl开漏-上拉"></a> ② 配置为 I²C SDA/SCL（开漏 + 上拉）</h3>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 开漏</span>
+<span class="token key attr-name">PKE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1</span>
+<span class="token key attr-name">PUE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1</span>
+<span class="token key attr-name">PUS</span> <span class="token punctuation">=</span> <span class="token value attr-value">10       # 上拉</span>
+<span class="token key attr-name">SRE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 快速速度</span>
+<span class="token key attr-name">DSE</span> <span class="token punctuation">=</span> <span class="token value attr-value">110      # R0/6</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-配置为普通-gpio-输出"><a class="markdownIt-Anchor" href="#3-配置为普通-gpio-输出"></a> ③ 配置为普通 GPIO 输出</h3>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">0             # 普通推挽</span>
+<span class="token key attr-name">DSE</span> <span class="token punctuation">=</span> <span class="token value attr-value">100 (R0/4)    # 中等驱动</span>
+<span class="token key attr-name">SRE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1             # 快速或视环境选</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约973字。于2025/12/08首次发布，最后更新于2025/12/08。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%AF%84%E5%AD%98%E5%99%A8%E6%80%BB%E4%BD%93%E5%8A%9F%E8%83%BD%E6%A6%82%E8%BF%B0"><span class="toc-text"> 一. 寄存器总体功能概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E9%80%90%E5%AD%97%E6%AE%B5%E8%A7%A3%E6%9E%90%E7%94%B1%E9%AB%98%E5%88%B0%E4%BD%8E%E4%BD%8D"><span class="toc-text"> 二. 逐字段解析（由高到低位）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3117reserved"><span class="toc-text"> 31–17：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-hys-%E8%BE%93%E5%85%A5%E8%BF%9F%E6%BB%9Ehysteresis%E4%BD%BF%E8%83%BD"><span class="toc-text"> 16: HYS — 输入迟滞（Hysteresis）使能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1514pus-%E4%B8%8A%E4%B8%8B%E6%8B%89%E7%94%B5%E9%98%BB%E9%85%8D%E7%BD%AE"><span class="toc-text"> 15–14：PUS — 上下拉电阻配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-pue-pull-keeper-%E9%80%89%E6%8B%A9"><span class="toc-text"> 13: PUE — Pull &#x2F; Keeper 选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-pke-pullkeeper-%E4%BD%BF%E8%83%BD"><span class="toc-text"> 12: PKE — Pull&#x2F;Keeper 使能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-ode-%E5%BC%80%E6%BC%8F%E8%BE%93%E5%87%BA%E4%BD%BF%E8%83%BDopen-drain-enable"><span class="toc-text"> 11: ODE — 开漏输出使能（Open Drain Enable）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#108reserved"><span class="toc-text"> 10–8：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76-speed-io%E9%80%9F%E5%BA%A6%E9%80%9A%E5%B8%B8-read-onlysnvs%E5%8C%BA%E5%9F%9F%E5%9B%BA%E5%AE%9A"><span class="toc-text"> 7–6: SPEED — I&#x2F;O速度（通常 Read Only，SNVS区域固定）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-dse-drive-strength%E9%A9%B1%E5%8A%A8%E8%83%BD%E5%8A%9B"><span class="toc-text"> 5–3: DSE — Drive Strength（驱动能力）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21reserved"><span class="toc-text"> 2–1：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-sre-slew-rate%E8%BE%93%E5%87%BA%E8%BD%AC%E6%8D%A2%E9%80%9F%E5%BA%A6"><span class="toc-text"> 0: SRE — Slew Rate（输出转换速度）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%8A%9F%E8%83%BD%E6%B1%87%E6%80%BB"><span class="toc-text"> 三. 功能汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E5%85%B8%E5%9E%8B%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90"><span class="toc-text"> 四. 典型使用例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%BA%E8%BE%93%E5%85%A5%E4%B8%8A%E6%8B%89"><span class="toc-text"> 配置为输入上拉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E4%B8%BA-i2c-sdascl%E5%BC%80%E6%BC%8F-%E4%B8%8A%E6%8B%89"><span class="toc-text"> ② 配置为 I²C SDA&#x2F;SCL（开漏 + 上拉）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E4%B8%BA%E6%99%AE%E9%80%9A-gpio-%E8%BE%93%E5%87%BA"><span class="toc-text"> ③ 配置为普通 GPIO 输出</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9,9,5],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":42,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

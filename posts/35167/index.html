@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">linux中断系统基础使用</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>在 Linux 内核开发中，<strong>中断（Interrupt）</strong> 是 CPU 与硬件通信的“急救热线”。如果让 CPU 不断轮询（Polling）硬件状态，效率极低；而中断机制允许硬件在需要时“打断” CPU，极大提升了系统的并发处理能力。</p>
+<p>本文将帮助您理解 Linux 中断处理的顶半部/底半部机制，掌握核心 API。</p>
+<h2 id="1-顶半部和底半部"><a class="markdownIt-Anchor" href="#1-顶半部和底半部"></a> 1. “顶半部”和“底半部”</h2>
+<p>Linux 中断处理的一个黄金法则 是：<strong>快进快出</strong></p>
+<p>当硬件触发中断时，CPU 会暂停当前任务，跳转到中断处理函数。如果这个函数执行时间过长（例如读取大量数据或进行复杂计算），系统就会卡顿，甚至丢失其他重要的中断信号。</p>
+<p>为了解决这个问题，Linux 将中断处理分为两个部分：</p>
+<h3 id="11-顶半部-top-half-hard-irq"><a class="markdownIt-Anchor" href="#11-顶半部-top-half-hard-irq"></a> 1.1. 顶半部 (Top Half / Hard IRQ)</h3>
+<ul>
+<li><strong>角色：</strong> “前台接待员”。</li>
+<li><strong>触发：</strong> 硬件直接触发。</li>
+<li><strong>特点：</strong>
+<ul>
+<li><strong>极快</strong>：只做最紧急的事（如读取寄存器状态、清除中断标志）。</li>
+<li><strong>屏蔽中断</strong>：执行期间通常会屏蔽当前CPU的其他中断。</li>
+<li><strong>不可睡眠</strong>：严禁调用任何可能导致睡眠的函数（如 <code>ssleep</code>, <code>mutex_lock</code>, <code>copy_from_user</code>）。</li>
+</ul>
+</li>
+<li><strong>任务：</strong> 登记任务，将耗时操作推迟给底半部，然后立即返回。</li>
+</ul>
+<h3 id="12-底半部-bottom-half"><a class="markdownIt-Anchor" href="#12-底半部-bottom-half"></a> 1.2. 底半部 (Bottom Half)</h3>
+<ul>
+<li><strong>角色：</strong> “后台处理专员”。</li>
+<li><strong>触发：</strong> 由顶半部调度，在稍后的安全时间执行。</li>
+<li><strong>特点：</strong>
+<ul>
+<li><strong>开中断</strong>：执行时允许响应其他中断。</li>
+</ul>
+<ul>
+<li><strong>灵活</strong>：根据机制不同，有些可以睡眠（Workqueue），有些不行（Softirq/Tasklet）。</li>
+</ul>
+</li>
+<li><strong>常见场景：</strong> 按键消抖、处理数据包、执行长时间计算</li>
+</ul>
+<h4 id="121-常见的底半部机制"><a class="markdownIt-Anchor" href="#121-常见的底半部机制"></a> 1.2.1. 常见的底半部机制</h4>
+<p>选择哪种底半部机制取决于您的具体需求：</p>
+<table>
+<thead>
+<tr>
+<th><strong>机制</strong></th>
+<th><strong>运行上下文</strong></th>
+<th><strong>是否允许睡眠</strong></th>
+<th><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Softirq (软中断)</strong></td>
+<td>中断上下文</td>
+<td><strong>否</strong></td>
+<td>极高并发需求（如网卡驱动）。一般驱动很少直接用。</td>
+</tr>
+<tr>
+<td><strong>Tasklet</strong></td>
+<td>中断上下文</td>
+<td><strong>否</strong></td>
+<td><strong>(旧)</strong> 轻量级任务。但在新内核中逐渐被 Workqueue 取代。</td>
+</tr>
+<tr>
+<td><strong>Workqueue (工作队列)</strong></td>
+<td><strong>进程上下文</strong></td>
+<td><strong>是</strong></td>
+<td><strong>(推荐)</strong> 需要耗时操作、需要睡眠、需要申请大量内存时。</td>
+</tr>
+<tr>
+<td><strong>Threaded IRQ</strong></td>
+<td>进程上下文</td>
+<td><strong>是</strong></td>
+<td><strong>(推荐)</strong> 现代驱动的首选，将中断处理直接线程化。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-irq-资源编号与设备树"><a class="markdownIt-Anchor" href="#2-irq-资源编号与设备树"></a> 2. IRQ 资源编号与设备树</h2>
+<p>在现代 Linux 内核中，绝大多数 SoC 的中断都不再通过固定的“linux 内部 IRQ 号”访问，而是通过 <strong>设备树（Device Tree）描述硬件 → 内核解析 → 统一抽象（irq_domain） → 转换成 Linux IRQ 号</strong> 的方式使用。</p>
+<p>这一层抽象非常重要，因为：</p>
+<ul>
+<li><strong>SoC 的硬件 IRQ 号不是从 0 开始，也不是固定长度</strong></li>
+<li><strong>不同中断控制器（GIC, NVIC, RISC-V PLIC …）的中断号格式完全不同</strong></li>
+<li>DTS 可以统一描述，不需要驱动写死中断号</li>
+</ul>
+<h3 id="21-设备树中的中断描述"><a class="markdownIt-Anchor" href="#21-设备树中的中断描述"></a> 2.1. 设备树中的中断描述</h3>
+<p>在 DTS 中，中断通常由两个属性提供：</p>
+<ol>
+<li><strong>interrupt-parent</strong>：指定使用哪个中断控制器</li>
+<li><strong>interrupts</strong>：描述设备的中断号和触发方式</li>
+</ol>
+<p>例如：</p>
+<pre class="line-numbers language-none"><code class="language-none">mydev: my-device@0 &#123;
+    compatible &#x3D; &quot;gdm,mydev&quot;;
+    reg &#x3D; &lt;0x01c20000 0x1000&gt;;
+
+    interrupt-parent &#x3D; &lt;&amp;gic&gt;;
+    interrupts &#x3D; &lt;33 IRQ_TYPE_LEVEL_LOW&gt;;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>“interrupts” 单元的含义依赖于中断控制器定义的 <strong>#interrupt-cells</strong> 属性。</p>
+<h4 id="211-interrupt-cells-的定义"><a class="markdownIt-Anchor" href="#211-interrupt-cells-的定义"></a> 2.1.1. “#interrupt-cells” 的定义</h4>
+<p>每个中断控制器节点都定义自己的中断参数格式。</p>
+<p>例如 ARM GIC：</p>
+<pre class="line-numbers language-none"><code class="language-none">gic: interrupt-controller@1e001000 &#123;
+    compatible &#x3D; &quot;arm,cortex-a9-gic&quot;;
+    #interrupt-cells &#x3D; &lt;3&gt;;
+    interrupt-controller;
+&#125;;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>表示这个中断控制器的 <code>interrupts = &lt;a b c&gt;</code> 有 <strong>3 个单元</strong>。<br />
+常见格式：</p>
+<table>
+<thead>
+<tr>
+<th>单元序号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>中断类型（0: SPI, 1: PPI）</td>
+</tr>
+<tr>
+<td>1</td>
+<td>硬件中断号</td>
+</tr>
+<tr>
+<td>2</td>
+<td>触发类型（edge/level）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="212-gpio-触发的中断"><a class="markdownIt-Anchor" href="#212-gpio-触发的中断"></a> 2.1.2. GPIO 触发的中断</h4>
+<p>很多 GPIO 控制器也提供中断功能：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">my_button <span class="token punctuation">&#123;</span>
+    gpios <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token operator">&amp;</span>gpio1 <span class="token number">5</span> GPIO_ACTIVE_LOW<span class="token operator">></span><span class="token punctuation">;</span>
+    interrupts <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token number">5</span> IRQ_TYPE_EDGE_FALLING<span class="token operator">></span><span class="token punctuation">;</span>
+    interrupt<span class="token operator">-</span>parent <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token operator">&amp;</span>gpio1<span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注意：<br />
+<code>gpios</code> 与 <code>interrupts</code> 是两回事。<br />
+<code>gpios</code>表示驱动该设备的 GPIO 引脚，<br />
+<code>interrupts</code>表示触发中断的中断号。</p>
+<h3 id="22-内核如何解析设备树中的中断"><a class="markdownIt-Anchor" href="#22-内核如何解析设备树中的中断"></a> 2.2. 内核如何解析设备树中的中断</h3>
+<p>中断解析的三层结构：</p>
+<pre class="line-numbers language-none"><code class="language-none">DTS → irq_domain → Linux IRQ number<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>解析过程：</p>
+<ol>
+<li>
+<p>解析 interrupt-parent 属性<br />
+内核找到你的设备是由哪个中断控制器管理。</p>
+</li>
+<li>
+<p>将 interrupts 中的原生硬件 IRQ 参数交给 irq_domain<br />
+中断控制器在初始化时，会创建对应的 <strong>irq_domain</strong> 对象，用于映射：</p>
+</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">硬件中断号 （hwirq）
+        ↓
+Linux 虚拟 IRQ（virq）
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>
+<p>返回驱动可用的 Linux IRQ<br />
+这个 IRQ 是你在 request_irq() 中使用的。</p>
+</li>
+<li>
+<p>你在驱动中拿到的 IRQ 号 <strong>不是硬件 IRQ</strong>，而是 Linux 分配的虚拟 IRQ（virq）<br />
+所以不能写死 IRQ 数字，必须从 DTS 获取。</p>
+</li>
+</ol>
+<h3 id="23-在驱动中获取设备树中的-irq-号"><a class="markdownIt-Anchor" href="#23-在驱动中获取设备树中的-irq-号"></a> 2.3. 在驱动中获取设备树中的 IRQ 号</h3>
+<h4 id="231-常用方式platform_get_irq"><a class="markdownIt-Anchor" href="#231-常用方式platform_get_irq"></a> 2.3.1. 常用方式：platform_get_irq()</h4>
+<p>最推荐、最通用：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> irq <span class="token operator">=</span> <span class="token function">platform_get_irq</span><span class="token punctuation">(</span>pdev<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>irq <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> irq<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>对应 DTS：</p>
+<pre class="line-numbers language-none"><code class="language-none">interrupts &#x3D; &lt;33 IRQ_TYPE_LEVEL_LOW&gt;;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果有多个中断：</p>
+<pre class="line-numbers language-none"><code class="language-none">interrupts &#x3D; &lt;33 IRQ_TYPE_LEVEL_LOW&gt;,
+             &lt;34 IRQ_TYPE_EDGE_RISING&gt;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>驱动：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">irq0 <span class="token operator">=</span> <span class="token function">platform_get_irq</span><span class="token punctuation">(</span>pdev<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+irq1 <span class="token operator">=</span> <span class="token function">platform_get_irq</span><span class="token punctuation">(</span>pdev<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h4 id="232-一般-gpio-irqgpiod_to_irq"><a class="markdownIt-Anchor" href="#232-一般-gpio-irqgpiod_to_irq"></a> 2.3.2. 一般 GPIO → IRQ：gpiod_to_irq()</h4>
+<p>如果是 GPIO：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">irq<span class="token operator">-</span>gpios <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token operator">&amp;</span>gpio1 <span class="token number">5</span> GPIO_ACTIVE_LOW<span class="token operator">></span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>驱动：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">gpio <span class="token operator">=</span> <span class="token function">gpiod_get</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>pdev<span class="token operator">-></span>dev<span class="token punctuation">,</span> <span class="token string">"irq"</span><span class="token punctuation">,</span> GPIOD_IN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+irq <span class="token operator">=</span> <span class="token function">gpiod_to_irq</span><span class="token punctuation">(</span>gpio<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h4 id="233-旧方法不推荐irq_of_parse_and_map"><a class="markdownIt-Anchor" href="#233-旧方法不推荐irq_of_parse_and_map"></a> 2.3.3. 旧方法（不推荐）：irq_of_parse_and_map()</h4>
+<p>较低级 API，如今主要用于没有 platform_device 的情况。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">irq <span class="token operator">=</span> <span class="token function">irq_of_parse_and_map</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="3-常见api"><a class="markdownIt-Anchor" href="#3-常见api"></a> 3. 常见API</h2>
+<h3 id="31-request_irq注册中断处理程序"><a class="markdownIt-Anchor" href="#31-request_irq注册中断处理程序"></a> 3.1. <code>request_irq()</code>：注册中断处理程序</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">request_irq</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> irq<span class="token punctuation">,</span>
+                <span class="token class-name">irq_handler_t</span> handler<span class="token punctuation">,</span>
+                <span class="token keyword">unsigned</span> <span class="token keyword">long</span> flags<span class="token punctuation">,</span>
+                <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>name<span class="token punctuation">,</span>
+                <span class="token keyword">void</span> <span class="token operator">*</span>dev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>irq</td>
+<td>中断号</td>
+</tr>
+<tr>
+<td>handler</td>
+<td>中断处理函数</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>触发方式，如 IRQF_TRIGGER_FALLING</td>
+</tr>
+<tr>
+<td>name</td>
+<td>/proc/interrupts 显示的名称</td>
+</tr>
+<tr>
+<td>dev</td>
+<td>传给 handler 的参数（通常设备结构体）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-free_irq释放中断"><a class="markdownIt-Anchor" href="#32-free_irq释放中断"></a> 3.2. <code>free_irq()</code>：释放中断</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">free_irq</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span> irq<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>dev<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="33-中断处理函数isr"><a class="markdownIt-Anchor" href="#33-中断处理函数isr"></a> 3.3. 中断处理函数（ISR）</h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">irqreturn_t</span> <span class="token function">my_irq_handler</span><span class="token punctuation">(</span><span class="token keyword">int</span> irq<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>dev_id<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">mydev</span> <span class="token operator">*</span>dev <span class="token operator">=</span> dev_id<span class="token punctuation">;</span>
+
+    <span class="token comment">/* 处理硬件中断：读取状态寄存器、清中断标志… */</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">return</span> IRQ_HANDLED<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注意：</p>
+<ul>
+<li><strong>不能睡眠</strong></li>
+<li><strong>不能使用可能阻塞的 API（如 msleep）</strong></li>
+</ul>
+<h3 id="34-enable_irq-disable_irq"><a class="markdownIt-Anchor" href="#34-enable_irq-disable_irq"></a> 3.4. <code>enable_irq()</code> / <code>disable_irq()</code></h3>
+<p>用于在软件中暂时禁用/启用某个 IRQ：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">disable_irq</span><span class="token punctuation">(</span>irq<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">// 会等待硬件中断执行完毕</span>
+<span class="token function">disable_irq_nosync</span><span class="token punctuation">(</span>irq<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 不等待</span>
+<span class="token function">enable_irq</span><span class="token punctuation">(</span>irq<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="4-底半部机制"><a class="markdownIt-Anchor" href="#4-底半部机制"></a> 4. 底半部机制</h2>
+<h3 id="41-tasklet轻量底半部"><a class="markdownIt-Anchor" href="#41-tasklet轻量底半部"></a> 4.1. tasklet（轻量底半部）</h3>
+<p>创建：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">my_tasklet_func</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">long</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token function">DECLARE_TASKLET</span><span class="token punctuation">(</span>my_tasklet<span class="token punctuation">,</span> my_tasklet_func<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>调度：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">tasklet_schedule</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_tasklet<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="42-workqueue更灵活"><a class="markdownIt-Anchor" href="#42-workqueue更灵活"></a> 4.2. workqueue（更灵活）</h3>
+<p>相比 tasklet，它可以睡眠，也更能处理复杂任务。</p>
+<p>创建工作：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">my_work_func</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">work_struct</span> <span class="token operator">*</span>work<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">mydev</span> <span class="token operator">*</span>dev <span class="token operator">=</span> <span class="token function">container_of</span><span class="token punctuation">(</span>work<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">mydev</span><span class="token punctuation">,</span> work<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 可以执行耗时任务 */</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>初始化：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">INIT_WORK</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>dev<span class="token operator">-></span>work<span class="token punctuation">,</span> my_work_func<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在中断里调度：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">schedule_work</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>dev<span class="token operator">-></span>work<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这是最常用的底半部方式。</p>
+<h2 id="5-中断处理中需要注意的事项"><a class="markdownIt-Anchor" href="#5-中断处理中需要注意的事项"></a> 5. 中断处理中需要注意的事项</h2>
+<h3 id="51-不要睡眠"><a class="markdownIt-Anchor" href="#51-不要睡眠"></a> 5.1. 不要睡眠</h3>
+<p>ISR 禁止使用：</p>
+<ul>
+<li>msleep</li>
+<li>mutex_lock（可能睡眠）</li>
+<li>schedule()</li>
+</ul>
+<h3 id="52-尽可能短"><a class="markdownIt-Anchor" href="#52-尽可能短"></a> 5.2. 尽可能短</h3>
+<ul>
+<li>清状态寄存器</li>
+<li>准备数据</li>
+<li>调度底半部</li>
+</ul>
+<h3 id="53-触发方式匹配硬件"><a class="markdownIt-Anchor" href="#53-触发方式匹配硬件"></a> 5.3. 触发方式匹配硬件</h3>
+<p>常见 flags：</p>
+<ul>
+<li>IRQF_TRIGGER_RISING</li>
+<li>IRQF_TRIGGER_FALLING</li>
+<li>IRQF_TRIGGER_HIGH</li>
+<li>IRQF_TRIGGER_LOW</li>
+<li>IRQF_ONESHOT（配合 threaded irq）</li>
+</ul>
+<h2 id="6-threaded-irq线程化中断"><a class="markdownIt-Anchor" href="#6-threaded-irq线程化中断"></a> 6. Threaded IRQ（线程化中断）</h2>
+<p>Linux 支持把中断处理放到线程里（可睡眠）。适合驱动复杂逻辑。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">request_threaded_irq</span><span class="token punctuation">(</span>irq<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span>
+                     my_thread_fn<span class="token punctuation">,</span>
+                     IRQF_ONESHOT <span class="token operator">|</span> IRQF_TRIGGER_FALLING<span class="token punctuation">,</span>
+                     <span class="token string">"mydev"</span><span class="token punctuation">,</span> dev<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>thread_fn 可以睡眠，非常灵活：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token class-name">irqreturn_t</span> <span class="token function">my_thread_fn</span><span class="token punctuation">(</span><span class="token keyword">int</span> irq<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>dev_id<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">msleep</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// 可以</span>
+    <span class="token keyword">return</span> IRQ_HANDLED<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="7-查看中断情况"><a class="markdownIt-Anchor" href="#7-查看中断情况"></a> 7. 查看中断情况</h2>
+<p>执行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /proc/interrupts<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以看到：</p>
+<ul>
+<li>中断号</li>
+<li>对应 CPU</li>
+<li>触发次数</li>
+<li>对应驱动名称</li>
+</ul>
+<p>例如：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">33</span>:      <span class="token number">1023</span>   GIC   edge   mydev_irq<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1.8k字。于2025/12/08首次发布，最后更新于2025/12/08。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+    <p> AI辅助创作：本文部分内容由 <code>ChatGPT 5</code> 生成，最终版本由作者审核与修改。<a target="_blank" rel="noopener" href="https://chatgpt.com/">了解该AI模型</a>。</p>
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%A1%B6%E5%8D%8A%E9%83%A8%E5%92%8C%E5%BA%95%E5%8D%8A%E9%83%A8"><span class="toc-text"> 1. “顶半部”和“底半部”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E9%A1%B6%E5%8D%8A%E9%83%A8-top-half-hard-irq"><span class="toc-text"> 1.1. 顶半部 (Top Half &#x2F; Hard IRQ)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E5%BA%95%E5%8D%8A%E9%83%A8-bottom-half"><span class="toc-text"> 1.2. 底半部 (Bottom Half)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-irq-%E8%B5%84%E6%BA%90%E7%BC%96%E5%8F%B7%E4%B8%8E%E8%AE%BE%E5%A4%87%E6%A0%91"><span class="toc-text"> 2. IRQ 资源编号与设备树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%AD%E7%9A%84%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0"><span class="toc-text"> 2.1. 设备树中的中断描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E5%86%85%E6%A0%B8%E5%A6%82%E4%BD%95%E8%A7%A3%E6%9E%90%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%AD%E7%9A%84%E4%B8%AD%E6%96%AD"><span class="toc-text"> 2.2. 内核如何解析设备树中的中断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E5%9C%A8%E9%A9%B1%E5%8A%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E6%A0%91%E4%B8%AD%E7%9A%84-irq-%E5%8F%B7"><span class="toc-text"> 2.3. 在驱动中获取设备树中的 IRQ 号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81api"><span class="toc-text"> 3. 常见API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-request_irq%E6%B3%A8%E5%86%8C%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E7%A8%8B%E5%BA%8F"><span class="toc-text"> 3.1. request_irq()：注册中断处理程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-free_irq%E9%87%8A%E6%94%BE%E4%B8%AD%E6%96%AD"><span class="toc-text"> 3.2. free_irq()：释放中断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0isr"><span class="toc-text"> 3.3. 中断处理函数（ISR）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-enable_irq-disable_irq"><span class="toc-text"> 3.4. enable_irq() &#x2F; disable_irq()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%BA%95%E5%8D%8A%E9%83%A8%E6%9C%BA%E5%88%B6"><span class="toc-text"> 4. 底半部机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-tasklet%E8%BD%BB%E9%87%8F%E5%BA%95%E5%8D%8A%E9%83%A8"><span class="toc-text"> 4.1. tasklet（轻量底半部）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-workqueue%E6%9B%B4%E7%81%B5%E6%B4%BB"><span class="toc-text"> 4.2. workqueue（更灵活）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E4%B8%AD%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E4%BA%8B%E9%A1%B9"><span class="toc-text"> 5. 中断处理中需要注意的事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E4%B8%8D%E8%A6%81%E7%9D%A1%E7%9C%A0"><span class="toc-text"> 5.1. 不要睡眠</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%9F%AD"><span class="toc-text"> 5.2. 尽可能短</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E8%A7%A6%E5%8F%91%E6%96%B9%E5%BC%8F%E5%8C%B9%E9%85%8D%E7%A1%AC%E4%BB%B6"><span class="toc-text"> 5.3. 触发方式匹配硬件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-threaded-irq%E7%BA%BF%E7%A8%8B%E5%8C%96%E4%B8%AD%E6%96%AD"><span class="toc-text"> 6. Threaded IRQ（线程化中断）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%9F%A5%E7%9C%8B%E4%B8%AD%E6%96%AD%E6%83%85%E5%86%B5"><span class="toc-text"> 7. 查看中断情况</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",2],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",3],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [6,2,10,4,11,2,4,15,9,9,5],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":42,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+
