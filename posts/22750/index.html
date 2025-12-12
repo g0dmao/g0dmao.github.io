@@ -89,7 +89,7 @@
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--文章详情页-->
 <div class="meta" style="margin: auto;">
-    <h1 style="text-align: center;">设备树、pinctrl、gpio、中断的实验</h1>
+    <h1 style="text-align: center;">按键驱动综合实验和ioctl功能介绍</h1>
 </div>
 
 <div class="a_container">
@@ -100,20 +100,20 @@
 </div>
 </details>
 <hr />
-<h2 id="实验内容"><a class="markdownIt-Anchor" href="#实验内容"></a> 实验内容</h2>
-<p>在设备树中添加按键外设“key”，同时使用pinctrl和gpio子系统，并使用中断系统进行消抖、读取按键值。</p>
+<h2 id="1-实验内容"><a class="markdownIt-Anchor" href="#1-实验内容"></a> 1. 实验内容</h2>
+<p>在设备树中添加按键外设“key”，同时使用pinctrl和gpio子系统，并使用中断系统启动定时器，并利用定时器进行消抖、读取按键值。</p>
 <ul>
-<li>知识点：设备树、pinctrl、gpio、中断<br />
-未涉及INPUT子系统，还没学到</li>
+<li>知识点：设备树、pinctrl、gpio、中断、ioctl、timer<br />
+未涉及INPUT子系统，还没学到。。。</li>
 </ul>
-<h2 id="查询手册并配置pinctrl-gpio-dts"><a class="markdownIt-Anchor" href="#查询手册并配置pinctrl-gpio-dts"></a> 查询手册并配置Pinctrl、GPIO、dts</h2>
+<h2 id="2-查询手册并配置pinctrl-gpio-dts"><a class="markdownIt-Anchor" href="#2-查询手册并配置pinctrl-gpio-dts"></a> 2. 查询手册并配置Pinctrl、GPIO、dts</h2>
 <p>查询原理图：key使用的引脚名为 SNVS_TAMPER1</p>
 <p><img src="Snipaste_2025-12-08_21-39-28.png" alt="" /></p>
 <p>查询参考手册，搜索“SNVS_TAMPER1”<br />
 该引脚可复用为 GPIO5_IO01：<strong>——GPIO子系统配置条件已就绪</strong></p>
 <p><img src="Snipaste_2025-12-08_21-16-29.png" alt="" /></p>
 <p>现在明确了pinctrl子系统的复用，还要配置电气属性。</p>
-<p>在参考手册找到 SW_PAD_CTL_PAD_SNVS_TAMPER1 SW PAD Control，该寄存器用于配置 GPIO5_IO01 引脚的电器属性，各个位的含义我专门写了一篇文章，这里就不细说了。我们需要：</p>
+<p>在参考手册找到 SW_PAD_CTL_PAD_SNVS_TAMPER1 SW PAD Control，该寄存器用于配置 GPIO5_IO01 引脚的电器属性，各个位的含义我专门写了一篇文章——参见<a href="https://blog.godmao.top/posts/21397/">IMX6ULL引脚电气属性配置寄存器浅析</a>，这里就不细说了。我们需要：</p>
 <ul>
 <li>第16位 HYS 启用输入迟滞：1</li>
 <li>第15-14位 PUS 启用100k下拉：00</li>
@@ -130,7 +130,7 @@
     pinctrl_key: keygrp&#123;
         fsl,pins &#x3D; &lt;
             MX6ULL_PAD_SNVS_TAMPER1__GPIO5_IO01 0x13080
-        &gt;
+        &gt;;
     &#125;;
 &#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>中断的属性也可以写了，就是interrupt-parent和interrupts这两个，我们触发方式设置为双边沿触发，中断宏定义在include/linux/irq.h</p>
@@ -146,13 +146,180 @@
         interrupt-parent &#x3D; &lt;&amp;gpio5&gt;;
         interrupts &#x3D; &lt;1 IRQ_TYPE_EDGE_BOTH&gt;;
         status &#x3D; &quot;okay&quot;;
-    &#125;
+    &#125;;
 &#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后在内核源码根目录下编译一波：<code>make dtbs</code></p>
+<h2 id="3-验证使用ftp把dts传到开发板"><a class="markdownIt-Anchor" href="#3-验证使用ftp把dts传到开发板"></a> 3. 验证：使用ftp把dts传到开发板</h2>
+<p>使用ftp文件传输到开发板相关方法，参见——<a href="https://blog.godmao.top/posts/26288">mx6ull开发版移植nxp官方u-boot</a></p>
+<p>这里主要讲一下如何将nxp官方的uboot启动命令修改为“使用ftp从网络中下载dts”而不是mmc中的dts,不然你每次启动还是从mmc中加载</p>
+<p>进入到 uboot 界面，使用 <code>pri</code> 命令查看环境变量，看bootcmd命令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">bootcmd</span><span class="token operator">=</span>run findfdt<span class="token punctuation">;</span>run findtee<span class="token punctuation">;</span>mmc dev <span class="token variable">$&#123;mmcdev&#125;</span><span class="token punctuation">;</span>mmc dev <span class="token variable">$&#123;mmcdev&#125;</span><span class="token punctuation">;</span> <span class="token keyword">if</span> mmc rescan<span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token keyword">if</span> run loadbootscript<span class="token punctuation">;</span> <span class="token keyword">then</span> run bootscript<span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> run loadimage<span class="token punctuation">;</span> <span class="token keyword">then</span> run mmcboot<span class="token punctuation">;</span> <span class="token keyword">else</span> run netboot<span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token keyword">else</span> run netboot<span class="token punctuation">;</span> <span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>使用递归的思想分析一波，设备启动后会进入 <code>run loadimage</code> 分支运行，最后运行 <code>mmcboot</code> 因此我们看mmcboot</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> Booting from mmc <span class="token punctuation">..</span>.<span class="token punctuation">;</span> run mmcargs<span class="token punctuation">;</span> <span class="token keyword">if</span> <span class="token builtin class-name">test</span> <span class="token variable">$&#123;tee&#125;</span> <span class="token operator">=</span> <span class="token function">yes</span><span class="token punctuation">;</span> <span class="token keyword">then</span> run loadfdt<span class="token punctuation">;</span> run loadtee<span class="token punctuation">;</span> bootm <span class="token variable">$&#123;tee_addr&#125;</span> - <span class="token variable">$&#123;fdt_addr&#125;</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token builtin class-name">test</span> <span class="token variable">$&#123;boot_fdt&#125;</span> <span class="token operator">=</span> <span class="token function">yes</span> <span class="token operator">||</span> <span class="token builtin class-name">test</span> <span class="token variable">$&#123;boot_fdt&#125;</span> <span class="token operator">=</span> try<span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token keyword">if</span> run loadfdt<span class="token punctuation">;</span> <span class="token keyword">then</span> bootz <span class="token variable">$&#123;loadaddr&#125;</span> - <span class="token variable">$&#123;fdt_addr&#125;</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token builtin class-name">test</span> <span class="token variable">$&#123;boot_fdt&#125;</span> <span class="token operator">=</span> try<span class="token punctuation">;</span> <span class="token keyword">then</span> bootz<span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token builtin class-name">echo</span> WARN: Cannot load the DT<span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token keyword">else</span> bootz<span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token keyword">fi</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>注意到 <code>loadfdt</code>，推测这应该就是load dts文件脚本，转到 <code>loadfdt</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">fatload</span><span class="token operator">=</span>mmc <span class="token variable">$&#123;mmcdev&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;mmcpart&#125;</span> <span class="token variable">$&#123;fdt_addr&#125;</span> <span class="token variable">$&#123;fdt_file&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>还真是兄弟，直接改一手：dtb名字自己确定</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">setenv fatload <span class="token string">"tftp 0x83000000 imx6ull-gdm-emmc.dtb"</span>
+saveenv<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>那么就ok啦，直接参考上面那篇文章网络传输dtb吧！</p>
+<p>下载启动后，查看</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /proc/device-tree/mykey
+<span class="token function">ls</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>确有此节点并且属性与设备树文件里的一致。</p>
+<h2 id="4-ioctl介绍"><a class="markdownIt-Anchor" href="#4-ioctl介绍"></a> 4. ioctl介绍</h2>
+<h3 id="41-为什么需要-ioctl"><a class="markdownIt-Anchor" href="#41-为什么需要-ioctl"></a> 4.1. 为什么需要 ioctl？</h3>
+<p>字符设备驱动一般会提供 <strong>read、write</strong> 接口，而 read/write 主要用于：</p>
+<ul>
+<li>read：从设备读数据</li>
+<li>write：往设备写数据</li>
+</ul>
+<p>但驱动经常有一些“不是读写”的功能，比如：</p>
+<ul>
+<li>设置按键工作模式</li>
+<li>获取某个按键的值</li>
+<li>清除缓冲区</li>
+<li>开/关 LED</li>
+<li>获取设备状态</li>
+<li>执行复位</li>
+<li>调节参数（如 PWM、波特率）</li>
+</ul>
+<p>这些事情不是数据流，而是 <strong>命令</strong>。<br />
+read/write 是拿来传数据的，不适合传“指令”。</p>
+<p>于是内核提供了一个专门用于“发送命令”的接口：<br />
+<strong>ioctl：I/O control（输入输出控制）</strong></p>
+<p>它的作用就是：<br />
+<strong>用户程序给驱动发送一个命令，驱动执行对应的动作。</strong></p>
+<h3 id="42-ioctl-的模型用超通俗生活化比喻解释"><a class="markdownIt-Anchor" href="#42-ioctl-的模型用超通俗生活化比喻解释"></a> 4.2. ioctl 的模型（用超通俗生活化比喻解释）</h3>
+<p>把驱动想象成一部“电器”，比如一个空调，你可以：</p>
+<ul>
+<li>read → 读取当前温度</li>
+<li>write → 写入要显示的内容</li>
+<li>ioctl → 控制空调的功能（调温度、开关机、风速）</li>
+</ul>
+<p>也就是说：<br />
+<strong>ioctl 就是“控制面板上的按钮”。</strong><br />
+用户程序通过 ioctl 给驱动发命令，驱动根据不同命令执行操作。</p>
+<h3 id="43-ioctl-函数的原型"><a class="markdownIt-Anchor" href="#43-ioctl-函数的原型"></a> 4.3. ioctl 函数的原型</h3>
+<p>驱动里必须实现一个函数：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">long</span> <span class="token function">unlocked_ioctl</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>filp<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> cmd<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> arg<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>参数解释：</p>
+<ul>
+<li><strong>cmd</strong>：命令编号（告诉驱动要做什么）</li>
+<li><strong>arg</strong>：命令的数据（比如 key_id、温度等）</li>
+</ul>
+<h3 id="44-cmd-是怎么设计的魔数-命令号-数据类型"><a class="markdownIt-Anchor" href="#44-cmd-是怎么设计的魔数-命令号-数据类型"></a> 4.4. cmd 是怎么设计的？（魔数 + 命令号 + 数据类型）</h3>
+<p>Linux 使用宏来构造 ioctl 命令：</p>
+<ul>
+<li><code>_IO()</code></li>
+<li><code>_IOR()</code></li>
+<li><code>_IOW()</code></li>
+<li><code>_IOWR()</code></li>
+</ul>
+<p>这些宏会构造命令码，并把隐藏信息编码进去。<br />
+例如：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">KEY_IOCTL_MAGIC</span> <span class="token char">'K'</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">KEY_GET_VALUE</span>   <span class="token expression"><span class="token function">_IOWR</span><span class="token punctuation">(</span>KEY_IOCTL_MAGIC<span class="token punctuation">,</span> <span class="token number">0x01</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>展开后，命令码包含信息：</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>魔数 <code>'K'</code></td>
+<td>标识该命令属于 Key 驱动</td>
+</tr>
+<tr>
+<td>命令号 <code>0x01</code></td>
+<td>这条命令是第一个功能</td>
+</tr>
+<tr>
+<td>操作方向 <code>IOWR</code></td>
+<td>读写用户空间</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<p>这样做能保证不同驱动不会冲突。</p>
+<h3 id="45-arg-参数是什么"><a class="markdownIt-Anchor" href="#45-arg-参数是什么"></a> 4.5. arg 参数是什么？</h3>
+<p>看函数原型：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">long</span> <span class="token function">unlocked_ioctl</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> arg<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>arg 是一个“数字”，但为了传数据，通常我们让用户传 <strong>指针</strong>：</p>
+<p>用户态：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> key_id <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token function">ioctl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> KEY_GET_VALUE<span class="token punctuation">,</span> <span class="token operator">&amp;</span>key_id<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>驱动态：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">copy_from_user</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>key_id<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span>arg<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>也就是说：<br />
+arg = 用户空间的数据地址<br />
+驱动读/写这个地址完成<strong>数据交互</strong>——也就是说，我把一个数据通过这个变量传入进驱动，驱动把要返回的数据通过这个变量再传回来</p>
+<h3 id="46-ioctl-内部流程非常清晰"><a class="markdownIt-Anchor" href="#46-ioctl-内部流程非常清晰"></a> 4.6. ioctl 内部流程（非常清晰）</h3>
+<p>假设你要读某个按键：<br />
+用户程序：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> key_id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token function">ioctl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> KEY_GET_VALUE<span class="token punctuation">,</span> <span class="token operator">&amp;</span>key_id<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>驱动里发生的事情：</p>
+<ol>
+<li>内核把命令放进 unlocked_ioctl</li>
+<li>驱动判断 cmd 是哪个指令</li>
+<li>使用 <code>copy_from_user</code> 获取用户传来的 key_id</li>
+<li>根据 key_id 获取按键值</li>
+<li>使用 <code>copy_to_user</code> 把按键值写回 arg 指向的用户变量</li>
+</ol>
+<p>最终用户程序里的 key_id 变成：<code>key2 的值</code></p>
+<h3 id="47-ioctl-是如何区分命令的"><a class="markdownIt-Anchor" href="#47-ioctl-是如何区分命令的"></a> 4.7. ioctl 是如何区分命令的？</h3>
+<p>驱动里会写：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">switch</span> <span class="token punctuation">(</span>cmd<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">case</span> KEY_GET_VALUE<span class="token operator">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">case</span> KEY_SET_MODE<span class="token operator">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>cmd 就像电话打进来时的“分机号”，告诉驱动要执行哪个功能。</p>
+<h3 id="48-小结"><a class="markdownIt-Anchor" href="#48-小结"></a> 4.8. 小结</h3>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>read</td>
+<td>获取数据流</td>
+</tr>
+<tr>
+<td>write</td>
+<td>发送数据流</td>
+</tr>
+<tr>
+<td>ioctl</td>
+<td>执行控制命令</td>
+</tr>
+</tbody>
+</table>
+<p>ioctl 原理：</p>
+<ol>
+<li>用户程序调用 ioctl(fd, cmd, arg)</li>
+<li>内核把 cmd 和 arg 传给驱动的 unlocked_ioctl</li>
+<li>驱动根据 cmd 执行不同操作</li>
+<li>arg 用于传入参数或返回结果</li>
+<li>命令码用魔数+编号生成，防止冲突</li>
+</ol>
+<h2 id="5-编写实验代码"><a class="markdownIt-Anchor" href="#5-编写实验代码"></a> 5. 编写实验代码</h2>
+<p><img src="readme.png" alt="" /></p>
+<p><a target="_blank" rel="noopener" href="https://file.godmao.top/@s/IlaXAvGm">代码下载</a></p>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约487字。于2025/12/08首次发布，最后更新于2025/12/08。 </p>
+<p>共计约1.8k字。于2025/12/08首次发布，最后更新于2025/12/12。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -186,7 +353,7 @@
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="toc-text"> 实验内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%8B%E5%86%8C%E5%B9%B6%E9%85%8D%E7%BD%AEpinctrl-gpio-dts"><span class="toc-text"> 查询手册并配置Pinctrl、GPIO、dts</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="toc-text"> 1. 实验内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%89%8B%E5%86%8C%E5%B9%B6%E9%85%8D%E7%BD%AEpinctrl-gpio-dts"><span class="toc-text"> 2. 查询手册并配置Pinctrl、GPIO、dts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E4%BD%BF%E7%94%A8ftp%E6%8A%8Adts%E4%BC%A0%E5%88%B0%E5%BC%80%E5%8F%91%E6%9D%BF"><span class="toc-text"> 3. 验证：使用ftp把dts传到开发板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ioctl%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 4. ioctl介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ioctl"><span class="toc-text"> 4.1. 为什么需要 ioctl？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-ioctl-%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%94%A8%E8%B6%85%E9%80%9A%E4%BF%97%E7%94%9F%E6%B4%BB%E5%8C%96%E6%AF%94%E5%96%BB%E8%A7%A3%E9%87%8A"><span class="toc-text"> 4.2. ioctl 的模型（用超通俗生活化比喻解释）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-ioctl-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8E%9F%E5%9E%8B"><span class="toc-text"> 4.3. ioctl 函数的原型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-cmd-%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%AD%94%E6%95%B0-%E5%91%BD%E4%BB%A4%E5%8F%B7-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 4.4. cmd 是怎么设计的？（魔数 + 命令号 + 数据类型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-arg-%E5%8F%82%E6%95%B0%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 4.5. arg 参数是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-ioctl-%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B%E9%9D%9E%E5%B8%B8%E6%B8%85%E6%99%B0"><span class="toc-text"> 4.6. ioctl 内部流程（非常清晰）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47-ioctl-%E6%98%AF%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E5%91%BD%E4%BB%A4%E7%9A%84"><span class="toc-text"> 4.7. ioctl 是如何区分命令的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48-%E5%B0%8F%E7%BB%93"><span class="toc-text"> 4.8. 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BC%96%E5%86%99%E5%AE%9E%E9%AA%8C%E4%BB%A3%E7%A0%81"><span class="toc-text"> 5. 编写实验代码</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -439,13 +606,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":43},{"name":"嵌入式","value":13},{"name":"记录","value":11},{"name":"内核编程","value":11},{"name":"入门","value":7}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":43},{"name":"嵌入式","value":13},{"name":"记录","value":11},{"name":"内核编程","value":11},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -494,7 +661,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":42,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":43,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

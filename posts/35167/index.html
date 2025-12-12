@@ -346,6 +346,25 @@ irq <span class="token operator">=</span> <span class="token function">gpiod_to_
 <li><strong>不能睡眠</strong></li>
 <li><strong>不能使用可能阻塞的 API（如 msleep）</strong></li>
 </ul>
+<p>返回值：</p>
+<ul>
+<li>
+<p><code>IRQ_HANDLED</code><br />
+表示：</p>
+<ul>
+<li>中断被这个 handler 正常处理了</li>
+<li>内核会认为这个中断“属于你”</li>
+</ul>
+</li>
+<li>
+<p><code>IRQ_NONE</code><br />
+表示：</p>
+<ul>
+<li>这个中断不属于你</li>
+<li>通常用于共享中断线（例如 PCI）</li>
+</ul>
+</li>
+</ul>
 <h3 id="34-enable_irq-disable_irq"><a class="markdownIt-Anchor" href="#34-enable_irq-disable_irq"></a> 3.4. <code>enable_irq()</code> / <code>disable_irq()</code></h3>
 <p>用于在软件中暂时禁用/启用某个 IRQ：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">disable_irq</span><span class="token punctuation">(</span>irq<span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">// 会等待硬件中断执行完毕</span>
@@ -424,7 +443,7 @@ irq <span class="token operator">=</span> <span class="token function">gpiod_to_
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约1.8k字。于2025/12/08首次发布，最后更新于2025/12/08。 </p>
+<p>共计约1.9k字。于2025/12/08首次发布，最后更新于2025/12/10。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -713,13 +732,13 @@ irq <span class="token operator">=</span> <span class="token function">gpiod_to_
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":43},{"name":"嵌入式","value":13},{"name":"记录","value":11},{"name":"内核编程","value":11},{"name":"入门","value":7}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":42},{"name":"嵌入式","value":13},{"name":"内核编程","value":11},{"name":"记录","value":10},{"name":"入门","value":7}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":43},{"name":"嵌入式","value":13},{"name":"记录","value":11},{"name":"内核编程","value":11},{"name":"入门","value":7}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -768,7 +787,7 @@ irq <span class="token operator">=</span> <span class="token function">gpiod_to_
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":10,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":42,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":13,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":11,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":1,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":5,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":43,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":7,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
