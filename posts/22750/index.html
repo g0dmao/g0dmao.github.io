@@ -189,7 +189,7 @@ read/write 是拿来传数据的，不适合传“指令”。</p>
 <strong>ioctl：I/O control（输入输出控制）</strong></p>
 <p>它的作用就是：<br />
 <strong>用户程序给驱动发送一个命令，驱动执行对应的动作。</strong></p>
-<h3 id="42-ioctl-的模型用超通俗生活化比喻解释"><a class="markdownIt-Anchor" href="#42-ioctl-的模型用超通俗生活化比喻解释"></a> 4.2. ioctl 的模型（用超通俗生活化比喻解释）</h3>
+<h3 id="42-ioctl-的模型"><a class="markdownIt-Anchor" href="#42-ioctl-的模型"></a> 4.2. ioctl 的模型</h3>
 <p>把驱动想象成一部“电器”，比如一个空调，你可以：</p>
 <ul>
 <li>read → 读取当前温度</li>
@@ -207,7 +207,8 @@ read/write 是拿来传数据的，不适合传“指令”。</p>
 <li><strong>cmd</strong>：命令编号（告诉驱动要做什么）</li>
 <li><strong>arg</strong>：命令的数据（比如 key_id、温度等）</li>
 </ul>
-<h3 id="44-cmd-是怎么设计的魔数-命令号-数据类型"><a class="markdownIt-Anchor" href="#44-cmd-是怎么设计的魔数-命令号-数据类型"></a> 4.4. cmd 是怎么设计的？（魔数 + 命令号 + 数据类型）</h3>
+<h3 id="44-cmd-是怎么设计的"><a class="markdownIt-Anchor" href="#44-cmd-是怎么设计的"></a> 4.4. cmd 是怎么设计的？</h3>
+<p><strong>魔数 + 命令号 + 数据类型。</strong></p>
 <p>Linux 使用宏来构造 ioctl 命令：</p>
 <ul>
 <li><code>_IO()</code></li>
@@ -258,7 +259,7 @@ read/write 是拿来传数据的，不适合传“指令”。</p>
 <p>也就是说：<br />
 arg = 用户空间的数据地址<br />
 驱动读/写这个地址完成<strong>数据交互</strong>——也就是说，我把一个数据通过这个变量传入进驱动，驱动把要返回的数据通过这个变量再传回来</p>
-<h3 id="46-ioctl-内部流程非常清晰"><a class="markdownIt-Anchor" href="#46-ioctl-内部流程非常清晰"></a> 4.6. ioctl 内部流程（非常清晰）</h3>
+<h3 id="46-ioctl-内部流程"><a class="markdownIt-Anchor" href="#46-ioctl-内部流程"></a> 4.6. ioctl 内部流程</h3>
 <p>假设你要读某个按键：<br />
 用户程序：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> key_id <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
@@ -353,7 +354,7 @@ arg = 用户空间的数据地址<br />
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="toc-text"> 1. 实验内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%89%8B%E5%86%8C%E5%B9%B6%E9%85%8D%E7%BD%AEpinctrl-gpio-dts"><span class="toc-text"> 2. 查询手册并配置Pinctrl、GPIO、dts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E4%BD%BF%E7%94%A8ftp%E6%8A%8Adts%E4%BC%A0%E5%88%B0%E5%BC%80%E5%8F%91%E6%9D%BF"><span class="toc-text"> 3. 验证：使用ftp把dts传到开发板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ioctl%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 4. ioctl介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ioctl"><span class="toc-text"> 4.1. 为什么需要 ioctl？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-ioctl-%E7%9A%84%E6%A8%A1%E5%9E%8B%E7%94%A8%E8%B6%85%E9%80%9A%E4%BF%97%E7%94%9F%E6%B4%BB%E5%8C%96%E6%AF%94%E5%96%BB%E8%A7%A3%E9%87%8A"><span class="toc-text"> 4.2. ioctl 的模型（用超通俗生活化比喻解释）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-ioctl-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8E%9F%E5%9E%8B"><span class="toc-text"> 4.3. ioctl 函数的原型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-cmd-%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E7%9A%84%E9%AD%94%E6%95%B0-%E5%91%BD%E4%BB%A4%E5%8F%B7-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text"> 4.4. cmd 是怎么设计的？（魔数 + 命令号 + 数据类型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-arg-%E5%8F%82%E6%95%B0%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 4.5. arg 参数是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-ioctl-%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B%E9%9D%9E%E5%B8%B8%E6%B8%85%E6%99%B0"><span class="toc-text"> 4.6. ioctl 内部流程（非常清晰）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47-ioctl-%E6%98%AF%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E5%91%BD%E4%BB%A4%E7%9A%84"><span class="toc-text"> 4.7. ioctl 是如何区分命令的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48-%E5%B0%8F%E7%BB%93"><span class="toc-text"> 4.8. 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BC%96%E5%86%99%E5%AE%9E%E9%AA%8C%E4%BB%A3%E7%A0%81"><span class="toc-text"> 5. 编写实验代码</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="toc-text"> 1. 实验内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%89%8B%E5%86%8C%E5%B9%B6%E9%85%8D%E7%BD%AEpinctrl-gpio-dts"><span class="toc-text"> 2. 查询手册并配置Pinctrl、GPIO、dts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E4%BD%BF%E7%94%A8ftp%E6%8A%8Adts%E4%BC%A0%E5%88%B0%E5%BC%80%E5%8F%91%E6%9D%BF"><span class="toc-text"> 3. 验证：使用ftp把dts传到开发板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ioctl%E4%BB%8B%E7%BB%8D"><span class="toc-text"> 4. ioctl介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-ioctl"><span class="toc-text"> 4.1. 为什么需要 ioctl？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-ioctl-%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="toc-text"> 4.2. ioctl 的模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-ioctl-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8E%9F%E5%9E%8B"><span class="toc-text"> 4.3. ioctl 函数的原型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-cmd-%E6%98%AF%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E7%9A%84"><span class="toc-text"> 4.4. cmd 是怎么设计的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-arg-%E5%8F%82%E6%95%B0%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 4.5. arg 参数是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-ioctl-%E5%86%85%E9%83%A8%E6%B5%81%E7%A8%8B"><span class="toc-text"> 4.6. ioctl 内部流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#47-ioctl-%E6%98%AF%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E5%91%BD%E4%BB%A4%E7%9A%84"><span class="toc-text"> 4.7. ioctl 是如何区分命令的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#48-%E5%B0%8F%E7%BB%93"><span class="toc-text"> 4.8. 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BC%96%E5%86%99%E5%AE%9E%E9%AA%8C%E4%BB%A3%E7%A0%81"><span class="toc-text"> 5. 编写实验代码</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
