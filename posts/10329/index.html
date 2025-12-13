@@ -89,230 +89,216 @@
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--文章详情页-->
 <div class="meta" style="margin: auto;">
-    <h1 style="text-align: center;">markdown渲染器测试</h1>
+    <h1 style="text-align: center;">Platform设备模型</h1>
 </div>
 
 <div class="a_container">
     <div id="article">
-        <p><ul class="markdownIt-TOC">
-<li><a href="#%E6%A0%87%E9%A2%982">标题2</a>
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-为什么使用platform"><a class="markdownIt-Anchor" href="#1-为什么使用platform"></a> 1. 为什么使用platform？</h2>
+<p>为了可移植性、兼容性，复用性，实现硬件和驱动的分离，让设备驱动可以在不同的板子上跑。</p>
+<p><img src="Snipaste_2025-12-13_21-11-35.png" alt="" /></p>
+<h2 id="2-platform-设备模型适合哪些设备"><a class="markdownIt-Anchor" href="#2-platform-设备模型适合哪些设备"></a> 2. Platform 设备模型适合哪些设备？</h2>
+<p>在 Linux 内核中，像 USB、PCI、I2C 这种设备可以自动被总线发现。但很多嵌入式系统的 SoC 内部外设（如 GPIO、RTC、UART、LCD、I2C-contrller）是直接通过内存映射（Memory-mapped）访问的，CPU 无法自动“感知”它们的存在。</p>
+<p><strong>Platform 总线</strong>就是为了管理这些“挂在内存上”的设备而诞生的。</p>
+<h2 id="3-理解-platform-模型"><a class="markdownIt-Anchor" href="#3-理解-platform-模型"></a> 3. 理解 Platform 模型</h2>
+<p>Platform 模型的核心思想是 <strong>“分层”</strong>：将<strong>硬件信息</strong>和<strong>驱动逻辑</strong>分开。它由三个核心部分组成：</p>
+<ol>
+<li><strong>Platform Device (设备)</strong>：描述硬件资源（寄存器地址、中断号等）。</li>
+<li><strong>Platform Driver (驱动)</strong>：实现操作逻辑（如何初始化、读写数据等）。</li>
+<li><strong>Platform Bus (总线)</strong>：作为中介，负责匹配设备和驱动。</li>
+</ol>
+<p>我们简单过一遍platform的工作流程，以对这三个部分有个简单的认知。</p>
+<h3 id="31-platform-的工作流程"><a class="markdownIt-Anchor" href="#31-platform-的工作流程"></a> 3.1. Platform 的工作流程</h3>
+<h4 id="311-总览"><a class="markdownIt-Anchor" href="#311-总览"></a> 3.1.1. 总览</h4>
+<pre class="line-numbers language-none"><code class="language-none">读取设备树
+ → 解析节点
+   → 判断“谁来认领这个节点”
+     → 创建 platform_device（兜底）
+       → platform_driver 注册
+         → platform_bus 匹配
+           → probe()
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>先明确一个前提：</p>
 <ul>
-<li><a href="#%E5%88%97%E8%A1%A8">列表</a></li>
-<li><a href="#%E6%9C%89%E5%BA%8F%E5%88%97%E8%A1%A8">有序列表</a></li>
-<li><a href="#%E9%93%BE%E6%8E%A5">链接</a></li>
-<li><a href="#%E5%9B%BE%E7%89%87">图片</a></li>
-<li><a href="#%E4%BB%A3%E7%A0%81%E5%9D%97">代码块</a></li>
-<li><a href="#%E5%BC%95%E7%94%A8">引用</a></li>
-<li><a href="#%E8%A1%A8%E6%A0%BC">表格</a></li>
-<li><a href="#%E5%88%92%E7%BA%BF">划线</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96">其他</a>
-<ul>
-<li><a href="#hexo-admonition">hexo-admonition</a></li>
-<li><a href="#hexo-tips"><s>hexo-tips</s></a></li>
+<li>Bootloader（U-Boot）已经把 <code>.dtb</code> 放到内存</li>
+<li>内核启动时，通过指针拿到整棵设备树<br />
+此时<strong>设备树只是“一坨数据结构”，还不是 device</strong></li>
 </ul>
-</li>
-</ul>
-</li>
-<li><a href="#2%E7%BA%A7">2级</a>
-<ul>
-<li><a href="#3%E7%BA%A7">3级</a>
-<ul>
-<li><a href="#4%E7%BA%A7">4级</a>
-<ul>
-<li><a href="#5%E7%BA%A7">5级</a>
-<ul>
-<li><a href="#6%E7%BA%A7">6级</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</p>
-<h1 id="markdown-测试文本"><a class="markdownIt-Anchor" href="#markdown-测试文本"></a> Markdown 测试文本</h1>
-<h2 id="标题2"><a class="markdownIt-Anchor" href="#标题2"></a> 标题2</h2>
-<p>这是一个段落，下面是<strong>加粗</strong>和<em>斜体</em>文本的示例。</p>
-<h3 id="列表"><a class="markdownIt-Anchor" href="#列表"></a> 列表</h3>
-<ul>
-<li>项目1</li>
-<li>项目2
-<ul>
-<li>子项目2.1</li>
-<li>子项目2.2</li>
-</ul>
-</li>
-<li>项目3</li>
-</ul>
-<h3 id="有序列表"><a class="markdownIt-Anchor" href="#有序列表"></a> 有序列表</h3>
+<h4 id="312-step1内核解析设备树阶段"><a class="markdownIt-Anchor" href="#312-step1内核解析设备树阶段"></a> 3.1.2. step1：内核解析设备树阶段</h4>
+<p>内核启动过程中，会进入设备树初始化阶段，开始解析设备树的节点。<br />
+对每个节点，内核问一个关键的问题:</p>
+<blockquote>
+<p>这个节点，该由谁来处理？</p>
+</blockquote>
 <ol>
 <li>
-<p>第一项</p>
+<p>先问：“是不是‘可枚举总线’设备？”<br />
+例如USB、PCI。<br />
+如果是——跳过设备树创建设备，以后靠总线扫描来创建</p>
 </li>
 <li>
-<p>第二项</p>
-</li>
-<li>
-<p>第三项</p>
-</li>
-</ol>
-<h3 id="链接"><a class="markdownIt-Anchor" href="#链接"></a> 链接</h3>
-<p><a target="_blank" rel="noopener" href="https://www.openai.com">点击这里访问OpenAI</a></p>
-<h3 id="图片"><a class="markdownIt-Anchor" href="#图片"></a> 图片</h3>
-<p><img src="https://openai.com/favicon.ico" alt="OpenAI logo" /></p>
-<h3 id="代码块"><a class="markdownIt-Anchor" href="#代码块"></a> 代码块</h3>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">hello_world</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Hello, World!"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h3>
-<blockquote>
-<p>“我爱吃香肠”</p>
-</blockquote>
-<h3 id="表格"><a class="markdownIt-Anchor" href="#表格"></a> 表格</h3>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>年龄</th>
-<th>职业</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Alice</td>
-<td>28</td>
-<td>医生</td>
-</tr>
-<tr>
-<td>Bob</td>
-<td>34</td>
-<td>工程师</td>
-</tr>
-<tr>
-<td>Carol</td>
-<td>25</td>
-<td>设计师</td>
-</tr>
-</tbody>
-</table>
-<h3 id="划线"><a class="markdownIt-Anchor" href="#划线"></a> 划线</h3>
-<p><s>我被划了</s></p>
-<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
-<p><mark>划重点，标记</mark></p>
-<details>
-<summary>可收起文本</summary>
-这是可收起文本. 可以包含任意元素, 比如 **粗体**, *斜体*,代码块
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Hello, World!"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</details> 
-<p><span class="spoiler">防剧透</span></p>
+<p>再问：“是不是某个‘专用子系统’设备？”<br />
+例如节点里有一些特殊属性：</p>
 <ul>
-<li>[ ] TODO List ！渲染失败</li>
+<li>gpio-controller</li>
+<li>interrupt-controller</li>
+<li>clock-controller</li>
+<li>pinctrl<br />
+如果是——这类节点有对应子系统解析。</li>
 </ul>
-<p>H<sub>2</sub>0<br />
-x<sup>2</sup></p>
-<p>脚注测试<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
-<h4 id="hexo-admonition"><a class="markdownIt-Anchor" href="#hexo-admonition"></a> hexo-admonition</h4>
-<div class="admonition note"><p class="admonition-title">Hexo-admonition 插件使用示例
-</p><p>这是基于 hexo-admonition 插件渲染的一条提示信息。类型为 note，并设置了自定义标题。</p>
-<p>提示内容开头留 4 个空格，可以有多行，最后用空行结束此标记。</p>
-</div>
-<div class="admonition warning"><p>This is warning without title.</p>
-</div>
-<div class="admonition todo"><p class="admonition-title">todo</p><p>This is todo.</p>
-</div>
-<div class="admonition error"><p class="admonition-title">error</p><p>This is error.</p>
-</div>
-<h4 id="hexo-tips"><a class="markdownIt-Anchor" href="#hexo-tips"></a> <s>hexo-tips</s></h4>
-<details>
-<summary>自2025.09.07起不再使用，改用 admonition。</summary>
-<p>:::warning<br />
-warning<br />
-:::</p>
-<p>:::danger<br />
-danger<br />
-:::</p>
-<p>:::tip<br />
-tip<br />
-:::</p>
-<p>:::mention<br />
-mention<br />
-:::</p>
-<p>:::recommend<br />
-recommend<br />
-:::</p>
-<p>:::note<br />
-note<br />
-:::</p>
-<p>:::info<br />
-info<br />
-:::</p>
-<p>:::success<br />
-success<br />
-:::</p>
-<p>:::error<br />
-error<br />
-:::</p>
-<p>:::bug<br />
-bug<br />
-:::</p>
-<p>:::todo<br />
-todo<br />
-:::</p>
-<p>:::example<br />
-example<br />
-:::</p>
-<p>:::quote<br />
-quote<br />
-:::</p>
-<p>:::link<br />
-link<br />
-:::</p>
-<p>:::code<br />
-code<br />
-:::</p>
-<p>:::update<br />
-update<br />
-:::</p>
-<p>:::star<br />
-star<br />
-:::</p>
-<p>:::time<br />
-time<br />
-:::</p>
-</details>
-<h1 id="标题大小对比"><a class="markdownIt-Anchor" href="#标题大小对比"></a> 标题大小对比</h1>
-<h2 id="2级"><a class="markdownIt-Anchor" href="#2级"></a> 2级</h2>
-<h3 id="3级"><a class="markdownIt-Anchor" href="#3级"></a> 3级</h3>
-<h4 id="4级"><a class="markdownIt-Anchor" href="#4级"></a> 4级</h4>
-<h5 id="5级"><a class="markdownIt-Anchor" href="#5级"></a> 5级</h5>
-<h6 id="6级"><a class="markdownIt-Anchor" href="#6级"></a> 6级</h6>
-<hr class="footnotes-sep" />
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>这是一个脚注解释 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li>
+<p>再问：”是不是属于某条总线子设备？“<br />
+例如I2C总线、SPI总线<br />
+如果是——有专门的总线框架解析</p>
 </li>
 </ol>
-</section>
+<blockquote>
+<p>这里注意区分I2C控制器和I2C设备，I2C控制器通常是SoC的内部外设，是platform设备，而I2C设备是挂在 I2C 总线上的外设，<strong>由I2C 总线框架管理</strong>，<strong>不是 platform 设备</strong>。</p>
+</blockquote>
+<p>问完之后，没人要你？那你就是 platform 设备。所以platform设备就是兜底规则。</p>
+<h4 id="313-step2内核创建-platform_device设备"><a class="markdownIt-Anchor" href="#313-step2内核创建-platform_device设备"></a> 3.1.3. step2：内核创建 platform_device（设备）</h4>
+<p>即内核将<strong>设备</strong>“挂”在 platform_bus 上。</p>
+<p>内核创建了</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">platform_device</span> <span class="token operator">*</span>pdev<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中比较重要的结构体成员：</p>
+<ul>
+<li><code>pdev-&gt;dev</code> → 设备信息
+<ul>
+<li><code>pdev-&gt;dev.of_node</code> → 指向设备树节点</li>
+<li><code>pdev-&gt;dev.bus</code> → platform_bus</li>
+</ul>
+</li>
+<li><code>pdev-&gt;name</code> → 来自节点名或 compatible</li>
+</ul>
+<p>这一步硬件被“对象化”了。之后GPIO、IRQ、寄存器、电源管理等<strong>全部都可以从 <code>pdev-&gt;dev</code> 出发统一获取</strong>。</p>
+<p>注意这里引出了platform的核心对象之一——<strong>设备</strong>。</p>
+<h4 id="314-step3platform_driver-注册驱动"><a class="markdownIt-Anchor" href="#314-step3platform_driver-注册驱动"></a> 3.1.4. step3：platform_driver 注册（驱动）</h4>
+<p>这一步是你做的。当你根据platform设备框架编写 <code>platform_driver</code>（驱动逻辑）时，<br />
+一定会调用：（后文会详细提到）</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">module_platform_driver</span><span class="token punctuation">(</span>my_driver<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>它类似于 <code>module_init()</code> ，<strong>而这个API的作用是把你写的驱动程序也注册进platform_bus，也就是把驱动挂到platform总线。</strong></p>
+<p>所以当你加载你的.ko文件时，驱动程序也注册进了platform总线。</p>
+<p>那这里就引出了platform的核心对象之一——<strong>驱动</strong>。</p>
+<h4 id="315-step4platform_bus-开始做匹配"><a class="markdownIt-Anchor" href="#315-step4platform_bus-开始做匹配"></a> 3.1.5. step4：platform_bus 开始做“匹配”</h4>
+<p>这是 platform 作为<strong>总线</strong>的核心职责。</p>
+<p>我们用伪代码来概括一下总线做的事：</p>
+<pre class="line-numbers language-none"><code class="language-none">for each platform_device:
+    for each platform_driver:
+        if (match(device, driver)):
+            call driver-&gt;probe(device)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><strong>匹配机制（Match）</strong><br />
+最常用的就是根据 compatible 进行匹配。<br />
+优先级大致是：</p>
+<ol>
+<li><code>of_match_table</code> ← 设备树 compatible</li>
+<li><code>id_table</code></li>
+<li><code>name</code></li>
+</ol>
+</blockquote>
+<p>整个过程我们的 compatible 就只在这一步发挥作用。</p>
+<h4 id="316-step5probe-被调用"><a class="markdownIt-Anchor" href="#316-step5probe-被调用"></a> 3.1.6. step5：probe() 被调用</h4>
+<p>驱动和设备匹配成功后就会调用probe()<br />
+probe()由你来实现。具体操作细节后文细说</p>
+<p>那我们应该在probe里做什么？——让设备（硬件）可用。</p>
+<p>典型顺序：</p>
+<ol>
+<li>从 <code>pdev-&gt;dev.of_node</code> 读属性</li>
+<li>申请 GPIO / IRQ / 内存</li>
+<li>初始化硬件状态</li>
+<li>注册字符设备 / miscdevice（如果需要）</li>
+</ol>
+<h4 id="317-step6remove"><a class="markdownIt-Anchor" href="#317-step6remove"></a> 3.1.7. step6：remove</h4>
+<p>如果设备被移除或其驱动被卸载，也就是匹配失效，则会调用remove()。</p>
+<p>remove()当然也由你来实现。我们后文细说。</p>
+<h2 id="4-使用platform设备模型"><a class="markdownIt-Anchor" href="#4-使用platform设备模型"></a> 4. 使用Platform设备模型</h2>
+<h3 id="41-省流版"><a class="markdownIt-Anchor" href="#41-省流版"></a> 4.1. 省流版</h3>
+<p>用设备树“声明硬件”，用 platform_driver“实现驱动逻辑”，<br />
+内核通过 platform 总线把两者配对，并调用你的 probe()</p>
+<h3 id="42-step1在设备树里声明设备"><a class="markdownIt-Anchor" href="#42-step1在设备树里声明设备"></a> 4.2. step1：在设备树里声明设备</h3>
+<p>在 <code>.dts</code> 里写一个节点描述硬件，例如：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">mykey <span class="token punctuation">&#123;</span>
+    compatible <span class="token operator">=</span> <span class="token string">"gdm,mykey"</span><span class="token punctuation">;</span>
+    key<span class="token operator">-</span>gpio <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token operator">&amp;</span>gpio1 <span class="token number">5</span> GPIO_ACTIVE_LOW<span class="token operator">></span><span class="token punctuation">;</span>
+    interrupt<span class="token operator">-</span>parent <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token operator">&amp;</span>gpio1<span class="token operator">></span><span class="token punctuation">;</span>
+    interrupts <span class="token operator">=</span> <span class="token operator">&lt;</span><span class="token number">5</span> IRQ_TYPE_EDGE_FALLING<span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="43-step2编写platform_driver驱动逻辑"><a class="markdownIt-Anchor" href="#43-step2编写platform_driver驱动逻辑"></a> 4.3. step2：编写platform_driver（驱动逻辑）</h3>
+<h4 id="431-定义匹配表"><a class="markdownIt-Anchor" href="#431-定义匹配表"></a> 4.3.1. 定义匹配表</h4>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> <span class="token class-name">of_device_id</span> mykey_of_match<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#123;</span> <span class="token punctuation">.</span>compatible <span class="token operator">=</span> <span class="token string">"gdm,mykey"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token function">MODULE_DEVICE_TABLE</span><span class="token punctuation">(</span>of<span class="token punctuation">,</span> mykey_of_match<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>这一步是在告诉 platform 总线：我能驱动什么设备，我能驱动设备的特征。</strong> 给bus的匹配提供信息。</p>
+<h4 id="432-在-probe-中完成设备初始化"><a class="markdownIt-Anchor" href="#432-在-probe-中完成设备初始化"></a> 4.3.2. 在 probe() 中完成“设备初始化”</h4>
+<h5 id="4321-获取设备树节点"><a class="markdownIt-Anchor" href="#4321-获取设备树节点"></a> 4.3.2.1. 获取设备树节点</h5>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>dev <span class="token operator">=</span> <span class="token operator">&amp;</span>pdev<span class="token operator">-></span>dev<span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token class-name">device_node</span> <span class="token operator">*</span>np <span class="token operator">=</span> dev<span class="token operator">-></span>of_node<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>后续所有资源都从这里“派生”</p>
+<h5 id="4322-获取gpio可选"><a class="markdownIt-Anchor" href="#4322-获取gpio可选"></a> 4.3.2.2. 获取GPIO【可选】</h5>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">gpio_desc</span> <span class="token operator">*</span>key_gpio<span class="token punctuation">;</span>
+
+key_gpio <span class="token operator">=</span> <span class="token function">devm_gpiod_get</span><span class="token punctuation">(</span>dev<span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">,</span> GPIOD_IN<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h5 id="4323-获取irq可选"><a class="markdownIt-Anchor" href="#4323-获取irq可选"></a> 4.3.2.3. 获取IRQ【可选】</h5>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> irq <span class="token operator">=</span> <span class="token function">platform_get_irq</span><span class="token punctuation">(</span>pdev<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>作用</p>
+<ul>
+<li>解析 <code>interrupts</code></li>
+<li>返回 Linux IRQ 号</li>
+</ul>
+<h5 id="4324-注册中断可选"><a class="markdownIt-Anchor" href="#4324-注册中断可选"></a> 4.3.2.4. 注册中断【可选】</h5>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">devm_request_irq</span><span class="token punctuation">(</span>dev<span class="token punctuation">,</span> irq<span class="token punctuation">,</span> key_isr<span class="token punctuation">,</span>
+                 IRQF_TRIGGER_FALLING<span class="token punctuation">,</span>
+                 <span class="token string">"mykey"</span><span class="token punctuation">,</span> dev<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h5 id="4325-其他操作"><a class="markdownIt-Anchor" href="#4325-其他操作"></a> 4.3.2.5. 其他操作…</h5>
+<h4 id="433-remove"><a class="markdownIt-Anchor" href="#433-remove"></a> 4.3.3. remove()</h4>
+<p>如果你用了：<code>devm_</code>开头的API，那基本上就不需要头疼资源释放的问题</p>
+<p>因为platform + devm = 自动资源回收</p>
+<h4 id="434-定义platform的操作"><a class="markdownIt-Anchor" href="#434-定义platform的操作"></a> 4.3.4. 定义platform的操作</h4>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">struct</span> <span class="token class-name">platform_driver</span> mykey_driver <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span>probe  <span class="token operator">=</span> mykey_probe<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>remove <span class="token operator">=</span> mykey_remove<span class="token punctuation">,</span>
+    <span class="token punctuation">.</span>driver <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">"mykey"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">.</span>of_match_table <span class="token operator">=</span> mykey_of_match<span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这一步把你的 probe / remove 交给 platform 框架托管。</p>
+<h4 id="435-注册-driver"><a class="markdownIt-Anchor" href="#435-注册-driver"></a> 4.3.5. 注册 driver</h4>
+<p>在模块的编写中通常这样写：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span> __init <span class="token function">leddriver_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	 <span class="token keyword">return</span> <span class="token function">module_platform_driver</span><span class="token punctuation">(</span>myled_driver<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这一步把 driver<br />
+挂到 platform_bus 上。</p>
+<h3 id="44-step3像往常一样添加设备"><a class="markdownIt-Anchor" href="#44-step3像往常一样添加设备"></a> 4.4. step3：像往常一样添加设备</h3>
+<p>初学者通常没弄清platform的作用，它只负责板级设备的描述、匹配、生命周期管理、硬件资源获取与托管。并不是直接把设备给你创建好了，如果你需要用户态接口，比如read()、write()、ioctl()；或者需要设备接口（/dev/xxx），你仍需要自己创建（在probe()中）。</p>
+<blockquote>
+<p>它是一个仓管，你完成一个作品需要什么资源，告诉仓管，仓管从仓库里给你拿资源，然后你来做。</p>
+</blockquote>
+<p><img src="%E6%A0%91%E5%BD%A2%E5%9B%BE.png" alt="" /></p>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约359字。于2025/01/18首次发布，最后更新于2025/09/07。 </p>
+<p>共计约1.7k字。于2025/12/13首次发布，最后更新于2025/12/13。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
 
 
+    <p> AI辅助创作：本文部分内容由 <code>ChatGPT 5.1</code> 生成，最终版本由作者审核与修改。<a target="_blank" rel="noopener" href="https://chatgpt.com/">了解该AI模型</a>。</p>
 
 
-    
-        <span>
-            <a href="/Tags/%E5%8D%9A%E5%AE%A2/" id="tgs">
-              #博客 |
-            </a>
-        </span>
-    
 
 
 </div>
@@ -340,7 +326,7 @@ time<br />
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#markdown-%E6%B5%8B%E8%AF%95%E6%96%87%E6%9C%AC"><span class="toc-text"> Markdown 测试文本</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E9%A2%982"><span class="toc-text"> 标题2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8"><span class="toc-text"> 列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E5%88%97%E8%A1%A8"><span class="toc-text"> 有序列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text"> 链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%89%87"><span class="toc-text"> 图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-text"> 代码块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8"><span class="toc-text"> 引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E6%A0%BC"><span class="toc-text"> 表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%92%E7%BA%BF"><span class="toc-text"> 划线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-text"> 其他</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%87%E9%A2%98%E5%A4%A7%E5%B0%8F%E5%AF%B9%E6%AF%94"><span class="toc-text"> 标题大小对比</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E7%BA%A7"><span class="toc-text"> 2级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E7%BA%A7"><span class="toc-text"> 3级</span></a></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8platform"><span class="toc-text"> 1. 为什么使用platform？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-platform-%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B%E9%80%82%E5%90%88%E5%93%AA%E4%BA%9B%E8%AE%BE%E5%A4%87"><span class="toc-text"> 2. Platform 设备模型适合哪些设备？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%90%86%E8%A7%A3-platform-%E6%A8%A1%E5%9E%8B"><span class="toc-text"> 3. 理解 Platform 模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-platform-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text"> 3.1. Platform 的工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8platform%E8%AE%BE%E5%A4%87%E6%A8%A1%E5%9E%8B"><span class="toc-text"> 4. 使用Platform设备模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E7%9C%81%E6%B5%81%E7%89%88"><span class="toc-text"> 4.1. 省流版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-step1%E5%9C%A8%E8%AE%BE%E5%A4%87%E6%A0%91%E9%87%8C%E5%A3%B0%E6%98%8E%E8%AE%BE%E5%A4%87"><span class="toc-text"> 4.2. step1：在设备树里声明设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-step2%E7%BC%96%E5%86%99platform_driver%E9%A9%B1%E5%8A%A8%E9%80%BB%E8%BE%91"><span class="toc-text"> 4.3. step2：编写platform_driver（驱动逻辑）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-step3%E5%83%8F%E5%BE%80%E5%B8%B8%E4%B8%80%E6%A0%B7%E6%B7%BB%E5%8A%A0%E8%AE%BE%E5%A4%87"><span class="toc-text"> 4.4. step3：像往常一样添加设备</span></a></li></ol></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
