@@ -89,7 +89,7 @@
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--文章详情页-->
 <div class="meta" style="margin: auto;">
-    <h1 style="text-align: center;">编程随想</h1>
+    <h1 style="text-align: center;">我的驱动模块项目文件结构</h1>
 </div>
 
 <div class="a_container">
@@ -100,65 +100,201 @@
 </div>
 </details>
 <hr />
-<p>在一切开始之前，只有一片寂静的“原初之石”（嵌入式设备）。</p>
-<h2 id="第一章启程者uboot的誓约"><a class="markdownIt-Anchor" href="#第一章启程者uboot的誓约"></a> 第一章：启程者U·Boot的誓约</h2>
-<p>在永恒的黑暗中，第一位生灵觉醒了，他是启程者U·Boot。U·Boot是一位不朽的守誓人，他的存在只有一个目的：开启世界。</p>
-<p>当启动的信号闪烁，U·Boot立刻开始了他的神圣仪式：他首先叩击了“原初之石”的脉络（初始化硬件），确认每一个节点——从宏大的记忆之河到微小的时钟之弦——都已准备就绪。</p>
-<p>U·Boot知道，他无法独自构建世界。他必须唤醒那位沉睡的，真正的造物主。他奔向古老的智慧之塔（存储器），找到并抬起了沉重的命运之卷。他将这卷轴——那是核心法则的记录——庄严地放置在清醒之所（内存）的中央。</p>
-<p>U·Boot深深地鞠躬，他望向那卷轴，低语道：“我的使命已终。核心啊，醒来吧，时间已到。” 他将所有的力量和权限，都倾注给了这卷轴，然后，U·Boot的光芒隐去，他完成了对黎明的誓约。</p>
-<h2 id="第二章律法之魂kernel的诞生"><a class="markdownIt-Anchor" href="#第二章律法之魂kernel的诞生"></a> 第二章：律法之魂Kernel的诞生</h2>
-<p>当U·Boot的光芒熄灭，律法之魂Kernel被唤醒了。</p>
-<p>Kernel是世界的内在灵魂，它没有具体的形态，却是一切秩序的源泉。Kernel诞生的第一件事，就是建立律法。</p>
-<p>它向四周伸出无数看不见的触手，拥抱并驾驭了整个“原初之石”（加载驱动程序，接管硬件）。现在，它能听到每一次输入，能控制每一次输出。</p>
-<p>它在广阔的空间内划定了界限（内存管理），制定了时间分配的铁律（进程调度），确保每一个未来的思绪和行动都能得到公平的资源。</p>
-<p>Kernel拥有了管理世界的绝对能力，但它环顾四周，发现自己身处一个有法则却无色彩的空旷世界。它像一位孤独的君王，拥有无上的权力，却没有臣民，没有诗歌，没有生命存在的意义。</p>
-<p>“我的律法需要一个国度来承载，需要一个故事来讲述。” Kernel低语。</p>
-<h2 id="第三章世界之华rootfs的盛开"><a class="markdownIt-Anchor" href="#第三章世界之华rootfs的盛开"></a> 第三章：世界之华RootFS的盛开</h2>
-<p>Kernel沿着旧日信标指引的道路，找到了那片被尘封的宝库——那里储存着人类文明所有的积淀与梦想，它就是世界之华RootFS。</p>
-<p>Kernel用律法的力量，将宝库的大门打开（挂载 RootFS），并伸出触手，唤醒了宝库中沉睡的第一个声音：先知 init。</p>
-<p>先知 init 醒来，在Kernel律法的框架下开始了他的工作。</p>
-<p>他迅速地摆放了日常所需的工具（基础命令、配置），让世界有了可操作的逻辑。</p>
-<p>他依次唤醒了吟游诗人的歌谣（应用程序）、哲人的手稿（配置文件）和工匠的工具（服务进程）。</p>
-<p>至此，Kernel的律法框架与RootFS的丰富内容完美结合。世界不再是空洞的法则，而是充满生机、可以感知、可以创造的完整存在。</p>
-<p>启程者U·Boot开启了诞生；律法之魂Kernel赋予了秩序；世界之华RootFS成就了意义。三位一体，构成了完整的生命觉醒之旅。</p>
-<h2 id="附录1世界之华的十大景观"><a class="markdownIt-Anchor" href="#附录1世界之华的十大景观"></a> 附录1：世界之华的十大景观</h2>
-<h3 id="root-和-home君王和臣民的私域"><a class="markdownIt-Anchor" href="#root-和-home君王和臣民的私域"></a> /root 和 /home：君王和臣民的私域</h3>
-<p>/root(君王的静室)：这是律法之魂Kernel的私人居所。只有他拥有最高的权限，用于处理最核心、最私密的政务。外人不得擅入。</p>
-<p>/home(臣民的村落)：这是所有在国度中生活和创造的个体（用户）的专属领地。每个臣民在自己的屋子里书写自己的故事，彼此独立，但都在科恩的律法之下。</p>
-<h3 id="bin-和-sbin勇士和祭司的武器库"><a class="markdownIt-Anchor" href="#bin-和-sbin勇士和祭司的武器库"></a> /bin 和 /sbin：勇士和祭司的武器库</h3>
-<p>/bin(勇士的佩剑)：存放着所有普通居民（用户）都可以使用的日常工具和技能。比如：ls（点清财物）、cp（搬运物品）。它们是国度最常用的动作。</p>
-<p>/sbin(祭司的法杖)：存放着只有最高祭司（系统管理员或 Kernel）才能动用的神圣工具。这些工具用于维护国度的根本稳定，如格式化土地、修复城墙等。</p>
-<h3 id="etc国度的古老法典"><a class="markdownIt-Anchor" href="#etc国度的古老法典"></a> /etc：国度的古老法典</h3>
-<p>/etc(古老的法典与契约)：存放着国度运行的所有规定和契约（配置文件）。它规定了谁（用户）能做什么，何时（服务）启动，以及如何（网络配置）与外界交流。它是世界的运行蓝图。</p>
-<h3 id="usr知识与文化的殿堂"><a class="markdownIt-Anchor" href="#usr知识与文化的殿堂"></a> /usr：知识与文化的殿堂</h3>
-<p>/usr(文化的宝库与学院)：Unix Software Resourse 存放着非核心但极其庞大的知识、艺术和工具。所有的吟游诗人的歌谣（库文件 /usr/lib）、学者的手稿（头文件 /usr/include）和复杂的巨型应用（/usr/bin）都集中于此，是国度的文明象征。</p>
-<h3 id="dev与生俱来的感知器官"><a class="markdownIt-Anchor" href="#dev与生俱来的感知器官"></a> /dev：与生俱来的感知器官</h3>
-<p>/dev(与生俱来的感知器官)：它不是真正的文件，而是Kernel与生俱来的“感知器官”（设备文件）。通过这些器官，灵魂可以直接触摸（读写）外界的光线（显示器）、倾听外界的声音（声卡）和感受外界的震动（键盘）。</p>
-<h3 id="proc-和-sys世界的实时心跳与镜像"><a class="markdownIt-Anchor" href="#proc-和-sys世界的实时心跳与镜像"></a> /proc 和 /sys：世界的实时心跳与镜像</h3>
-<p>/proc(世界的实时心跳)：它是一个魔法的镜子，实时映射出Kernel的每一个思绪和每一次呼吸（进程信息）。它不存储任何实物，只是Kernel当前状态的投影。</p>
-<p>/sys(世界的生理数据)：它是一个精密的温度计和测量仪，详细展示国度的生理数据（硬件和驱动状态）。</p>
-<h3 id="tmp-和-var时间的沙漏与变化"><a class="markdownIt-Anchor" href="#tmp-和-var时间的沙漏与变化"></a> /tmp 和 /var：时间的沙漏与变化</h3>
-<p>/tmp(流逝的沙漏)： 存放着短暂的、易逝的思绪（临时文件）。一旦日出日落（重启），这些思绪便会随风消逝。</p>
-<p>/var(变化的记录簿)： 存放着所有不断增长、不断变化的历史记录。比如：守夜人的日志（日志文件 /var/log）和来往的信件（邮件 /var/mail）。</p>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>当我们编写一个linux外部模块时，如果是小demo，我们还可以把所有实现都放在一个.c文件里，但是如果你想要写一个真实、可长期维护的驱动，这样是肯定不推荐的，一定是多文件结构。</p>
+<h2 id="文件组织形式及原则"><a class="markdownIt-Anchor" href="#文件组织形式及原则"></a> 文件组织形式及原则</h2>
+<p>按职责拆分，把一个模块拆为运用多个子系统的子模块，一个子系统模块单独为一个.c文件。这些子系统模块通过内部共享头文件为main.c提供使用该子系统模块的接口。</p>
+<p>例如，一个GPIO按键驱动的目录结构如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">key_driver&#x2F;
+├── Makefile
+├── Kconfig              # 可选
+├── key_main.c           # 模块入口 &#x2F; probe &#x2F; remove
+├── key_gpio.c           # GPIO 相关
+├── key_irq.c            # 中断相关
+├── key_fops.c           # 字符设备 &#x2F; file_operations
+├── key_internal.h       # 内部头文件（核心）
+└── key_uapi.h           # 可选：用户态 ioctl 定义<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key_main.c</code></td>
+<td><code>module_init / exit</code>、<code>probe/remove</code></td>
+</tr>
+<tr>
+<td><code>key_gpio.c</code></td>
+<td>GPIO 获取、释放、读值</td>
+</tr>
+<tr>
+<td><code>key_irq.c</code></td>
+<td><code>request_irq</code>、中断处理</td>
+</tr>
+<tr>
+<td><code>key_fops.c</code></td>
+<td><code>open/read/ioctl/poll</code></td>
+</tr>
+<tr>
+<td><code>key_internal.h</code></td>
+<td><strong>模块内部共享结构和函数声明</strong></td>
+</tr>
+<tr>
+<td><code>key_uapi.h</code></td>
+<td><strong>给用户态用的 ioctl 定义（可选）</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="文件的编写原则"><a class="markdownIt-Anchor" href="#文件的编写原则"></a> 文件的编写原则</h2>
+<h3 id="最小化依赖头文件"><a class="markdownIt-Anchor" href="#最小化依赖头文件"></a> 最小化依赖头文件</h3>
+<p>你可能会想，我把所有.c文件需要包含的头文件都写到key_internal.h，然后其他.c文件只引用key_internal.h就好了？这种做法在 C 语言编程，尤其是 Linux 内核编程中，是<strong>应该避免的</strong>。原因如下：</p>
+<ol>
+<li>可读性差。阅读代码的人完全不知到你的.c文件依赖哪些内核头文件。</li>
+<li>编译速度。任何 <code>.c</code> 文件都必须处理所有不必要的头文件内容，导致编译时间大幅增加。</li>
+<li>命名空间污染。引入了大量的符号和宏定义，增加了<strong>符号冲突</strong>的风险，也使代码更难阅读和维护。</li>
+</ol>
+<p>一个有趣的说法是，你已经把整个项目拆分成了许多功能子系统的实现，但是如果你像上面那样做，就等于又把它们杂糅在一起了，这与我们的初衷背道而驰。</p>
+<p>应该怎么做？</p>
+<ol>
+<li><strong>按需包含 (Include What You Use)</strong>：只包含你当前文件需要使用的定义。</li>
+<li><strong>依赖分离</strong>：将依赖关系限制在真正需要它们的源文件和头文件内。</li>
+<li><strong>保持最小依赖</strong>：只引入当前文件所需的最小集合的符号。</li>
+</ol>
+<h3 id="内部头文件的内容"><a class="markdownIt-Anchor" href="#内部头文件的内容"></a> 内部头文件的内容</h3>
+<p>只放：</p>
+<ol>
+<li>所有 <code>.c</code> 都需要的头文件</li>
+<li>跨文件函数声明</li>
+<li>核心结构体定义</li>
+<li>前置声明</li>
+<li>核心结构体成员所需要的头文件</li>
+</ol>
+<p>其中第4、5点我们需要视情况灵活处理，详见下文。</p>
+<h3 id="定义结构体成员时用不用指针"><a class="markdownIt-Anchor" href="#定义结构体成员时用不用指针"></a> 定义结构体成员时用不用指针？</h3>
+<p>当我们编写内核模块，在定义结构体成员时，特别是这个成员也是一个结构体，到底用指针还是直接内嵌呢？</p>
+<p>首先我们了解一下这两种方式的特点：</p>
+<h4 id="内嵌"><a class="markdownIt-Anchor" href="#内嵌"></a> 内嵌</h4>
+<p>🟢适用场景：</p>
+<ul>
+<li><strong>组合关系（Is-part-of）：</strong> 子结构体是父结构体不可分割的一部分。例如，一个按键内部“自带”一个定时器。</li>
+<li><strong>生命周期同步：</strong> 子结构体必须随父结构体一起创建和销毁。</li>
+<li><strong>性能考量：</strong>
+<ul>
+<li><strong>减少内存碎片：</strong> 一次 <code>kmalloc</code> 就能申请到父子所有的内存。</li>
+<li><strong>缓存友好（Cache Locality）：</strong> 父子结构体在物理内存中是连续的，CPU 访问速度更快。</li>
+</ul>
+</li>
+<li><strong>内核习惯用法：</strong> * <code>struct cdev</code> 或 <code>struct list_head</code> 通常内嵌在自定义驱动结构体中，以便通过 <code>container_of</code> 宏来找回父结构体的指针。</li>
+</ul>
+<p>🔴缺点：</p>
+<ul>
+<li><strong>必须包含头文件：</strong> <strong>编译器必须知道子结构体的确切大小</strong>，所以头文件里必须 <code>#include</code> 它的定义。</li>
+<li><strong>空间固定：</strong> 即使你不使用这个成员，它也会占用内存。</li>
+</ul>
+<h4 id="what-about-指针"><a class="markdownIt-Anchor" href="#what-about-指针"></a> WHAT ABOUT 指针？</h4>
+<p>当我们定义一个指针时，其内存大小是确定的——4字节（32位系统）或8字节（64位系统）。</p>
+<p>🟢适用场景：</p>
+<ul>
+<li><strong>引用关系（Refers-to）：</strong> 你只是在“借用”或“观察”一个由别处创建和管理的对象。<br />
+<em>例如：</em> GPIO 描述符是由内核 GPIO 子系统管理的，你的驱动只是申请了一个“使用权”。</li>
+<li><strong>生命周期不同步：</strong> 子对象的寿命可能比父对象长，或者在父对象创建后才动态生成。</li>
+<li><strong>可选性（Optional）：</strong> 这个成员可能不存在。指针可以设为 <code>NULL</code>，而内嵌结构体永远占用空间。</li>
+<li><strong>解耦依赖：</strong> 如前所述，可以使用<strong>前置声明<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></strong>，减少头文件的相互包含。</li>
+<li><strong>共享资源：</strong> 多个不同的父对象可能需要指向同一个子对象实例。</li>
+</ul>
+<p>🔴缺点：</p>
+<ul>
+<li><strong>内存碎片：</strong> 如果子对象也需要动态分配，会多出一次内存申请开销。</li>
+<li><strong>访问开销：</strong> 需要通过指针解引用（Dereference）访问，稍微慢一点。</li>
+</ul>
+<h4 id="最终判断原则"><a class="markdownIt-Anchor" href="#最终判断原则"></a> 最终判断原则</h4>
+<p>对于我来说，在编写模块时，我会这样判断：</p>
+<ol>
+<li>
+<p>这个成员是不是来自其他子系统的句柄？我只是“借用”或“观察”一个由别处创建和管理的对象。如果是，则使用指针。<br />
+<em>例如： GPIO 描述符是由内核 GPIO 子系统管理的，你的驱动只是申请了一个“使用权”。</em></p>
+</li>
+<li>
+<p>我会不会用这个结构体成员反向寻回其父结构体（container_of）？如果是，则直接内嵌。</p>
+</li>
+</ol>
+<p>我最常用的还是第二点，如果第二点不满足我会直接考虑使用指针，其余还可参考上文提到的特点综合考虑，只是我更倾向于用指针。</p>
+<h2 id="一个头文件的例子"><a class="markdownIt-Anchor" href="#一个头文件的例子"></a> 一个头文件的例子</h2>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">__KEY_PDEV_INTERNAL_H__</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__KEY_PDEV_INTERNAL_H__</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/types.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/device.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/cdev.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/timer.h></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">DEV_NAME</span> <span class="token string">"key_pdev"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">KEY_NUM</span>  <span class="token expression"><span class="token number">1</span></span></span>
+
+<span class="token keyword">struct</span> <span class="token class-name">gpio_desc</span><span class="token punctuation">;</span><span class="token comment">//前置声明</span>
+
+<span class="token comment">/* -------- 数据结构 -------- */</span>
+<span class="token comment">/* key 设备下 单个按键数据结构*/</span>
+<span class="token keyword">struct</span> <span class="token class-name">key_member</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">gpio_desc</span> <span class="token operator">*</span>gpio_input<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> irq_num<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">timer_list</span> debounce_timer<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> final_val<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* key 设备数据结构 */</span>
+<span class="token keyword">struct</span> <span class="token class-name">key_dev</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">dev_t</span> devno<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">cdev</span> cdev<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">class</span> <span class="token operator">*</span>cls<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>device<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">device</span> <span class="token operator">*</span>pdev_dev<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">key_member</span> KeyMem<span class="token punctuation">[</span>KEY_NUM<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* -------- 跨文件函数 -------- */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在这个例子里，结构体 <code>struct key_dev</code> 指的是整个按键设备，而 <code>struct key_member</code> 则是按键设备下的一个按键。</p>
+<ol>
+<li>
+<p>在 <code>struct key_member</code> 中，其包含了 <code>struct timer_list</code>，且使用了<strong>结构体本身</strong> (<code>struct timer_list debounce_timer</code>)，而不是指针。因此，<strong>必须</strong>包含定义它的头文件 <code>&lt;linux/timer.h&gt;</code>。</p>
+</li>
+<li>
+<p><code>struct gpio_desc</code> 使用的是指针，但是他是用于特定功能的结构体成员，也就是说它只会在使用GPIO子系统的.c文件中操作，其他文件只是“持有这个字段”。这种情况适合使用前置声明，在使用这个字段的.c文件中来包含它的依赖。</p>
+</li>
+<li>
+<p>该项目需要 cdev 和 debounce_timer 寻回其父结构体，因此使用的是内嵌。</p>
+</li>
+<li>
+<p>对于像 <code>struct cdev</code> 和 <code>struct device</code> 这样的核心结构，几乎贯穿整个项目，所以包含他们的头文件（cdev.h 和 device.h）是正确的。</p>
+</li>
+<li>
+<p><code>types.h</code> 用于 <code>dev_t</code> 。虽然很多头文件会间接包含它，但明确包含是好习惯。</p>
+</li>
+</ol>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>由于指针的内存大小是确定的，所以编译器不用知道该数据类型的具体定义以判断其所占内存，我们只需要告诉编译器这个数据类型有定义，这就是前置声明，它可以降低编译依赖。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约1.6k字。于2025/11/02首次发布，最后更新于2025/11/02。 </p>
+<p>共计约1.9k字。于2025/12/16首次发布，最后更新于2025/12/16。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
 
 
 
-
-    
-        <span>
-            <a href="/Tags/Linux/" id="tgs">
-              #Linux |
-            </a>
-        </span>
-    
 
 
 </div>
@@ -186,7 +322,7 @@
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%90%AF%E7%A8%8B%E8%80%85uboot%E7%9A%84%E8%AA%93%E7%BA%A6"><span class="toc-text"> 第一章：启程者U·Boot的誓约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E5%BE%8B%E6%B3%95%E4%B9%8B%E9%AD%82kernel%E7%9A%84%E8%AF%9E%E7%94%9F"><span class="toc-text"> 第二章：律法之魂Kernel的诞生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E4%B8%96%E7%95%8C%E4%B9%8B%E5%8D%8Erootfs%E7%9A%84%E7%9B%9B%E5%BC%80"><span class="toc-text"> 第三章：世界之华RootFS的盛开</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%951%E4%B8%96%E7%95%8C%E4%B9%8B%E5%8D%8E%E7%9A%84%E5%8D%81%E5%A4%A7%E6%99%AF%E8%A7%82"><span class="toc-text"> 附录1：世界之华的十大景观</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#root-%E5%92%8C-home%E5%90%9B%E7%8E%8B%E5%92%8C%E8%87%A3%E6%B0%91%E7%9A%84%E7%A7%81%E5%9F%9F"><span class="toc-text"> &#x2F;root 和 &#x2F;home：君王和臣民的私域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bin-%E5%92%8C-sbin%E5%8B%87%E5%A3%AB%E5%92%8C%E7%A5%AD%E5%8F%B8%E7%9A%84%E6%AD%A6%E5%99%A8%E5%BA%93"><span class="toc-text"> &#x2F;bin 和 &#x2F;sbin：勇士和祭司的武器库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#etc%E5%9B%BD%E5%BA%A6%E7%9A%84%E5%8F%A4%E8%80%81%E6%B3%95%E5%85%B8"><span class="toc-text"> &#x2F;etc：国度的古老法典</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#usr%E7%9F%A5%E8%AF%86%E4%B8%8E%E6%96%87%E5%8C%96%E7%9A%84%E6%AE%BF%E5%A0%82"><span class="toc-text"> &#x2F;usr：知识与文化的殿堂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dev%E4%B8%8E%E7%94%9F%E4%BF%B1%E6%9D%A5%E7%9A%84%E6%84%9F%E7%9F%A5%E5%99%A8%E5%AE%98"><span class="toc-text"> &#x2F;dev：与生俱来的感知器官</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proc-%E5%92%8C-sys%E4%B8%96%E7%95%8C%E7%9A%84%E5%AE%9E%E6%97%B6%E5%BF%83%E8%B7%B3%E4%B8%8E%E9%95%9C%E5%83%8F"><span class="toc-text"> &#x2F;proc 和 &#x2F;sys：世界的实时心跳与镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tmp-%E5%92%8C-var%E6%97%B6%E9%97%B4%E7%9A%84%E6%B2%99%E6%BC%8F%E4%B8%8E%E5%8F%98%E5%8C%96"><span class="toc-text"> &#x2F;tmp 和 &#x2F;var：时间的沙漏与变化</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text"> 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BB%84%E7%BB%87%E5%BD%A2%E5%BC%8F%E5%8F%8A%E5%8E%9F%E5%88%99"><span class="toc-text"> 文件组织形式及原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9A%84%E7%BC%96%E5%86%99%E5%8E%9F%E5%88%99"><span class="toc-text"> 文件的编写原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BE%9D%E8%B5%96%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-text"> 最小化依赖头文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%A4%B4%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-text"> 内部头文件的内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E7%BB%93%E6%9E%84%E4%BD%93%E6%88%90%E5%91%98%E6%97%B6%E7%94%A8%E4%B8%8D%E7%94%A8%E6%8C%87%E9%92%88"><span class="toc-text"> 定义结构体成员时用不用指针？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E5%A4%B4%E6%96%87%E4%BB%B6%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="toc-text"> 一个头文件的例子</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
