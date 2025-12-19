@@ -89,7 +89,7 @@
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
         <!--文章详情页-->
 <div class="meta" style="margin: auto;">
-    <h1 style="text-align: center;">IMX6ULL引脚电气属性配置寄存器浅析</h1>
+    <h1 style="text-align: center;">Linux异步通知</h1>
 </div>
 
 <div class="a_container">
@@ -100,341 +100,270 @@
 </div>
 </details>
 <hr />
-<p><strong>IMX6ULL参考手册中，一个电气属性配置寄存器说明如下，我们来解读一下。</strong></p>
-<p><img src="Snipaste_2025-12-08_21-19-18.png" alt="" /></p>
-<p><img src="Snipaste_2025-12-08_21-19-26.png" alt="" /></p>
-<p>这个寄存器属于 <strong>IOMUXC_SNVS</strong>，作用是：</p>
-<p><strong>配置 SNVS_TAMPER1 引脚的电气特性（如上下拉、电驱动能力、开漏、速度等）</strong>。 它<strong>不负责选择复用功能（MUX）</strong>，只负责“PAD 控制”。</p>
-<h2 id="一-寄存器总体功能概述"><a class="markdownIt-Anchor" href="#一-寄存器总体功能概述"></a> 一. <strong>寄存器总体功能概述</strong></h2>
-<p>SW_PAD_CTL_PAD_SNVS_TAMPER1 提供以下功能配置：</p>
-<table>
-<thead>
-<tr>
-<th>功能方向</th>
-<th>子功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>输入端</td>
-<td>上下拉、保持、迟滞 Hysteresis</td>
-</tr>
-<tr>
-<td>输出端</td>
-<td>开漏使能、驱动强度、slew rate（边沿速度）</td>
-</tr>
-<tr>
-<td>PAD 行为</td>
-<td>SPEED（在 SNVS 区域通常是固定值）</td>
-</tr>
-<tr>
-<td>保护</td>
-<td>部分位保留不用</td>
-</tr>
-</tbody>
-</table>
-<p>下面按位说明。</p>
-<h2 id="二-逐字段解析由高到低位"><a class="markdownIt-Anchor" href="#二-逐字段解析由高到低位"></a> 二. <strong>逐字段解析（由高到低位）</strong></h2>
-<h3 id="3117reserved"><a class="markdownIt-Anchor" href="#3117reserved"></a> <strong>31–17：Reserved</strong></h3>
-<p>这些位保留，写什么都没用。</p>
-<h3 id="16-hys-输入迟滞hysteresis使能"><a class="markdownIt-Anchor" href="#16-hys-输入迟滞hysteresis使能"></a> <strong>16: HYS — 输入迟滞（Hysteresis）使能</strong></h3>
-<p>作用： 让输入信号增加抗抖动能力，在信号接近阈值边缘时不容易误触发。</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td><strong>不启用迟滞</strong>（输入信号干净时使用）</td>
-</tr>
-<tr>
-<td>1</td>
-<td><strong>启用迟滞</strong>（抗干扰更好，推荐给按键/慢信号）</td>
-</tr>
-</tbody>
-</table>
-<h3 id="1514pus-上下拉电阻配置"><a class="markdownIt-Anchor" href="#1514pus-上下拉电阻配置"></a> <strong>15–14：PUS — 上下拉电阻配置</strong></h3>
-<p>只对输入有效。</p>
-<table>
-<thead>
-<tr>
-<th>PUS 值</th>
-<th>电阻配置</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>00</td>
-<td>100K 下拉</td>
-<td>拉低</td>
-</tr>
-<tr>
-<td>01</td>
-<td>47K 上拉</td>
-<td>稍强的上拉</td>
-</tr>
-<tr>
-<td>10</td>
-<td>100K 上拉</td>
-<td>弱上拉</td>
-</tr>
-<tr>
-<td>11</td>
-<td>22K 上拉</td>
-<td>强上拉</td>
-</tr>
-</tbody>
-</table>
-<p>要使用这些上下拉，必须配合 <strong>PUE=1</strong> 和/或 <strong>PKE=1</strong>。</p>
-<h3 id="13-pue-pull-keeper-选择"><a class="markdownIt-Anchor" href="#13-pue-pull-keeper-选择"></a> <strong>13: PUE — Pull / Keeper 选择</strong></h3>
-<p>决定启用 <strong>Pull</strong> 还是 <strong>Keeper</strong>。</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>Keeper（保持器）启用：用于保持原状态（不是真上下拉）</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Pull（真正的上下拉电阻）启用</td>
-</tr>
-</tbody>
-</table>
-<p><strong>一般如果你希望确定逻辑电平（输入），就把 PUE=1。</strong></p>
-<h3 id="12-pke-pullkeeper-使能"><a class="markdownIt-Anchor" href="#12-pke-pullkeeper-使能"></a> <strong>12: PKE — Pull/Keeper 使能</strong></h3>
-<p>是否启用 pull/keeper 模块。</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>禁用 Pull/Keeper</td>
-</tr>
-<tr>
-<td>1</td>
-<td>使能 Pull/Keeper（由 PUE 决定是 Pull 还是 Keeper）</td>
-</tr>
-</tbody>
-</table>
-<p>即：PKE=1 时，PUE 决定到底是“pull”还是“keeper”。</p>
-<h3 id="11-ode-开漏输出使能open-drain-enable"><a class="markdownIt-Anchor" href="#11-ode-开漏输出使能open-drain-enable"></a> <strong>11: ODE — 开漏输出使能（Open Drain Enable）</strong></h3>
-<table>
-<thead>
-<tr>
-<th>ODE</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td><strong>普通输出模式</strong></td>
-</tr>
-<tr>
-<td>1</td>
-<td><strong>开漏模式（Open-drain）</strong></td>
-</tr>
-</tbody>
-</table>
-<p>开漏常用于：</p>
+<p>Linux 异步通知机制（Asynchronous Notification）是 Linux 设备驱动中一个非常经典且实用的概念。</p>
+<p>简单来说，它的核心思想是 <strong>“被动接收，而非主动查询”</strong>。</p>
+<h2 id="1-什么是异步通知机制"><a class="markdownIt-Anchor" href="#1-什么是异步通知机制"></a> 1. 什么是异步通知机制</h2>
+<p>想象一下你在钓鱼，这时候你有两种方式知道鱼上钩了：</p>
+<ol>
+<li>
+<p><strong>轮询（Polling）</strong>：你每隔 5 秒钟拉起鱼竿看一看有没有鱼。这很累，而且如果你在看书，看书会被不断打断。</p>
+</li>
+<li>
+<p><strong>异步通知（Asynchronous）</strong>：你在鱼竿上挂个铃铛，然后你就安心看书。当鱼上钩拉动鱼竿时，铃铛响了（<strong>信号</strong>），你再放下书去收杆。</p>
+</li>
+</ol>
+<p>在 Linux 中，异步通知机制是基于 <strong>信号（Signal）</strong> 实现的。</p>
 <ul>
-<li>I²C SDA/SCL</li>
-<li>多设备共享信号线</li>
-<li>需要外拉电阻的场景</li>
+<li>
+<p><strong>非阻塞 I/O</strong>：应用程序需要不断循环读取（轮询），浪费 CPU。</p>
+</li>
+<li>
+<p><strong>异步通知</strong>：应用程序告诉内核驱动：“如果有数据了，发个信号（通常是 <code>SIGIO</code>）告诉我。” 驱动程序在数据就绪时，主动向应用程序发送信号，应用程序暂停当前工作，进入信号处理函数处理数据。</p>
+</li>
 </ul>
-<h3 id="108reserved"><a class="markdownIt-Anchor" href="#108reserved"></a> <strong>10–8：Reserved</strong></h3>
-<p>无意义。</p>
-<h3 id="76-speed-io速度通常-read-onlysnvs区域固定"><a class="markdownIt-Anchor" href="#76-speed-io速度通常-read-onlysnvs区域固定"></a> <strong>7–6: SPEED — I/O速度（通常 Read Only，SNVS区域固定）</strong></h3>
-<p>在 SNVS 区域一般固定为：</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>10b</td>
-<td>medium (100 MHz)</td>
-</tr>
-</tbody>
-</table>
-<p>但 SNVS 的 tamper pin 本质上通常是低速接口，因此 SPEED 通常不重要。</p>
-<h3 id="53-dse-drive-strength驱动能力"><a class="markdownIt-Anchor" href="#53-dse-drive-strength驱动能力"></a> <strong>5–3: DSE — Drive Strength（驱动能力）</strong></h3>
-<p>配置输出引脚的驱动强度（等效电阻 R0/n）。</p>
-<table>
-<thead>
-<tr>
-<th>DSE</th>
-<th>驱动能力</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>000</td>
-<td>关闭输出驱动</td>
-<td>不输出（禁用）</td>
-</tr>
-<tr>
-<td>001</td>
-<td>R0/1</td>
-<td>最强</td>
-</tr>
-<tr>
-<td>010</td>
-<td>R0/2</td>
-<td>强</td>
-</tr>
-<tr>
-<td>011</td>
-<td>R0/3</td>
-<td>中等</td>
-</tr>
-<tr>
-<td>100</td>
-<td>R0/4</td>
-<td></td>
-</tr>
-<tr>
-<td>101</td>
-<td>R0/5</td>
-<td></td>
-</tr>
-<tr>
-<td>110</td>
-<td>R0/6</td>
-<td></td>
-</tr>
-<tr>
-<td>111</td>
-<td>R0/7</td>
-<td>最弱</td>
-</tr>
-</tbody>
-</table>
-<p>驱动越强，负载越大，下降上升越快，但 EMI 可能会增大。</p>
-<h3 id="21reserved"><a class="markdownIt-Anchor" href="#21reserved"></a> <strong>2–1：Reserved</strong></h3>
-<p>不用配置。</p>
-<h3 id="0-sre-slew-rate输出转换速度"><a class="markdownIt-Anchor" href="#0-sre-slew-rate输出转换速度"></a> <strong>0: SRE — Slew Rate（输出转换速度）</strong></h3>
-<p>控制输出电平变化的快慢：</p>
-<table>
-<thead>
-<tr>
-<th>值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>Slow（慢速）→ EMI 小</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Fast（快速）→ 边沿快、驱动高频信号</td>
-</tr>
-</tbody>
-</table>
-<p>一般：</p>
+<h2 id="2-异步通知的优缺点"><a class="markdownIt-Anchor" href="#2-异步通知的优缺点"></a> 2. 异步通知的优缺点</h2>
+<h3 id="21-优点"><a class="markdownIt-Anchor" href="#21-优点"></a> 2.1. 优点</h3>
 <ul>
-<li>高频信号 → <strong>Fast（1）</strong></li>
-<li>普通 GPIO → <strong>Slow（0）</strong></li>
-<li>有 EMI 要求 → <strong>Slow（0）</strong></li>
+<li><strong>节省 CPU 资源</strong>：应用程序不需要死循环轮询（Polling），CPU 可以处理其他任务或进入休眠。</li>
+<li><strong>响应及时</strong>：数据一来，驱动立马发信号，比轮询的时间片机制反应更快。</li>
+<li><strong>逻辑解耦</strong>：应用程序可以专心做主逻辑，只有在 I/O 事件发生时才被打断。</li>
 </ul>
-<h2 id="三-功能汇总"><a class="markdownIt-Anchor" href="#三-功能汇总"></a> 三. <strong>功能汇总</strong></h2>
+<h3 id="22-缺点"><a class="markdownIt-Anchor" href="#22-缺点"></a> 2.2. 缺点</h3>
+<ul>
+<li><strong>编程复杂度增加</strong>：需要处理信号并发、重入等问题。</li>
+<li><strong>不适合高频数据</strong>：如果数据来得太快（比如网络包狂轰滥炸），不断触发信号中断会让 CPU 把时间都花在上下文切换上（类似“中断风暴”），此时轮询反而更高效。</li>
+</ul>
+<h2 id="3-理解异步通知机制"><a class="markdownIt-Anchor" href="#3-理解异步通知机制"></a> 3. 理解异步通知机制</h2>
+<p>我们从用户态开始入手，看在使用异步通知时，内核里实际发生了什么。<br />
+首先我们需要了解三个核心API：</p>
+<h3 id="31-fcntl"><a class="markdownIt-Anchor" href="#31-fcntl"></a> 3.1. <code>fcntl()</code></h3>
+<p>它定义在 <code>&lt;linux/fcntl.h&gt;</code>。是<strong>用户态</strong>用来“控制已打开文件描述符行为”的系统调用。<br />
+它<strong>不负责读写数据</strong>，而是用来：</p>
+<ul>
+<li>改文件描述符的<strong>状态</strong></li>
+<li>设置 <strong>进程 / 信号 / 锁</strong> 等属性</li>
+</ul>
+<p>函数原型：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fcntl.h></span></span>
+
+<span class="token keyword">int</span> <span class="token function">fcntl</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">int</span> cmd<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token comment">/* arg */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>fd</code>：已经打开的文件描述符</li>
+<li><code>cmd</code>：你要干什么</li>
+<li><code>arg</code>：参数（根据 cmd 不同）</li>
+</ul>
+<p>fcntl主要是操作 <code>struct file</code> 这个结构体，如下：</p>
+<pre class="line-numbers language-none"><code class="language-none">用户态 fcntl()
+   ↓
+sys_fcntl()
+   ↓
+VFS
+   ↓
+struct file
+ ├─ f_flags   ← O_NONBLOCK &#x2F; O_ASYNC
+ ├─ f_owner   ← SIGIO 接收者
+ └─ f_op<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>四大类用法：</p>
+<p><em><strong>1. F_GETFL / F_SETFL</strong></em></p>
+<p>🟢作用：读取 / 修改 <code>file-&gt;f_flags</code></p>
+<p>🟢常见标志位：</p>
 <table>
 <thead>
 <tr>
-<th>功能类别</th>
-<th>字段</th>
+<th>标志</th>
 <th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>输入配置</strong></td>
-<td>HYS</td>
-<td>输入迟滞（抗干扰）</td>
+<td><code>O_NONBLOCK</code></td>
+<td>非阻塞 I/O</td>
 </tr>
 <tr>
-<td></td>
-<td>PUS</td>
-<td>使用哪种上下拉电阻</td>
+<td><code>O_ASYNC</code></td>
+<td>启用异步通知（SIGIO）</td>
 </tr>
 <tr>
-<td></td>
-<td>PUE/PKE</td>
-<td>启用上下拉或保持器</td>
+<td><code>O_APPEND</code></td>
+<td>追加写</td>
 </tr>
 <tr>
-<td><strong>输出配置</strong></td>
-<td>ODE</td>
-<td>开漏输出</td>
-</tr>
-<tr>
-<td></td>
-<td>DSE</td>
-<td>驱动强度</td>
-</tr>
-<tr>
-<td></td>
-<td>SRE</td>
-<td>信号边沿速度</td>
-</tr>
-<tr>
-<td><strong>常规</strong></td>
-<td>SPEED</td>
-<td>I/O速度（SNVS一般固定）</td>
-</tr>
-<tr>
-<td></td>
-<td>Reserved</td>
-<td>保留位</td>
+<td><code>O_DIRECT</code></td>
+<td>直接 I/O</td>
 </tr>
 </tbody>
 </table>
-<h2 id="四-典型使用例子"><a class="markdownIt-Anchor" href="#四-典型使用例子"></a> 四. <strong>典型使用例子</strong></h2>
-<h3 id="配置为输入上拉"><a class="markdownIt-Anchor" href="#配置为输入上拉"></a> 配置为输入上拉</h3>
-<p>例如一个按键输入：</p>
-<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">HYS</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 开启迟滞</span>
-<span class="token key attr-name">PKE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 使能 pull/keeper</span>
-<span class="token key attr-name">PUE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 使用 pull 模式</span>
-<span class="token key attr-name">PUS</span> <span class="token punctuation">=</span> <span class="token value attr-value">10       # 100K 上拉</span>
-<span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">0        # 输入不需要开漏</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="2-配置为-i2c-sdascl开漏-上拉"><a class="markdownIt-Anchor" href="#2-配置为-i2c-sdascl开漏-上拉"></a> ② 配置为 I²C SDA/SCL（开漏 + 上拉）</h3>
-<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 开漏</span>
-<span class="token key attr-name">PKE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1</span>
-<span class="token key attr-name">PUE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1</span>
-<span class="token key attr-name">PUS</span> <span class="token punctuation">=</span> <span class="token value attr-value">10       # 上拉</span>
-<span class="token key attr-name">SRE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1        # 快速速度</span>
-<span class="token key attr-name">DSE</span> <span class="token punctuation">=</span> <span class="token value attr-value">110      # R0/6</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="3-配置为普通-gpio-输出"><a class="markdownIt-Anchor" href="#3-配置为普通-gpio-输出"></a> ③ 配置为普通 GPIO 输出</h3>
-<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token key attr-name">ODE</span> <span class="token punctuation">=</span> <span class="token value attr-value">0             # 普通推挽</span>
-<span class="token key attr-name">DSE</span> <span class="token punctuation">=</span> <span class="token value attr-value">100 (R0/4)    # 中等驱动</span>
-<span class="token key attr-name">SRE</span> <span class="token punctuation">=</span> <span class="token value attr-value">1             # 快速或视环境选</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>🟢用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> flags <span class="token operator">=</span> <span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_GETFL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_SETFL<span class="token punctuation">,</span> flags <span class="token operator">|</span> O_NONBLOCK <span class="token operator">|</span> O_ASYNC<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<blockquote>
+<p><strong>不能直接 F_SETFL 一个新值</strong>，否则你会把原有 flags 覆盖掉。</p>
+</blockquote>
+<p><em><strong>2. F_SETOWN / F_GETOWN</strong></em><br />
+👉 <strong>异步通知必须用</strong></p>
+<p>🟢作用：指定信号发给谁 修改 <code>file-&gt;f_owner.pid = pid</code></p>
+<p>🟢用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_SETOWN<span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><em><strong>3. F_DUPFD / F_DUPFD_CLOEXEC</strong></em></p>
+<p>🟢作用：复制文件描述符</p>
+<p>🟢用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> newfd <span class="token operator">=</span> <span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_DUPFD<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><em><strong>4. 文件锁</strong></em></p>
+<p>用于防止多个进程同时操作资源。现在不深入。</p>
+<h3 id="32-fasync_helper"><a class="markdownIt-Anchor" href="#32-fasync_helper"></a> 3.2. <code>fasync_helper()</code></h3>
+<p>这是在驱动层使用的。<code>fasync_helper()</code> 用来维护“需要被异步通知的进程列表”。<br />
+它做的事只有一个核心目标——<br />
+<strong>哪个进程打开了设备并设置了 O_ASYNC，就把那个进程记下来。</strong></p>
+<p>函数原型：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">fasync_helper</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span>
+                  <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span>
+                  <span class="token keyword">int</span> on<span class="token punctuation">,</span>
+                  <span class="token keyword">struct</span> <span class="token class-name">fasync_struct</span> <span class="token operator">*</span><span class="token operator">*</span>fapp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>
+<p><code>fd</code>：</p>
+<ul>
+<li>用户态传进来的文件描述符</li>
+<li><strong>只是标识用途</strong></li>
+<li>内核真正关心的是 <code>file</code><br />
+可以把它当附带信息</li>
+</ul>
+</li>
+<li>
+<p><code>file</code>：</p>
+<ul>
+<li>对应用户态 <code>open()</code> 返回的 fd</li>
+<li>即fcntl操作的 <code>struct file</code>
+<ul>
+<li><code>f_owner</code>（信号接收者）</li>
+<li><code>f_flags</code>（是否 O_ASYNC）<br />
+异步通知最终是基于 file 的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>on</code>：</p>
+<ul>
+<li><code>on != 0</code> 启用异步（加入队列）</li>
+<li><code>on == 0</code> 关闭异步（移除队列）</li>
+</ul>
+</li>
+<li>
+<p><code>fapp</code>：<br />
+需要被异步通知的进程链表的链表头。</p>
+</li>
+</ul>
+<p>函数逻辑伪代码：</p>
+<pre class="line-numbers language-none"><code class="language-none">if (on) &#123;
+    &#x2F;&#x2F; 开启异步
+    if (file 不在 fapp 链表中) &#123;
+        分配 fasync_struct
+        设置 file &#x2F; f_owner
+        插入 fapp 链表
+    &#125;
+&#125; else &#123;
+    &#x2F;&#x2F; 关闭异步
+    if (file 在 fapp 链表中) &#123;
+        从链表删除
+        释放 fasync_struct
+    &#125;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="33-kill_fasync"><a class="markdownIt-Anchor" href="#33-kill_fasync"></a> 3.3. <code>kill_fasync()</code></h3>
+<p>在驱动层使用。向应用程序发出信号的核心函数。</p>
+<p>原型：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">kill_fasync</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">fasync_struct</span> <span class="token operator">*</span><span class="token operator">*</span>fp<span class="token punctuation">,</span> <span class="token keyword">int</span> sig<span class="token punctuation">,</span> <span class="token keyword">int</span> band<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><code>fp</code>：要操作的 fasync_struct。</li>
+<li><code>sig</code>：要发送的信号。</li>
+<li><code>band</code>：可读时设置为 POLL_IN，可写时设置为 POLL_OUT。</li>
+</ul>
+<h3 id="34-工作流程"><a class="markdownIt-Anchor" href="#34-工作流程"></a> 3.4. 工作流程</h3>
+<ol>
+<li>在用户态打开设备：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"/dev/key"</span><span class="token punctuation">,</span> O_RDWR<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>此步在 VFS 中创建 <code>struct file</code>，没启用异步。</p>
+<ol start="2">
+<li>用户态登记进程PID：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_SETOWN<span class="token punctuation">,</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>内核找到 <code>struct file</code>，把 <code>file-&gt;f_owner.pid</code> 设置为当前进程 PID，以后这个 file 触发信号，就发给这个进程。</p>
+<ol start="3">
+<li>用户态请求开启异步通知：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> flags <span class="token operator">=</span> <span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_GETFL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fcntl</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> F_SETFL<span class="token punctuation">,</span> flags <span class="token operator">|</span> O_ASYNC<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>此步会触发驱动的 fasync 回调函数。</strong></p>
+<ol start="4">
+<li>驱动必须实现 fasync 这个fop：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">key_fasync</span><span class="token punctuation">(</span><span class="token keyword">int</span> fd<span class="token punctuation">,</span> <span class="token keyword">struct</span> <span class="token class-name">file</span> <span class="token operator">*</span>file<span class="token punctuation">,</span> <span class="token keyword">int</span> on<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">key_dev</span> <span class="token operator">*</span>kdev <span class="token operator">=</span> file<span class="token operator">-></span>private_data<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">fasync_helper</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> file<span class="token punctuation">,</span> on<span class="token punctuation">,</span> <span class="token operator">&amp;</span>kdev<span class="token operator">-></span>async_queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>fasync_helper：把当前进程封装成 <code>struct fasync_struct</code> 并加入 <code>kdev-&gt;async_queue</code>。</p>
+<p>just like this：</p>
+<pre class="line-numbers language-none"><code class="language-none">key_dev -&gt; 设备资源结构体
+ └── async_queue
+      ├── 进程A (PID xxx)
+      ├── 进程B<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="5">
+<li>事件发生：<br />
+例如，按键中断触发</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">irq_handler()
+&#123;
+    key_value &#x3D; 1;
+    kill_fasync(&amp;kdev-&gt;async_queue, SIGIO, POLL_IN);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>kill_fasync：通知 async_queue 里的所有进程：有 I/O 事件发生了。</p>
+<p>just like this：</p>
+<pre class="line-numbers language-none"><code class="language-none">kill_fasync
+ └── 遍历 async_queue
+      └── send_sigio()
+           └── send_sig_info()
+                └── 把 SIGIO 放入目标进程的 signal queue<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注意：此函数只是把只是把信号“挂”到目标进程上。</p>
+<ol start="6">
+<li>用户态必须注册信号处理函数：</li>
+</ol>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">signal</span><span class="token punctuation">(</span>SIGIO<span class="token punctuation">,</span> sigio_handler<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>当内核发现：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">current<span class="token operator">-></span>pending signal <span class="token operator">==</span> SIGIO<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>则<br />
+→ 保存当前上下文<br />
+→ 跳转到 sigio_handler()</p>
+<h2 id="4-使用异步机制"><a class="markdownIt-Anchor" href="#4-使用异步机制"></a> 4. 使用异步机制</h2>
+<h3 id="41-应用程序端-user-space"><a class="markdownIt-Anchor" href="#41-应用程序端-user-space"></a> 4.1. 应用程序端 (User Space)</h3>
+<p>应用程序需要做三件事（简称“三板斧”）：</p>
+<ol>
+<li><strong>绑定信号处理函数</strong>：使用 <code>signal()</code> 让应用知道收到 <code>SIGIO</code> 信号后该干什么。</li>
+<li><strong>设置属主</strong>：使用 <code>fcntl(fd, F_SETOWN, getpid())</code> 告诉内核：“这个设备文件的信号要发给当前进程”。</li>
+<li><strong>开启异步标志</strong>：使用 <code>fcntl(fd, F_SETFL, flags | O_ASYNC)</code> 启用异步通知功能。</li>
+</ol>
+<h3 id="42-驱动程序端-kernel-space"><a class="markdownIt-Anchor" href="#42-驱动程序端-kernel-space"></a> 4.2. 驱动程序端 (Kernel Space)</h3>
+<p>驱动需要处理数据结构 <code>fasync_struct</code> 并实现三个部分：</p>
+<ol>
+<li><strong>定义结构体</strong>：在设备结构体中定义 <code>struct fasync_struct *async_queue;</code>。</li>
+<li><strong>实现 <code>.fasync</code> 接口</strong>：当应用调用 <code>fcntl</code> 设置 <code>O_ASYNC</code> 时，内核会调用驱动的 <code>.fasync</code> 函数。驱动里只需调用内核辅助函数 <code>fasync_helper</code>。</li>
+<li><strong>发送信号</strong>：当设备数据就绪（如中断来了），调用 <code>kill_fasync</code> 发送信号。</li>
+<li><strong>清理</strong>：在 <code>.release</code> 函数中把节点从异步队列中删除。</li>
+</ol>
+<h3 id="43-番外嵌入还是指针"><a class="markdownIt-Anchor" href="#43-番外嵌入还是指针"></a> 4.3. 番外：嵌入还是指针？</h3>
+<p>在设备资源结构体中，<br />
+<code>struct fasync_struct async_queue</code> 用嵌入还是指针？</p>
+<p>用指针。因为它是“外部管理对象”，你只是引用。它由 <code>fasync_helper</code> 管理。</p>
+<p>—END—</p>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约973字。于2025/12/08首次发布，最后更新于2025/12/08。 </p>
+<p>共计约1.8k字。于2025/12/19首次发布，最后更新于2025/12/20。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -468,7 +397,7 @@
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%AF%84%E5%AD%98%E5%99%A8%E6%80%BB%E4%BD%93%E5%8A%9F%E8%83%BD%E6%A6%82%E8%BF%B0"><span class="toc-text"> 一. 寄存器总体功能概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E9%80%90%E5%AD%97%E6%AE%B5%E8%A7%A3%E6%9E%90%E7%94%B1%E9%AB%98%E5%88%B0%E4%BD%8E%E4%BD%8D"><span class="toc-text"> 二. 逐字段解析（由高到低位）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3117reserved"><span class="toc-text"> 31–17：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-hys-%E8%BE%93%E5%85%A5%E8%BF%9F%E6%BB%9Ehysteresis%E4%BD%BF%E8%83%BD"><span class="toc-text"> 16: HYS — 输入迟滞（Hysteresis）使能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1514pus-%E4%B8%8A%E4%B8%8B%E6%8B%89%E7%94%B5%E9%98%BB%E9%85%8D%E7%BD%AE"><span class="toc-text"> 15–14：PUS — 上下拉电阻配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-pue-pull-keeper-%E9%80%89%E6%8B%A9"><span class="toc-text"> 13: PUE — Pull &#x2F; Keeper 选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-pke-pullkeeper-%E4%BD%BF%E8%83%BD"><span class="toc-text"> 12: PKE — Pull&#x2F;Keeper 使能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-ode-%E5%BC%80%E6%BC%8F%E8%BE%93%E5%87%BA%E4%BD%BF%E8%83%BDopen-drain-enable"><span class="toc-text"> 11: ODE — 开漏输出使能（Open Drain Enable）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#108reserved"><span class="toc-text"> 10–8：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#76-speed-io%E9%80%9F%E5%BA%A6%E9%80%9A%E5%B8%B8-read-onlysnvs%E5%8C%BA%E5%9F%9F%E5%9B%BA%E5%AE%9A"><span class="toc-text"> 7–6: SPEED — I&#x2F;O速度（通常 Read Only，SNVS区域固定）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-dse-drive-strength%E9%A9%B1%E5%8A%A8%E8%83%BD%E5%8A%9B"><span class="toc-text"> 5–3: DSE — Drive Strength（驱动能力）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21reserved"><span class="toc-text"> 2–1：Reserved</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-sre-slew-rate%E8%BE%93%E5%87%BA%E8%BD%AC%E6%8D%A2%E9%80%9F%E5%BA%A6"><span class="toc-text"> 0: SRE — Slew Rate（输出转换速度）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E5%8A%9F%E8%83%BD%E6%B1%87%E6%80%BB"><span class="toc-text"> 三. 功能汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E5%85%B8%E5%9E%8B%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90"><span class="toc-text"> 四. 典型使用例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%BA%E8%BE%93%E5%85%A5%E4%B8%8A%E6%8B%89"><span class="toc-text"> 配置为输入上拉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E4%B8%BA-i2c-sdascl%E5%BC%80%E6%BC%8F-%E4%B8%8A%E6%8B%89"><span class="toc-text"> ② 配置为 I²C SDA&#x2F;SCL（开漏 + 上拉）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E4%B8%BA%E6%99%AE%E9%80%9A-gpio-%E8%BE%93%E5%87%BA"><span class="toc-text"> ③ 配置为普通 GPIO 输出</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="toc-text"> 1. 什么是异步通知机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text"> 2. 异步通知的优缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E4%BC%98%E7%82%B9"><span class="toc-text"> 2.1. 优点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E7%BC%BA%E7%82%B9"><span class="toc-text"> 2.2. 缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%90%86%E8%A7%A3%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%88%B6"><span class="toc-text"> 3. 理解异步通知机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-fcntl"><span class="toc-text"> 3.1. fcntl()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-fasync_helper"><span class="toc-text"> 3.2. fasync_helper()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-kill_fasync"><span class="toc-text"> 3.3. kill_fasync()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#34-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text"> 3.4. 工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8%E5%BC%82%E6%AD%A5%E6%9C%BA%E5%88%B6"><span class="toc-text"> 4. 使用异步机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%AB%AF-user-space"><span class="toc-text"> 4.1. 应用程序端 (User Space)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E7%AB%AF-kernel-space"><span class="toc-text"> 4.2. 驱动程序端 (Kernel Space)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%95%AA%E5%A4%96%E5%B5%8C%E5%85%A5%E8%BF%98%E6%98%AF%E6%8C%87%E9%92%88"><span class="toc-text"> 4.3. 番外：嵌入还是指针？</span></a></li></ol></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
