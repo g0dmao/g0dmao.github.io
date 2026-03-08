@@ -17,35 +17,179 @@
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
 
     <body>
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
-        <!--tag详情页-->
-<h2 style="text-align: center;"> Tag: iic </h2>
-<div class="container">
-    <div>
-    
-        <h2> 2025/03 </h2>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">ARM-CMSIS简介</h1>
+</div>
 
-    
-        03/12 -
-    
-    <a href="/posts/58129/">CubeMX配置功能系列：iic</a><br>
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-cmsis是什么"><a class="markdownIt-Anchor" href="#1-cmsis是什么"></a> 1. CMSIS是什么</h2>
+<p>相信使用keil的朋友对“CMSIS”这个词并不陌生，在我们初入门时，并没有深究这个词的含义，只是知道系统启动和这个有关。那他究竟是什么呢？</p>
+<p><strong>CMSIS ( Cortex Microcontroller Software Interface Standard )，翻译过来是ARM Cortex™ 微控制器软件接口标准</strong> 。简单来说，CMSIS就是 ARM 公司为了解决单片机（MCU）碎片化问题，而强行推行的一套“类 Linux 子系统框架”。</p>
+<p>我们都知道，在程序设计中，上层直接依赖底层，代码耦合性非常的严重，底层代码一改，上层不知道要改多少地方，因此我们在程序设计中才会有依赖倒置原则。如果你了解程序设计中的依赖倒置原则，那理解ARM设计这套标准的初衷就不难了。</p>
+<p>在早期的 ARM 单片机时代，ST（意法半导体）、NXP（恩智浦）、TI（德州仪器）等厂商都有自己的大爷脾气。大家用的都是 ARM Cortex-M 的内核，但每家定义的寄存器名字、写驱动的方式千奇百怪。代码换个芯片就得重写。所以 ARM 站出来制定了 CMSIS，也就相当于是接口层。</p>
+<h2 id="2-cmsis的几个核心组件"><a class="markdownIt-Anchor" href="#2-cmsis的几个核心组件"></a> 2. CMSIS的几个核心组件</h2>
+<h3 id="21-cmsis-core"><a class="markdownIt-Anchor" href="#21-cmsis-core"></a> 2.1. CMSIS-CORE</h3>
+<p>ARM 自己设计的 CPU 内核（比如 Cortex-M3/M4/M7）里面带的东西，比如中断控制器（NVIC）、系统滴答定时器（SysTick）、MPU（内存保护单元）以及一些核心寄存器。因为这是 ARM 亲生的，所以 ARM 直接提供写好的 C 语言头文件和内联汇编。你调用的 <code>NVIC_EnableIRQ()</code>，在任何厂家的 Cortex-M 芯片上都是一模一样的，因为所有厂家都依赖它。</p>
+<h3 id="22-device-header-files"><a class="markdownIt-Anchor" href="#22-device-header-files"></a> 2.2. Device Header Files</h3>
+<p>ARM 规定了一个<strong>命名规范</strong>，强制要求各家厂商统一数据结构的长相。所有芯片厂商按照这个格式来定义自己外设（UART、SPI、I2C）的寄存器地址和位掩码。比如强制要求叫 <code>UART1-&gt;DR</code>，而不能叫 <code>UART1_DATA_REG</code>。</p>
+<h3 id="23-cmsis-driver"><a class="markdownIt-Anchor" href="#23-cmsis-driver"></a> 2.3. CMSIS-Driver</h3>
+<p>驱动接口层。这是一个<strong>纯粹的接口标准（API 定义）</strong>。ARM 定义了一套结构体，里面全都是函数指针。比如对于串口，它规定必须有 <code>Initialize</code>、<code>Send</code>、<code>Receive</code> 这几个接口。芯片厂商（如 ST）需要提供底层代码去填充这些函数指针。而上层则直接调用这些接口。</p>
+<h3 id="24-cmsis-rtos"><a class="markdownIt-Anchor" href="#24-cmsis-rtos"></a> 2.4. CMSIS-RTOS</h3>
+<p>这个很简单，由于每种 OS 的创建线程、信号量 API 都不一样。CMSIS-RTOS 提供了一层封装（Wrapper）。 如果你用 CMSIS-RTOS提供的API，不管你底层真正跑的是 FreeRTOS 还是 Keil RTX，你的应用代码都不用改。</p>
+<h2 id="3-使用cmsis来进行开发"><a class="markdownIt-Anchor" href="#3-使用cmsis来进行开发"></a> 3. 使用CMSIS来进行开发</h2>
+<p>上面的介绍可能带给你一点启发。既然对于所有采用ARMCortex内核的芯片，都支持CMSIS，那我直接用CMSIS提供的接口来进行开发，岂不是直接实现代码大一统？直接无缝切换mcu，代码依然能运行？</p>
+<p>理想很丰满，但现实很骨感。如果代码完全不依赖具体硬件，那客户今天用 ST，明天嫌贵就可以无缝切换到其他厂商。像 ST 这样的巨头，为了维持客户粘性，虽然名义上支持 CMSIS-Driver，但他们更主推自己搞的 STM32 HAL 库。<br />
+所以在实际单片机开发中，<strong>CMSIS-CORE</strong> 是百分之百会用到的（大家都认），但 <strong>CMSIS-Driver</strong> 不一定每一家都完全支持或者好用，很多开发者依然会直接调用厂商提供的专属驱动库。</p>
+<p>当然你也可以尝试使用CMSIS来进行开发，也很简单，这里贴一篇文章可以参考：<br />
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/yyz_1987/article/details/130731368?spm=1001.2014.3001.5502">还在老一套？STM32使用新KEIL5的IDE，全新开发模式RTE介绍及使用_keil rte-CSDN博客</a></p>
 
-    
-        03/10 -
-    
-    <a href="/posts/55329/">通信协议：Iic</a><br>
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1k字。于2026/03/08首次发布，最后更新于2026/03/08。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
 
     </div>
-    <div style="position: sticky; top: 10px;">
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-cmsis%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text"> 1. CMSIS是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-cmsis%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-text"> 2. CMSIS的几个核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-cmsis-core"><span class="toc-text"> 2.1. CMSIS-CORE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-device-header-files"><span class="toc-text"> 2.2. Device Header Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-cmsis-driver"><span class="toc-text"> 2.3. CMSIS-Driver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-cmsis-rtos"><span class="toc-text"> 2.4. CMSIS-RTOS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8cmsis%E6%9D%A5%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91"><span class="toc-text"> 3. 使用CMSIS来进行开发</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
-        <button id="back-to-index" title="back to home">Home</button>
+            <button id="back-to-index" title="back to home">Home</button>
         </a>
+        <button id="back-to-top" title="back to top">Top</button>
     </div>
 </div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
