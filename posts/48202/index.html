@@ -17,30 +17,236 @@
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
 
     <body>
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
-        <!--tag详情页-->
-<h2 style="text-align: center;"> Tag: POSIX </h2>
-<div class="container">
-    <div>
-    
-        <h2> 2025/09 </h2>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">大蟒蛇subprocess模块极简入门</h1>
+</div>
 
-    
-        09/15 -
-    
-    <a href="/posts/26506/">POSIX IPC：System v 的继任者</a><br>
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>写 Python 脚本时，经常会需要在 Python 代码里悄悄跑一个终端命令（比如跑一段 bash 脚本）。<br />
+那就不得不提到 Python 官方推荐的现代解决方案：<code>subprocess</code> 模块。由于我只是偶尔写点小脚本，只要掌握其中的一个函数就足够了，在此记录以防忘记。</p>
+<h3 id="唯一真神subprocessrun"><a class="markdownIt-Anchor" href="#唯一真神subprocessrun"></a> 唯一真神：subprocess.run()</h3>
+<p>自 Python 3.5 起，官方强烈建议使用 <code>subprocess.run()</code> 来替代其他老旧的函数。它的逻辑非常直白：运行指定的命令，等待它完成，然后返回一个包含执行结果的对象。</p>
+<p>我们需要先导入它：</p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>下面我们通过三个最常见的场景，来看看它到底怎么用。</p>
+<h3 id="场景一只管执行不需要获取输出-fire-and-forget"><a class="markdownIt-Anchor" href="#场景一只管执行不需要获取输出-fire-and-forget"></a> 场景一：只管执行，不需要获取输出 (Fire and Forget)</h3>
+<p>假设你只想在脚本里新建一个文件夹，不需要关心终端打印了什么。</p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess
+
+# 执行命令: mkdir new_folder
+subprocess.run([&quot;mkdir&quot;, &quot;new_folder&quot;])
+
+print(&quot;文件夹创建完毕！&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>我们把命令写成了一个<strong>列表</strong> <code>[&quot;mkdir&quot;, &quot;new_folder&quot;]</code>，而不是一个长字符串 <code>&quot;mkdir new_folder&quot;</code>。 这是 <code>subprocess</code> 的推荐写法，它可以有效避免复杂的空格转义和安全漏洞（比如 Shell 注入）。<strong>第一个元素是命令，后面的元素是参数。</strong></p>
+</blockquote>
+<h3 id="场景二我需要拿到命令的输出内容"><a class="markdownIt-Anchor" href="#场景二我需要拿到命令的输出内容"></a> 场景二：我需要拿到命令的输出内容</h3>
+<p>这是写脚本时最常见的需求。比如你想用 Python 获取当前的系统时间或者某个配置项的值，你需要把终端打印的字存到 Python 的变量里。</p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess
+
+# 运行 echo 命令，并捕获输出
+result &#x3D; subprocess.run([&quot;echo&quot;, &quot;Hello from terminal!&quot;], capture_output&#x3D;True, text&#x3D;True)
+
+# 打印获取到的内容
+print(f&quot;终端说: &#123;result.stdout&#125;&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>核心要点：</strong> 这里加了两个非常关键的参数：</p>
+<ol>
+<li>
+<p><strong>capture_output=True</strong>：告诉 Python，不要把结果打印到屏幕上，而是偷偷拦截下来存进 <code>result</code> 对象里。</p>
+</li>
+<li>
+<p><strong>text=True</strong>：告诉 Python 将输出结果作为普通的 <strong>字符串（String）</strong> 处理。如果不加这个参数，你得到的是带有 <code>b'...'</code> 前缀的字节流（Bytes），处理起来会很麻烦。</p>
+</li>
+</ol>
+<h3 id="场景三如果命令执行失败了怎么办"><a class="markdownIt-Anchor" href="#场景三如果命令执行失败了怎么办"></a> 场景三：如果命令执行失败了怎么办？</h3>
+<p>写脚本最怕的就是静默失败。如果外部命令报错了，Python 脚本默认还会继续往下跑，这可能会导致灾难性的后果。</p>
+<p><code>subprocess.run()</code> 返回的 <code>result</code> 对象里，有一个叫 <code>returncode</code> 的属性。<code>returncode == 0</code> 代表成功，非 0 代表出错。</p>
+<p><strong>温和的处理方式（手动检查）：</strong></p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess
+
+result &#x3D; subprocess.run([&quot;ls&quot;, &quot;&#x2F;nonexistent_folder&quot;], capture_output&#x3D;True, text&#x3D;True)
+
+if result.returncode &#x3D;&#x3D; 0:
+    print(&quot;命令执行成功！&quot;)
+else:
+    print(f&quot;糟糕，出错了！错误代码: &#123;result.returncode&#125;&quot;)
+    print(f&quot;错误信息: &#123;result.stderr&#125;&quot;) # 报错信息通常存放在 stderr 中<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>暴力的处理方式（直接让脚本崩溃报错）：</strong></p>
+<p>如果你希望外部命令一旦失败，Python 脚本就立刻停止并抛出异常，只需加一个 <code>check=True</code> 参数：</p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess
+
+# 如果这个命令失败，Python 会直接抛出 CalledProcessError 异常
+subprocess.run([&quot;ls&quot;, &quot;&#x2F;nonexistent_folder&quot;], check&#x3D;True)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>如果偶尔写写脚本，把下面这段代码存成代码片段（Snippet），遇到需要调用外部命令的时候直接复制粘贴修改即可：</p>
+<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">import subprocess
+
+def run_command(cmd_list):
+    &quot;&quot;&quot;
+    运行外部命令的通用模板
+    &quot;&quot;&quot;
+    try:
+        # capture_output 捕获输出, text&#x3D;True 返回字符串, check&#x3D;True 失败时抛出异常
+        result &#x3D; subprocess.run(cmd_list, capture_output&#x3D;True, text&#x3D;True, check&#x3D;True)
+        return result.stdout.strip() # strip() 用来去掉结尾多余的换行符
+    except subprocess.CalledProcessError as e:
+        print(f&quot;命令执行失败: &#123;e&#125;&quot;)
+        print(f&quot;错误输出: &#123;e.stderr&#125;&quot;)
+        return None
+
+# 使用示例：
+output &#x3D; run_command([&quot;git&quot;, &quot;branch&quot;])
+if output:
+    print(f&quot;当前分支信息：\n&#123;output&#125;&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这就够用了！至于更复杂的管道符（<code>|</code>）交互或者后台异步执行，那是<code>subprocess.Popen</code> 的工作，等到真的需要写复杂的系统脚本时再去了解它也不迟。</p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1.1k字。于2026/03/12首次发布，最后更新于2026/03/12。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
 
     </div>
-    <div style="position: sticky; top: 10px;">
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%94%AF%E4%B8%80%E7%9C%9F%E7%A5%9Esubprocessrun"><span class="toc-text"> 唯一真神：subprocess.run()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%80%E5%8F%AA%E7%AE%A1%E6%89%A7%E8%A1%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E8%8E%B7%E5%8F%96%E8%BE%93%E5%87%BA-fire-and-forget"><span class="toc-text"> 场景一：只管执行，不需要获取输出 (Fire and Forget)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%BA%8C%E6%88%91%E9%9C%80%E8%A6%81%E6%8B%BF%E5%88%B0%E5%91%BD%E4%BB%A4%E7%9A%84%E8%BE%93%E5%87%BA%E5%86%85%E5%AE%B9"><span class="toc-text"> 场景二：我需要拿到命令的输出内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%89%E5%A6%82%E6%9E%9C%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E5%A4%B1%E8%B4%A5%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="toc-text"> 场景三：如果命令执行失败了怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text"> 总结</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
-        <button id="back-to-index" title="back to home">Home</button>
+            <button id="back-to-index" title="back to home">Home</button>
         </a>
+        <button id="back-to-top" title="back to top">Top</button>
     </div>
 </div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
     <script src="/vendor/js/echarts.min.js"></script>
         
         <script>
