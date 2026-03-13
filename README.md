@@ -1,5 +1,13 @@
 # 更新日志（自2025.08）
 
+## 2026
+
+- 03.13
+  
+  - 更新主页介绍
+  
+  - 更新数据统计展示
+
 ## 2025
 
 - 11.04
@@ -69,7 +77,7 @@
 目前博客使用了如下插件：
 
 - 索引生成器：[hexo-generator-index-custom ](https://github.com/im0o/hexo-generator-index-custom)
-- 博客数据可视化：[hexo-graph](https://github.com/codepzj/hexo-graph)
+- 博客数据可视化：[hexo-statistics-charts](https://www.npmjs.com/package/hexo-statistics-charts)
 - 文章链接生成：[hexo-abbrlink](https://github.com/ohroy/hexo-abbrlink)
 - 渲染器：[hexo-renderer-markdown-it-plus](https://github.com/CHENXCHEN/hexo-renderer-markdown-it-plus)
 - 警告卡片：[hexo-admonition](https://github.com/lxl80/hexo-admonition)
