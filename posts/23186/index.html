@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">通信协议：SPI</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-什么是spi"><a class="markdownIt-Anchor" href="#1-什么是spi"></a> 1. 什么是SPI？</h2>
+<p>SPI（Serial Peripheral Interface，串行外设接口）是由摩托罗拉（Motorola）公司开发的一种<strong>同步、全双工、单主多从式</strong>的通信协议。</p>
+<p>不用被这些名词吓到，我们拆解来看：</p>
+<ul>
+<li><strong>同步：</strong> 意味着通信双方有一个共同的时钟（节拍器）来指挥数据的收发，步调一致。</li>
+<li><strong>全双工：</strong> 数据可以同时双向传输。就像你在打电话，你可以一边说话一边听对方说话。</li>
+<li><strong>单主多从式：</strong> 网络中有且只有一个“老大”（Master），其他都是“小弟”（Slave）。老大负责提供时钟节拍，并决定什么时候和哪个小弟说话（CS）。</li>
+</ul>
+<h2 id="2-工作原理"><a class="markdownIt-Anchor" href="#2-工作原理"></a> 2. 工作原理</h2>
+<p>它的底层硬件逻辑其实极其简单粗暴——核心就是<strong>移位寄存器（Shift Register）</strong>。</p>
+<p>在STM32（主机）和你的屏幕或传感器（从机）内部，各有一个8位（或16位）的移位寄存器。这两个寄存器通过 MOSI 和 MISO 两根线首尾相连，形成了一个<strong>环形结构</strong>。</p>
+<p><strong>工作过程就是转圈交换数据：</strong></p>
+<p>主机将 CS 线拉低。</p>
+<ol>
+<li>
+<p><strong>准备阶段：</strong> 主机把要发送的数据放到自己的移位寄存器里；从机也把要返回的数据放到自己的移位寄存器里。</p>
+</li>
+<li>
+<p><strong>时钟启动：</strong> 主机的 SCLK 引脚开始发出时钟脉冲。</p>
+</li>
+<li>
+<p><strong>环形移位：</strong> 每来一个时钟脉冲的边沿（取决于SPI的工作模式）：</p>
+<ul>
+<li>主机寄存器里的最高位（MSB）通过 MOSI 线被挤出去，跑进从机寄存器的最低位。</li>
+<li>同时，从机寄存器里的最高位（MSB）通过 MISO 线被挤出去，跑进主机寄存器的最低位。</li>
+</ul>
+</li>
+<li>
+<p><strong>完成交换：</strong> 经过连续的8个时钟脉冲，主从机内部的8位数据刚好完整地转了一圈。主机的发出去的数据到了从机，从机的数据也到了主机。</p>
+</li>
+<li>
+<p><strong>锁存</strong>：当CS线再次被拉高，数据被锁存。就可以开始解析数据了。</p>
+</li>
+</ol>
+<p>因此，SPI的发送和接收是<strong>绑定在一起同时发生的</strong>。</p>
+<ul>
+<li>主机哪怕只是纯发送，它的MISO引脚也会在底层同步接收从机发来的数据（虽然你可以忽略这些垃圾数据）。</li>
+<li>反之，如果主机只想读数据，也必须主动发送一个“伪数据”（通常是<code>0xFF</code>或<code>0x00</code>），产生8个时钟节拍，才能把从机里的数据给“挤”回来。</li>
+</ul>
+<p><img src="Snipaste_2026-03-14_17-02-54.png" alt="" /></p>
+<p><img src="Snipaste_2026-03-14_17-15-17.png" alt="" /></p>
+<h2 id="3-标准spi信号线"><a class="markdownIt-Anchor" href="#3-标准spi信号线"></a> 3. 标准SPI信号线</h2>
+<p>SPI接口一般使用四条信号线通信：<strong>SDI（数据输入），SDO（数据输出），SCK（时钟），CS（片选）</strong></p>
+<p>亦即：</p>
+<ol>
+<li>
+<p><strong>SCLK (Serial Clock) - 串行时钟线：</strong> 由主机产生，就像乐队指挥的指挥棒。时钟的频率决定了通信的速度。</p>
+</li>
+<li>
+<p><strong>MOSI (Master Output Slave Input) - 主出从入：</strong> 主机发送数据，从机接收数据的通道。</p>
+</li>
+<li>
+<p><strong>MISO (Master Input Slave Output) - 主入从出：</strong> 主机接收数据，从机发送数据的通道。</p>
+</li>
+<li>
+<p><strong>CS/NSS (Chip Select / Slave Select) - 片选线：</strong> 由主机控制，低电平有效。当主机想要和某个特定的从机通信时，就会把连接那个从机的CS线拉低（变成0V）。这就好比上课时老师点名：“那个CS线被拉低的同学，站起来回答问题！”</p>
+</li>
+</ol>
+<blockquote>
+<p>因为每个从机都需要一根独立的CS线，所以如果从机太多，会占用主机较多的GPIO引脚。</p>
+</blockquote>
+<h2 id="4-spi工作模式"><a class="markdownIt-Anchor" href="#4-spi工作模式"></a> 4. SPI工作模式</h2>
+<p>SPI允许配置时钟的极性和相位，组合出四种工作模式。</p>
+<ul>
+<li>
+<p><strong>CPOL (Clock Polarity - 时钟极性)：</strong> 决定了SPI空闲时（没有数据传输时），SCLK线是高电平还是低电平。</p>
+<ul>
+<li>
+<p><code>CPOL = 0</code>：空闲时SCLK为低电平。</p>
+</li>
+<li>
+<p><code>CPOL = 1</code>：空闲时SCLK为高电平。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>CPHA (Clock Phase - 时钟相位)：</strong> 决定了数据是在时钟的第几个跳变沿（上升沿或下降沿）被采样（读取）。</p>
+<ul>
+<li>
+<p><code>CPHA = 0</code>：在第1个跳变沿采样数据。</p>
+</li>
+<li>
+<p><code>CPHA = 1</code>：在第2个跳变沿采样数据。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="Pasted%20image%2020260314162232.png" alt="" /></p>
+<p><strong>怎么选？</strong> 具体使用哪种模式，完全取决于你要连接的<strong>从机芯片手册</strong>怎么写。绝大多数市面上的传感器和屏幕驱动芯片，默认使用的是 <strong>Mode 0</strong> (CPOL=0, CPHA=0) 或 <strong>Mode 3</strong> (CPOL=1, CPHA=1)。</p>
+<h2 id="5-spi-多从设备的连接"><a class="markdownIt-Anchor" href="#5-spi-多从设备的连接"></a> 5. SPI 多从设备的连接</h2>
+<p>主机连接从机的方法一般有两种——直连式和菊花链式</p>
+<p><strong>直连：</strong></p>
+<p>很直观。</p>
+<p><img src="Snipaste_2026-03-14_17-01-58.png" alt="" /></p>
+<p><strong>菊花链</strong>：</p>
+<p>可以看出菊花链可以一定程度上节省GPIO资源。</p>
+<p>菊花链的最大缺点是因为是信号串行传输，所以一旦数据链路中的某设备发生故障的时候，它下面优先级较低的设备就不可能得到服务了；</p>
+<p>另一方面，距离主机越远的从机，获得服务的优先级越低，所以需要安排好从机的优先级，并且设置总线检测器，如果某个从机超时，则对该从机进行短路，防止单个从机损坏造成整个链路崩溃的情况；</p>
+<p><img src="Snipaste_2026-03-14_16-44-59.png" alt="" /></p>
+<p>具体的数据流向：</p>
+<p><img src="Snipaste_2026-03-14_16-49-40.png" alt="" /></p>
+<p>D为有效数据，X为无效数据（无操作指令NOP），可以看出，离主机越远，主机要给该从机发送消息耗时越长。</p>
+<blockquote>
+<p>假设你有 3 个设备组成菊花链（从机 1、从机 2、从机 3，从机 3 在最末端）。你想让<strong>从机 3</strong> 执行指令 <code>0xAA</code>，同时让从机 1 和 2 保持原样。主机不能只发一个 <code>0xAA</code>，它必须一次性发送 <strong>3 个字节（24 bits）</strong> 的数据。数据包的构造顺序是：<br />
+第 1 个字节：给从机 3 的目标指令 <code>0xAA</code><br />
+第 2 个字节：给从机 2 的 <strong>NOP（无操作）指令</strong>（通常是 <code>0x00</code> 或 <code>0xFF</code>，具体看芯片手册）<br />
+第 3 个字节：给从机 1 的 <strong>NOP（无操作）指令</strong></p>
+</blockquote>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1.5k字。于2026/03/14首次发布，最后更新于2026/03/14。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFspi"><span class="toc-text"> 1. 什么是SPI？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text"> 2. 工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A0%87%E5%87%86spi%E4%BF%A1%E5%8F%B7%E7%BA%BF"><span class="toc-text"> 3. 标准SPI信号线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-spi%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 4. SPI工作模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-spi-%E5%A4%9A%E4%BB%8E%E8%AE%BE%E5%A4%87%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-text"> 5. SPI 多从设备的连接</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,6],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

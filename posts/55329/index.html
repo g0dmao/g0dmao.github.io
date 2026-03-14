@@ -101,13 +101,13 @@
 <p>:::</p>
 </details>
 <hr />
-<h2 id="说明"><a class="markdownIt-Anchor" href="#说明"></a> 说明</h2>
+<h2 id="1-说明"><a class="markdownIt-Anchor" href="#1-说明"></a> 1. 说明</h2>
 <p>iic作为当今嵌入式应用中最常见的串行通信协议之一<span class="spoiler">我愿将其与UART和SPI并称三幻神</span>，是对于嵌入式开发者是最基本的要求，因为老是会忘记iic协议的一些细节，故作记录。</p>
-<h2 id="iic简介"><a class="markdownIt-Anchor" href="#iic简介"></a> iic简介</h2>
+<h2 id="2-iic简介"><a class="markdownIt-Anchor" href="#2-iic简介"></a> 2. iic简介</h2>
 <p><strong>IIC(Inter－Integrated Circuit)总线</strong>是一种由NXP（原PHILIPS）公司开发的两线式串行总线，用于连接微控制器及其外围设备。<strong>是一种半双工同步的低速通信协议</strong>。多用于主控制器和从器件间的主从通信，在小数据量场合使用，传输距离短，任意时刻只能有一个主机等特性。<br />
 <br />
 IC使用两根信号线进行通信：一根时钟线SCL，一根数据线SDA。IIC将SCL处于高时SDA拉低的动作作为开始信号，SCL处于高时SDA拉高的动作作为结束信号；传输数据时，SDA在SCL低电平时改变数据，在SCL高电平时保持数据，每个SCL脉冲的高电平传递1位数据。</p>
-<h2 id="主要特性"><a class="markdownIt-Anchor" href="#主要特性"></a> 主要特性</h2>
+<h2 id="3-主要特性"><a class="markdownIt-Anchor" href="#3-主要特性"></a> 3. 主要特性</h2>
 <ul>
 <li>IC用2根信号线通信：串行数据线 SDA、串行时钟线 SCL；</li>
 <li>IIC总线上所有器件的SDA、SCL引脚输出驱动都为<strong>开漏(OD) 结构</strong>，通过外接上拉电阻实现总线上所有节点SDA、SCL信号的线与逻辑关系；</li>
@@ -116,6 +116,7 @@ IC使用两根信号线进行通信：一根时钟线SCL，一根数据线SDA。
 <li>支持多主机。在总线上存在多个主机时，通过冲突检测和仲裁机制防止多个主机同时发起数据传输时存在的冲突；</li>
 <li>IIC总线上所有器件都具有“自动应答”功能，保证数据传输的正确性； <strong>主机和从机的区别在于对SCL的发送权，只有主机才能发送SCL</strong>；</li>
 <li>IIC总线允许挂载最多的设备数量取决于总线上最大电容值，一般为400pf（Hs模式100pf）</li>
+<li>有严格的时间窗口要求（建立时间（Setup Time）和保持时间（Hold Time））。</li>
 </ul>
 <p>支持的传输速率：</p>
 <table>
@@ -148,23 +149,47 @@ IC使用两根信号线进行通信：一根时钟线SCL，一根数据线SDA。
 </tr>
 </tbody>
 </table>
-<h2 id="硬件结构"><a class="markdownIt-Anchor" href="#硬件结构"></a> 硬件结构</h2>
-<h3 id="总线结构"><a class="markdownIt-Anchor" href="#总线结构"></a> 总线结构</h3>
+<h2 id="4-硬件特性及其高级机制"><a class="markdownIt-Anchor" href="#4-硬件特性及其高级机制"></a> 4. 硬件特性及其高级机制</h2>
+<h3 id="41-总线结构"><a class="markdownIt-Anchor" href="#41-总线结构"></a> 4.1. 总线结构</h3>
 <p>IIC使用两根信号线进行通信，要求两根线都使用 <strong>开漏输出接上拉电阻</strong> 的配置，以此实现总线上所有节点SDA、SCL信号的<strong>线与</strong>逻辑关系。<br />
 Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’低’数据不稳定，甚至损坏端口；太大会导致信号上升缓慢，使得数据传输出错。在不同应用场景及供电电压下有不同的取值要求。<br />
 <img src="79b9189018381624841758e3ade6e477.png" alt="" /></p>
-<h3 id="仲裁机制"><a class="markdownIt-Anchor" href="#仲裁机制"></a> 仲裁机制</h3>
-<h4 id="开漏输出"><a class="markdownIt-Anchor" href="#开漏输出"></a> 开漏输出</h4>
+<h3 id="42-开漏输出"><a class="markdownIt-Anchor" href="#42-开漏输出"></a> 4.2. 开漏输出</h3>
 <p>开漏输出回顾：当输入为高电平时，三级管导通，输出为低电平。输入为低电平，输出不确定，在这种情况下，如果使用强上拉，则可以输出高电平。开漏输出是实现”线与“的一种方案。</p>
-<h4 id="线与"><a class="markdownIt-Anchor" href="#线与"></a> 线与</h4>
+<h3 id="43-线与"><a class="markdownIt-Anchor" href="#43-线与"></a> 4.3. 线与</h3>
 <p>多个开漏输出连接在一起时，只要有一个输入为低电平，那么总体表现为低电平（处于低电平的那个io口把vdd流向Vout的电流引走了）。<br />
 <img src="Snipaste_2025-03-11_20-01-18.png" alt="" /></p>
 <p>“线与“使得总线上不会出现数据冲突，实现了总线的仲裁控制。总线的控制权会交给最后一个输出低电平的设备，其它设备（输出高）通过检测总线上的电平状态（状态低），对比与自己输出状态不一致，则自动退出对总线的控制请求，从而防止了总线上的数据冲突。</p>
-<h2 id="时序逻辑"><a class="markdownIt-Anchor" href="#时序逻辑"></a> 🌟时序逻辑</h2>
-<h3 id="数据有效性"><a class="markdownIt-Anchor" href="#数据有效性"></a> 数据有效性</h3>
+<h3 id="44-高级机制"><a class="markdownIt-Anchor" href="#44-高级机制"></a> 4.4 高级机制</h3>
+<h4 id="441-时钟拉伸"><a class="markdownIt-Anchor" href="#441-时钟拉伸"></a> 4.4.1 时钟拉伸</h4>
+<p>在理想状态下，时钟线 SCL 完全由主机掌控。但如果遇到这种情况：主机发送数据的速度太快，而从机（比如一个正在进行复杂运算的 ADC 芯片或 EEPROM）来不及处理上一个字节，怎么办？</p>
+<p>I2C 允许从机<strong>反向控制</strong>时钟线，这就是时钟拉伸。</p>
+<ol>
+<li><strong>主机释放 SCL：</strong> 在传输完一个 bit 后，主机内部的输出级会释放 SCL（输出 1/高阻态），期望外部的上拉电阻将 SCL 拉高，以便传输下一个 bit。</li>
+<li><strong>从机强制拉低 SCL：</strong> 如果从机还没准备好，它可以在这个时候主动把 SCL <strong>拉低</strong>（输出 0）。</li>
+<li><strong>主机的等待机制：</strong> 根据“线与”逻辑，只要从机拉低了 SCL，整条总线就是低电平。主机在准备拉高 SCL 发送下一位时，会去<strong>检测 SCL 的实际电平</strong>。如果主机发现自己释放了 SCL，但 SCL 依然是低电平，主机就会明白：“哦，从机还没忙完”。</li>
+<li><strong>恢复通信：</strong> 主机会进入等待状态，直到从机处理完毕并释放 SCL。此时上拉电阻将 SCL 拉高，主机检测到高电平后，才继续产生时钟信号。</li>
+</ol>
+<h4 id="442-总线仲裁"><a class="markdownIt-Anchor" href="#442-总线仲裁"></a> 4.4.2 总线仲裁</h4>
+<p>I2C 允许多个主机挂在同一条总线上。如果两个主机在完全相同的时刻想要控制总线（同时发出 Start 信号），它们不仅不会造成电路短路（因为是开漏输出，没有电源对地的直接通路），还能通过一套极其优雅的机制决出胜负。</p>
+<p>仲裁的核心法则是：<strong>“0 战胜 1”（拉低电平的设备获胜）</strong>。</p>
+<ol>
+<li><strong>同时发车：</strong> 主机 A 和主机 B 同时检测到总线空闲，同时发出 Start 信号，并开始发送地址。</li>
+<li><strong>边发边听：</strong> I2C 的设备在发送数据的同时，也会<strong>实时读取 SDA 线上的实际电平</strong>。</li>
+<li><strong>冲突发生：</strong> 假设主机 A 想发送 <code>1</code>（释放 SDA，期望被上拉变高），而主机 B 想发送 <code>0</code>（拉低 SDA）。</li>
+<li><strong>线与的魔法：</strong> 根据线与逻辑，此时总线实际表现为 <code>0</code>（低电平）。</li>
+<li><strong>仲裁结果：</strong> * 主机 B 想发 <code>0</code>，读回来也是 <code>0</code>，它认为一切正常，继续发送。
+<ul>
+<li>主机 A 想发 <code>1</code>，但读回来却是 <code>0</code>。主机 A 瞬间意识到：“有其他设备把总线拉低了，我发生了冲突！”</li>
+</ul>
+</li>
+<li><strong>默默退出：</strong> 发现自己发送与读取不一致的主机 A，会<strong>立刻判定自己失去了仲裁（Lost Arbitration）</strong>，并立即切换到从机模式或停止输出，把总线完全让给主机 B。整个过程对主机 B 和接收方来说是完全无缝且透明的。</li>
+</ol>
+<h2 id="5-时序逻辑"><a class="markdownIt-Anchor" href="#5-时序逻辑"></a> 5. 时序逻辑</h2>
+<h3 id="51-数据有效性"><a class="markdownIt-Anchor" href="#51-数据有效性"></a> 5.1 数据有效性</h3>
 <p>scl为高电平期间，为数据采集期，所以sda上的数据此时一定要保持稳定哦~<br />
 <img src="6c89c55012485f151df1a9fb48843d3f.jpeg" alt="" /></p>
-<h3 id="开始与结束信号"><a class="markdownIt-Anchor" href="#开始与结束信号"></a> 开始与结束信号</h3>
+<h3 id="52-开始与结束信号"><a class="markdownIt-Anchor" href="#52-开始与结束信号"></a> 5.2 开始与结束信号</h3>
 <p>有设备想要sda总线控制权时，会主动把sda拉低。平时sda为高。</p>
 <ul>
 <li><strong>开始信号（START/S）：</strong> <strong>SCL为高时</strong>，SDA从高到低的跳变产生开始信号 。</li>
@@ -172,10 +197,10 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 <li><strong>重复开始信号（ReSTART/Sr）：</strong> 在结束时不给出STOP信号，而以一个时钟周期内再次给出开始信号作为替代。<br />
 <img src="f749a6ab4f928522a99db173fd504647.png" alt="" /></li>
 </ul>
-<h3 id="传输格式字节格式"><a class="markdownIt-Anchor" href="#传输格式字节格式"></a> 传输格式（字节格式）</h3>
+<h3 id="53-传输格式字节格式"><a class="markdownIt-Anchor" href="#53-传输格式字节格式"></a> 5.3 传输格式（字节格式）</h3>
 <p>SDA数据线上的每个字节<strong>必须是8位</strong>，对于每次传输的<strong>字节数没有限制</strong>。每个字节（8位）数据传送完后紧跟着应答信号（ACK，第9位）。数据的先后顺序为：<strong>高位在前</strong> 。<br />
 <img src="d3bbca378362c28829cee243a8497ef7.png" alt="" /></p>
-<h3 id="ack信号"><a class="markdownIt-Anchor" href="#ack信号"></a> ACK信号</h3>
+<h3 id="54-ack信号"><a class="markdownIt-Anchor" href="#54-ack信号"></a> 5.4 ACK信号</h3>
 <p>协议规定数据传输过程必须包含应答（ACK）。接收器通过应答告知发送的字节已被成功接收，之后发送器可以进行下一个字节的传输。所以主机产生数据传输过程用了9个时钟。发送器在应答时钟周期内释放对SDA总线的控制，这样 <strong>接收器</strong> 可以通过将SDA线拉低告知发送器：数据已被成功接收。(谁接收，谁发送应答信号)<span class="spoiler">发送端对接收端说：我他妈要给你发数据了，收到货他妈回复一下0</span><br />
 应答信号分为两种：</p>
 <ol>
@@ -185,14 +210,101 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 <p>主机发送数据，从机接收时，ACK信号由从机发出。当在SCL第9位时钟高电平信号期间，如果SDA仍然保持高电平，则主机可以直接产生STOP条件终止以后的传输或者继续ReSTART开始一个新的传输 <span class="spoiler">此时主机发现事情不对，我他妈辛辛苦苦给你发的货你连句回应都没有，主机可以选择不发了，或者继续用爱发电发发发 大声发！来财，来~我是憋佬仔</span><br />
 <br />
 从机发送数据，主机读取数据时，ACK信号由主机给出。主机响应ACK表示还需要再接收数据，而当主机接收完想要的数据后，通过发送NACK告诉从机读取数据结束、释放总线。随后主机发送STOP命令，将总线释放，结束读操作。<span class="spoiler">从机这个fw，纯添狗级别的、麦当劳级别的、ATM级别的。主机叫一直叫从机爆金币，从机真就一直爆，榨干从机了就直接把他甩了他妈的</span></p>
-<h3 id="7bit完整传输示意图"><a class="markdownIt-Anchor" href="#7bit完整传输示意图"></a> 7bit完整传输示意图</h3>
+<h3 id="55-7bit完整传输流程拆解主发从收"><a class="markdownIt-Anchor" href="#55-7bit完整传输流程拆解主发从收"></a> 5.5 7bit完整传输流程拆解（主发从收）</h3>
 <p><img src="f313f22e0c7bc962ff6e9e5afc2bbc95.png" alt="" /></p>
-<p>没错前7位是地址，发完地址发送读/写命令，然后发送端交出sda控制权，等待接收端的应答信号。如果从机没有给出ACK应答，则说明接收设备可能没有收到数据（如寻址的设备不存在或是设备正在忙碌）或无法解析收到的数据，如果是这样，则由master来决定如何处理（STOP或ReSTART）。</p>
-<h3 id="从机发主机收的情况"><a class="markdownIt-Anchor" href="#从机发主机收的情况"></a> 从机发，主机收的情况</h3>
-<p>主机对向从机读取数据时，方式同发送数据有所不同，要多一次通信过程。<br />
-主机需要先向从机发送一次信号，告诉从机”我要读取数据“，然后<strong>重开一次通信</strong><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，等待从机主动返回数据。<br />
-<img src="Snipaste_2025-03-11_20-50-32.png" alt="" /></p>
-<h3 id="10bit传输"><a class="markdownIt-Anchor" href="#10bit传输"></a> 10bit传输</h3>
+<ol>
+<li>
+<p><strong>动作 1：总线空闲 (Bus Idle)</strong></p>
+<ul>
+<li><strong>状态：</strong> SCL 和 SDA 都在上拉电阻的作用下保持<strong>高电平</strong>。</li>
+<li><strong>潜台词：</strong> 没有任何设备在说话，总线可用。</li>
+</ul>
+</li>
+<li>
+<p><strong>动作 2：主机抢占总线 (Start Condition - S)</strong></p>
+<ul>
+<li><strong>操作：</strong> 主机在 SCL 为<strong>高</strong>时，主动把 SDA 拉<strong>低</strong>。</li>
+<li><strong>潜台词：</strong> 主机：“大家安静，我要开始点名了！”</li>
+<li><strong>效果：</strong> 所有挂在总线上的从机内部的 I2C 硬件模块都会被唤醒，准备接收地址。</li>
+</ul>
+</li>
+<li>
+<p><strong>动作 3：主机发送寻址与方向位 (Address + Write Bit)</strong><br />
+主机开始发出 SCL 时钟脉冲（一共 8 个时钟）。<strong>同时，在 SCL 为低电平时依次改变 SDA 的状态，在 SCL 为高电平时保持 SDA 稳定。</strong></p>
+<ul>
+<li><strong>发地址 (7 bit)：</strong> 主机依次发送 <code>0x3C</code> 的二进制 <code>011 1100</code>（先发高位 MSB）。</li>
+<li><strong>发方向 (1 bit)：</strong> 第 8 个位是读写控制位（R/W）。因为是主机发送数据，所以主机发送 <code>0</code>（写操作）。</li>
+<li><strong>合并来看：</strong> 主机实际在总线上发出的这一个字节是 <code>0x3C &lt;&lt; 1 | 0</code> = <code>0x78</code> (<code>0111 1000</code>)。</li>
+</ul>
+</li>
+<li>
+<p>动作 4：从机应答点名 (Slave ACK 1)<br />
+这是第一个极其关键的校验点。</p>
+<ul>
+<li><strong>第 9 个时钟周期到来：</strong> 主机释放 SDA 线（让它默认变高），但继续输出第 9 个 SCL 脉冲。</li>
+<li><strong>从机的动作：</strong> 地址匹配为 <code>0x3C</code> 的那个从机，必须在这个时钟周期内，主动把 SDA 拉<strong>低</strong>。</li>
+<li><strong>主机的检测：</strong> 主机在第 9 个 SCL 的高电平期间去读取 SDA 的电平。
+<ul>
+<li>如果读到是<strong>低电平 (ACK)</strong>：说明从机在线且准备好了，继续下一步。</li>
+<li>如果读到是<strong>高电平 (NACK)</strong>：说明从机没接好、坏了或者正在忙。主机通常会直接发起 Stop 信号放弃本次通信。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>动作 5：主机发送业务数据 (Data Transmission)<br />
+握手成功，开始传真东西。</p>
+<ul>
+<li>主机继续发出 8 个 SCL 时钟脉冲。</li>
+<li>按照 <code>1010 0101</code> (<code>0xA5</code>) 的顺序，主机在 SCL 低电平时切换 SDA，高电平时保持。数据依然是高位（MSB）先发。</li>
+</ul>
+</li>
+<li>
+<p>动作 6：从机再次应答 (Slave ACK 2)<br />
+传完一个字节，还得确认对方收没收到。</p>
+<ul>
+<li><strong>第 18 个时钟周期（第 2 个字节的第 9 位）：</strong> 主机再次释放 SDA 线，输出时钟。</li>
+<li><strong>从机的动作：</strong> 从机如果成功将 <code>0xA5</code> 存入了自己的接收移位寄存器，就会再次将 SDA 拉<strong>低</strong> (ACK)。</li>
+<li><em>(注：如果主机还要发更多数据，就会在这个 ACK 之后，循环执行 动作 5 和 动作 6。)</em></li>
+</ul>
+</li>
+<li>
+<p>动作 7：通信结束，释放总线 (Stop Condition - P)<br />
+数据发完了，需要把总线交还给系统。</p>
+<ul>
+<li><strong>操作准备：</strong> 主机先确保 SCL 和 SDA 都处于<strong>低电平</strong>。</li>
+<li><strong>释放 SCL：</strong> 主机释放 SCL，SCL 被上拉变<strong>高</strong>。</li>
+<li><strong>释放 SDA：</strong> 在 SCL 已经为高的前提下，主机释放 SDA，SDA 产生一个<strong>上升沿</strong>变<strong>高</strong>。</li>
+<li><strong>潜台词：</strong> 主机：“我说完了，总线释放。” 所有从机恢复待机状态。</li>
+</ul>
+</li>
+</ol>
+<h3 id="56-从机发主机收的情况"><a class="markdownIt-Anchor" href="#56-从机发主机收的情况"></a> 5.6 从机发，主机收的情况</h3>
+<ul>
+<li>动作1-2是一样的，</li>
+<li>动作3第八位改为发送1（读），</li>
+<li>动作4一样的，</li>
+<li>动作5变为从机发送业务数据（接管SDA，主机提供时钟。在主机的 SCL 处于低电平时，从机改变 SDA 的状态；在 SCL 为高电平时，主机去<strong>采样</strong> SDA 上的电平。</li>
+<li>动作 6：主机决定是否继续 (Master <strong>ACK / NACK</strong>)
+<ul>
+<li>选择 A：主机发送 ACK（拉低 SDA）。
+<ul>
+<li>潜台词：“我收到了这个字节，<strong>并且我还没读够，请继续发下一个字节</strong>。”</li>
+<li>从机收到 ACK 后，会继续霸占 SDA 线，准备在下一个时钟发送下一个字节。</li>
+</ul>
+</li>
+<li>选择 B：主机发送 NACK（不拉低 SDA，保持高电平）。
+<ul>
+<li>潜台词：“我收到了这个字节，<strong>我已经读完了，不要再发了！</strong>”</li>
+<li>从机收到 NACK 后，会立刻<strong>释放 SDA 线</strong>，将控制权交还给主机。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>动作7：主机接管SDA后发送stop信号</li>
+</ul>
+<p><img src="Snipaste_2025-03-11_20-50-32.png" alt="" /></p>
+<h3 id="57-10bit传输"><a class="markdownIt-Anchor" href="#57-10bit传输"></a> 5.7 10bit传输</h3>
 <p>随着IIC设备日益增多，7位的从机地址逐渐不能满足使用，于是从机地址从7位扩充到了10位。7位和10位地址的设备可以共存于同一个I2C总线系统互不冲突，展现了良好的兼容性。<br />
 10-bit 地址的IIC设备需要 2-Byte 来传输从设备地址信息，所以采用了这样的设计：第一个字节为 11110 + 地址高两位(第10、9bit) + 读写控制位，第二个字节为从设备地址低8位，除此之外与7-bit设备相同。（因为 “1111 0xx” 为 IIC 中特地保留的16个特殊指令地址中的一个，所以7-bit设备不会响应该首字节的呼叫，只有10-bit设备会响应，从而实现良好兼容。<span class="spoiler">好样的，iic👍👍👍为你骄傲</span>）<br />
 直接贴图了<br />
@@ -207,18 +319,11 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yuanqiangfei/p/15781416.html">二十、I2C总线仲裁机制 - 轻轻的吻 - 博客园</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/638360051">GPIO推挽与开漏输出的“线与“特性 - 知乎</a></li>
 </ul>
-<hr class="footnotes-sep" />
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>重复启动信号（Repeated Start）是一种特殊的操作，<strong>它允许在不释放总线的情况下从写模式切换到读模式</strong>。这种方式可以避免总线被其他设备占用，或者防止主设备发送 STOP 信号后，其他设备试图接管总线。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约2.3k字。于2025/03/10首次发布，最后更新于2025/03/14。 </p>
+<p>共计约3.8k字。于2025/03/10首次发布，最后更新于2026/03/14。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -272,7 +377,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iic%E7%AE%80%E4%BB%8B"><span class="toc-text"> iic简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-text"> 主要特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text"> 硬件结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF%E7%BB%93%E6%9E%84"><span class="toc-text"> 总线结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%B2%E8%A3%81%E6%9C%BA%E5%88%B6"><span class="toc-text"> 仲裁机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91"><span class="toc-text"> 🌟时序逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%9C%89%E6%95%88%E6%80%A7"><span class="toc-text"> 数据有效性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E4%B8%8E%E7%BB%93%E6%9D%9F%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 开始与结束信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E6%A0%BC%E5%BC%8F%E5%AD%97%E8%8A%82%E6%A0%BC%E5%BC%8F"><span class="toc-text"> 传输格式（字节格式）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ack%E4%BF%A1%E5%8F%B7"><span class="toc-text"> ACK信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7bit%E5%AE%8C%E6%95%B4%E4%BC%A0%E8%BE%93%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="toc-text"> 7bit完整传输示意图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E6%9C%BA%E5%8F%91%E4%B8%BB%E6%9C%BA%E6%94%B6%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text"> 从机发，主机收的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10bit%E4%BC%A0%E8%BE%93"><span class="toc-text"> 10bit传输</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text"> 参考文章</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AF%B4%E6%98%8E"><span class="toc-text"> 1. 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-iic%E7%AE%80%E4%BB%8B"><span class="toc-text"> 2. iic简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-text"> 3. 主要特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%A1%AC%E4%BB%B6%E7%89%B9%E6%80%A7%E5%8F%8A%E5%85%B6%E9%AB%98%E7%BA%A7%E6%9C%BA%E5%88%B6"><span class="toc-text"> 4. 硬件特性及其高级机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E6%80%BB%E7%BA%BF%E7%BB%93%E6%9E%84"><span class="toc-text"> 4.1. 总线结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%BC%80%E6%BC%8F%E8%BE%93%E5%87%BA"><span class="toc-text"> 4.2. 开漏输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%BA%BF%E4%B8%8E"><span class="toc-text"> 4.3. 线与</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E9%AB%98%E7%BA%A7%E6%9C%BA%E5%88%B6"><span class="toc-text"> 4.4 高级机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%97%B6%E5%BA%8F%E9%80%BB%E8%BE%91"><span class="toc-text"> 5. 时序逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E6%95%B0%E6%8D%AE%E6%9C%89%E6%95%88%E6%80%A7"><span class="toc-text"> 5.1 数据有效性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E5%BC%80%E5%A7%8B%E4%B8%8E%E7%BB%93%E6%9D%9F%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 5.2 开始与结束信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E4%BC%A0%E8%BE%93%E6%A0%BC%E5%BC%8F%E5%AD%97%E8%8A%82%E6%A0%BC%E5%BC%8F"><span class="toc-text"> 5.3 传输格式（字节格式）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#54-ack%E4%BF%A1%E5%8F%B7"><span class="toc-text"> 5.4 ACK信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#55-7bit%E5%AE%8C%E6%95%B4%E4%BC%A0%E8%BE%93%E6%B5%81%E7%A8%8B%E6%8B%86%E8%A7%A3%E4%B8%BB%E5%8F%91%E4%BB%8E%E6%94%B6"><span class="toc-text"> 5.5 7bit完整传输流程拆解（主发从收）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#56-%E4%BB%8E%E6%9C%BA%E5%8F%91%E4%B8%BB%E6%9C%BA%E6%94%B6%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-text"> 5.6 从机发，主机收的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#57-10bit%E4%BC%A0%E8%BE%93"><span class="toc-text"> 5.7 10bit传输</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="toc-text"> 参考文章</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -325,7 +430,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -451,7 +556,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,1,2],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,6],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -525,13 +630,13 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":14},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":14},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -580,7 +685,7 @@ Rp电阻的取值有一定的要求，太小会导致灌入电流过大，使’
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":1,"path":"嵌入式/通信协议"}],"count":14,"path":"嵌入式"},{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

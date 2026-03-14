@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">使用openOCD进行调试</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>OpenOCD（<strong>Open On-Chip Debugger</strong>）是一个极其强大的开源工具，主要用于硬件调试、在线编程（ISP）和边界扫描测试。</p>
+<h2 id="1-openocd-的工作逻辑"><a class="markdownIt-Anchor" href="#1-openocd-的工作逻辑"></a> 1. OpenOCD 的工作逻辑</h2>
+<p>在动手之前，我们需要理解 OpenOCD 在整个开发链路中扮演的角色：</p>
+<ol>
+<li>
+<p><strong>主机 (Host PC)：</strong> 运行 OpenOCD 软件，以及 GDB 调试器。</p>
+</li>
+<li>
+<p><strong>调试适配器 (Adapter/Interface)：</strong> 连接电脑和目标芯片的硬件（例如 ST-Link、J-Link、DAPLink 等）。</p>
+</li>
+<li>
+<p><strong>目标芯片 (Target)：</strong> 你要调试或烧录的微控制器（例如 STM32、ESP32 等）。</p>
+</li>
+</ol>
+<p>OpenOCD 的作用就是<strong>作为桥梁</strong>。它向左通过网络端口（Telnet/GDB）与你的电脑软件通信，向右通过 USB 驱动控制你的调试器硬件，最终操作芯片。</p>
+<h2 id="2-安装"><a class="markdownIt-Anchor" href="#2-安装"></a> 2. 安装</h2>
+<ul>
+<li>
+<p><strong>Windows:</strong> 官方仓库提供预编译版本： <a target="_blank" rel="noopener" href="https://github.com/openocd-org/openocd/releases">Releases · openocd-org/openocd</a>。解压后，将 <code>bin</code> 文件夹的路径添加到系统的环境变量 <code>PATH</code> 中。</p>
+</li>
+<li>
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openocd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p><strong>测试安装：</strong> 在终端输入 <code>openocd --version</code>，如果能看到版本号说明安装成功。</p>
+<h2 id="3-启动-openocd-服务"><a class="markdownIt-Anchor" href="#3-启动-openocd-服务"></a> 3. 启动 OpenOCD 服务</h2>
+<p>启动 OpenOCD 的核心在于<strong>告诉它你用了什么调试器，以及你要连什么芯片</strong>。这通过指定配置文件（<code>.cfg</code>）来实现。OpenOCD 自带了大量的标准配置文件（通常存放在它安装目录的 <code>scripts</code> 文件夹下）。</p>
+<p><strong>基础启动命令格式：</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/<span class="token operator">&lt;</span>调试器名称<span class="token operator">></span>.cfg <span class="token parameter variable">-f</span> target/<span class="token operator">&lt;</span>芯片名称<span class="token operator">></span>.cfg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>常见组合</strong>：</p>
+<ul>
+<li>
+<p><strong>ST-Link 烧录 STM32F4 系列：</strong></p>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/stlink.cfg <span class="token parameter variable">-f</span> target/stm32f4x.cfg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>DAPLink 烧录 STM32F1 系列：</strong></p>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/cmsis-dap.cfg <span class="token parameter variable">-f</span> target/stm32f1x.cfg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>J-Link 烧录树莓派 RP2040：</strong></p>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/jlink.cfg <span class="token parameter variable">-f</span> target/rp2040.cfg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<p>如果终端输出 <code>Info : Listening on port 3333 for gdb connections</code> 和 <code>Info : Listening on port 4444 for telnet connections</code>，说明连接成功，服务已经跑起来了。<strong>此时不要关闭这个终端窗口。</strong></p>
+<h2 id="4-烧录与控制"><a class="markdownIt-Anchor" href="#4-烧录与控制"></a> 4. 烧录与控制</h2>
+<p>OpenOCD 启动后，它会在后台运行并开放了几个网络端口。你可以重新打开一个新的终端窗口，通过 <strong>Telnet (端口 4444)</strong> 直接发送命令给它。</p>
+<h3 id="41-连接到-openocd-控制台"><a class="markdownIt-Anchor" href="#41-连接到-openocd-控制台"></a> <strong>4.1. 连接到 OpenOCD 控制台</strong></h3>
+<p>在新终端输入：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">telnet localhost <span class="token number">4444</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="42-常用交互指令"><a class="markdownIt-Anchor" href="#42-常用交互指令"></a> 4.2 常用交互指令</h3>
+<p>连接成功后，你会看到 <code>&gt;</code> 提示符。以下是标准的操作流程：</p>
+<ol>
+<li>
+<p>暂停芯片运行：</p>
+ <pre class="line-numbers language-none"><code class="language-none">&gt; halt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p>解锁/擦除并写入固件（支持 .hex / .bin / .elf）：<br />
+这里假设你要烧录的文件名为 <code>firmware.hex</code>，<strong>请使用绝对路径或确保在当前工作目录下。</strong></p>
+ <pre class="line-numbers language-none"><code class="language-none">&gt; flash write_image erase firmware.hex<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p>复位并运行芯片：</p>
+ <pre class="line-numbers language-none"><code class="language-none">&gt; reset run<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p>退出 Telnet：</p>
+ <pre class="line-numbers language-none"><code class="language-none">&gt; exit<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ol>
+<p>如果你不想每次都敲这么多命令，可以直接在启动 OpenOCD 时附带执行命令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/stlink.cfg <span class="token parameter variable">-f</span> target/stm32f4x.cfg <span class="token parameter variable">-c</span> <span class="token string">"program firmware.hex verify reset exit"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这条命令会自动完成：连接 -&gt; 烧录 -&gt; 校验 -&gt; 复位运行 -&gt; 退出。非常适合自动化脚本！</p>
+<h2 id="5-结合gdb进行代码调试"><a class="markdownIt-Anchor" href="#5-结合gdb进行代码调试"></a> 5. 结合GDB进行代码调试</h2>
+<p>OpenOCD 最强大的地方在于配合 GDB 进行单步调试。</p>
+<ol>
+<li>
+<p><strong>保持 OpenOCD 服务运行（参考第三部分）。</strong></p>
+</li>
+<li>
+<p><strong>打开新终端，启动 GDB：</strong>（需要使用对应架构的 gdb，比如 ARM）</p>
+ <pre class="line-numbers language-none"><code class="language-none">arm-none-eabi-gdb your_program.elf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>在 GDB 中连接到 OpenOCD：</strong></p>
+ <pre class="line-numbers language-none"><code class="language-none">(gdb) target remote localhost:3333<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>复位并暂停芯片（OpenOCD 特定指令在 GDB 中需要加 <code>monitor</code> 前缀）：</strong></p>
+ <pre class="line-numbers language-none"><code class="language-none">(gdb) monitor reset halt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>加载程序（烧录）：</strong></p>
+ <pre class="line-numbers language-none"><code class="language-none">(gdb) load<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>开始常规 GDB 调试：</strong></p>
+<ul>
+<li>
+<p><code>b main</code> (在 main 函数打断点)</p>
+</li>
+<li>
+<p><code>c</code> (Continue，运行到断点)</p>
+</li>
+<li>
+<p><code>n</code> (Next，单步步过)</p>
+</li>
+<li>
+<p><code>s</code> (Step，单步步入)</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="6-常见问题排查"><a class="markdownIt-Anchor" href="#6-常见问题排查"></a> 6. 常见问题排查</h2>
+<table>
+<thead>
+<tr>
+<th><strong>错误现象</strong></th>
+<th><strong>可能的原因与解决方案</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Error: open failed</code></td>
+<td>找不到调试器硬件。请检查 USB 是否插好，虚拟机是否勾选了 USB 直通，或者 Windows 下是否缺少 WinUSB 驱动（可以使用 Zadig 工具安装驱动）。</td>
+</tr>
+<tr>
+<td><code>Error: init mode failed</code></td>
+<td>调试器与芯片通信失败。检查 SWD/JTAG 连线（GND, SWDIO, SWCLK）是否接错、松动，或者芯片是否供电正常。</td>
+</tr>
+<tr>
+<td><code>Error: timed out while waiting for target halted</code></td>
+<td>芯片可能进入了深度休眠或禁用了调试端口。尝试按住开发板上的 Reset 按钮，运行命令，然后瞬间松开 Reset。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-wsl下的openocd最佳实践"><a class="markdownIt-Anchor" href="#7-wsl下的openocd最佳实践"></a> 7. WSL下的OpenOCD最佳实践</h2>
+<p><strong>核心思路：</strong> 把 OpenOCD 运行在 Windows 上直接接管 USB 硬件，把交叉编译工具链和 GDB 运行在 WSL 中。两者通过 TCP 网络端口进行通信。</p>
+<p>由于 OpenOCD 本质上就是一个 GDB Server，这种 C/S（客户端/服务端）架构完美契合 WSL 的网络特性。</p>
+<p><strong>操作步骤：</strong></p>
+<ol>
+<li><strong>在 Windows 端启动 OpenOCD：</strong></li>
+</ol>
+<ul>
+<li>下载 Windows 版的 OpenOCD。</li>
+<li>插上你的调试器（确保 Windows 下已安装对应驱动，如 WinUSB）。</li>
+<li>在 Windows 的 PowerShell 或 CMD 中启动 OpenOCD，并<strong>强制绑定 IP 为全网段</strong>，以便 WSL 可以访问：  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openocd <span class="token parameter variable">-f</span> interface/stlink.cfg <span class="token parameter variable">-f</span> target/stm32f4x.cfg <span class="token parameter variable">-c</span> <span class="token string">"bindto 0.0.0.0"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<ol start="2">
+<li><strong>在 WSL 端获取 Windows 主机 IP：</strong><br />
+WSL2 和 Windows 不在同一个网段。你需要在 WSL 终端中获取 Windows 宿主机的 IP 地址（通常是虚拟网关）： <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 获取 Windows 宿主机的 IP</span>
+<span class="token function">cat</span> /etc/resolv.conf <span class="token operator">|</span> <span class="token function">grep</span> nameserver <span class="token operator">|</span> <span class="token function">awk</span> <span class="token string">'&#123;print $2&#125;'</span> 
+<span class="token comment"># 假设输出为 172.28.16.1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<blockquote>
+<p>如果你使用的是 Windows 11 且开启了 WSL 的 <code>networkingMode=mirrored</code>，你可以直接使用 <code>localhost</code>)</p>
+</blockquote>
+<ol start="3">
+<li>
+<p><strong>在 WSL 端启动 GDB 并连接:</strong><br />
+编译出 <code>.elf</code> 固件后，在 WSL 中启动 GDB：</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">arm-none-eabi-gdb your_firmware.elf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在 GDB 命令行中，连接到 Windows 上的 OpenOCD：</p>
+ <pre class="line-numbers language-none"><code class="language-none">(gdb) target remote 172.28.16.1:3333
+(gdb) load   
+(gdb) monitor reset halt
+(gdb) continue<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p>通过 GDB 的 <code>load</code> 命令，固件数据是通过 TCP 传给 OpenOCD 的，完美规避了跨系统的文件路径问题。</p>
+<blockquote>
+<p>还有一种方案是将USB透传给WSL，这样WSL就拥有这个usb设备，可正常使用Linux下的openOCD，透传USB参见：<a href="https://blog.godmao.top/posts/13715/">WSL下连接USB设备-GoDm@'s blog</a></p>
+</blockquote>
+<h2 id="8-基于-vscode-图形化调试"><a class="markdownIt-Anchor" href="#8-基于-vscode-图形化调试"></a> 8. 基于 vscode 图形化调试</h2>
+<p>在 VS Code 中进行图形化调试是目前嵌入式开发最高效的方式。借助强大的 <strong>Cortex-Debug</strong> 插件，你可以完美地将代码编辑、编译（在 WSL 中）和底层硬件调试结合在一起，甚至可以直接在可视化界面中查看外设寄存器和 RTOS 的任务栈。</p>
+<p>在 VS Code 中（如果是WSL，则在WSL环境下）安装了以下插件：</p>
+<ol>
+<li><strong>C/C++</strong> (Microsoft) - 提供代码补全和基础 GDB 支持。</li>
+<li><strong>Cortex-Debug</strong> (marus25) - <strong>最核心的插件</strong>，专门针对 ARM Cortex-M 内核优化，支持 OpenOCD 桥接、寄存器查看和 RTOS 线程解析。</li>
+</ol>
+<h3 id="81-核心配置编写-launchjson"><a class="markdownIt-Anchor" href="#81-核心配置编写-launchjson"></a> 8.1. 核心配置：编写 launch.json</h3>
+<p><code>launch.json</code> 核心作用是告诉 VS Code 如何启动和配置调试会话。</p>
+<p>当你编译出 <code>.elf</code> 文件后，你需要把它烧录进芯片，并且监控程序的运行。这就是 <code>launch.json</code> 要干的。它定义了 VS Code 应该怎么去调用底层的调试工具。</p>
+<p>在这个文件里，你需要向 VS Code 交代清楚：</p>
+<ul>
+<li><em>用什么调试插件</em>？ （比如我们用的 <code>cortex-debug</code>）</li>
+<li><em>程序文件在哪里</em>？ （指路刚才编译出来的 <code>.elf</code> 文件）</li>
+<li><em>用什么硬件接口</em>？ （ST-Link 还是 DAPLink？）</li>
+<li><em>目标芯片是什么</em>？ （比如 STM32F4 系列）</li>
+<li><em>调试服务器在哪</em>？ （是我们之前说的 WSL 内部启动，还是连接到 Windows 宿主机？）</li>
+</ul>
+<p>有了 <code>launch.json</code>，VS Code 的图形化调试界面（左侧的变量窗口、调用堆栈、断点控制）才知道要去哪里获取数据。当你打下一个断点时，VS Code 会通过 <code>launch.json</code> 里的配置，把这个“暂停”指令一路传达到物理芯片的硬件断点寄存器上。</p>
+<p>在你的工程根目录下，创建或打开 <code>.vscode/launch.json</code> 文件。针对我们在上一回提到的两种 WSL 开发架构，这里提供两套配置。你可以直接将以下代码复制进去，根据你的实际架构选择对应的调试配置启动。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.2.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"configurations"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 【配置一：混合架构】OpenOCD 运行在 Windows 端，GDB 在 WSL 端</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Debug (Windows OpenOCD)"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"cortex-debug"</span><span class="token punctuation">,</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span>
+            <span class="token property">"servertype"</span><span class="token operator">:</span> <span class="token string">"external"</span><span class="token punctuation">,</span> <span class="token comment">// 关键：告诉插件 OpenOCD 已经在外部启动了</span>
+            <span class="token property">"gdbTarget"</span><span class="token operator">:</span> <span class="token string">"172.28.16.1:3333"</span><span class="token punctuation">,</span> <span class="token comment">// 替换为你的 Windows 宿主机 IP</span>
+            <span class="token property">"executable"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceFolder&#125;/build/your_program.elf"</span><span class="token punctuation">,</span> <span class="token comment">// 替换为你的实际 elf 路径</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;"</span><span class="token punctuation">,</span>
+            <span class="token property">"runToEntryPoint"</span><span class="token operator">:</span> <span class="token string">"main"</span><span class="token punctuation">,</span> <span class="token comment">// 启动后自动在 main 函数停下</span>
+            
+            <span class="token comment">// 进阶功能（可选但强烈推荐）</span>
+            <span class="token property">"svdFile"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;/STM32F4xx.svd"</span><span class="token punctuation">,</span> <span class="token comment">// 替换为你的芯片 SVD 文件路径</span>
+            <span class="token property">"rtos"</span><span class="token operator">:</span> <span class="token string">"FreeRTOS"</span> <span class="token comment">// 如果你跑了 RTOS，开启此项可以查看所有线程状态</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 【配置二：USB 穿透】OpenOCD 和 GDB 都运行在 WSL 内部</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Debug (WSL Local OpenOCD)"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"cortex-debug"</span><span class="token punctuation">,</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span>
+            <span class="token property">"servertype"</span><span class="token operator">:</span> <span class="token string">"openocd"</span><span class="token punctuation">,</span> <span class="token comment">// 关键：由插件全权负责在 WSL 启动和关闭 OpenOCD</span>
+            <span class="token property">"executable"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceFolder&#125;/build/your_program.elf"</span><span class="token punctuation">,</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;"</span><span class="token punctuation">,</span>
+            <span class="token property">"configFiles"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"interface/stlink.cfg"</span><span class="token punctuation">,</span> <span class="token comment">// 你的调试器配置文件</span>
+                <span class="token string">"target/stm32f4x.cfg"</span>   <span class="token comment">// 你的目标芯片配置文件</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"runToEntryPoint"</span><span class="token operator">:</span> <span class="token string">"main"</span><span class="token punctuation">,</span>
+            
+            <span class="token comment">// 进阶功能</span>
+            <span class="token property">"svdFile"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceRoot&#125;/STM32F4xx.svd"</span><span class="token punctuation">,</span>
+            <span class="token property">"rtos"</span><span class="token operator">:</span> <span class="token string">"FreeRTOS"</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="82-cortex-debug-进阶"><a class="markdownIt-Anchor" href="#82-cortex-debug-进阶"></a> 8.2. Cortex-Debug 进阶</h3>
+<p>配置好 <code>launch.json</code> 并按下 <code>F5</code> 启动调试后，除了常规的单步运行（F10）、进入函数（F11）、打断点，你还可以利用 Cortex-Debug 提供的强大面板：</p>
+<ol>
+<li>
+<p><strong>外设寄存器可视化 (XPERIPHERALS 面板)</strong></p>
+<p><strong>作用：</strong> 你可以直接在图形界面点开 <code>GPIOA</code>、<code>TIM1</code> 等外设，实时查看甚至<strong>动态修改</strong>底层寄存器的值（比如直接勾选某个 bit 来翻转引脚电平），这在排查底层驱动或协议栈问题时很好用。</p>
+<blockquote>
+<p>SVD 文件通常可以从芯片厂商官网（如 STMicroelectronics）或 Keil 的 Pack 包中提取。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>RTOS 线程感知 (CALL STACK 面板)</strong></p>
+<p>如果你在项目中使用了 RTOS（如 FreeRTOS、RT-Thread），在 <code>launch.json</code> 中添加 <code>&quot;rtos&quot;: &quot;FreeRTOS&quot;</code> 字段。</p>
+<p><strong>作用：</strong> Cortex-Debug 会自动解析内存，在左侧的“调用堆栈 (Call Stack)”中列出当前系统中所有的 RTOS 任务（Thread）。你可以随时点击任意一个被挂起或阻塞的任务，查看它在切换上下文之前的局部变量和运行轨迹。这对于排查死锁或时序问题极为有效。</p>
+</li>
+<li>
+<p><strong>内存查看器 (Memory View)</strong></p>
+<p>按下 <code>Ctrl+Shift+P</code>，输入 <code>Cortex-Debug: View Memory</code>。</p>
+<p><strong>作用：</strong> 输入一个内存地址（例如缓冲区的首地址 <code>0x20001000</code>）和长度，你可以像使用 Hex Editor 一样直接观察裸机内存中的数据变化。</p>
+</li>
+</ol>
+<h4 id="补充从keil-pack包获取svd"><a class="markdownIt-Anchor" href="#补充从keil-pack包获取svd"></a> 补充：从keil pack包获取svd</h4>
+<ol>
+<li><strong>访问 Keil Pack 官网：</strong> 打开 <a target="_blank" rel="noopener" href="https://www.keil.com/dd2/pack/">Keil CMSIS-Pack 搜索页</a>。</li>
+<li><strong>下载 Pack 包：</strong> 搜索你的芯片系列（例如 <code>STM32G4</code>），找到 <code>Keil.STM32G4xx_DFP</code> 并下载。你会得到一个后缀为 <code>.pack</code> 的文件。</li>
+<li><strong>解压提取：</strong> <strong><code>.pack</code> 文件本质上就是一个 <code>.zip</code> 压缩包。</strong> 将它的后缀改成 <code>.zip</code> 然后解压。</li>
+<li><strong>找到 SVD：</strong> 在解压后的文件夹中，依次进入 <code>CMSIS</code> -&gt; <code>SVD</code> 目录，里面有 <code>.svd</code> 文件。</li>
+</ol>
+<p>建议直接把下载好的 <code>.svd</code> 文件扔到你的 VS Code 工程根目录下（和 <code>.vscode</code> 文件夹平级）然后修改 <code>launch.json</code>。</p>
+<h3 id="83-自动化编译任务"><a class="markdownIt-Anchor" href="#83-自动化编译任务"></a> 8.3 自动化编译任务</h3>
+<p>当你写完代码后，通常需要在终端里输入类似 <code>make -j8</code> 或者 <code>cmake --build build</code> 的命令。每次修改代码都要敲一次命令太麻烦了。我们可以把这些命令封装为一个Task。实现 <strong>“按 F5 自动编译 -&gt; 自动烧录 -&gt; 自动进入调试”</strong> 的一键全自动流水线。</p>
+<p>在工程的 <code>.vscode</code> 目录下创建一个名为 <code>tasks.json</code> 的文件。根据你的构建工具，选择以下其中一段配置填入：</p>
+<ul>
+<li>
+<p><strong>makefile</strong>：<br />
+如果你的工程根目录下有一个 <code>Makefile</code>，请使用这个配置：</p>
+  <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"2.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"Build Project"</span><span class="token punctuation">,</span> <span class="token comment">// 任务名称，可以自定义</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span>
+            <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"make"</span><span class="token punctuation">,</span>
+            <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"-j$(nproc)"</span> 
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"options"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceFolder&#125;"</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"group"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"build"</span><span class="token punctuation">,</span>
+                <span class="token property">"isDefault"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"problemMatcher"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"$gcc"</span> <span class="token comment">// 自动解析 GCC 编译器的报错并在 VSCode 源码中高亮提示</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>Cmake：</strong><br />
+如果你的工程是基于 CMake 的（即根目录下有 <code>CMakeLists.txt</code>），请使用这个配置。<em>（假设你已经执行过 <code>cmake -B build</code> 生成了构建目录）</em>：</p>
+  <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"2.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"label"</span><span class="token operator">:</span> <span class="token string">"Build Project"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"shell"</span><span class="token punctuation">,</span>
+            <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"cmake"</span><span class="token punctuation">,</span>
+            <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"--build"</span><span class="token punctuation">,</span>
+                <span class="token string">"build"</span><span class="token punctuation">,</span> <span class="token comment">// 假设你的编译输出目录叫 build</span>
+                <span class="token string">"-j$(nproc)"</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"options"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"$&#123;workspaceFolder&#125;"</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"group"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+                <span class="token property">"kind"</span><span class="token operator">:</span> <span class="token string">"build"</span><span class="token punctuation">,</span>
+                <span class="token property">"isDefault"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            <span class="token property">"problemMatcher"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"$gcc"</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<blockquote>
+<p>参数中加了 <strong><code>-j$(nproc)</code></strong>。在 Linux/WSL 环境下，这代表调用 CPU 的所有核心进行并发编译。如果你在工程中引入了像 LVGL 这样的图形库，或者包含了复杂的微内核和协议栈，几百上千个 C 文件的编译时间会非常长。加上这个参数，编译速度能提升好几倍，极大地改善调试体验。</p>
+</blockquote>
+<blockquote>
+<p><strong>task.json 工作逻辑</strong>： 创建一个<code>Build Project</code> 的任务，告诉 VS Code：“当你执行这个任务时，就在终端里帮我自动运行 <code>make</code> 命令”。</p>
+</blockquote>
+<blockquote>
+<p><strong>不仅仅是编译：</strong> 你甚至可以写一个清空编译产物的任务（执行 <code>make clean</code>），或者写一个自动打包固件的任务。只要是能在终端里敲的命令，都可以写进 <code>tasks.json</code> 里让它一键代劳。</p>
+</blockquote>
+<p>现在任务写好了，我们需要告诉 VSCode 在启动 OpenOCD 调试之前，请先运行这个编译任务</p>
+<p>打开你之前的 <code>.vscode/launch.json</code>，在你的调试配置项(“configurations”)中，添加一行 <code>preLaunchTask</code>，它的值必须和你刚才在 <code>tasks.json</code> 中写的 <code>label</code> 完全一致。</p>
+<p>完成。</p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3.4k字。于2026/03/14首次发布，最后更新于2026/03/14。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-openocd-%E7%9A%84%E5%B7%A5%E4%BD%9C%E9%80%BB%E8%BE%91"><span class="toc-text"> 1. OpenOCD 的工作逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85"><span class="toc-text"> 2. 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8-openocd-%E6%9C%8D%E5%8A%A1"><span class="toc-text"> 3. 启动 OpenOCD 服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%83%A7%E5%BD%95%E4%B8%8E%E6%8E%A7%E5%88%B6"><span class="toc-text"> 4. 烧录与控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E8%BF%9E%E6%8E%A5%E5%88%B0-openocd-%E6%8E%A7%E5%88%B6%E5%8F%B0"><span class="toc-text"> 4.1. 连接到 OpenOCD 控制台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%B8%B8%E7%94%A8%E4%BA%A4%E4%BA%92%E6%8C%87%E4%BB%A4"><span class="toc-text"> 4.2 常用交互指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BB%93%E5%90%88gdb%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%B0%83%E8%AF%95"><span class="toc-text"> 5. 结合GDB进行代码调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-text"> 6. 常见问题排查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-wsl%E4%B8%8B%E7%9A%84openocd%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text"> 7. WSL下的OpenOCD最佳实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%9F%BA%E4%BA%8E-vscode-%E5%9B%BE%E5%BD%A2%E5%8C%96%E8%B0%83%E8%AF%95"><span class="toc-text"> 8. 基于 vscode 图形化调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#81-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E7%BC%96%E5%86%99-launchjson"><span class="toc-text"> 8.1. 核心配置：编写 launch.json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#82-cortex-debug-%E8%BF%9B%E9%98%B6"><span class="toc-text"> 8.2. Cortex-Debug 进阶</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#83-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%BC%96%E8%AF%91%E4%BB%BB%E5%8A%A1"><span class="toc-text"> 8.3 自动化编译任务</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,6],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+
