@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">Project001-开发日记</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="ERROR。" data-whm="这个文章不能被校验, 不过你还是能看看解密后的内容。">
+  <script id="hbeData" type="hbeData" data-hmacdigest="9d71c29f7a0f97c07df1f3f9ec0cf1d23dc956d1ea948541718de45b74e8291c">472f0d2124ee617a2f29ff331422d5d3c786bf02d6cb05b48659c7bd0efc234c66e4d05e5e352805b8be7fb548f5db1dc6ce19185f33969b60366e77544d242a4ad3617be960d1cc6fb50f20f9bc3fa3dc4611c1b7fe65e71a5a3a53a2361ac23d01b5245c304a9c64d1f2d42467b313e7b98b9941501c7f62ba70ae803acc1147cacc437bdd5678ef1810bb19b628c6a4bce1bcb2f217b0631590f4a05267a7a121c769458bb6d0d3a007991a4e5946e6e80bfdd70ada16fe8b7f425cd91ff2fd2c0d96e6a7a61f2a495ff7c5d17f33392096a74bcf83fe0a2a1b47dd5a8cc11585947ae9ce708ca44fe807a441afd12f8304730781830b4f9cc4f4cdf370535e05cecdcdde5fb485d559476d4a130b41d70fc5d6999e8bb9a1105d9fc8bad1acf6b48e4bca65932d62ce795949be362d42d3c4aa5b1a3df4213ed5be2d1da2e61473992a40a821237717333de4627358fc2994316e97947ee4226e077242b9cefda11569c1c2f215c48465b138522f4b07318abd2f22d8510062db07321bd2afa3e3ba185327edb3e09727c8fc3c20767d699fd94fc88f732a5fa9e53f6e3eb54682e5777c81338ac6371452ed9834aaef586740c7f36b7004ba61c47a207383e5406ad892b6e07cf9380d47182f5c1d6747ed1c35aee91950215cf3f1e98b453df4c35fa3104959fcd0341aa489554c8a0e78a740b13268c1048eda91d98421ab7733a8b9115bd0a1be9d2d883a4b567896805e1aabab5347c97645ce52689e7d7d6a55e8c5fe2bd22eae832fbe97111ea69badf69d49ddcf75432f47ae6c7afebf2db69eb4ffe0105f7fab03a16b1ef3c6c8e35b78af51f165a295bcd2a2316907e1dba7b81535691ad3dd8d741742acd3fd907a100f4f3100178571d582ea302d350906c718a34b7c917534c4b971819c57b7d248df42d75e7420b6e82859c83e31cb73e6207f1f7c8c3a97ef350d169ba0fa6e07f364578b32a8ebdf49f230a050b958ab1ce365806bad0c1c5daf30b44fe9f5ee6e45419fd842548c1812aca0bd8e0f4f056347dba897589fe6090214865c77d876f01bcfa361020806a9f9951454cca0cf0e3a828a5110dc9fe9fa5a963af12206b83f71fa84af43af62623a05b78e143e48405af25fb917d16b579f6cccdab9ebd43075518b1e7050f113ae213ae7d269b2755225d47583a706dac841a467ea8e3cc17458381bf9f55767f6997b0bc9aebe6b882d86acac80e2f61dd37f19c7ba7a7526d70befe8a2124067451b809f56f2dc65d787821a43dcb0b8d26ab10f9e3d4874277c7f3ba100972fa0e3fe81be5233c2107aefcf48c38d35e883b02821c0df5406e09a7c179d933bdfd41939a85e97cf872fa33de0459edaa3bf0fee1d2907df3fa654269675967debe7dfaaf16be1a982f2ec080f0c5767d5d12a7f84f66e5f410c814e78901636a0f42b1909fe74ee84c76c78b5c2b22705d868dc84917d4000fe66569868b646c1ec9ab10db12201b8a14d9563f071530dced6cfed60bef008ff725c736e8942bb397d39e4633f0d6e66f2f8e2d2645e8d3884381d458c146dffdb37915bbecd7555bc17cd3bad0be666e4e8d0dc05994a5f268abd55457d99c139976353401d7c5ad3034faf4b6cc6c8583533c503f824d02c5d1839a82916a0233e550252cf76bc23da8b303e914a5393a32ac9c6596ee357113f9f40ce44fe2708d6fbbfd170f510aeec084d96281a9afc47004338662b927ed70a8e7a5252e2a86be82246eeaa7d188666770b3c7e8812b5973c33a13cf1941943edd0ddf0cbc57f67fc1dde330e45fa93ede5133a283424b61b5a59d2ed5c9e5433236ea88c7496b1ca2a1e5231205699c67aa65f5c61f15367de02a2eb494fb01d69971e0cac493b9645c65e13bda58cfb7628defb60d390fa01621d4824bb75971ed17fd03dbff2350d45239435279255bc996d99dd39a9d902a6d9e8b9146a8625aca0da008f9f369defd28df8cfe9e09a4df6624bb0bedb189e054940271bf44f4f431dc45cb7ec455ddc18d829fcb297a153f2eed744122c80512890436308a06c52d261cd68f939fcc13699f5e8d79430d3fc0427c62c9ee2eb4dc34fb74d434611a2852660e151a6cd324185fac9d86485e8f5da9cc487cd2edd588894c86f90bba277a900e862ac6e41ba7f813543758bca6aee7fb7949039a8464eddb98e354660a4955f117c3ce36991d43582066c487d2b32ace2973cd40af542ff8d79ec2c82b9a694c581bcc95d002cb68064f30e68f95c11cab9d5efd6a5cd51f9c0c63a83d1ceed4be27109c7bd07717ae00ef479fedc0f9806af29e36628af700e83cceffae1525681a19b81b363dbfcc50d588c2675a944add3f869d5898f2e76f103efeabc944fd43a1d98231b5ff8c02131dc0ffa356b0447614cccd4d22d3ae4dacfcb3dd95d5adf4a85caa2a63832e013920d085e75c1384e0ba2f7b8f9026ec8862adaec651c6bb7f54310f7c305f7830d7d2312d17fa17b33597dfb8a518ddd7afb9a271912ae81b601407aa9e1d150122a1a937c5f23a74d0bee0b3a9e6924fe6a987da0ba6cc12eecc503b754ef2693a945c76322d0c06c25f4448b50a0ec74cb29bf844aced152c0477bd9f5fd7dd71182d56b1331ba584ecc6c46b74ad845ed8f809e3409bd651c1ca47840ab9eab0c8789e0ffdfbcd6b7cfd42fbb0555412eff9abba33a5b8217c42b3335a4751baa1a2fec3f5d74f3884c295ad562d9d7e19ae0df062eedf2d349a92de31255a6b55a2dfb744054e0009c77a2dea8432f87c4c8bbf12b66a29141e7e3fd715c536b96278b127b3e930ff4d913087e1144c67a90aa1ce4ce2ecdff083f679a4b9ad1aff385488f4ed6dbd7ecec6777621ddac4503ac7a36d425a399863e4aa9f9eba644c2724c259e01f27f8189efbc9eebddc8f24df752dcb05c6a45a8698addc77d0cd6d5afbaa8404e0cadb42ee93aacfa55d49513bea6053ab7f9eaf41cf8e65e9758f6ca273329eefb68dee902e09a1e781b83ec54cf6af9ca45480fcba61d03899b3e3533b2f55aa1c8e3cd6db6e63c16c8d94094f11927aae4ad080c1e62592ed0bc64005cdd4601d248eba809836f938256166e38d9c2b86a46a55be6e97852a77b6e7d3ece010e1b66a1c5530f78155fdb3721fd16ae362062bab4f991f5acaca78df912201141f34577ddf667e8a002c9944e4c2283c669d7c417f54af206e4e8d0b70bfddb5d36d4202c9cf57622c9bfcb8481b35263a5072507985ebd3f70ba959bfd705b3b0ef2aec205ee4de1654371458907061f0655db04d64282ca449223e650ae8faf1a98914c24911aeb08343e7cd6d1d6bac6463b7cb37c6e741f10888dee81e359049f1f7f62378f6748d6887630624d3f1965edf08fdc04c86e089459eeebd52e754743ce67620caeb784b44b92cfea600f58d9217267ef644da976ec8b794b9192798e7f9c357966edc08de0f8f2ab55454ffd554ecb32def28a369435f00f9a77c3a310cada480146d2ef93c5d609ee5a018e7d8cd6260501734f1740e52be58e36b513c2e43ff396757f1b1815d41b59b6c09ec4a4dc8851c83c024b03e57d527ad4723af4b4eef633777ac3dc9bde90039ddbe0d77c4f887d3ed2ddf49f742a9aff6d56948fb94c011a39d4fca82a4411c1d1db36c625e2991a12596da6a948049789f83e320fc854a42c9f80c59000c8ff0f4e5fcdb9c241e23c6214d6424b49256931a8eae70a1d919d681a34c9360ad26aa0fd78b9d21e9cb5041c289ff44e2a132ac7c974a7086df3449d600f22d4f6647f6b72cfd7b6d6b7cb8065ea3acb84252580bdc298f7f1dc4bec27aece090f87c4506e35deffe5e17f729853ae58c5c8481cf6a7ebf98dcede368dfc381c7afaeba005a6cfc410f56d35f79e709ec63c0f7ee74909f247cf6b7c4cfe9bd587c8745ea84e0ca8d4ba81a37031d6735d3d1be2c957174d8ec10c5ea478868404a2321fb56d4cf67bd75330e12ed9122381bac3d84efbb6aac687b6603144d412ccf5e9cac54e58223c8a8148adc4a0bd4f0a1878c0d3bd9b1e01593e31b726fc6e5face0567a33b4145e51ed1a17bd39b080d181b33f0655c9bd9edda4439d0496387221bb74f9ebb9e7522c652da8a583d39f013e708c41ab10f15063e7a4a9a7a29556a0be34dddb61ec7831c09a7653a7c574bb99cdb9861fbd6c8be986163a6631ecb8fb633d8fdac1cca8af67b7caf3a7658424b74b27fc7f6089efedd0b607c65a3cc7bbac7d147f344380a707d9eef944ab7e357fcf878886c375693dc5ad4b0e9448206ca01bcc9e665efb2f05c0f0f5c</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-up">
+      <input class="hbe hbe-input-field hbe-input-field-up" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-up" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-up">文章已被隐藏，可能为私密内容或还未完成。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约19字。于2026/03/17首次发布，最后更新于2026/03/17。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,7],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":17},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

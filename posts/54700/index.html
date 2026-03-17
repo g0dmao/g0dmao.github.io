@@ -145,6 +145,58 @@
 <p><strong>Cortex-Debug (marus25)</strong>: <strong>极其关键的插件</strong>。专门为 ARM Cortex-M 系列优化，支持直接在 VS Code 里查看外设寄存器 (Peripherals)、内存、反汇编代码以及 RTOS 的任务栈信息。</p>
 </li>
 </ol>
+<p><strong>另</strong>：要想使用VSCODE自带的CMake生成目标，还需要配置 <code>CMakePresets.json</code>——。VSCODE CMake插件的配置文件。</p>
+<p><img src="Snipaste_2026-03-17_20-14-36.png" alt="" /></p>
+<p>然后打开 <code>CMakePresets.json</code>，在configurePresets项里修改</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+	&quot;name&quot;: &quot;使用工具链文件配置预设&quot;,
+	&quot;displayName&quot;: &quot;使用工具链文件配置预设&quot;,
+	&quot;description&quot;: &quot;设置 Ninja 生成器、版本和安装目录&quot;,
+	&quot;generator&quot;: &quot;Ninja&quot;,
+	&quot;binaryDir&quot;: &quot;$&#123;sourceDir&#125;&#x2F;out&#x2F;build&#x2F;$&#123;presetName&#125;&quot;,
+	&quot;cacheVariables&quot;: &#123;
+		&quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
+		&quot;CMAKE_TOOLCHAIN_FILE&quot;: &quot;&quot;,
+		&quot;CMAKE_INSTALL_PREFIX&quot;: &quot;$&#123;sourceDir&#125;&#x2F;out&#x2F;install&#x2F;$&#123;presetName&#125;&quot;
+    &#125;
+&#125;,<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>修改为这个：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+	&quot;name&quot;: &quot;stm32-debug&quot;,
+	&quot;displayName&quot;: &quot;stm32 交叉编译 (Debug)&quot;,
+	&quot;description&quot;: &quot;使用 make 和 ARM 工具链编译&quot;,
+	&quot;generator&quot;: &quot;Unix Makefiles&quot;,
+	&quot;binaryDir&quot;: &quot;$&#123;sourceDir&#125;&#x2F;build&quot;,
+	&quot;cacheVariables&quot;: &#123;
+		&quot;CMAKE_BUILD_TYPE&quot;: &quot;Debug&quot;,
+		&quot;CMAKE_TOOLCHAIN_FILE&quot;: &quot;$&#123;sourceDir&#125;&#x2F;cmake&#x2F;gcc-arm-none-eabi.cmake&quot;,
+		&quot;CMAKE_RUNTIME_OUTPUT_DIRECTORY&quot;: &quot;$&#123;sourceDir&#125;&#x2F;bin&quot;
+	&#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>主要就是设置cmake的输出目录，工具链，还有生成什么文件（generator，你填 <code>Unix Makefiles</code> 就生成makefile，填 <code>Ninja</code> 就是ninja文件）</p>
+<p><strong>另</strong>：一般来说，使用cubemx生成的项目文件，VSCODE的c语言支持插件（IntelliSense）是不可能正常工作的，会报很多红，找不到路径等等。所以这里我们还需要配置 <code>c_cpp_properties.json</code>,重新配置一下这个IntelliSense。在项目文件夹下创建 <code>.vscode</code>文件夹并在该文件夹下创建<code>c_cpp_properties.json</code></p>
+<p>在 <code>configurations</code> 下创建一个新配置：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+	&quot;name&quot;: &quot;STM32_ARM&quot;,
+	&quot;compilerPath&quot;: &quot;&#x2F;home&#x2F;gdm&#x2F;prjts&#x2F;ARM_TOOLCHAIN&#x2F;AArch32-BareMetal&#x2F;arm-none-eabi-PATH&#x2F;arm-none-eabi-gcc&quot;,
+	&quot;compileCommands&quot;: &quot;$&#123;workspaceFolder&#125;&#x2F;build&#x2F;compile_commands.json&quot;,
+	&quot;cStandard&quot;: &quot;gnu11&quot;,
+	&quot;cppStandard&quot;: &quot;gnu++14&quot;,
+	&quot;intelliSenseMode&quot;: &quot;linux-gcc-arm&quot;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>compilerPath</code> 指定你的系统编译器路径，这样一些标准头文件就不会被乱找。</p>
+<p><code>compileCommands</code> IntelliSense就是通过它来解析各种路径，提供语法补全等支持，它由 Cmake自动生成。</p>
+<p>CubeMX自动生成的<code>CMakeList.txt</code> 里的这个选项：</p>
+<pre class="line-numbers language-none"><code class="language-none"># Enable compile command to ease indexing with e.g. clangd
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>就是开启生成它的宏。所以如果CMake没有自动生成，请确保开启了这个宏。</p>
+<p><code>intelliSenseMode</code> 则确保 intelliSense 以32位arm架构的规则来为你提供语法分析。</p>
+<p><strong>另</strong>：如果你又新创建了文件夹该怎么做呢？如果你新创建了文件夹，在这个文件夹里intelliSense又不会解析了。<br />
+在 cubeMX 生成的<code>CMakeList.txt</code> 里有下面两项：</p>
+<p><img src="Snipaste_2026-03-17_20-33-08.png" alt="" /></p>
+<p>注释已经写的很清楚了，添加好后，在重新使用cmake生成一下，cmake会自动更新 compile_commands.json ，然后intelliSense就可以正常工作了。</p>
+<p>还是推荐逐个写明添加的文件，而不是使用file和glob，在 <a href="https://blog.godmao.top/posts/35476/">CMake简易使用文档</a>中有讲。</p>
 <h2 id="4-项目的初始化"><a class="markdownIt-Anchor" href="#4-项目的初始化"></a> 4. 项目的初始化</h2>
 <p>在初始化 STM32 的时钟树、引脚复用和生成外设 HAL 库时，<strong>STM32CubeMX</strong> 依然是最高效的工具。虽然WSL有WSLg，理论上支持Linux版的CubeMX，但是安装Linux版会有很多依赖也需要安装，所以我还是选择在Win下使用CubeMX。</p>
 <ol>
@@ -169,7 +221,7 @@
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约899字。于2026/03/14首次发布，最后更新于2026/03/14。 </p>
+<p>共计约1.6k字。于2026/03/14首次发布，最后更新于2026/03/17。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -256,7 +308,7 @@
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -382,7 +434,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,1,6],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,7],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -511,7 +563,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":17,"path":"嵌入式"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
