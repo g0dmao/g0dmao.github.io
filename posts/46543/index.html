@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">FreeRTOS的内部机制4</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>这章我们来分析一下PendSV和SwitchContext的实现细节，OS内核中比较难啃的地方。<br />
+那我们先来看看 <code>/portable/GCC/ARM_CM4F/port.c</code> 对 PendSV_Handler 的实现。</p>
+<h2 id="1-pendsv_handler-的实现带浮点运算单元的版本"><a class="markdownIt-Anchor" href="#1-pendsv_handler-的实现带浮点运算单元的版本"></a> 1. PendSV_Handler 的实现（带浮点运算单元的版本）</h2>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">xPortPendSVHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/* This is a naked function. */</span>
+
+    __asm <span class="token keyword">volatile</span>
+    <span class="token punctuation">(</span>
+        <span class="token string">"   mrs r0, psp                         \n"</span>
+        <span class="token string">"   isb                                 \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   ldr r3, =pxCurrentTCB               \n"</span> <span class="token comment">/* Get the location of the current TCB. */</span>
+        <span class="token string">"   ldr r2, [r3]                        \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   tst r14, #0x10                      \n"</span> <span class="token comment">/* Is the task using the FPU context?  If so, push high vfp registers. */</span>
+        <span class="token string">"   it eq                               \n"</span>
+        <span class="token string">"   vstmdbeq r0!, &#123;s16-s31&#125;             \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   stmdb r0!, &#123;r4-r11, r14&#125;            \n"</span> <span class="token comment">/* Save the core registers. */</span>
+        <span class="token string">"   str r0, [r2]                        \n"</span> <span class="token comment">/* Save the new top of stack into the first member of the TCB. */</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   stmdb sp!, &#123;r0, r3&#125;                 \n"</span>
+        <span class="token string">"   mov r0, %0                          \n"</span>
+        <span class="token string">"   msr basepri, r0                     \n"</span>
+        <span class="token string">"   dsb                                 \n"</span>
+        <span class="token string">"   isb                                 \n"</span>
+        <span class="token string">"   bl vTaskSwitchContext               \n"</span>
+        <span class="token string">"   mov r0, #0                          \n"</span>
+        <span class="token string">"   msr basepri, r0                     \n"</span>
+        <span class="token string">"   ldmia sp!, &#123;r0, r3&#125;                 \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   ldr r1, [r3]                        \n"</span> <span class="token comment">/* The first item in pxCurrentTCB is the task top of stack. */</span>
+        <span class="token string">"   ldr r0, [r1]                        \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   ldmia r0!, &#123;r4-r11, r14&#125;            \n"</span> <span class="token comment">/* Pop the core registers. */</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   tst r14, #0x10                      \n"</span> <span class="token comment">/* Is the task using the FPU context?  If so, pop the high vfp registers too. */</span>
+        <span class="token string">"   it eq                               \n"</span>
+        <span class="token string">"   vldmiaeq r0!, &#123;s16-s31&#125;             \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   msr psp, r0                         \n"</span>
+        <span class="token string">"   isb                                 \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">WORKAROUND_PMU_CM001 </span><span class="token comment">/* XMC4000 specific errata workaround. */</span></span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression">WORKAROUND_PMU_CM001 <span class="token operator">==</span> <span class="token number">1</span></span></span>
+                <span class="token string">"           push &#123; r14 &#125;                \n"</span>
+                <span class="token string">"           pop &#123; pc &#125;                  \n"</span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+        <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   bx r14                              \n"</span>
+        <span class="token string">"                                       \n"</span>
+        <span class="token string">"   .ltorg                              \n"</span>
+        <span class="token operator">::</span><span class="token string">"i"</span> <span class="token punctuation">(</span> configMAX_SYSCALL_INTERRUPT_PRIORITY <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>整个过程可以划分为三个阶段：<strong>上半场（保存现场）、中场休息（挑选任务）、下半场（恢复现场）</strong>。</p>
+<h3 id="第一阶段上半场-保存当前任务的现场"><a class="markdownIt-Anchor" href="#第一阶段上半场-保存当前任务的现场"></a> 第一阶段：上半场 —— 保存当前任务的现场</h3>
+<p>当系统触发 PendSV 进入这个中断时，<strong>硬件已经自动帮你把当前任务的 R0-R3, R12, LR, PC, xPSR（如果用了浮点运算，还有 S0-S15）压入了当前任务的栈里</strong>。剩下的活需要这段汇编手动干。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   mrs r0, psp                         \n"</span> <span class="token comment">/* 读取当前任务的栈指针 PSP 到 R0 */</span>
+<span class="token string">"   isb                                 \n"</span> <span class="token comment">/* 指令同步屏障，确保流水线执行完毕 */</span>
+
+<span class="token string">"   ldr r3, =pxCurrentTCB               \n"</span> <span class="token comment">/* R3 获取 pxCurrentTCB 指针的地址 */</span>
+<span class="token string">"   ldr r2, [r3]                        \n"</span> <span class="token comment">/* R2 获取当前 TCB 的真实首地址 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：先把当前任务的栈顶指针 <code>PSP</code> 拿出来放在 <code>R0</code> 里备用。接着，顺藤摸瓜找到当前正在运行的任务控制块 <code>TCB</code>。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   tst r14, #0x10                      \n"</span> <span class="token comment">/* 测试 R14(LR) 的第4位 */</span>
+<span class="token string">"   it eq                               \n"</span> <span class="token comment">/* 如果第4位是0 (Equal) */</span>
+<span class="token string">"   vstmdbeq r0!, &#123;s16-s31&#125;             \n"</span> <span class="token comment">/* 把浮点寄存器 s16-s31 压栈 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：<strong>这是带 FPU 芯片的特有。</strong> 在中断里，<code>R14</code>（也就是 <code>LR</code> 寄存器）里面装的不再是返回地址，而是一个叫做 <code>EXC_RETURN</code> 的特殊值。它的<strong>第 4 位</strong>用来标记被中断的任务刚刚有没有使用浮点运算。</p>
+<ul>
+<li>
+<p>如果有用（第4位=0），我们就必须手动把剩下的高位浮点寄存器 <code>s16-s31</code> 也压入当前任务的栈（<code>R0</code>）里。（<code>s0-s15</code> 由硬件压）。</p>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   stmdb r0!, &#123;r4-r11, r14&#125;            \n"</span> <span class="token comment">/* 将普通寄存器 r4-r11 和 r14(EXC_RETURN) 压栈 */</span>
+<span class="token string">"   str r0, [r2]                        \n"</span> <span class="token comment">/* 【关键！】把最终的栈指针 R0 保存到 TCB 的第一个成员 pxTopOfStack 里 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p><strong>解读</strong>：接着把普通寄存器 <code>R4-R11</code> 压栈。注意这里连 <code>R14 (EXC_RETURN)</code> 也一并压栈了，因为下一个任务醒来时，也要根据自己的 <code>EXC_RETURN</code> 来决定怎么出栈。<br />
+压栈结束后，<code>R0</code> 的位置发生移动，成为了新的“栈顶”。 <code>str</code> 则把这个新栈顶记录到任务的“身份证” TCB 里。<strong>当前任务，正式进入休眠！</strong></p>
+<h3 id="第二阶段中场休息-呼叫-c-函数挑选新任务"><a class="markdownIt-Anchor" href="#第二阶段中场休息-呼叫-c-函数挑选新任务"></a> 第二阶段：中场休息 —— 呼叫 C 函数挑选新任务</h3>
+<p>这部分的核心是调用 <code>vTaskSwitchContext</code>，但调用 C 函数之前需要做周密的保护。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   stmdb sp!, &#123;r0, r3&#125;                 \n"</span> <span class="token comment">/* 把 r0 和 r3 压入主堆栈 (MSP) 保护起来 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>解读</strong>：由于接下来要调用 C 语言函数，C 函数在运行中可能会破坏寄存器的值。由于等会“下半场”我们还要靠 <code>R3</code> 去找下一个任务的 TCB，所以先把它们压入主堆栈（中断专用栈）藏起来。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   mov r0, %0                          \n"</span> <span class="token comment">/* %0 是宏传入的参数 configMAX_SYSCALL_INTERRUPT_PRIORITY */</span>
+<span class="token string">"   msr basepri, r0                     \n"</span> <span class="token comment">/* 写入 basepri 寄存器，屏蔽部分中断 */</span>
+<span class="token string">"   dsb                                 \n"</span> 
+<span class="token string">"   isb                                 \n"</span>
+<span class="token string">"   bl vTaskSwitchContext               \n"</span> <span class="token comment">/* 调用 C 函数，挑选最高优先级的就绪任务！ */</span>
+<span class="token string">"   mov r0, #0                          \n"</span> 
+<span class="token string">"   msr basepri, r0                     \n"</span> <span class="token comment">/* 清零 basepri，重新开启中断 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：这就是 FreeRTOS 的<strong>临界区保护机制</strong>。通过配置 <code>BASEPRI</code> 寄存器，屏蔽掉所有优先级低于某个设定的中断，防止在切换任务指针的关键时刻又被打断。安全锁死后，调用调度算法 <code>vTaskSwitchContext</code>。 <strong>函数执行完毕后，全局变量 pxCurrentTCB 则被偷天换日，指向下一个要运行的高优先级任务</strong>。</p>
+<h3 id="第三阶段下半场-恢复新任务的现场"><a class="markdownIt-Anchor" href="#第三阶段下半场-恢复新任务的现场"></a> 第三阶段：下半场 —— 恢复新任务的现场</h3>
+<p>现在，我们要把新任务唤醒，把刚才存入栈里的数据全部弹回 CPU。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   ldmia sp!, &#123;r0, r3&#125;                 \n"</span> <span class="token comment">/* 把之前藏在主堆栈里的 R0, R3 拿回来 */</span>
+
+<span class="token string">"   ldr r1, [r3]                        \n"</span> <span class="token comment">/* 此时 R3 指向的 pxCurrentTCB 已经变了！R1 拿到新任务的 TCB 首地址 */</span>
+<span class="token string">"   ldr r0, [r1]                        \n"</span> <span class="token comment">/* R0 拿到新任务的 pxTopOfStack (栈顶指针) */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：拿到新任务上次休眠时保存的栈顶指针 <code>R0</code>。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   ldmia r0!, &#123;r4-r11, r14&#125;            \n"</span> <span class="token comment">/* 从新任务的栈中弹出 r4-r11 和 r14(EXC_RETURN) */</span>
+
+<span class="token string">"   tst r14, #0x10                      \n"</span> <span class="token comment">/* 再次检查弹出来的 R14 的第 4 位 */</span>
+<span class="token string">"   it eq                               \n"</span>
+<span class="token string">"   vldmiaeq r0!, &#123;s16-s31&#125;             \n"</span> <span class="token comment">/* 如果新任务使用了浮点运算，把浮点寄存器也弹出来 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：<strong>怎么吃的怎么吐出来。</strong> 刚才压栈的顺序反过来执行一次。注意，弹出的 <code>R14</code> 决定了接下来是否要恢复浮点寄存器。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token string">"   msr psp, r0                         \n"</span> <span class="token comment">/* 把弹完数据后的 R0 重新写回 CPU 的栈指针寄存器 PSP */</span>
+<span class="token string">"   isb                                 \n"</span>
+<span class="token string">"   bx r14                              \n"</span> <span class="token comment">/* 异常返回！硬件接管剩余出栈工作 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><strong>解读</strong>：大功告成！把最新的栈位置还给 <code>PSP</code> 。最后一句 <code>bx r14</code> 让 CPU 根据 <code>R14</code> 的值退出中断模式。<strong>硬件会自动从 PSP 指向的栈里弹出 R0-R3, R12, LR, PC, xPSR。</strong> 伴随着 <code>PC</code> 寄存器的更新，CPU 已经置身于全新的任务现场中了！</p>
+<h3 id="如若不需浮点运算"><a class="markdownIt-Anchor" href="#如若不需浮点运算"></a> 如若不需浮点运算</h3>
+<p>如果不搞浮点运算，只用最普通的 Cortex-M3，完全可以删掉所有带 <code>vstmdbeq</code> 和 <code>vldmiaeq</code> 的浮点指令，以及测试 <code>R14</code> 的逻辑，那么你的代码只剩下最核心的：</p>
+<ol>
+<li><code>MRS r0, PSP</code></li>
+<li>推入 <code>r4-r11</code></li>
+<li>存入旧 TCB</li>
+<li>调用 <code>vTaskSwitchContext</code></li>
+<li>读取新 TCB</li>
+<li>弹出 <code>r4-r11</code></li>
+<li><code>MSR PSP, r0</code></li>
+<li><code>BX LR</code></li>
+</ol>
+<h2 id="2-vtaskswitchcontext-的实现细节"><a class="markdownIt-Anchor" href="#2-vtaskswitchcontext-的实现细节"></a> 2. vTaskSwitchContext 的实现细节</h2>
+<p>如果说 <code>PendSV</code> 是负责干苦力的“搬运工”（把寄存器压栈出栈），那么 <code>vTaskSwitchContext</code> 就是坐在调度室里的“总调度长”。</p>
+<p>在 <code>PendSV</code> 的纯汇编代码中，有一句极其关键的调用：<code>bl vTaskSwitchContext</code>。搬运工把旧任务打包好之后，跑来问总调度长：“下一个该让谁上？”总调度长查阅一番后，在小黑板上写下新任务的名字（更新 <code>pxCurrentTCB</code> 指针），然后搬运工再去把新任务解包运行。</p>
+<h3 id="1-核心使命更新-pxcurrenttcb"><a class="markdownIt-Anchor" href="#1-核心使命更新-pxcurrenttcb"></a> 1. 核心使命：更新 pxCurrentTCB</h3>
+<p>这个函数存在的终极目的只有一个：<strong>找到当前就绪链表中优先级最高的任务，并将全局指针 pxCurrentTCB 指向它的任务控制块（TCB）。</strong></p>
+<h3 id="2-附加工作推荐开启"><a class="markdownIt-Anchor" href="#2-附加工作推荐开启"></a> 2. 附加工作（推荐开启）</h3>
+<p>在去挑下一个任务之前，调度长会顺手做两件附加工作：</p>
+<ul>
+<li>
+<p><strong>运行时间统计 (Run Time Stats)：</strong> 如果你的系统开启了 <code>configGENERATE_RUN_TIME_STATS</code>，调度长会记录一下上一个任务总共跑了多长时间。你平时在终端里敲 <code>top</code> 命令看到的 CPU 占用率，底层数据就是在这里收集的。</p>
+</li>
+<li>
+<p><strong>栈溢出检查 (Stack Overflow Checking)：</strong> 如果你开启了 <code>configCHECK_FOR_STACK_OVERFLOW</code>。调度长会去检查刚刚被暂停的那个任务的栈。它会去看栈底的最后几个字节（也就是我们之前提到过的魔术字，通常是 <code>0xA5A5A5A5</code>）有没有被改写。如果被改写了，说明任务的局部变量开得太大，把栈底击穿了！调度长会立刻触发 <code>vApplicationStackOverflowHook()</code> 函数，通常是直接死机报错，以确保系统不带病运行。</p>
+</li>
+</ul>
+<h3 id="3-挑选最高优先级任务"><a class="markdownIt-Anchor" href="#3-挑选最高优先级任务"></a> 3. 挑选最高优先级任务</h3>
+<p>附加工作做完，进入核心环节。在源码中，有一个宏： <code>taskSELECT_HIGHEST_PRIORITY_TASK()</code></p>
+<p>这是 FreeRTOS 神奇的地方：<strong>O(1) 时间复杂度的调度算法。</strong> 无论你创建了 5 个任务还是 50 个任务，它找出最高优先级任务消耗的时间是绝对恒定的。这是怎么做到的呢？这取决于你的架构配置。</p>
+<h4 id="方法-a通用-c-语言法"><a class="markdownIt-Anchor" href="#方法-a通用-c-语言法"></a> 方法 A：通用 C 语言法</h4>
+<p>—— 硬件不支持时的备选</p>
+<p>如果是比较低端的 8 位单片机（没有专门的硬件指令），FreeRTOS 只能用一个 <code>while</code> 循环，从最高优先级的就绪链表往下遍历，直到找到第一个里面有任务的链表。这种方法虽然简单，但每次耗时不一样（O(n)），不够实时。</p>
+<p>FreeRTOS会维护一个<strong>uxTopReadyPriority</strong>的变量记录就绪链表数，也是优先级数。</p>
+<h4 id="方法-b硬件指令加速法"><a class="markdownIt-Anchor" href="#方法-b硬件指令加速法"></a> 方法 B：硬件指令加速法</h4>
+<p>对于ARM架构芯片，FreeRTOS 采用了硬件优化方案：<strong>前导零计数指令（CLZ - Count Leading Zeros）</strong>。</p>
+<p>FreeRTOS 维护了一个 32 位的无符号整数变量，也叫做 <strong>uxTopReadyPriority</strong>。不同的方法<strong>uxTopReadyPriority</strong>的初始化不同，是条件编译实现的。</p>
+<ul>
+<li>它的每一位（Bit）代表一个优先级。</li>
+<li>如果优先级 3 的就绪链表里有任务，就把 Bit 3 置为 1。如果没有，就置 0。 当调度长需要找最高优先级时，只需执行一条汇编指令： <code>__asm (&quot;clz r0, r1&quot;)</code></li>
+</ul>
+<p>这条指令会在 1 个时钟周期内，直接告诉这个 32 位变量里，从左往右数有几个 0，从而<strong>反推出最高位是 1 的是在第几位</strong>。 这就等于瞬间知道了当前系统中有就绪任务的最高优先级是多少（比如优先级 5）。</p>
+<h3 id="4-同级轮转再复习"><a class="markdownIt-Anchor" href="#4-同级轮转再复习"></a> 4. 同级轮转再复习</h3>
+<p>找到了最高优先级（假设是 5），接下来就要从 <code>pxReadyTasksLists[5]</code> 这个链表里挑任务了。</p>
+<p>如果这个链表里有多个任务（比如任务 A 和任务 B 都是优先级 5，并且都在就绪状态），怎么做到公平的时间片轮转呢？</p>
+<p>在 <code>taskSELECT_HIGHEST_PRIORITY_TASK</code> 宏的内部，有这样一句代码：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">listGET_OWNER_OF_NEXT_ENTRY</span><span class="token punctuation">(</span> pxCurrentTCB<span class="token punctuation">,</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxReadyTasksLists<span class="token punctuation">[</span> uxTopPriority <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li>就绪链表不仅记录了头部，还记录了一个<strong>索引指针（Index）</strong>。</li>
+<li>每次调用这个函数，索引指针就会往后移动一格。</li>
+<li>第一次挑出任务 A 给 <code>pxCurrentTCB</code>，索引指向 B。下一个 SysTick 到来触发切换时，再调用这个函数，就会挑出任务 B，索引又绕回 A。</li>
+<li>这就完美实现了同级优先级的<strong>公平时间片轮转（Round-Robin）</strong></li>
+</ul>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约2.7k字。于2026/03/28首次发布，最后更新于2026/03/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-pendsv_handler-%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%B8%A6%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97%E5%8D%95%E5%85%83%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-text"> 1. PendSV_Handler 的实现（带浮点运算单元的版本）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%E4%B8%8A%E5%8D%8A%E5%9C%BA-%E4%BF%9D%E5%AD%98%E5%BD%93%E5%89%8D%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%8E%B0%E5%9C%BA"><span class="toc-text"> 第一阶段：上半场 —— 保存当前任务的现场</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%E4%B8%AD%E5%9C%BA%E4%BC%91%E6%81%AF-%E5%91%BC%E5%8F%AB-c-%E5%87%BD%E6%95%B0%E6%8C%91%E9%80%89%E6%96%B0%E4%BB%BB%E5%8A%A1"><span class="toc-text"> 第二阶段：中场休息 —— 呼叫 C 函数挑选新任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%E4%B8%8B%E5%8D%8A%E5%9C%BA-%E6%81%A2%E5%A4%8D%E6%96%B0%E4%BB%BB%E5%8A%A1%E7%9A%84%E7%8E%B0%E5%9C%BA"><span class="toc-text"> 第三阶段：下半场 —— 恢复新任务的现场</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E8%8B%A5%E4%B8%8D%E9%9C%80%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97"><span class="toc-text"> 如若不需浮点运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-vtaskswitchcontext-%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text"> 2. vTaskSwitchContext 的实现细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E4%BD%BF%E5%91%BD%E6%9B%B4%E6%96%B0-pxcurrenttcb"><span class="toc-text"> 1. 核心使命：更新 pxCurrentTCB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%99%84%E5%8A%A0%E5%B7%A5%E4%BD%9C%E6%8E%A8%E8%8D%90%E5%BC%80%E5%90%AF"><span class="toc-text"> 2. 附加工作（推荐开启）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8C%91%E9%80%89%E6%9C%80%E9%AB%98%E4%BC%98%E5%85%88%E7%BA%A7%E4%BB%BB%E5%8A%A1"><span class="toc-text"> 3. 挑选最高优先级任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%90%8C%E7%BA%A7%E8%BD%AE%E8%BD%AC%E5%86%8D%E5%A4%8D%E4%B9%A0"><span class="toc-text"> 4. 同级轮转再复习</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":1,"path":"嵌入式/PCB"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":3,"path":"RTOS"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

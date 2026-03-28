@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">FreeRTOS的内部机制2</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-freertos中的链表结构"><a class="markdownIt-Anchor" href="#1-freertos中的链表结构"></a> 1. FreeRTOS中的链表结构</h2>
+<p>上一节我们介绍了任务创建的部分，但对于链表部分没有深入分析，这章我们就来分析一下这个最核心的数据结构，FreeRTOS底层逻辑。理解FreeRTOS的链表，是理解任务调度、时间管理以及各种通信机制（队列、信号量）的基础。</p>
+<blockquote>
+<p>任务的状态切换，本质上就是把任务的TCB从一个链表拔出来，插进另一个链表里。<br />
+——鲁迅</p>
+</blockquote>
+<h3 id="11-链表结构详解"><a class="markdownIt-Anchor" href="#11-链表结构详解"></a> 1.1 链表结构详解</h3>
+<p>FreeRTOS 使用的是<strong>双向环形链表</strong>。在 <code>include/list.h</code> 中，有两个最核心的结构体。</p>
+<ol>
+<li>
+<p>链表节点：<code>ListItem_t</code> (挂在TCB身上的钩子)</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">xLIST_ITEM</span>
+<span class="token punctuation">&#123;</span>
+    TickType_t xItemValue<span class="token punctuation">;</span>             <span class="token comment">/* 节点的值。用于排序（比如延时阻塞时，按唤醒时间点排序） */</span>
+    <span class="token keyword">struct</span> <span class="token class-name">xLIST_ITEM</span> <span class="token operator">*</span> pxNext<span class="token punctuation">;</span>        <span class="token comment">/* 指向下一个节点 */</span>
+    <span class="token keyword">struct</span> <span class="token class-name">xLIST_ITEM</span> <span class="token operator">*</span> pxPrevious<span class="token punctuation">;</span>    <span class="token comment">/* 指向上一个节点 */</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span> pvOwner<span class="token punctuation">;</span>                    <span class="token comment">/* 核心！指向这个节点的主人（通常是 TCB 的指针） */</span>
+    <span class="token keyword">struct</span> <span class="token class-name">xLIST</span> <span class="token operator">*</span> pvContainer<span class="token punctuation">;</span>        <span class="token comment">/* 指向这个节点当前所在的链表（用来检查任务到底在哪） */</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">xLIST_ITEM</span> ListItem_t<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>还记得我们在 TCB 结构体里看到的 <code>xStateListItem</code> 和 <code>xEventListItem</code> 吗？它们就是这个结构体。 可以把 <code>ListItem_t</code> 想象成 TCB 伸出来的“钩子”。RTOS 调度器从来不直接把 TCB 放进链表，而是把 TCB 上的这根“钩子”挂进链表。</p>
+<ul>
+<li><code>pvOwner</code> 的设计：如何通过子结构体成员反向寻回其父结构体？你可能会想到Linux里的 <code>container_of</code> 宏。不过更有效的方法就是直接在子结构体成员中直接嵌入父结构体的地址，这样就能快速寻回。简单来说，当调度器在链表里找到一个节点时，通过 <code>pvOwner</code> 就能顺藤摸瓜，直接找到这个节点所属的 TCB。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<ol start="2">
+<li>
+<p>链表根节点：<code>List_t</code></p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c">	<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">xLIST</span>
+<span class="token punctuation">&#123;</span>
+    UBaseType_t uxNumberOfItems<span class="token punctuation">;</span>    <span class="token comment">/* 链表里现在有几个节点 */</span>
+    ListItem_t <span class="token operator">*</span> pxIndex<span class="token punctuation">;</span>           <span class="token comment">/* 游标指针：用于遍历链表（同优先级时间片轮转就靠它） */</span>
+    MiniListItem_t xListEnd<span class="token punctuation">;</span>        <span class="token comment">/* 链表的尾部/锚点（为了节省一点点内存，去掉了Owner属性的精简版节点） */</span>
+<span class="token punctuation">&#125;</span> List_t<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果 <code>ListItem_t</code> 是挂在衣服（TCB）上的钩子，那 <code>List_t</code> 就是衣柜里的“衣架横杆”。系统里定义了各种各样的“衣架”，在 <code>task.c</code> 中定义：</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c">PRIVILEGED_DATA <span class="token keyword">static</span> List_t pxReadyTasksLists<span class="token punctuation">[</span> configMAX_PRIORITIES <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">/**&lt; Prioritised ready tasks. */</span>
+
+PRIVILEGED_DATA <span class="token keyword">static</span> List_t xDelayedTaskList1<span class="token punctuation">;</span>                         <span class="token comment">/**&lt; Delayed tasks. */</span>
+
+PRIVILEGED_DATA <span class="token keyword">static</span> List_t xDelayedTaskList2<span class="token punctuation">;</span>                         <span class="token comment">/**&lt; Delayed tasks (two lists are used - one for delays that have overflowed the current tick count. */</span>
+
+PRIVILEGED_DATA <span class="token keyword">static</span> List_t <span class="token operator">*</span> <span class="token keyword">volatile</span> pxDelayedTaskList<span class="token punctuation">;</span>              <span class="token comment">/**&lt; Points to the delayed task list currently being used. */</span>
+
+PRIVILEGED_DATA <span class="token keyword">static</span> List_t <span class="token operator">*</span> <span class="token keyword">volatile</span> pxOverflowDelayedTaskList<span class="token punctuation">;</span>      <span class="token comment">/**&lt; Points to the delayed task list currently being used to hold tasks that have overflowed the current tick count. */</span>
+
+PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyList<span class="token punctuation">;</span>                         <span class="token comment">/**&lt; Tasks that have been readied while the scheduler was suspended.  They will be moved to the ready list when the scheduler is resumed. */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token punctuation">(</span> INCLUDE_vTaskSuspend <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span></span></span>
+    PRIVILEGED_DATA <span class="token keyword">static</span> List_t xSuspendedTaskList<span class="token punctuation">;</span> <span class="token comment">/**&lt; Tasks that are currently suspended. */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>
+<p>**<em>pxReadyTasksLists[configMAX_PRIORITIES]</em></p>
+<p>用于挂载就绪任务。<br />
+这是一个链表数组。<code>configMAX_PRIORITIES</code> 定义的是最大的优先级，默认应该是5。<br />
+说明 FreeRTOS 为每一个可能设定的优先级都单独准备了一个链表，优先级相同则在同一链表，调度时根据优先级查表，需要注意的是FreeRTOS 等级数字大的优先级高（5最优先）。</p>
+</li>
+<li>
+<p><em><strong>xDelayedTaskList1 &amp; 2</strong></em></p>
+<p>用于挂载阻塞和延时任务。<br />
+在注释中也说了，两个链表是为了防止系统节拍溢出的问题。下面是一个例子：<br />
+首先系统节拍（Tick）是用一个整型变量记录的（比如 32 位）。假设当前 Tick 是 <code>0xFFFFFFF0</code>，任务 A 调用了 <code>vTaskDelay(100)</code>。任务 A 应该在 <code>0xFFFFFFF0 + 100</code> = <code>0x00000054</code> （溢出后）醒来。如果只有一个延时链表，并且按照唤醒时间从小到大排序，调度器在比较时间时就会彻底混乱：<code>0x00000054</code> 在数值上比当前的 <code>0xFFFFFFF0</code> 还要小，这该怎么比？<br />
+对此的解决办法是采用双链表：</p>
+<ol>
+<li>
+<p><strong>当前链表 (由<code>pxDelayedTaskList</code>指针指向的链表)：</strong> 存放那些在Tick 溢出前就会醒来的任务。</p>
+</li>
+<li>
+<p><strong>溢出链表 (由<code>pxOverflowDelayedTaskList</code>指针指向的链表)：</strong> 存放那些唤醒时间越过了溢出界限（也就是唤醒时间在数值上小于当前时间）的任务，比如刚才的任务 A。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><em><strong>pxDelayedTaskList</strong></em>、<em><strong>pxOverflowDelayedTaskList</strong></em></p>
+<p>注意看这两个并不是链表类型，而是指针类型，指向上面提到的两个双delay链表。它由一个非常巧妙的运用：<br />
+当系统 Tick 计满溢出变为 0 时，内核<strong>直接把这两个指针互换</strong>。溢出链表变成了当前链表，无缝衔接，继续运行。</p>
+</li>
+<li>
+<p><em><strong>xPendingReadyList</strong></em></p>
+<p>用于暂存“刚刚解除阻塞，但由于特殊原因目前还不能放入 Ready 链表”的任务。<br />
+运行的任务 A 正好在修改就绪链表（比如它刚好在创建一个新任务，或者动态改变某个任务的优先级）它通常会调用 <code>vTaskSuspendAll()</code>让调度器挂起（不能进行任务切换），以保证修改就绪链表不被打断或就绪链表被其他任务修改。</p>
+<p>但注意：<strong>此时硬件中断是依然开启的</strong>。假设调度器正挂起时，一个串口接收中断触发了。ISR（中断服务函数）释放了一个信号量，这个信号量恰好唤醒了一个高优先级任务 B。<br />
+此时的情况：</p>
+<ol>
+<li>由于调度器被挂起了，内核不能现在就把任务 B 放进前面讲的<code>pxReadyTasksLists</code> 里去打乱正在进行的内核逻辑。如若直接强行把任务 B 塞进就绪链表，就会发生严重的数据竞争——同时修改同一个双向链表的指针。</li>
+<li>任务 B 确实已经不属于 Blocked 状态了，不能继续待在 Delayed 链表里。</li>
+</ol>
+<p>此时内核会把任务 B 暂时挂到 <code>xPendingReadyList</code>。代码执行到 <code>xTaskResumeAll()</code> 恢复调度器时，内核会检查这个 Pending 链表。如果里面有任务，就会把它们全部转移到对应的 <code>pxReadyTasksLists</code> 中，然后触发一次上下文切换。</p>
+</li>
+<li>
+<p><em><strong>xSuspendedTaskList</strong></em></p>
+<p>用于挂载被挂起的任务。这里只需注意区分挂起和阻塞。</p>
+<ul>
+<li>
+<p>阻塞是因为<strong>等待某个具体事件</strong>（等待信号量、队列有数据）或者<strong>等待时间到达</strong>（<code>vTaskDelay</code>）而进入<strong>被动</strong>休眠。一旦外部因素解除则会加入就绪链表。</p>
+</li>
+<li>
+<p>而挂起则是<strong>主动</strong>的休眠（用户程序主动调用了<code>vTaskSuspend( xTaskHandle )</code>），进入挂起态后，没有运行资格，或者说系统直接无视这个任务，要想重新运行，只能是系统里的另一个活跃任务显式调用<code>vTaskResume(TaskHandle)</code>或其衍生函数。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>双向环形链表：<br />
+<img src="Snipaste_2026-03-26_18-57-25.png" alt="" /></p>
+<h2 id="2-创建任务函数对链表的操作"><a class="markdownIt-Anchor" href="#2-创建任务函数对链表的操作"></a> 2. 创建任务函数对链表的操作</h2>
+<ol>
+<li>
+<p>初始化</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">vListInitialiseItem</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxNewTCB<span class="token operator">-></span>xStateListItem <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这个函数只做两件事：</p>
+<ol>
+<li>
+<p><code>pvContainer = NULL;</code> （标记这个钩子目前哪儿也没挂）。</p>
+</li>
+<li>
+<p><code>pvOwner = pxNewTCB;</code> （把钩子的主人指向刚刚创建的这个 TCB。以后谁拿到这个钩子，谁就能找到这个 TCB）。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>挂入就绪链表 (<code>prvAddTaskToReadyList</code>)<br />
+需要注意这个函数的这个地方：</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* If the scheduler is not already running, make this task the
+* current task if it is the highest priority task to be created
+* so far. */</span>
+	<span class="token keyword">if</span><span class="token punctuation">(</span> pxCurrentTCB<span class="token operator">-></span>uxPriority <span class="token operator">&lt;=</span> pxNewTCB<span class="token operator">-></span>uxPriority <span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		pxCurrentTCB <span class="token operator">=</span> pxNewTCB<span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">else</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p>pxCurrentTCB是一个全局变量，指向当前运行的TCB。当调度器首次调度时，最先执行的任务设定为<strong>最高优先级，最后创建的任务。</strong></p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1.9k字。于2026/03/26首次发布，最后更新于2026/03/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-freertos%E4%B8%AD%E7%9A%84%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-text"> 1. FreeRTOS中的链表结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="toc-text"> 1.1 链表结构详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1%E5%87%BD%E6%95%B0%E5%AF%B9%E9%93%BE%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text"> 2. 创建任务函数对链表的操作</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":1,"path":"嵌入式/PCB"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":3,"path":"RTOS"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

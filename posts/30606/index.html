@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">FreeRTOS的内部机制3</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-甘-文-崔三个重要的中断"><a class="markdownIt-Anchor" href="#1-甘-文-崔三个重要的中断"></a> 1. 甘、文、崔：三个重要的中断</h2>
+<p>在FreeRTOS中，使用三个宏重写了中断，他们一般定义在与硬件相关的 <code>port.c</code> 中。</p>
+<p>例如 <code>/portable/GCC/ARM_CM4F/port.c</code>。</p>
+<blockquote>
+<p>注意还有一个文件夹叫 <code>/portable/GCC/ARM_CM4_MPU/port.c</code>。这是带内存保护单元MPU的版本，由于添加了内存保护功能，实现较为复杂，上下文开销也大。一般用在对安全性要求极高的产品上，比如医疗和车规级产品。一般产品不建议使用。</p>
+</blockquote>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">xPortPendSVHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span> <span class="token keyword">__attribute__</span><span class="token punctuation">(</span> <span class="token punctuation">(</span> naked <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">xPortSysTickHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">vPortSVCHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span> <span class="token keyword">__attribute__</span><span class="token punctuation">(</span> <span class="token punctuation">(</span> naked <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p><code>__attribute__( ( naked ) )</code> 告知编译器这个函数是“裸体”的，不要给他“穿衣服”（即给他添加额外的汇编代码）</p>
+</blockquote>
+<h3 id="11-svc_handler"><a class="markdownIt-Anchor" href="#11-svc_handler"></a> 1.1 SVC_Handler</h3>
+<p>—— Supervisor Call，系统服务调用。</p>
+<p>它在RTOS中仅被调用一次，用来启动第一个任务。</p>
+<p>芯片复位上电，默认运行在特权模式下，并且使用的是 <strong>MSP（主栈指针）</strong>。（我们在1里讲的双栈模式）但我们前面说过，RTOS 的任务必须使用自己的私有栈，也就是必须切换到 <strong>PSP（进程栈指针）</strong> 去运行。</p>
+<p>标准做法就是使用SVC。省流：<code>vTaskStartScheduler()</code> 通过触发 <code>svc 0</code> 指令进入到了SVC中断。</p>
+<details>
+<summary> 如果对具体的调用链感兴趣可点击展开查看细节，篇幅原因折叠了 </summary>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">vTaskStartScheduler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	BaseType_t xReturn<span class="token punctuation">;</span>
+	xReturn <span class="token operator">=</span> <span class="token function">prvCreateIdleTasks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token punctuation">(</span> configUSE_TIMERS <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span></span></span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span> xReturn <span class="token operator">==</span> pdPASS <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            xReturn <span class="token operator">=</span> <span class="token function">xTimerCreateTimerTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* configUSE_TIMERS */</span></span>
+    <span class="token comment">/* The return value for xPortStartScheduler is not required
+         * hence using a void datatype. */</span>
+        <span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span> <span class="token function">xPortStartScheduler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看出，开始调度函数一般就做这些事：</p>
+<ol>
+<li>创建空闲任务</li>
+<li>如果使用了定时器，则创建定时器守护函数</li>
+<li>调用 <code>xPortStartScheduler()</code>，这个函数又与硬件强相关</li>
+</ol>
+<p>我们来看 <code>/portable/GCC/ARM_CM4F/port.c</code> 中的 <code>xPortStartScheduler()</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment">/* Start the first task. */</span>
+    <span class="token function">prvPortStartFirstTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>再看 <code>prvPortStartFirstTask()</code>，可以看到已经到汇编了，最重点的就是 <code> svc 0</code> 这个指令，直接触发了SVC中断。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">prvPortStartFirstTask</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/* Start the first task.  This also clears the bit that indicates the FPU is
+     * in use in case the FPU was used before the scheduler was started - which
+     * would otherwise result in the unnecessary leaving of space in the SVC stack
+     * for lazy saving of FPU registers. */</span>
+    __asm <span class="token keyword">volatile</span> <span class="token punctuation">(</span>
+        <span class="token string">" ldr r0, =0xE000ED08   \n"</span> <span class="token comment">/* Use the NVIC offset register to locate the stack. */</span>
+        <span class="token string">" ldr r0, [r0]          \n"</span>
+        <span class="token string">" ldr r0, [r0]          \n"</span>
+        <span class="token string">" msr msp, r0           \n"</span> <span class="token comment">/* Set the msp back to the start of the stack. */</span>
+        <span class="token string">" mov r0, #0            \n"</span> <span class="token comment">/* Clear the bit that indicates the FPU is in use, see comment above. */</span>
+        <span class="token string">" msr control, r0       \n"</span>
+        <span class="token string">" cpsie i               \n"</span> <span class="token comment">/* Globally enable interrupts. */</span>
+        <span class="token string">" cpsie f               \n"</span>
+        <span class="token string">" dsb                   \n"</span>
+        <span class="token string">" isb                   \n"</span>
+        <span class="token string">" svc 0                 \n"</span> <span class="token comment">/* System call to start first task. */</span>
+        <span class="token string">" nop                   \n"</span>
+        <span class="token string">" .ltorg                \n"</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</details>
+<p>那在SVC中断里具体做什么呢？我们查看SVC回调函数的实现细节：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">vPortSVCHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span> <span class="token keyword">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span> naked <span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">vPortSVCHandler</span><span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    __asm <span class="token keyword">volatile</span> <span class="token punctuation">(</span>
+        <span class="token comment">/* 1. 找到当前最高优先级任务的 TCB 指针 */</span>
+        <span class="token string">"   ldr r3, pxCurrentTCBConst2      \n"</span> <span class="token comment">/* r3 = &amp;pxCurrentTCB (获取指针变量本身的物理地址) */</span>
+        <span class="token string">"   ldr r1, [r3]                    \n"</span> <span class="token comment">/* r1 = pxCurrentTCB (解引用，拿到当前 TCB 的首地址) */</span>
+        
+        <span class="token comment">/* 2. 读取 TCB 的第一个成员：pxTopOfStack */</span>
+        <span class="token string">"   ldr r0, [r1]                    \n"</span> <span class="token comment">/* r0 = TCB的首个4字节数据，即之前伪造好的栈顶指针 */</span>
+        
+        <span class="token comment">/* 3. 手动出栈：恢复属于软件管理的寄存器 (R4-R11) 以及 EXC_RETURN (R14) */</span>
+        <span class="token string">"   ldmia r0!, &#123;r4-r11, r14&#125;        \n"</span> <span class="token comment">/* 从 r0 指向的栈内存中，连续弹出数据到 r4-r11 和 r14。 */</span>
+        
+        <span class="token comment">/* 4. 移交栈指针给硬件 PSP */</span>
+        <span class="token string">"   msr psp, r0                     \n"</span> <span class="token comment">/* 将 r0 赋值给 CPU 的进程栈指针 (PSP) */</span>
+        <span class="token string">"   isb                             \n"</span> <span class="token comment">/* 指令同步屏障：清空流水线，强制 CPU 确认 PSP 已经更新 */</span>
+        
+        <span class="token comment">/* 5. 打开中断总开关 */</span>
+        <span class="token string">"   mov r0, #0                      \n"</span> 
+        <span class="token string">"   msr basepri, r0                 \n"</span> <span class="token comment">/* 清零 BASEPRI 寄存器，允许所有优先级的中断触发 */</span>
+        
+        <span class="token comment">/* 6. 神奇的异空间跳跃：触发硬件自动出栈 */</span>
+        <span class="token string">"   bx r14                          \n"</span> <span class="token comment">/* 跳转到 r14 (LR) 寄存器里的特殊地址，触发中断返回 */</span>
+        <span class="token string">"                                   \n"</span>
+        <span class="token string">"   .align 4                        \n"</span>
+        <span class="token string">"pxCurrentTCBConst2: .word pxCurrentTCB \n"</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>简单来说，就是做了这么几件事：</p>
+<ul>
+<li>通过 <code>pxCurrentTCB</code> 找到第一个任务的栈顶指针。</li>
+<li>将 CPU 的栈指针（PSP）指向这个栈顶。</li>
+<li>执行出栈操作（POP），把我们在 <code>pxPortInitialiseStack</code> 里伪造的 <code>PC</code>、<code>R0</code> 等寄存器弹到 CPU 里。</li>
+<li>汇编执行 <code>bx r14</code>（返回指令）。跳到了第一个任务的代码去执行了。</li>
+</ul>
+<blockquote>
+<p>新入栈的元素总是在栈顶，出栈总是栈顶元素出，是曰“后进先出”。</p>
+</blockquote>
+<p>一些细节的说明：</p>
+<ol>
+<li>对于汇编指令的含义，这里就不多赘述。</li>
+<li>关于硬件自动出栈，我也没太搞明白，我只知道R14里的0xFFFFFFFD是有特殊含义的，当 CPU 执行到最后一句 <code>bx r14</code> 时，它发现 R14 里面装的是 <code>0xFFFFFFFD</code> ，会知道要使用PSP而且会硬件层面出栈。</li>
+</ol>
+<p><img src="Snipaste_2026-03-27_18-00-41.png" alt="" /></p>
+<p>至此，第一个任务的运行现场已准备就绪，开始运行了！</p>
+<h3 id="12-systick_handler"><a class="markdownIt-Anchor" href="#12-systick_handler"></a> 1.2 SysTick_Handler</h3>
+<p>——决策者。</p>
+<p>SysTick 是 RTOS 的心跳，通常每 1 毫秒触发一次。它的核心职责是<strong>处理时间逻辑</strong>并<strong>做出调度决策</strong>，但<strong>绝对不亲自执行上下文切换</strong>。来看看其核心代码：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">SysTick_Handler</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token comment">/*The SysTick runs at the lowest interrupt priority*/</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 1. 屏蔽中断，保护 OS 内部数据结构</span>
+    <span class="token class-name">uint32_t</span> ulPreviousMask <span class="token operator">=</span> <span class="token function">portSET_INTERRUPT_MASK_FROM_ISR</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 2. 更新系统时间 (xTickCount++)，检查有没有延时到期的任务</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token function">xTaskIncrementTick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> pdFALSE <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">//向硬件寄存器（ICSR）的特定位写 1，请求触发 PendSV 中断。</span>
+        portNVIC_INT_CTRL_REG <span class="token operator">=</span> portNVIC_PENDSVSET_BIT<span class="token punctuation">;</span> 
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// 4. 恢复中断屏蔽</span>
+    <span class="token function">portCLEAR_INTERRUPT_MASK_FROM_ISR</span><span class="token punctuation">(</span> ulPreviousMask <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>就一个核心函数 <code>xTaskIncrementTick()</code> 做了很多事：</p>
+<ol>
+<li>
+<p><strong>维持系统时间：</strong> 每次触发，将 FreeRTOS 的全局系统节拍计数器（<code>xTickCount</code>）加 1。</p>
+</li>
+<li>
+<p><strong>唤醒阻塞任务：</strong> 检查 <code>pxDelayedTaskList</code>（延时链表）。如果有任务的等待时间到了（比如 <code>vTaskDelay(100)</code> 结束，或者等待的超时时间到了），SysTick 负责把它从阻塞链表移到就绪链表（<code>pxReadyTasksLists</code>）。</p>
+</li>
+<li>
+<p><strong>时间片轮转裁决：</strong> 如果开启了时间片，SysTick 会检查当前运行任务的同优先级下，是否有其他任务也在就绪状态。如果有，说明当前任务的“1 毫秒配额”用完了，该换人了。</p>
+</li>
+</ol>
+<p>这个函数比较长，我们还是看一些核心的部分:</p>
+<details>
+<summary>1. 增加计时器值，以及判断时钟是否溢出，若溢出则切换阻塞链表指针（第2节讲的）的部分</summary>
+<pre><code><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Tick increment should occur on every kernel timer event. Core 0 has the
+     * responsibility to increment the tick, or increment the pended ticks if the
+     * scheduler is suspended.  If pended ticks is greater than zero, the core that
+     * calls xTaskResumeAll has the responsibility to increment the tick. */</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span> uxSchedulerSuspended <span class="token operator">==</span> <span class="token punctuation">(</span> UBaseType_t <span class="token punctuation">)</span> <span class="token number">0U</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">/* Minor optimisation.  The tick count cannot change in this
+         * block. */</span>  <span class="token comment">//1，增加计数</span>
+        <span class="token keyword">const</span> TickType_t xConstTickCount <span class="token operator">=</span> xTickCount <span class="token operator">+</span> <span class="token punctuation">(</span> TickType_t <span class="token punctuation">)</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+        <span class="token comment">/* Increment the RTOS tick, switching the delayed and overflowed
+         * delayed lists if it wraps to 0. */</span>
+        xTickCount <span class="token operator">=</span> xConstTickCount<span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span><span class="token punctuation">(</span> xConstTickCount <span class="token operator">==</span> <span class="token punctuation">(</span> TickType_t <span class="token punctuation">)</span> <span class="token number">0U</span> <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">taskSWITCH_DELAYED_LISTS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//2，切换链表指针</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
+</details>
+<details>
+<summary>2. 唤醒阻塞任务的部分</summary>
+	<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* See if this tick has made a timeout expire.  Tasks are stored in
+        * the  queue in the order of their wake time - meaning once one task
+        * has been found whose block time has not expired there is no need to
+        * look any further down the list. */</span>
+       <span class="token keyword">if</span><span class="token punctuation">(</span> xConstTickCount <span class="token operator">>=</span> xNextTaskUnblockTime <span class="token punctuation">)</span>
+       <span class="token punctuation">&#123;</span>
+           <span class="token keyword">for</span><span class="token punctuation">(</span> <span class="token punctuation">;</span> <span class="token punctuation">;</span> <span class="token punctuation">)</span>
+           <span class="token punctuation">&#123;</span>
+               <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token function">listLIST_IS_EMPTY</span><span class="token punctuation">(</span> pxDelayedTaskList <span class="token punctuation">)</span> <span class="token operator">!=</span> pdFALSE <span class="token punctuation">)</span>
+               <span class="token punctuation">&#123;</span>
+                   <span class="token comment">/* The delayed list is empty.  Set xNextTaskUnblockTime
+                    * to the maximum possible value so it is extremely
+                    * unlikely that the
+                    * if( xTickCount >= xNextTaskUnblockTime ) test will pass
+                    * next time through. */</span>
+                      <span class="token comment">//如果没有阻塞任务，则将其设为最大值，以便不进入大if判断中，而这个xNextTaskUnblockTime是个全局变量，有阻塞任务时会更新</span>
+                   xNextTaskUnblockTime <span class="token operator">=</span> portMAX_DELAY<span class="token punctuation">;</span>
+                   <span class="token keyword">break</span><span class="token punctuation">;</span>
+               <span class="token punctuation">&#125;</span>
+               <span class="token keyword">else</span>
+               <span class="token punctuation">&#123;</span>
+                   <span class="token comment">/* The delayed list is not empty, get the value of the
+                    * item at the head of the delayed list.  This is the time
+                    * at which the task at the head of the delayed list must
+                    * be removed from the Blocked state. */</span>
+                   <span class="token comment">/* MISRA Ref 11.5.3 [Void pointer assignment] */</span>
+                   <span class="token comment">/* More details at: https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/main/MISRA.md#rule-115 */</span>
+                   <span class="token comment">/* coverity[misra_c_2012_rule_11_5_violation] */</span>
+                   pxTCB <span class="token operator">=</span> <span class="token function">listGET_OWNER_OF_HEAD_ENTRY</span><span class="token punctuation">(</span> pxDelayedTaskList <span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   xItemValue <span class="token operator">=</span> <span class="token function">listGET_LIST_ITEM_VALUE</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxTCB<span class="token operator">-></span>xStateListItem <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   
+                   <span class="token keyword">if</span><span class="token punctuation">(</span> xConstTickCount <span class="token operator">&lt;</span> xItemValue <span class="token punctuation">)</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token comment">/* It is not time to unblock this item yet, but the
+                        * item value is the time at which the task at the head
+                        * of the blocked list must be removed from the Blocked
+                        * state -  so record the item value in
+                        * xNextTaskUnblockTime. */</span>
+                          <span class="token comment">//记录所有任务中离就绪时间最短的</span>
+                       xNextTaskUnblockTime <span class="token operator">=</span> xItemValue<span class="token punctuation">;</span>
+                       <span class="token keyword">break</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+                   <span class="token keyword">else</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+
+                   <span class="token comment">/* It is time to remove the item from the Blocked state. */</span>
+                   <span class="token function">listREMOVE_ITEM</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxTCB<span class="token operator">-></span>xStateListItem <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                   <span class="token comment">/* Is the task waiting on an event also?  If so remove
+                    * it from the event list. */</span>
+                   <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token function">listLIST_ITEM_CONTAINER</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxTCB<span class="token operator">-></span>xEventListItem <span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token constant">NULL</span> <span class="token punctuation">)</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token function">listREMOVE_ITEM</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxTCB<span class="token operator">-></span>xEventListItem <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+                   <span class="token keyword">else</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+
+                   <span class="token comment">/* Place the unblocked task into the appropriate ready
+                    * list. */</span>
+                      <span class="token comment">//加入就绪链表</span>
+                   <span class="token function">prvAddTaskToReadyList</span><span class="token punctuation">(</span> pxTCB <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</details></details>
+<details>
+<summary>3. 同优先级的时间片轮询</summary>
+	<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* Tasks of equal priority to the currently running task will share
+         * processing time (time slice) if preemption is on, and the application
+         * writer has not explicitly turned time slicing off. */</span>
+        <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token punctuation">(</span> <span class="token punctuation">(</span> configUSE_PREEMPTION <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span> configUSE_TIME_SLICING <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span></span></span>
+        <span class="token comment">//本质就是判断链表长度嘛</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token punctuation">(</span> configNUMBER_OF_CORES <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span></span></span>
+            <span class="token punctuation">&#123;</span>
+                <span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token function">listCURRENT_LIST_LENGTH</span><span class="token punctuation">(</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> pxReadyTasksLists<span class="token punctuation">[</span> pxCurrentTCB<span class="token operator">-></span>uxPriority <span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">1U</span> <span class="token punctuation">)</span>
+                <span class="token punctuation">&#123;</span>
+                    xSwitchRequired <span class="token operator">=</span> pdTRUE<span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                <span class="token keyword">else</span>
+                <span class="token punctuation">&#123;</span>
+                    <span class="token function">mtCOVERAGE_TEST_MARKER</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</details>
+<p>最后：</p>
+<ul>
+<li>
+<p><strong>下达切换指令（悬起 PendSV）：</strong> 当 SysTick 经过上述计算，发现<strong>需要</strong>进行任务切换时（无论是同级轮转，还是唤醒了更高优先级的任务），它只会做一件事：向硬件寄存器（ICSR）的特定位写 1，<strong>请求触发 PendSV 中断</strong>。然后 SysTick 就直接返回退出了。</p>
+</li>
+<li>
+<p><strong>如果高优先级IRQ经常打断systick，会不会导致时钟不准？</strong></p>
+<p>只要你的IRQ写的符合标准，比如不要做长时间的逻辑，一般不会，只会有时间抖动。因为我们有硬件计数器兜底。硬件计数器的时间是绝对准确的，这次systick中断稍微延后了，下一次依然会准时触发。</p>
+</li>
+</ul>
+<h3 id="13-pendsv_handler"><a class="markdownIt-Anchor" href="#13-pendsv_handler"></a> 1.3 ⭐PendSV_Handler</h3>
+<p>——可悬起的系统调用。上下文切换的核心</p>
+<p>PendSV（可悬起的系统调用），它是一种CPU系统级别的异常，它可以像普通外设中断一样被悬起，而不会像SVC服务那样，因为没有及时响应处理，而触发Fault。所以PendSV的最大特点就是，它是系统级别的异常，但它又支持挂起。</p>
+<ul>
+<li><strong>触发时机</strong>：被 SysTick 触发，或者任务调用 <code>TaskYield()</code>、<code>TaskDelay()</code> 时主动触发。</li>
+<li><strong>存在的意义</strong>： <strong>保存上一个任务的现场，恢复下一个任务的现场。</strong></li>
+</ul>
+<p>here are some question，hope they can help you understand PendSV better：</p>
+<ul>
+<li>
+<p><strong>为什么使用PendSV</strong>？</p>
+<p>因为优先级最低，如果此时系统中有任何其他硬件外设中断（如串口接收、定时器、ADC）正在发生，PendSV 会排队等待。它保证了“任务切换”绝对不会抢占“硬件中断响应”。</p>
+</li>
+<li>
+<p><strong>用systick中断将优先级设为最低，然后在systick中断里切换上下文，是不是也可以达到同样的效果？</strong></p>
+<p>我认为是不可以的，因为systick最主要的任务是记录系统节拍，它的触发是有严格规律的（比如严格每 1 毫秒触发一次），但 RTOS 中的任务切换，绝大多数时候是<strong>异步的、突发的</strong>。我们总不可能在需要上下文切换的时候强制触发一次systick中断吧？这样时钟节拍不就乱了吗？</p>
+</li>
+<li>
+<p><strong>在上下文切换时，一般要关闭中断响应，此时如果来了紧急的中断怎么办？</strong></p>
+<p>额，会屏蔽低于某个优先级的中断，而不是所有中断，如果是很紧急的中断，把他优先级设高一点，就算在任务切换也能紧急响应。这叫<strong>零延迟中断（Zero Latency Interrupts）</strong></p>
+</li>
+</ul>
+<blockquote>
+<p><strong>课后小科普：什么是中断丢失？</strong><br />
+NVIC挂起寄存器（ISPR）中，每一个中断源只有 1 个 Bit 的记录空间。所以该寄存器只能记录“谁来找过”，不能记录“来了几次”。所以某个中断被挂起期间，无论这个中断又触发了几次，最后恢复的时候也只会执行一次，除了最后一次其余中断全部丢失了。避免这种情况的方法就是遵循中断“快进快出”原则。</p>
+</blockquote>
+<p>要想复刻一个RTOS，PendSV的实现是不得不品的一环。关于PendSV的源码，我们下一章继续！</p>
+<h2 id="2-调度的本质是链表操作"><a class="markdownIt-Anchor" href="#2-调度的本质是链表操作"></a> 2. 调度的本质是链表操作</h2>
+<p>在上一节我们已经略微领悟到了三个中断的妙处，可以说是从微观角度来理解RTOS，下面我们从宏观角度继续看看RTOS的调度。正如本章标题所说，调度的本质就是链表操作，我们结合具体的场景来看看调度是怎么回事。</p>
+<p>首先，在 FreeRTOS 中，所有的任务在任何时刻都必然存在于以下三种链表之一：</p>
+<ol>
+<li><strong>就绪链表数组</strong> (<code>pxReadyTasksLists</code>)：随时准备运行的任务。</li>
+<li><strong>阻塞/延时链表</strong> (<code>xDelayedTaskList</code>)：在睡觉，或者在等某个事件的任务。</li>
+<li><strong>挂起链表</strong> (<code>xPendingReadyList</code> / <code>xSuspendedTaskList</code>)：被强制暂停的特殊情况。</li>
+</ol>
+<h3 id="场景一同级任务的时间片轮转"><a class="markdownIt-Anchor" href="#场景一同级任务的时间片轮转"></a> 场景一：同级任务的时间片轮转</h3>
+<p><strong>触发时机</strong>：硬件的 SysTick 定时器（比如每 1ms）产生一次中断。</p>
+<p><strong>链表操作</strong>：</p>
+<ol>
+<li>硬件中断打断当前运行的 Task A。</li>
+<li>系统进入中断服务函数，调用内核的 <code>xTaskIncrementTick()</code>，将全局时间 <code>xTickCount</code> 加 1。</li>
+<li>检查当前优先级下，是否还有其他就绪任务？如果有，触发底层 <code>PendSV</code> 异常</li>
+<li>在切换函数 <code>vTaskSwitchContext</code> 中，调用 <code>listGET_OWNER_OF_NEXT_ENTRY</code>。</li>
+<li><strong>核心动作</strong>：将 <code>pxReadyTasksLists[TaskA的优先级]</code> 这个链表的 <code>pxIndex</code> 游标往后移动一格，获取到 Task B 的 TCB。</li>
+<li>将全局指针 <code>pxCurrentTCB</code> 指向 Task B。完成切换！</li>
+</ol>
+<blockquote>
+<p>时间片轮转的实现方法，可以类比排队打饭，打完饭的人还想打，需要到队尾去排队。任务a运行1个时钟，就被移到队尾，让下一个任务运行，该任务又运行1个时钟，也被移到队尾，以此类推，循环往复。而我们的任务链表是环形的，它不需要执行耗时的“拔出再插入”操作，只是遍历环形链表就可以达到这种目的。还记得我们在 <code>List_t</code> 结构体里看到的那个 <code>pxIndex</code>（游标指针）吗？想想你是怎么遍历环形链表的？<code>pxIndex = pxIndex-&gt;pxNext</code>。游标往后挪一格，下一个任务自然就变成了队伍的第一个。</p>
+</blockquote>
+<h3 id="场景二任务主动睡觉-调用-vtaskdelay"><a class="markdownIt-Anchor" href="#场景二任务主动睡觉-调用-vtaskdelay"></a> 场景二：任务主动“睡觉” (调用 <code>vTaskDelay</code>)</h3>
+<p><strong>触发时机</strong>：Task A 运行到一半，调用了 <code>vTaskDelay(100)</code>，想休息 100 个 tick。 <strong>链表操作</strong>：</p>
+<ol>
+<li><strong>计算唤醒时间</strong>：系统把当前的 <code>xTickCount</code> + 100，算出一个“闹钟时间”（ItemValue），存入 Task A TCB 的状态钩子 <code>xStateListItem.xItemValue</code> 中。</li>
+<li><strong>拔出</strong>：把 Task A 从它所在的就绪链表 <code>pxReadyTasksLists</code> 中 <code>List_Remove</code> 拔出来。</li>
+<li><strong>插入等待</strong>：把 Task A 插入到延时链表 <code>xDelayedTaskList</code> 中。<strong>注意：延时链表是按唤醒时间升序排列的！</strong> 最早醒来的任务永远排在链表最前面。（这就是 <code>vListInsert</code> 按值插入的作用）。</li>
+<li><strong>让出 CPU</strong>：Task A 调用 <code>portYIELD()</code>，主动触发上下文切换。调度器会在剩下的就绪任务里挑一个最高优先级的去运行。</li>
+</ol>
+<h3 id="场景三闹钟响了任务唤醒-滴答中断触发"><a class="markdownIt-Anchor" href="#场景三闹钟响了任务唤醒-滴答中断触发"></a> 场景三：闹钟响了，任务唤醒 (滴答中断触发)</h3>
+<p><strong>触发时机</strong>：又是 SysTick 中断。 <strong>链表操作</strong>：</p>
+<ol>
+<li><code>xTaskIncrementTick()</code> 除了增加时间，还会死死盯着 <code>xDelayedTaskList</code> 的<strong>第一个节点</strong>（因为它是最早醒的）。</li>
+<li>判断第一个节点的闹钟时间（<code>xItemValue</code>）是否等于或者小于当前的 <code>xTickCount</code>？</li>
+<li>如果时间到了（比如 Task A 睡够了 100 毫秒）：
+<ul>
+<li><strong>拔出</strong>：把它从 <code>xDelayedTaskList</code> 拔出。</li>
+<li><strong>插回</strong>：重新把它插回对应优先级的 <code>pxReadyTasksLists</code> 的尾部。</li>
+</ul>
+</li>
+<li><strong>抢占判定</strong>：如果刚刚醒来的 Task A 的优先级，<strong>大于或等于</strong>当前正在运行的 Task B 的优先级，立马触发上下文切换！Task B 瞬间被挂起，Task A 抢回 CPU。</li>
+</ol>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3.8k字。于2026/03/26首次发布，最后更新于2026/03/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%94%98-%E6%96%87-%E5%B4%94%E4%B8%89%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%AD%E6%96%AD"><span class="toc-text"> 1. 甘、文、崔：三个重要的中断</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-svc_handler"><span class="toc-text"> 1.1 SVC_Handler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-systick_handler"><span class="toc-text"> 1.2 SysTick_Handler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-pendsv_handler"><span class="toc-text"> 1.3 ⭐PendSV_Handler</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B0%83%E5%BA%A6%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%98%AF%E9%93%BE%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-text"> 2. 调度的本质是链表操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%80%E5%90%8C%E7%BA%A7%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%97%B6%E9%97%B4%E7%89%87%E8%BD%AE%E8%BD%AC"><span class="toc-text"> 场景一：同级任务的时间片轮转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%BA%8C%E4%BB%BB%E5%8A%A1%E4%B8%BB%E5%8A%A8%E7%9D%A1%E8%A7%89-%E8%B0%83%E7%94%A8-vtaskdelay"><span class="toc-text"> 场景二：任务主动“睡觉” (调用 vTaskDelay)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%89%E9%97%B9%E9%92%9F%E5%93%8D%E4%BA%86%E4%BB%BB%E5%8A%A1%E5%94%A4%E9%86%92-%E6%BB%B4%E7%AD%94%E4%B8%AD%E6%96%AD%E8%A7%A6%E5%8F%91"><span class="toc-text"> 场景三：闹钟响了，任务唤醒 (滴答中断触发)</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":1,"path":"嵌入式/PCB"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":3,"path":"RTOS"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

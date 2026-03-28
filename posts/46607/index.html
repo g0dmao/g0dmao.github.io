@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">FreeRTOS的内部机制1</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<h2 id="1-从栈的角度来看rtos整体"><a class="markdownIt-Anchor" href="#1-从栈的角度来看rtos整体"></a> 1. 从栈的角度来看RTOS整体</h2>
+<p>从 RTOS 的宏观视角来看，栈的核心作用可以归结为以下四个维度：</p>
+<h3 id="11-任务独立性的根本"><a class="markdownIt-Anchor" href="#11-任务独立性的根本"></a> 1.1 任务独立性的根本</h3>
+<p>——一任务一栈。</p>
+<p>在裸机系统里，整个系统只有一个大循环，所有的函数共享同一个巨大的系统栈。 但在 RTOS 中，最大的特点是“多任务并发”。为了让每个任务都感觉自己独占了整个 CPU，RTOS 必须为每一个创建的任务分配一块<strong>完全独立、私有的栈内存。</strong></p>
+<ul>
+<li>当你在 FreeRTOS 中调用 <code>xTaskCreate()</code> 时，传入的参数之一就是“栈深度（Stack Size）”。</li>
+<li>任务的局部变量、嵌套调用的函数现场，全都保存在它自己的这块私有领地里。没有这块私有栈，所谓的“多任务”就无从谈起。</li>
+</ul>
+<h3 id="12-上下文切换的载体"><a class="markdownIt-Anchor" href="#12-上下文切换的载体"></a> 1.2 上下文切换的载体</h3>
+<p>——最核心的作用。</p>
+<p><strong>当发生任务切换时（例如经过了一个 SysTick，或者任务 A 主动调用 <code>vTaskDelay</code>）：</strong></p>
+<ol>
+<li>
+<p><strong>冻结现场（压栈）：</strong> 硬件和 RTOS 的底层汇编代码，会强行把当前 CPU 里的所有通用寄存器（R0-R12, LR, PC, xPSR 等）全部一股脑压入 <strong>任务 A 的私有栈</strong> 中。</p>
+</li>
+<li>
+<p><strong>保存指针：</strong> RTOS 把当前任务 A 压栈后最新的栈指针（SP）的值，保存到任务 A 的 <strong>任务控制块（TCB, Task Control Block）</strong> 里。</p>
+</li>
+<li>
+<p><strong>切换指针：</strong> RTOS 找到优先级最高的就绪任务 B，从任务 B 的 TCB 中取出它上次保存的栈指针（SP）值，强行塞给 CPU 的 SP 寄存器。</p>
+</li>
+<li>
+<p><strong>解冻现场（出栈）：</strong> CPU 现在指向了任务 B 的私有栈。执行一次出栈操作，把栈里保存的旧寄存器值全部弹出到 CPU 核心里。</p>
+</li>
+<li>
+<p><strong>恢复执行：</strong> PC（程序计数器）被恢复，系统瞬间穿越回了任务 B 上次被暂停的地方继续执行。</p>
+</li>
+</ol>
+<h3 id="13-中断栈与任务栈的物理隔离"><a class="markdownIt-Anchor" href="#13-中断栈与任务栈的物理隔离"></a> 1.3 中断栈与任务栈的物理隔离</h3>
+<p>——双栈机制，节省 RAM。Cortex-M使用了这种机制。记住要考</p>
+<ul>
+<li>
+<p>让所有的普通任务使用 <strong>PSP（进程栈）</strong>。一旦发生硬件中断，CPU 自动切换到 <strong>MSP（主栈）</strong>。</p>
+</li>
+<li>
+<p><strong>好处：</strong> 中断服务函数（ISR）运行产生的局部变量和嵌套压栈，全部消耗在 MSP 对应的那块系统全局栈上。因此，你给任务分配栈大小时，<strong>只需要考虑该任务自身的业务逻辑深度，完全不需要为任何中断预留空间。</strong> 这极大地节省了总内存。</p>
+</li>
+</ul>
+<h3 id="14-检测系统稳定性"><a class="markdownIt-Anchor" href="#14-检测系统稳定性"></a> 1.4 检测系统稳定性</h3>
+<p>由于每个任务的栈大小在创建时就被写死了（静态分配或从 RTOS 堆中分配固定大小），如果任务内部定义了太大的局部数组（比如 <code>char buf[2048];</code>），或者递归调用太深，就会导致<strong>栈溢出（Stack Overflow）</strong>。 溢出的数据会直接篡改相邻任务的栈或者系统数据，导致极其诡异的 HardFault（硬件错误）。</p>
+<ul>
+<li>RTOS 通常会利用栈来做健康监测。比如 FreeRTOS 会在任务栈的末尾填充特定的魔术字（如 <code>0xA5</code>）。RTOS 在空闲时会去检查这个魔术字有没有被覆盖。如果被覆盖了，说明该任务踩界了，立刻触发 <code>vApplicationStackOverflowHook</code> 报错死机，以防系统带病运行。</li>
+</ul>
+<h2 id="2-创建任务的内部细节"><a class="markdownIt-Anchor" href="#2-创建任务的内部细节"></a> 2. 创建任务的内部细节</h2>
+<h3 id="21-任务的实体tcb-task-control-block"><a class="markdownIt-Anchor" href="#21-任务的实体tcb-task-control-block"></a> 2.1 任务的实体（TCB -Task Control Block）</h3>
+<p>任务在 FreeRTOS的体现就是一个结构体，也可以说是一个任务类（面向对象的说法）。</p>
+<p>在 <code>tasks.c</code> 的头部，你可以找到 <code>tskTCB</code> 结构体的定义。把那些杂七杂八的条件编译宏全删了，核心只剩下这几行：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">tskTaskControlBlock</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">volatile</span> StackType_t <span class="token operator">*</span>pxTopOfStack<span class="token punctuation">;</span> <span class="token comment">/* 指向任务栈的当前栈顶。绝对的核心！并且必须放在结构体的第一个位置 */</span>
+
+    ListItem_t xStateListItem<span class="token punctuation">;</span>          <span class="token comment">/* 状态节点：用来把任务挂到就绪链表或阻塞链表 */</span>
+    ListItem_t xEventListItem<span class="token punctuation">;</span>          <span class="token comment">/* 事件节点：用来把任务挂到事件（如队列、信号量）等待链表 */</span>
+    
+    UBaseType_t uxPriority<span class="token punctuation">;</span>             <span class="token comment">/* 任务优先级 */</span>
+    StackType_t <span class="token operator">*</span>pxStack<span class="token punctuation">;</span>               <span class="token comment">/* 指向任务栈的起始地址（用于销毁任务时释放内存，或栈溢出检测） */</span>
+    <span class="token keyword">char</span> pcTaskName<span class="token punctuation">[</span> configMAX_TASK_NAME_LEN <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">/* 任务名字，主要用于调试 */</span>
+<span class="token punctuation">&#125;</span> tskTCB<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>此节我们聚焦于 <code>pxTopOfStack</code> 和 <code>pxStack</code>。</p>
+<h3 id="22-当我们在创建任务时我们在做什么"><a class="markdownIt-Anchor" href="#22-当我们在创建任务时我们在做什么"></a> 2.2 当我们在创建任务时我们在做什么？</h3>
+<p>在 <code>tasks.c</code> 找到创建任务函数原型：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">BaseType_t <span class="token function">xTaskCreate</span><span class="token punctuation">(</span> TaskFunction_t pxTaskCode<span class="token punctuation">,</span>
+                            <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span> <span class="token keyword">const</span> pcName<span class="token punctuation">,</span>
+                            <span class="token keyword">const</span> configSTACK_DEPTH_TYPE uxStackDepth<span class="token punctuation">,</span>
+                            <span class="token keyword">void</span> <span class="token operator">*</span> <span class="token keyword">const</span> pvParameters<span class="token punctuation">,</span>
+                            UBaseType_t uxPriority<span class="token punctuation">,</span>
+                            TaskHandle_t <span class="token operator">*</span> <span class="token keyword">const</span> pxCreatedTask <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>官方文档对参数的释义如下：</p>
+<ul>
+<li>
+<p><em>pvTaskCode</em></p>
+<p>指向<strong>任务入口函数的指针</strong>（即实现任务的函数名称，请参阅如下示例）。 任务通常<a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/02-Kernel-features/01-Tasks-and-co-routines/05-Implementing-a-task">以无限循环的形式实现</a>；实现任务的函数 绝不能尝试返回或退出。但是，任务可以 <a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/04-API-references/01-Task-creation/03-vTaskDelete/">自行删除</a>。</p>
+</li>
+<li>
+<p><em>pcName</em></p>
+<p><strong>任务的描述性名称</strong>。此参数主要用于方便调试，但也可用于 <a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/04-API-references/03-Task-utilities/00-Task-utilities/#xtaskgethandle">获取任务句柄</a>。任务名称的最大长度 由 <a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/03-Supported-devices/02-Customization">FreeRTOSConfig.h</a> 中的 configMAX_TASK_NAME_LEN 定义。</p>
+</li>
+<li>
+<p><em>uxStackDepth</em></p>
+<p>要<a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/02-Kernel-features/09-Memory-management/01-Memory-management">分配</a><strong>用作任务堆栈的字数（不是字节数！）</strong>。例如，如果 堆栈宽度为 16 位，uxStackDepth 为 100，则将分配 200 字节用作任务 堆栈。再举一例，如果堆栈宽度为 32 位，uxStackDepth 为 400， 则将分配 1600 字节用作任务堆栈。堆栈深度与堆栈宽度的乘积不得超过 size_t 类型变量所能包含的最大值。请参阅 常见问题：<a target="_blank" rel="noopener" href="https://www.freertos.org/Why-FreeRTOS/FAQs/Memory-usage-boot-times-context#how-big-should-the-stack-be">堆栈应该多大？</a>。</p>
+</li>
+<li>
+<p><em>pvParameters</em></p>
+<p><strong>作为参数传递给所创建任务的值</strong>。如果 pvParameters 设置为某变量的地址， 则在创建的任务执行时，该变量必须仍然存在， 因此，不能传递堆栈变量的地址。</p>
+</li>
+<li>
+<p><em>uxPriority</em></p>
+<p>创建的任务将以该指定<a target="_blank" rel="noopener" href="https://www.freertos.org/Documentation/02-Kernel/02-Kernel-features/01-Tasks-and-co-routines/03-Task-priorities"><strong>优先级</strong></a>执行。支持 MPU 的系统 可以通过在 uxPriority 中设置 portPRIVILEGE_BIT 位来选择以特权（系统）模式创建任务。 例如，要创建优先级为 2 的特权任务，请将 uxPriority 设置为 ( 2 | portPRIVILEGE_BIT )。应断言优先级 低于 configMAX_PRIORITIES。如果 configASSERT 未定义，则优先级默认上限为 (configMAX_PRIORITIES - 1)。</p>
+</li>
+<li>
+<p><em>pxCreatedTask</em></p>
+<p>用于将句柄传递至由 xTaskCreate() 函数创建的任务。pxCreatedTask 是可选参数， 可设置为 NULL。</p>
+</li>
+</ul>
+<p><strong>返回：</strong></p>
+<ul>
+<li>如果任务创建成功，则返回 pdPASS，</li>
+<li>否则返回 errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY。</li>
+</ul>
+<blockquote>
+<p>“任务栈” 本质是在堆上，这何尝不是一种NTR呢？&gt;_&gt;</p>
+</blockquote>
+<p>我们查看它的调用层次结构如下：</p>
+<p><img src="Snipaste_2026-03-24_22-02-21.png" alt="" /></p>
+<p>在我们调用它时，直接进入到了一个私有函数，也就是静态函数（<code>prvCreatetask</code>），在<code>prvCreatetask</code> 里，核心就做两件事： malloc 一块内存给 TCB，并初始化为0x00；malloc 另一块内存作为任务的栈。</p>
+<p>ok，TCB分配好内存后，结构体成员尚未初始化，填写结构体成员则由 <code>prvInitialiseNewTask()</code> 这个静态函数来完成：</p>
+<ol>
+<li>
+<p><strong>清理栈内存</strong>：把分配到的栈空间全刷成 <code>0xA5</code>（可配置，为了调试时看栈最高使用了多少）。</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">if</span> <span class="token expression"><span class="token punctuation">(</span> tskSET_NEW_STACKS_TO_KNOWN_VALUE <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span></span></span>
+<span class="token punctuation">&#123;</span>
+	<span class="token comment">/* Fill the stack with a known value to assist debugging. */</span>
+	<span class="token punctuation">(</span> <span class="token keyword">void</span> <span class="token punctuation">)</span> <span class="token function">memset</span><span class="token punctuation">(</span> pxNewTCB<span class="token operator">-></span>pxStack<span class="token punctuation">,</span> <span class="token punctuation">(</span> <span class="token keyword">int</span> <span class="token punctuation">)</span> tskSTACK_FILL_BYTE<span class="token punctuation">,</span> <span class="token punctuation">(</span> <span class="token class-name">size_t</span> <span class="token punctuation">)</span> uxStackDepth <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span> StackType_t <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">/* tskSET_NEW_STACKS_TO_KNOWN_VALUE */</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>tskSTACK_FILL_BYTE</code> 被定义为0xA5。</p>
+</li>
+<li>
+<p><strong>初始化链表节点</strong>：调用 <code>vListInitialiseItem</code>，把 TCB 里的 <code>xStateListItem</code> 初始化，并把这个节点的主人（owner）设置为当前的 TCB。此节我们略过。</p>
+</li>
+<li>
+<p><strong>伪造栈帧</strong>：调用 <code>pxPortInitialiseStack()</code> 来伪造栈帧。</p>
+</li>
+</ol>
+<p>我们注意到，在TCB中，并没有函数入口（创建函数的参数 <em>pvTaskCode</em>）和函数参数（创建函数的参数 <em>pvParameters</em>）相关成员，难道传入这两个参数是没有意义的吗？如此重要的两个信息记录在哪呢？</p>
+<p>——答案是栈。</p>
+<p>在 <code>prvInitialiseNewTask()</code> 中我们提到其调用 <code>pxPortInitialiseStack()</code>。顾名思义，也就是初始化任务栈。它负责初始化任务控制块（TCB）的各个字段，设置任务名称、优先级、列表项，并初始化任务堆栈。在这里TCB从一块内存转变为一个完全初始化、准备好可被调度的任务控制块。</p>
+<p>这里不得不提到这个函数也关系到任务如何正确地被加载进CPU执行。</p>
+<p>我们还没有讲调度器，但是我们可以先说一下调度器（Scheduler）的工作逻辑：当它决定要运行某个任务时，会从该任务的 TCB（任务控制块）中取出之前保存的栈指针（<em>pxTopOfStack</em>）（保存现场）然后执行一系列出栈（POP）操作，把栈里的数据恢复到 CPU 的寄存器中，最后修改 PC 指针让程序跑起来。</p>
+<p>这就产生了一个问题：如果是一个刚创建的全新任务，程序没运行过，连栈都是空的，何谈现场？如果栈里啥都没有，CPU 的 PC（程序计数器）怎么知道要跳转到你的任务函数？CPU 怎么知道你的任务函数的参数是什么？</p>
+<p><code>pxPortInitialiseStack</code> 的任务之一，就是在任务刚刚创建、还未执行之前，在它的私有栈顶布置好一个“程序运行现场”。伪造它曾经运行过。</p>
+<blockquote>
+<p><code>pxPortInitialiseStack()</code> 在 <code>portable.h</code> 中声明，但实现在具体硬件对应的移植文件中，因为如何初始化栈和硬件强相关(比如栈的增长方向）。</p>
+</blockquote>
+<p>以最常见的 ARM Cortex-M3/M4 为例，伪造逻辑如下：注意寄存器的顺序不能乱！</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">StackType_t <span class="token operator">*</span><span class="token function">pxPortInitialiseStack</span><span class="token punctuation">(</span> StackType_t <span class="token operator">*</span>pxTopOfStack<span class="token punctuation">,</span> TaskFunction_t pxCode<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>pvParameters <span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/* 1. 栈顶指针先向下偏移，留出存放一套 CPU 寄存器的空间 */</span>
+    pxTopOfStack <span class="token operator">-=</span> <span class="token number">16</span><span class="token punctuation">;</span> <span class="token comment">/* Cortex-M 压栈需要保存 16 个寄存器 (XPSR, PC, LR, R12, R3-R0, R11-R4) */</span>
+
+    <span class="token comment">/* 2. 开始往栈里填入伪造数据 */</span>
+    pxTopOfStack<span class="token punctuation">[</span> <span class="token number">15</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0x01000000UL</span><span class="token punctuation">;</span>      <span class="token comment">/* xPSR: 必须设置 Thumb 状态位，否则一运行就硬件错误 */</span>
+    pxTopOfStack<span class="token punctuation">[</span> <span class="token number">14</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token class-name">uint32_t</span> <span class="token punctuation">)</span> pxCode<span class="token punctuation">;</span> <span class="token comment">/* PC: 任务函数的入口地址！CPU 出栈后就会直接跳到这里执行 */</span>
+    pxTopOfStack<span class="token punctuation">[</span> <span class="token number">13</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token class-name">uint32_t</span> <span class="token punctuation">)</span> prvTaskExitError<span class="token punctuation">;</span> <span class="token comment">/* LR: 返回地址。任务是不允许 return 的，万一 return 了就跳到错误处理函数 */</span>
+    
+    <span class="token comment">/* R12, R3, R2, R1 随便填，或者清零 */</span>
+    
+    pxTopOfStack<span class="token punctuation">[</span> <span class="token number">8</span> <span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token class-name">uint32_t</span> <span class="token punctuation">)</span> pvParameters<span class="token punctuation">;</span> <span class="token comment">/* R0: 按照 C 语言调用约定，R0 保存函数的第一个参数 */</span>
+
+    <span class="token comment">/* R11 - R4 随便填，一般填个固定特征值方便调试 (如 0x11111111, 0x04040404 等) */</span>
+
+    <span class="token comment">/* 3. 返回最终的栈顶指针，这个指针会被存入 TCB 的 pxTopOfStack 中 */</span>
+    <span class="token keyword">return</span> pxTopOfStack<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该函数执行完后，我们的创建工作也就接近尾声了，最终会形成这样一块内存布局：</p>
+<p><img src="Snipaste_2026-03-24_22-55-57.png" alt="" /></p>
+<p>这就是最终的“任务”。一定注意它的顺序！后面要考。</p>
+<p><strong>当 RTOS 调度器第一次挑中这个任务，执行汇编的上下文切换（出栈操作）时：</strong> 栈里预先布置好的 <code>pxCode</code> 被弹入了 CPU 的 <code>PC</code> 寄存器，<code>pvParameters</code> 被弹入了 <code>R0</code> 寄存器。 CPU 无缝跳转到了你的任务代码，并且完美接收了传进来的参数。任务就此拥有了生命。</p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约2.8k字。于2026/03/24首次发布，最后更新于2026/03/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8E%E6%A0%88%E7%9A%84%E8%A7%92%E5%BA%A6%E6%9D%A5%E7%9C%8Brtos%E6%95%B4%E4%BD%93"><span class="toc-text"> 1. 从栈的角度来看RTOS整体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BB%BB%E5%8A%A1%E7%8B%AC%E7%AB%8B%E6%80%A7%E7%9A%84%E6%A0%B9%E6%9C%AC"><span class="toc-text"> 1.1 任务独立性的根本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2%E7%9A%84%E8%BD%BD%E4%BD%93"><span class="toc-text"> 1.2 上下文切换的载体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E4%B8%AD%E6%96%AD%E6%A0%88%E4%B8%8E%E4%BB%BB%E5%8A%A1%E6%A0%88%E7%9A%84%E7%89%A9%E7%90%86%E9%9A%94%E7%A6%BB"><span class="toc-text"> 1.3 中断栈与任务栈的物理隔离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="toc-text"> 1.4 检测系统稳定性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%86%E8%8A%82"><span class="toc-text"> 2. 创建任务的内部细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%AE%9E%E4%BD%93tcb-task-control-block"><span class="toc-text"> 2.1 任务的实体（TCB -Task Control Block）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-%E5%BD%93%E6%88%91%E4%BB%AC%E5%9C%A8%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1%E6%97%B6%E6%88%91%E4%BB%AC%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-text"> 2.2 当我们在创建任务时我们在做什么？</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":1,"path":"嵌入式/PCB"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":3,"path":"RTOS"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+
