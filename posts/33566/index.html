@@ -17,29 +17,202 @@
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
 </head>
 
     <body>
         <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
-        <!--分类详情页-->
-<h2 style="text-align: center;"> Category: VPS </h2>
-<div class="container">
-    <div>
-    
-        <h2> 2025/10 </h2>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">stupidRTos开发日记</h1>
+</div>
 
-    
-        10/14 -
-    
-    <a href="/posts/2446/">记录搭建一台云服务器环境的过程</a><br>
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h1 style="color:blue"> 开发进度 </h1>
+<ul>
+<li>[ ] RTOS最基本的功能
+<ul>
+<li>[x] 任务静态创建与TCB</li>
+<li>[x] 任务栈的初始化</li>
+<li>[ ] 动态创建任务</li>
+<li>[x] SVC中断启动内核和第一个任务</li>
+<li>[x] 在PendSV中断里上下文切换</li>
+<li>[x] 任务主动发起的上下文切换函数</li>
+<li>[x] Systick中断触发上下文切换</li>
+<li>[x] 中断屏蔽宏函数</li>
+<li>[x] Delay函数</li>
+<li>[x] Idle空闲任务</li>
+</ul>
+</li>
+<li>[ ] 一些基本的进程间同步功能</li>
+</ul>
+<h2 style="color:red"> DAY1 26-03-29 </h2>
+<p>正式开始 suipidRTOS 项目。根据前面学习的FreeRTOS的内部机制进行开发。</p>
+<p>完成了任务创建与TCB、任务栈的初始化、SVC中断的实现。</p>
+<h2 style="color:red"> DAY2 26-03-30 </h2>
+完成任务主动让出CPU、PendSV中断的汇编逻辑。
+<h3 id="bug1只会触发一次上下文切换"><a class="markdownIt-Anchor" href="#bug1只会触发一次上下文切换"></a> Bug1：只会触发一次上下文切换</h3>
+<p>问题出在 <strong><code>stm32f4xx_it.c</code> 中的中断函数嵌套调用</strong>。<br />
+在 <code>stm32f4xx_it.c</code> 中，我是这么写的：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">PendSV_Handler</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token comment">/* USER CODE BEGIN PendSV_IRQn 0 */</span>
+  <span class="token function">srtos_PendSV_Handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 你在这里调用了汇编函数！</span>
+  <span class="token comment">/* USER CODE END PendSV_IRQn 0 */</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>PendSV_Handler</code> 是一个<strong>标准的 C 函数</strong>。当内核进入这个函数时，编译器为了遵守 C 语言调用约定，会生成压栈指令（Prologue），并用 <code>bl</code>（分支并链接）指令去调用 <code>srtos_PendSV_Handler()</code>。<code>bl</code> 指令<strong>覆盖掉了 <code>LR</code> 寄存器</strong>！此时 <code>r14</code> 不再是 <code>0xFFFFFFFD</code>，而是变成了 <code>PendSV_Handler</code> 函数内部的下一条指令地址。导致PendSV中断不能正常返回到应该被切换到的任务函数，而是返回到 <code>PendSV_Handler(void)</code>，进一步返回到原先的函数。只能切换一次是因为首次运行时手动设置了LR寄存器的值。</p>
+<p><strong>Fix：上下文切换的汇编函数必须是中断向量表的直接入口，绝对不能被其他 C 函数包装或调用。</strong></p>
+<h2 style="color:red"> DAY3 26-04-02 </h2>
+<p>完成Systick和中断屏蔽宏函数。</p>
+<h3 id="q1行为寄存器的写入规则"><a class="markdownIt-Anchor" href="#q1行为寄存器的写入规则"></a> Q1：行为寄存器的写入规则</h3>
+<p>不同于数据寄存器，行为寄存器的写入规则不应该用 <code>|=</code> （或等于）来赋值，而是直接用等于号赋值。例如ARM Cortex-M 内核的 <strong>ICSR（Interrupt Control and State Register，中断控制和状态寄存器）</strong> 就是一个行为寄存器。</p>
+<p>写入规则：“写 0 无效”。硬件会直接无视 0，原来是什么状态，就是什么状态。</p>
+<h3 id="q2终于理解了为什么要为os单独设置一个时基而不是和mcu共用一个时基"><a class="markdownIt-Anchor" href="#q2终于理解了为什么要为os单独设置一个时基而不是和mcu共用一个时基"></a> Q2：终于理解了为什么要为OS单独设置一个时基而不是和MCU共用一个时基</h3>
+<p>OS和MCU时钟（HAL库依赖的时钟）解耦的妙处——确保这两个系统不受对方的影响。两个系统完全控制自己的时钟。</p>
+<p>如果在多任务运行期间，需要临时挂起调度器（<code>vTaskSuspendAll()</code>）去执行一段极其关键的裸机代码，或者发生严重 Fault 需要在不依赖 OS 的情况下用 HAL 库保存错误日志到 Flash，SysTick 此时的状态是不可控的。</p>
+<p><strong>时钟解耦，能保证无论 OS 处于未启动、运行中、还是崩溃状态，MCU（HAL库）永远有一颗正常跳动的心脏。</strong></p>
+<h2 style="color:red"> DAY4 26-04-04 </h2>
+<p>清明前夕苦逼营业中…</p>
+<p>初步实现了Delay函数的逻辑还有空闲任务。一遍调通没啥大问题。</p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约840字。于2026/04/03首次发布，最后更新于2026/04/04。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
 
     </div>
-    <div style="position: sticky; top: 10px;">
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text"> 开发进度 </span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"> DAY1 26-03-29 </span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"> DAY2 26-03-30 </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bug1%E5%8F%AA%E4%BC%9A%E8%A7%A6%E5%8F%91%E4%B8%80%E6%AC%A1%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text"> Bug1：只会触发一次上下文切换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"> DAY3 26-04-02 </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#q1%E8%A1%8C%E4%B8%BA%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E5%86%99%E5%85%A5%E8%A7%84%E5%88%99"><span class="toc-text"> Q1：行为寄存器的写入规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#q2%E7%BB%88%E4%BA%8E%E7%90%86%E8%A7%A3%E4%BA%86%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%B8%BAos%E5%8D%95%E7%8B%AC%E8%AE%BE%E7%BD%AE%E4%B8%80%E4%B8%AA%E6%97%B6%E5%9F%BA%E8%80%8C%E4%B8%8D%E6%98%AF%E5%92%8Cmcu%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AA%E6%97%B6%E5%9F%BA"><span class="toc-text"> Q2：终于理解了为什么要为OS单独设置一个时基而不是和MCU共用一个时基</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"> DAY4 26-04-04 </span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
-        <button id="back-to-index" title="back to home">Home</button>
+            <button id="back-to-index" title="back to home">Home</button>
         </a>
+        <button id="back-to-top" title="back to top">Top</button>
     </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
 </div>
 
 
@@ -64,7 +237,7 @@
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -183,14 +356,14 @@
                     monthlyChart.setOption({
                         xAxis: { 
                             type: 'category', 
-                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03"], 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03","2026-04"], 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13,1],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -264,13 +437,13 @@
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":16},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":46},{"name":"嵌入式","value":18},{"name":"内核编程","value":12},{"name":"记录","value":11},{"name":"python","value":8}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":16},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -319,7 +492,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":1,"path":"嵌入式/PCB"},{"name":"程序架构","children":[],"count":5,"path":"嵌入式/程序架构"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":3,"path":"RTOS"},{"name":"Linux","children":[{"name":"记录","children":[],"count":11,"path":"Linux/记录"},{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"项目管理","children":[],"count":2,"path":"Linux/项目管理"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":46,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"python","children":[],"count":8,"path":"python"},{"name":"项目管理","children":[],"count":1,"path":"项目管理"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"VPS","children":[],"count":1,"path":"VPS"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":6,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":16,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":4,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
