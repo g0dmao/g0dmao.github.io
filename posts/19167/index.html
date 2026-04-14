@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">ESPIDF-SDK配置</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<hr />
+<p>*<em><strong>AI生成内容</strong></em></p>
+<hr />
+<h2 id="一-前置准备与核心说明"><a class="markdownIt-Anchor" href="#一-前置准备与核心说明"></a> 一、前置准备与核心说明</h2>
+<ol>
+<li><strong>环境要求</strong>：已完成ESP-IDF开发环境搭建（优先推荐VS Code + ESP-IDF插件），已创建并正确打开ESP-IDF项目（必须打开包含顶层<code>CMakeLists.txt</code>和<code>main</code>文件夹的项目根目录）。</li>
+<li><strong>核心特性</strong>
+<ul>
+<li>配置为<strong>项目级</strong>，每个项目独立拥有<code>sdkconfig</code>文件，不同项目配置互不影响。</li>
+<li><strong>禁止手动修改<code>sdkconfig</code>文件</strong>，所有修改必须通过配置编辑器完成，避免配置冲突、依赖失效。</li>
+<li>配置项与目标芯片强相关，编辑器会自动过滤当前芯片不支持的功能（如ESP32-C3无经典蓝牙，对应配置会自动隐藏）。</li>
+</ul>
+</li>
+</ol>
+<h2 id="二-vs-code环境-打开配置编辑器主流图形化方式"><a class="markdownIt-Anchor" href="#二-vs-code环境-打开配置编辑器主流图形化方式"></a> 二、VS Code环境 打开配置编辑器（主流图形化方式）</h2>
+<p>提供3种稳定打开方式，新手优先使用命令面板方式：</p>
+<ol>
+<li><strong>方式1：命令面板（通用无差异）</strong> 按下<code>Ctrl+Shift+P</code>（Windows/Linux）/<code>Cmd+Shift+P</code>（Mac）调出命令面板，输入<code>ESP-IDF: SDK Configuration Editor</code>，选中并回车，等待几秒加载完成（首次加载会解析项目Kconfig配置文件）。</li>
+<li><strong>方式2：左侧ESP-IDF面板</strong> 点击VS Code左侧活动栏的乐鑫ESP-IDF图标，打开插件面板，在顶部区域找到「SDK Configuration Editor」选项，点击即可打开。</li>
+<li><strong>方式3：底部状态栏快捷入口</strong> 查看VS Code底部状态栏，找到ESP-IDF区域的<strong>齿轮图标（SDK Config）</strong>，点击一键打开。</li>
+</ol>
+<h2 id="三-编辑器界面结构与基础操作"><a class="markdownIt-Anchor" href="#三-编辑器界面结构与基础操作"></a> 三、编辑器界面结构与基础操作</h2>
+<h3 id="31-核心界面布局"><a class="markdownIt-Anchor" href="#31-核心界面布局"></a> 3.1 核心界面布局</h3>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>核心功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>顶部搜索栏</td>
+<td>最高频核心功能，输入配置关键词（如<code>flash size</code>）或宏名称（如<code>CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ</code>），可瞬间定位目标配置，无需逐层查找菜单</td>
+</tr>
+<tr>
+<td>左侧配置分类树</td>
+<td>所有配置项按功能模块树形分类，顶层分类包含串口烧录、分区表、系统设置、组件配置、引导程序、编译器选项等</td>
+</tr>
+<tr>
+<td>右侧配置详情区</td>
+<td>选中左侧分类后，展示该分类下的所有配置项，包含官方说明、操作控件（下拉框/复选框/输入框）、对应的<code>CONFIG_</code>宏名称</td>
+</tr>
+<tr>
+<td>底部操作栏</td>
+<td>提供保存、重置、撤销、重做等核心操作按钮</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-基础操作规则"><a class="markdownIt-Anchor" href="#32-基础操作规则"></a> 3.2 基础操作规则</h3>
+<ul>
+<li>复选框：勾选=启用功能（对应宏设为<code>y</code>），取消勾选=禁用（对应宏设为<code>n</code>）。</li>
+<li>下拉框：点击展开可选值，选择与硬件/需求匹配的参数（如Flash大小、CPU主频）。</li>
+<li>输入框：直接输入数值（如栈大小、波特率）或字符串（如自定义分区表路径）。</li>
+<li>帮助查看：鼠标悬停在配置项上，会弹出官方完整说明，包含功能、取值范围、依赖关系、注意事项。</li>
+</ul>
+<h2 id="四-核心高频配置项-分步详解新手必配"><a class="markdownIt-Anchor" href="#四-核心高频配置项-分步详解新手必配"></a> 四、核心高频配置项 分步详解（新手必配）</h2>
+<h3 id="41-基础硬件与烧录配置serial-flasher-config"><a class="markdownIt-Anchor" href="#41-基础硬件与烧录配置serial-flasher-config"></a> 4.1 基础硬件与烧录配置（Serial flasher config）</h3>
+<p>项目创建后首个必须核对的配置，直接决定烧录成功率和芯片启动稳定性。</p>
+<ul>
+<li>
+<p><strong>Flash size</strong>：SPI Flash容量，必须与开发板硬件完全一致。常见选项：2MB/4MB/8MB/16MB，如ESP32-WROOM-32默认4MB，WROVER系列多为8MB/16MB。</p>
+<blockquote>
+<p>踩坑提醒：配置容量大于实际硬件，会导致烧录失败、程序崩溃；小于实际容量，会浪费Flash空间。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>Flash SPI mode</strong>：Flash通信模式，默认QIO（4线高速模式），若烧录后无法启动，可改为DIO（2线兼容模式）。</p>
+</li>
+<li>
+<p><strong>Flash SPI speed</strong>：Flash时钟频率，常用40MHz/80MHz，主频越高读写速度越快，硬件质量不佳时可降为40MHz提升稳定性。</p>
+</li>
+<li>
+<p><strong>Flash baud rate</strong>：烧录波特率，默认115200，可提升至921600加快烧录速度，烧录不稳定时降回低波特率。</p>
+</li>
+<li>
+<p><strong>Monitor baud rate</strong>：串口监视器波特率，必须与代码中UART日志输出波特率一致，行业通用默认值115200。</p>
+</li>
+</ul>
+<h3 id="42-分区表配置partition-table"><a class="markdownIt-Anchor" href="#42-分区表配置partition-table"></a> 4.2 分区表配置（Partition Table）</h3>
+<p>决定Flash空间的分配规则，直接影响固件、OTA、数据存储的可用空间。</p>
+<ul>
+<li>
+<p><strong>Partition Table</strong> 核心下拉选项：</p>
+<ol>
+<li>
+<p><code>Single factory app, no OTA</code>：单固件分区，无OTA功能，适合无需远程升级的简单项目，占用Flash空间最小。</p>
+</li>
+<li>
+<p><code>Factory app, two OTA definitions</code>：默认选项，带双OTA分区，支持远程固件升级，是物联网项目的首选。</p>
+</li>
+<li>
+<p><code>Custom partition table CSV</code>：自定义分区表，适合需要调整分区大小、新增自定义分区的场景，需指定CSV文件路径。</p>
+<blockquote>
+<p>注意：修改分区表配置后，必须执行<strong>全量清理→全量编译→全量烧录</strong>，否则会出现分区不匹配、启动失败。</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="43-系统核心设置esp-system-settings"><a class="markdownIt-Anchor" href="#43-系统核心设置esp-system-settings"></a> 4.3 系统核心设置（ESP System Settings）</h3>
+<p>芯片运行的核心参数，直接影响性能、功耗、内存管理。</p>
+<ul>
+<li><strong>CPU frequency</strong>：CPU主频，ESP32系列默认240MHz（最高性能），可选择160MHz/80MHz，降低主频可显著降低功耗，适合低功耗电池项目。</li>
+<li><strong>Main XTAL frequency</strong>：主晶振频率，开发板默认均为40MHz，禁止随意修改，否则芯片无法正常起振运行。</li>
+<li><strong>RTOS tick rate (Hz)</strong>：FreeRTOS系统时钟节拍，默认100Hz（10ms一个tick），高实时性项目可改为1000Hz（1ms一个tick），但会小幅增加CPU开销。</li>
+<li><strong>Main task stack size</strong>：主任务（app_main）栈大小，默认8192字节，若主任务中使用大数组、深度递归、复杂函数调用，出现栈溢出报错时，需调大该值。</li>
+<li><strong>SPIRAM 相关配置</strong>：若开发板带外部PSRAM（如ESP32-WROVER系列），必须开启「Enable SPI RAM support」，否则无法使用外部内存；同时可配置WiFi/LWIP优先从PSRAM分配内存，缓解内部RAM压力。</li>
+</ul>
+<h3 id="44-引导程序配置bootloader-config"><a class="markdownIt-Anchor" href="#44-引导程序配置bootloader-config"></a> 4.4 引导程序配置（Bootloader config）</h3>
+<p>芯片启动引导相关设置，新手仅需关注基础日志配置，安全加密相关量产时再配置。</p>
+<ul>
+<li><strong>Bootloader log verbosity</strong>：Bootloader日志级别，默认Info，调试启动问题时改为Debug，发布产品时改为Warning/Error，减少日志输出，加快启动速度。</li>
+<li><strong>Bootloader optimized for</strong>：优化方向，默认平衡模式，可选择<code>Size</code>（减小Bootloader体积）或<code>Speed</code>（加快启动速度）。</li>
+</ul>
+<h3 id="45-组件配置component-config"><a class="markdownIt-Anchor" href="#45-组件配置component-config"></a> 4.5 组件配置（Component config）</h3>
+<p>ESP-IDF最核心的配置分类，包含所有内置组件的功能开关、参数配置，几乎所有外设、协议栈、中间件的配置都在这里。</p>
+<h4 id="451-freertos-配置"><a class="markdownIt-Anchor" href="#451-freertos-配置"></a> 4.5.1 FreeRTOS 配置</h4>
+<p>路径：Component config → FreeRTOS</p>
+<ul>
+<li><strong>Idle task stack size</strong>：空闲任务栈大小，出现空闲任务栈溢出报错时调大。</li>
+<li><strong>Enable FreeRTOS stats formatting functions</strong>：开启系统统计功能，调试时可查看CPU占用率、任务运行状态、堆栈剩余空间，发布版建议关闭以节省资源。</li>
+<li><strong>Use vTaskTicklessIdle for low power</strong>：低功耗Tickless空闲模式，电池供电的低功耗项目必须开启，可大幅降低待机功耗。</li>
+<li><strong>Stack overflow check</strong>：栈溢出检测，调试阶段建议开启，可快速定位栈溢出的问题代码。</li>
+</ul>
+<h4 id="452-日志输出配置"><a class="markdownIt-Anchor" href="#452-日志输出配置"></a> 4.5.2 日志输出配置</h4>
+<p>路径：Component config → Log output</p>
+<ul>
+<li><strong>Default log verbosity</strong>：全局默认日志级别，从低到高为：Error &lt; Warning &lt; Info &lt; Debug &lt; Verbose。
+<ul>
+<li>调试阶段：设为Debug，输出全量调试日志，快速定位问题。</li>
+<li>发布阶段：设为Info/Warning，减少日志输出，加快运行速度，减小固件体积。</li>
+</ul>
+</li>
+<li><strong>Maximum log verbosity</strong>：编译进固件的最大日志级别，低于该级别的日志不会被编译进固件，发布版设为Info可显著减小固件体积。</li>
+<li><strong>Use ANSI terminal colors in log</strong>：日志彩色输出，默认开启，串口监视器中不同级别日志用颜色区分，可读性更强。</li>
+</ul>
+<h4 id="453-wifi-配置"><a class="markdownIt-Anchor" href="#453-wifi-配置"></a> 4.5.3 WiFi 配置</h4>
+<p>路径：Component config → Wi-Fi</p>
+<ul>
+<li><strong>WiFi log verbosity</strong>：WiFi模块日志级别，调试WiFi连接、断连问题时改为Debug。</li>
+<li><strong>Maximum number of WiFi stations connected</strong>：AP模式下最大接入的设备数量，默认4，可根据需求调整。</li>
+<li><strong>WiFi TX power</strong>：WiFi发射功率，默认20dBm（最大值），低功耗项目可降低功率，减少功耗和干扰。</li>
+<li><strong>WiFi NVS flash</strong>：开启WiFi配置NVS存储，默认开启，开启后可自动保存SSID和密码，重启后无需重新配网。</li>
+</ul>
+<h4 id="454-蓝牙ble-配置"><a class="markdownIt-Anchor" href="#454-蓝牙ble-配置"></a> 4.5.4 蓝牙/BLE 配置</h4>
+<p>路径：Component config → Bluetooth</p>
+<ul>
+<li>首先勾选「Bluetooth」启用蓝牙功能，然后选择蓝牙模式：BLE（低功耗蓝牙）、Classic Bluetooth（经典蓝牙）、Dual Mode（双模）。</li>
+<li><strong>BLE Max connections</strong>：BLE最大连接数，默认1，多设备连接项目需调大该值。</li>
+<li><strong>BLE MTU size</strong>：BLE最大传输单元，默认23字节，大数据传输时可上调至512字节，提升传输速度。</li>
+<li><strong>BLE Controller stack</strong>：蓝牙协议栈，默认推荐NimBLE（体积小、功耗低，专为BLE优化），也可选择Bluedroid（支持经典蓝牙+BLE双模）。</li>
+</ul>
+<h4 id="455-lwip-网络协议栈配置"><a class="markdownIt-Anchor" href="#455-lwip-网络协议栈配置"></a> 4.5.5 LWIP 网络协议栈配置</h4>
+<p>路径：Component config → LWIP 所有TCP/IP、Socket、HTTP、MQTT等网络通信的底层配置，核心项：</p>
+<ul>
+<li><strong>TCP send/receive buffer size</strong>：TCP发送/接收缓冲区大小，大文件传输、高速通信时调大，低内存项目可适当调小。</li>
+<li><strong>TCP maximum segment size (MSS)</strong>：TCP最大报文段长度，默认1460（以太网标准值），非特殊需求不建议修改。</li>
+<li><strong>DHCP client options</strong>：DHCP客户端配置，可调整IP获取超时时间、重试次数，优化弱网环境下的配网成功率。</li>
+</ul>
+<h3 id="46-编译器选项配置compiler-options"><a class="markdownIt-Anchor" href="#46-编译器选项配置compiler-options"></a> 4.6 编译器选项配置（Compiler options）</h3>
+<ul>
+<li><strong>Optimization level</strong>：编译器优化等级
+<ul>
+<li>调试阶段：选择<code>Debug (-Og)</code>，优化最少，调试信息最全，支持断点调试所有代码。</li>
+<li>发布阶段：选择<code>Release (-Os)</code>，优化固件体积和运行速度，是量产首选。</li>
+</ul>
+</li>
+<li><strong>Enable C++ exceptions</strong>：C<ins>异常支持，默认关闭，使用C</ins>开发且用到try/catch异常机制时必须开启。</li>
+<li><strong>Enable stack smashing protection</strong>：栈溢出保护，调试阶段建议开启，可检测并上报栈溢出问题。</li>
+</ul>
+<h2 id="五-配置的保存-生效与版本管理"><a class="markdownIt-Anchor" href="#五-配置的保存-生效与版本管理"></a> 五、配置的保存、生效与版本管理</h2>
+<h3 id="51-保存配置"><a class="markdownIt-Anchor" href="#51-保存配置"></a> 5.1 保存配置</h3>
+<ul>
+<li>
+<p>基础保存：修改完成后，点击编辑器右上角/底部的<strong>Save</strong>按钮（软盘图标），编辑器会自动将配置写入项目根目录的<code>sdkconfig</code>文件，同时自动处理配置项的依赖关系。</p>
+</li>
+<li>
+<p>进阶版本管理：可通过命令<code>ESP-IDF: Save Default SDKCONFIG file (save-defconfig)</code>生成<code>sdkconfig.defaults</code>文件，该文件存储项目自定义默认配置，可纳入Git版本控制，团队协作、项目移植时可自动同步配置。</p>
+<blockquote>
+<p>注意：<code>sdkconfig</code>文件不建议纳入Git版本控制，<code>sdkconfig.defaults</code>是官方推荐的版本管理文件。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="52-配置生效规则"><a class="markdownIt-Anchor" href="#52-配置生效规则"></a> 5.2 配置生效规则</h3>
+<ul>
+<li>普通配置修改：保存后，<strong>必须重新编译项目</strong>，配置才会生效（配置宏在编译阶段被处理）。</li>
+<li>特殊配置修改（分区表、Bootloader、Flash核心参数）：保存后，必须先执行<code>Full Clean</code>全量清理，再全量编译，最后全量烧录（包含Bootloader、分区表、app固件），否则配置不生效，甚至导致芯片无法启动。</li>
+</ul>
+<h3 id="53-配置重置"><a class="markdownIt-Anchor" href="#53-配置重置"></a> 5.3 配置重置</h3>
+<ul>
+<li>若配置混乱，点击编辑器的<strong>Reset</strong>按钮，一键恢复当前ESP-IDF版本对应芯片的出厂默认配置。</li>
+<li>也可直接删除项目根目录的<code>sdkconfig</code>文件，重新打开编辑器，会自动生成全新的默认配置文件。</li>
+</ul>
+<h2 id="六-命令行配置方式idfpy-menuconfig全环境兼容"><a class="markdownIt-Anchor" href="#六-命令行配置方式idfpy-menuconfig全环境兼容"></a> 六、命令行配置方式（<a target="_blank" rel="noopener" href="http://idf.py">idf.py</a> menuconfig，全环境兼容）</h2>
+<p>若不使用VS Code，或在Linux/服务器环境开发，可使用官方原生字符界面配置工具，与图形化编辑器的配置项完全一致，底层共用同一套Kconfig系统。</p>
+<ol>
+<li>
+<p>操作步骤：打开终端，cd到ESP-IDF项目的<strong>根目录</strong>，执行命令 <code>idf.py menuconfig</code>，回车启动字符配置界面。</p>
+</li>
+<li>
+<p>核心操作快捷键：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>核心功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上下方向键</td>
+<td>移动光标，选择配置项</td>
+</tr>
+<tr>
+<td>回车</td>
+<td>进入子菜单/确认选择</td>
+</tr>
+<tr>
+<td>空格/Y/N</td>
+<td>切换复选框的启用/禁用状态</td>
+</tr>
+<tr>
+<td>/</td>
+<td>搜索配置项，输入关键词即可定位</td>
+</tr>
+<tr>
+<td>?</td>
+<td>查看当前配置项的官方详细帮助</td>
+</tr>
+<tr>
+<td>Esc</td>
+<td>返回上一级菜单/退出界面</td>
+</tr>
+<tr>
+<td>S</td>
+<td>保存配置</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>退出界面</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>保存与生效：按S键保存配置，回车确认，按Q退出后，重新编译项目即可生效，规则与图形化完全一致。</p>
+</li>
+</ol>
+<h2 id="七-常见问题与排查方案"><a class="markdownIt-Anchor" href="#七-常见问题与排查方案"></a> 七、常见问题与排查方案</h2>
+<ol>
+<li>
+<p><strong>编辑器一直加载，无法打开</strong></p>
+<ul>
+<li>常见原因：项目根目录选择错误、ESP-IDF环境未正确加载、CMakeLists.txt存在语法错误。</li>
+<li>解决：确认打开的是包含顶层<code>CMakeLists.txt</code>的项目根目录，查看VS Code左下角是否正确识别ESP-IDF版本和目标芯片，重新执行<code>ESP-IDF: Set ESP-IDF Environment</code>命令加载环境，修复CMakeLists.txt语法错误。</li>
+</ul>
+</li>
+<li>
+<p><strong>修改配置后编译不生效</strong></p>
+<ul>
+<li>常见原因：未保存配置、未重新编译、宏名称拼写错误、配置项依赖功能未启用。</li>
+<li>解决：确认点击Save保存配置，执行<code>Full Clean</code>→<code>Build</code>全量编译，核对代码中<code>CONFIG_</code>宏名称与配置项完全一致，检查配置项的依赖功能是否已启用。</li>
+</ul>
+</li>
+<li>
+<p><strong>配置后烧录，开发板无法启动</strong></p>
+<ul>
+<li>常见原因：Flash大小/模式配置错误、晶振频率配置错误、分区表不匹配、Bootloader配置异常。</li>
+<li>解决：恢复默认配置，核对开发板硬件参数，重新配置后执行全量编译+全量烧录（包含Bootloader和分区表）。</li>
+</ul>
+</li>
+<li>
+<p><strong>找不到目标配置项</strong></p>
+<ul>
+<li>解决：直接使用顶部搜索栏，输入配置项的关键词或<code>CONFIG_</code>宏名称，瞬间定位；同时确认目标芯片支持该功能，部分功能仅特定芯片型号支持。</li>
+</ul>
+</li>
+</ol>
+<h2 id="八-代码中使用配置的示例"><a class="markdownIt-Anchor" href="#八-代码中使用配置的示例"></a> 八、代码中使用配置的示例</h2>
+<p>所有配置项都会生成对应的<code>CONFIG_</code>宏，可直接在代码中调用，实现配置与代码联动：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"sdkconfig.h"</span></span>
+
+<span class="token keyword">void</span> <span class="token function">app_main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 打印配置的CPU主频</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"当前CPU主频：%d MHz\n"</span><span class="token punctuation">,</span> CONFIG_ESP32_DEFAULT_CPU_FREQ_MHZ<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 条件编译：仅开启PSRAM时执行这段代码</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">CONFIG_ESP32_SPIRAM_SUPPORT</span></span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"已启用PSRAM支持\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"未启用PSRAM\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3.6k字。于2026/04/05首次发布，最后更新于2026/04/08。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E4%B8%8E%E6%A0%B8%E5%BF%83%E8%AF%B4%E6%98%8E"><span class="toc-text"> 一、前置准备与核心说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-vs-code%E7%8E%AF%E5%A2%83-%E6%89%93%E5%BC%80%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%BB%E6%B5%81%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text"> 二、VS Code环境 打开配置编辑器（主流图形化方式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E7%BC%96%E8%BE%91%E5%99%A8%E7%95%8C%E9%9D%A2%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-text"> 三、编辑器界面结构与基础操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%A0%B8%E5%BF%83%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"><span class="toc-text"> 3.1 核心界面布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C%E8%A7%84%E5%88%99"><span class="toc-text"> 3.2 基础操作规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E6%A0%B8%E5%BF%83%E9%AB%98%E9%A2%91%E9%85%8D%E7%BD%AE%E9%A1%B9-%E5%88%86%E6%AD%A5%E8%AF%A6%E8%A7%A3%E6%96%B0%E6%89%8B%E5%BF%85%E9%85%8D"><span class="toc-text"> 四、核心高频配置项 分步详解（新手必配）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%9F%BA%E7%A1%80%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%83%A7%E5%BD%95%E9%85%8D%E7%BD%AEserial-flasher-config"><span class="toc-text"> 4.1 基础硬件与烧录配置（Serial flasher config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%88%86%E5%8C%BA%E8%A1%A8%E9%85%8D%E7%BD%AEpartition-table"><span class="toc-text"> 4.2 分区表配置（Partition Table）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%B3%BB%E7%BB%9F%E6%A0%B8%E5%BF%83%E8%AE%BE%E7%BD%AEesp-system-settings"><span class="toc-text"> 4.3 系统核心设置（ESP System Settings）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AEbootloader-config"><span class="toc-text"> 4.4 引导程序配置（Bootloader config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E7%BB%84%E4%BB%B6%E9%85%8D%E7%BD%AEcomponent-config"><span class="toc-text"> 4.5 组件配置（Component config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9%E9%85%8D%E7%BD%AEcompiler-options"><span class="toc-text"> 4.6 编译器选项配置（Compiler options）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BF%9D%E5%AD%98-%E7%94%9F%E6%95%88%E4%B8%8E%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-text"> 五、配置的保存、生效与版本管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-text"> 5.1 保存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88%E8%A7%84%E5%88%99"><span class="toc-text"> 5.2 配置生效规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E9%85%8D%E7%BD%AE%E9%87%8D%E7%BD%AE"><span class="toc-text"> 5.3 配置重置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8Fidfpy-menuconfig%E5%85%A8%E7%8E%AF%E5%A2%83%E5%85%BC%E5%AE%B9"><span class="toc-text"> 六、命令行配置方式（idf.py menuconfig，全环境兼容）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8E%92%E6%9F%A5%E6%96%B9%E6%A1%88"><span class="toc-text"> 七、常见问题与排查方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB-%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 八、代码中使用配置的示例</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,4],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+
+</html>
+

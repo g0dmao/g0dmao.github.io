@@ -241,11 +241,53 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
 </li>
 </ol>
 <p>pxCurrentTCB是一个全局变量，指向当前运行的TCB。当调度器首次调度时，最先执行的任务设定为<strong>最高优先级，最后创建的任务。</strong></p>
+<h2 id="3-链表的操作"><a class="markdownIt-Anchor" href="#3-链表的操作"></a> 3. 链表的操作</h2>
+<p>此节需要你理解环形链表的基本操作（如插入节点）</p>
+<h3 id="31-链表节点按值排序插入"><a class="markdownIt-Anchor" href="#31-链表节点按值排序插入"></a> 3.1 <strong>链表节点按值排序插入</strong></h3>
+<p>这里讲一个FreeRTOS中比较重要的一个链表操作——<strong>链表节点按值排序插入</strong>。也就是通过比较链表结构体中的 <code>xItemValue</code> 的值将节点按序插入。</p>
+<h4 id="311-作用"><a class="markdownIt-Anchor" href="#311-作用"></a> 3.1.1 作用</h4>
+<p>在阻塞链表中，<code>xItemValue</code> 指代的是阻塞时间，按序插入，我们就能快速判断任务是否到达延时（如果第一个任务都没有到达延时，那后面的也肯定不会到达），以及快速取出第一个到达延时的任务（就是第一个任务）。非常的高效</p>
+<h4 id="312-流程"><a class="markdownIt-Anchor" href="#312-流程"></a> 3.1.2 流程</h4>
+<p>我复刻了一下，大致是这样的：<br />
+其中 <code>MultiUseValue</code> 即 <code>xItemValue</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">ListInsertNodeAndSort</span><span class="token punctuation">(</span>List_t <span class="token operator">*</span><span class="token keyword">const</span> theList<span class="token punctuation">,</span> ListNode_t <span class="token operator">*</span>theNodeToInsert<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    ListNode_t <span class="token operator">*</span>Iterator<span class="token punctuation">;</span>   <span class="token comment">// 迭代器指针，用来记录位置</span>
+    <span class="token keyword">const</span> <span class="token class-name">uint32_t</span> ValueOfInsertion <span class="token operator">=</span> theNodeToInsert<span class="token operator">-></span>MultiUseValue<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> ValueOfInsertion <span class="token operator">==</span> <span class="token number">0xffffffff</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 直接插入到尾节点。即HeadNode的前节点。</span>
+        <span class="token comment">// 此时Iterator 指向当前尾节点（也就是要插入节点的上一个节点）</span>
+        Iterator <span class="token operator">=</span> theList<span class="token operator">-></span>HeadNode<span class="token punctuation">.</span>PrevNode<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token keyword">else</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 正常遍历：从头节点开始往下找</span>
+        <span class="token comment">// 用一个 for 循环，只要下一个节点的值 &lt;= valueOfInsertion，Iterator 就继续往下走</span>
+        <span class="token comment">// 由于是先比较，后更新节点位置，所以当循环结束时，Iterator 也是我们要插入节点的前一个节点</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span> Iterator <span class="token operator">=</span> <span class="token punctuation">(</span>ListNode_t <span class="token operator">*</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token punctuation">(</span> theList<span class="token operator">-></span>HeadNode <span class="token punctuation">)</span><span class="token punctuation">;</span>
+              Iterator<span class="token operator">-></span>NextNode<span class="token operator">-></span>MultiUseValue <span class="token operator">&lt;=</span> ValueOfInsertion<span class="token punctuation">;</span>
+              Iterator <span class="token operator">=</span> Iterator<span class="token operator">-></span>NextNode <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">// 空循环，靠 for 括号里的逻辑推进即可</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 下面开始链表节点移植手术</span>
+    <span class="token comment">// 请注意顺序！由于我们要靠Iterator->NextNode寻找要插入节点的后节点，所以Iterator->NextNode的值应该最后改变，</span>
+    <span class="token comment">// 因此先链接后节点再链接前节点</span>
+    <span class="token comment">// 推荐的顺序：</span>
+    <span class="token comment">//1. 先把要插入节点的前后节点指定，形成单向链</span>
+    theNodeToInsert<span class="token operator">-></span>NextNode <span class="token operator">=</span> Iterator<span class="token operator">-></span>NextNode<span class="token punctuation">;</span>
+    theNodeToInsert<span class="token operator">-></span>PrevNode <span class="token operator">=</span> Iterator<span class="token punctuation">;</span>
+    <span class="token comment">//2. 把要插入节点的后节点PrevNode更新，补全后节点的双向链</span>
+    Iterator<span class="token operator">-></span>NextNode<span class="token operator">-></span>PrevNode <span class="token operator">=</span> theNodeToInsert<span class="token punctuation">;</span>
+    <span class="token comment">//3. 最后更新插入节点的前节点NextNode，补全前节点的双向链</span>
+    Iterator<span class="token operator">-></span>NextNode <span class="token operator">=</span> theNodeToInsert<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约1.9k字。于2026/03/26首次发布，最后更新于2026/03/28。 </p>
+<p>共计约2.4k字。于2026/03/26首次发布，最后更新于2026/04/14。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -279,7 +321,7 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-freertos%E4%B8%AD%E7%9A%84%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-text"> 1. FreeRTOS中的链表结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="toc-text"> 1.1 链表结构详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1%E5%87%BD%E6%95%B0%E5%AF%B9%E9%93%BE%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text"> 2. 创建任务函数对链表的操作</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-freertos%E4%B8%AD%E7%9A%84%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-text"> 1. FreeRTOS中的链表结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E9%93%BE%E8%A1%A8%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="toc-text"> 1.1 链表结构详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E4%BB%BB%E5%8A%A1%E5%87%BD%E6%95%B0%E5%AF%B9%E9%93%BE%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text"> 2. 创建任务函数对链表的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%93%BE%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text"> 3. 链表的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E9%93%BE%E8%A1%A8%E8%8A%82%E7%82%B9%E6%8C%89%E5%80%BC%E6%8E%92%E5%BA%8F%E6%8F%92%E5%85%A5"><span class="toc-text"> 3.1 链表节点按值排序插入</span></a></li></ol></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -332,7 +374,7 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-01-02",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -451,14 +493,14 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
                     monthlyChart.setOption({
                         xAxis: { 
                             type: 'category', 
-                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-03","2026-04"], 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,1,13,1],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,4],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -532,13 +574,13 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
                         xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
                         yAxis: {
                             type: 'category',
-                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":16},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
                             axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         series: [{
                             name: 'Category Count',
                             type: 'bar',
-                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":16},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
                             label: {
                                 show: true,
                                 position: 'right',
@@ -587,7 +629,7 @@ PRIVILEGED_DATA <span class="token keyword">static</span> List_t xPendingReadyLi
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"其他","children":[],"count":5,"path":"其他"},{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":6,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":16,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":4,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',

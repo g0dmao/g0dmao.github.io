@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>GoDm@'s blog</title>
+
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <h1 id="WebTitle" style="text-align: center;">GoDm@'s Blog</h1>
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">ESPIDF快速入门</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-安装espidf"><a class="markdownIt-Anchor" href="#1-安装espidf"></a> 1. 安装ESPIDF</h2>
+<p>参见——<a target="_blank" rel="noopener" href="https://docs.espressif.com/projects/vscode-esp-idf-extension/zh_CN/latest/installation.html">安装 ESP-IDF 和相关工具 - - — ESP-IDF Extension for VSCode latest 文档</a></p>
+<h2 id="2-cli常用命令"><a class="markdownIt-Anchor" href="#2-cli常用命令"></a> 2. CLI常用命令</h2>
+<p><img src="Snipaste_2026-04-05_17-25-59.png" alt="" /></p>
+<h2 id="3-sdk的配置"><a class="markdownIt-Anchor" href="#3-sdk的配置"></a> 3. SDK的配置</h2>
+<p>最常用的就是配置flash、CPU主频、FreeRTOS的时钟频率。<br />
+可能还会用到：</p>
+<p>自定义分区、外部ram配置、日志等级、编译优化。</p>
+<p>参见——<a href="https://blog.godmao.top/posts/19167/">ESPIDF-SDK配置</a></p>
+<h2 id="4-分区表详解"><a class="markdownIt-Anchor" href="#4-分区表详解"></a> 4. 分区表详解</h2>
+<p><img src="Snipaste_2026-04-05_20-06-31.png" alt="" /></p>
+<p>分区顾名思义就是给硬盘分区，并告诉系统每个区是用来干嘛的。如果没有分区表，系统就不知道如何操作这个存储器。</p>
+<p>这是我自己自定义的分区表：这是一个适用ota升级的分区</p>
+<pre class="line-numbers language-none"><code class="language-none"># Name,   Type, SubType, Offset,  Size, Flags
+# 注意：偏移量(Offset)留空，系统在编译时会自动计算并紧凑排列
+nvs,      data, nvs,     ,        0x4000,
+otadata,  data, ota,     ,        0x2000,
+phy_init, data, phy,     ,        0x1000,
+factory,  app,  factory, ,        1M,
+ota_0,    app,  ota_0,   ,        1M,
+ota_1,    app,  ota_1,   ,        1M,
+spiffs,   data, spiffs,  ,        0xE0000,<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="41-容量怎么算"><a class="markdownIt-Anchor" href="#41-容量怎么算"></a> 4.1 容量怎么算？</h3>
+<p>相信大家第一次看到用16进制表示分区的大小时是一头雾水，不知道这对应的是多少字节。其实我们只需要把16进制转换为十进制就可以算出大小。</p>
+<p>比如 <code>0x1000</code> 用我们小学二年级学过的方法：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn><msup><mn>6</mn><mn>3</mn></msup><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">1 \times 16^3 = 4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span></span></span></span>。</p>
+<p>因为 1 KB = 1024 字节，所以： <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mo>÷</mo><mn>1024</mn><mo>=</mo><mrow><mn mathvariant="bold">4</mn><mtext> KB</mtext></mrow></mrow><annotation encoding="application/x-tex">4096 \div 1024 = \mathbf{4 \text{ KB}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">4</span><span class="mord text"><span class="mord"> KB</span></span></span></span></span></span></p>
+<p>再如 <code>0xf0000</code><br />
+F 在十六进制里代表 15。换算成十进制： <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>15</mn><mo>×</mo><mn>1</mn><msup><mn>6</mn><mn>4</mn></msup><mo>=</mo><mn>983</mn><mo separator="true">,</mo><mn>040</mn></mrow><annotation encoding="application/x-tex">15 \times 16^4 = 983,040</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">6</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">9</span><span class="mord">8</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">4</span><span class="mord">0</span></span></span></span> 字节。<br />
+换算成 KB： <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>983040</mn><mo>÷</mo><mn>1024</mn><mo>=</mo><mrow><mn mathvariant="bold">960</mn><mtext> KB</mtext></mrow></mrow><annotation encoding="application/x-tex">983040 \div 1024 = \mathbf{960 \text{ KB}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">9</span><span class="mord">8</span><span class="mord">3</span><span class="mord">0</span><span class="mord">4</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">9</span><span class="mord mathbf">6</span><span class="mord mathbf">0</span><span class="mord text"><span class="mord"> KB</span></span></span></span></span></span></p>
+<p>总结一下，<code>0x1000</code> 代表 4 KB。<code>0x10000</code> 代表 64 KB。这样我们就可以很直观的换算大小了。</p>
+<p>所以，上面分区表大小对应如下：</p>
+<ul>
+<li><strong>nvs</strong>: 16 KB</li>
+<li><strong>otadata</strong>: 8 KB</li>
+<li><strong>phy_init</strong>: 4 KB</li>
+<li><strong>factory</strong>: 1 MB (1024 KB)</li>
+<li><strong>ota_0</strong>: 1 MB (1024 KB)</li>
+<li><strong>ota_1</strong>: 1 MB (1024 KB)</li>
+<li><strong>spiffs</strong>: 896 KB</li>
+</ul>
+<h3 id="42-分区表各列含义"><a class="markdownIt-Anchor" href="#42-分区表各列含义"></a> 4.2 分区表各列含义</h3>
+<p>esp32的分区表是用csv文件定义的，左到右用逗号隔开了 6 个参数：<br />
+<code>Name, Type, SubType, Offset, Size, Flags</code></p>
+<ol>
+<li>
+<p><strong>Name (名称)</strong>：这个分区的名字，你自己起的，方便你和系统识别（比如叫 <code>spiffs</code> 或 <code>nvs</code>）。</p>
+</li>
+<li>
+<p><strong>Type (类型)</strong>：大分类。ESP32 只有两种核心类型：</p>
+<ul>
+<li>
+<p><code>app</code>：代表这个分区是用来存<strong>可执行的代码/程序</strong>的。</p>
+</li>
+<li>
+<p><code>data</code>：代表这个分区是用来存<strong>数据</strong>的（比如配置参数、文件、网页等）。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>SubType (子类型)</strong>：小分类，进一步说明这个分区具体干嘛用。比如同样是 <code>app</code>，可以是出厂代码（<code>factory</code>）或者升级用的代码（<code>ota_0</code>）。不可随意起！</p>
+</li>
+<li>
+<p><strong>Offset (偏移量)</strong>：这个分区在芯片物理空间上的“起始地址”。推荐留空。 编译器会把它们紧凑地排列好，省去了我们手动计算地址可能犯的错。</p>
+</li>
+<li>
+<p><strong>Size (大小)</strong>：这个分区的容量（就是我们上面算过的那些数值）。</p>
+</li>
+<li>
+<p><strong>Flags (标志位)</strong>：高级设置，比如是否加密等。绝大多数情况下留空即可。</p>
+</li>
+</ol>
+<h3 id="43-分区解析"><a class="markdownIt-Anchor" href="#43-分区解析"></a> 4.3 分区解析</h3>
+<p>这是一个带 OTA 无线升级功能 + 文件系统的设计。</p>
+<p><strong>1. 系统配置区（nvs, otadata, phy_init）</strong>。<code>nvs</code> 用来存连接过的 WiFi 密码、传感器校准值，这样断电重启后密码还在。<code>phy_init</code> 存射频底层数据。<code>otadata</code> 告诉系统下次开机应该运行哪个盘里的代码。</p>
+<p><strong>2. 核心程序区（factory, ota_0, ota_1）</strong> 为什么要有三个 <code>app</code> 区？这是为了实现 <strong>OTA（Over-The-Air 无线升级）</strong>：</p>
+<ul>
+<li>
+<p><strong>factory</strong>：通过 USB 线烧录的原始固件（出厂设置）。</p>
+</li>
+<li>
+<p><strong>ota_0 和 ota_1</strong>：当你通过 WiFi 远程更新程序时，ESP32 不会直接覆盖正在运行的程序（万一升级到一半断电了，设备就“变砖”彻底死机了）。假设系统现在运行在 <code>ota_0</code>，当你下载新固件时，它会存入 <code>ota_1</code>。存好并校验无误后，修改 <code>otadata</code> ，下次重启就从 <code>ota_1</code> 启动。这就保证了设备永远有一个完整的系统可以运行。</p>
+</li>
+</ul>
+<p><strong>3. 文件系统区（spiffs）</strong> 这部分空间相当于一个小小的 U 盘。如果你用 ESP32 做一个网页控制台，你可以把 HTML 文件、CSS 样式表甚至小的图标图片存在这里，你的代码只需要去读取这些文件发给浏览器即可，而不需要把这些乱七八糟的文本全都硬编码（Hardcode）写在 C 语言代码里。</p>
+<h3 id="44-subtype的官方命名规范"><a class="markdownIt-Anchor" href="#44-subtype的官方命名规范"></a> 4.4 subtype的官方命名规范</h3>
+<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="UTF-8"> <title>ESP32 分区表 SubType 说明</title> <style> /* 基础表格样式 */ .esp32-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; text-align: left; } .esp32-table th, .esp32-table td { border: 1px solid #0070c6; padding: 12px 15px; } .esp32-table th { background-color: #f5f5f5; font-weight: bold; } /* 分类行高亮样式 */ .category-row { background-color:  ; font-weight: bold; } /* 警告提示样式 */ .warn { color: #d9534f; font-weight: bold; } </style> </head> <body> <table class="esp32-table"> <thead> <tr> <th>分区类型(Type)</th> <th>子类型(SubType)</th> <th>核心用途说明</th> </tr> </thead> <tbody> <!-- 程序区 app --> <tr> <td rowspan="3"><strong>app<br>(程序区)</strong></td> <td>factory</td> <td>出厂默认程序，ESP32 首次通电优先运行</td> </tr> <tr> <td>ota_0 ~ ota_15</td> <td>OTA 无线升级程序槽位，最多16个，常用 ota_0/ota_1 交替使用</td> </tr> <tr> <td>test</td> <td>工厂生产线测试专用，日常开发极少使用</td> </tr> <!-- 数据区 data 分类 --> <tr class="category-row"> <td rowspan="8"><strong>data<br>(数据区)</strong></td> <td class="warn">【系统核心数据】</td> <td class="warn">⚠️ 禁止随意修改</td> </tr> <tr> <td>nvs</td> <td>非易失性存储，WiFi 库自动存储密码、连接记录</td> </tr> <tr> <td>ota</td> <td>8KB 小分区，记录当前系统运行的 OTA 槽位</td> </tr> <tr> <td>phy</td> <td>物理层初始化数据，存储射频校准等底层参数</td> </tr> <tr class="category-row"> <td>【文件系统】</td> <td>用于存储数据/文件</td> </tr> <tr> <td>spiffs</td> <td>Flash 轻量级文件系统，适合存储网页、图片</td> </tr> <tr> <td>fat</td> <td>通用 FAT 文件系统，适配 SD 卡、USB 存储模拟</td> </tr> <tr> <td>littlefs</td> <td>高性能、高安全性，主流替代 spiffs 的文件系统</td> </tr> <tr class="category-row"> <td></td> <td>【其他高级功能】</td> <td>拓展功能专用分区</td> </tr> <tr> <td></td> <td>coredump</td> <td>程序崩溃时存储内存状态，用于故障排查</td> </tr> <tr> <td></td> <td>nvs_keys</td> <td>Flash 加密功能专用，存储 NVS 分区加密密钥</td> </tr> </tbody> </table> <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,4],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":18},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body> </html>
+<h3 id="45-数据分配规则"><a class="markdownIt-Anchor" href="#45-数据分配规则"></a> 4.5 数据分配规则</h3>
+<ul>
+<li>
+<p><strong>规则一：4KB 对齐原则（最基础的物理铁律）</strong></p>
+<p>Flash 芯片的最小擦除单位是 1 个扇区（4KB）。</p>
+<ul>
+<li>
+<p><strong>规则</strong>：<strong>所有分区的大小（Size）必须是 4KB（<code>0x1000</code>）的整数倍。</strong></p>
+</li>
+<li>
+<p><strong>绝对不要</strong>出现像 <code>0x1500</code> 或者 <code>3KB</code> 这种大小，系统会直接报错。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>规则二：系统关键数据“雷打不动”</strong></p>
+<p>有些底层数据分区，官方有严格的要求，最好不要乱改：</p>
+<ul>
+<li>
+<p><strong><code>otadata</code></strong>：必须是 <strong>8KB</strong>（<code>0x2000</code>）。用于 OTA 双备份切换。</p>
+</li>
+<li>
+<p><strong><code>phy_init</code></strong>：必须是 <strong>4KB</strong>（<code>0x1000</code>）。用于射频参数。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>规则三：NVS 分区“宁大勿小”</strong></p>
+<p><code>nvs</code> 负责存储 WiFi 密码、系统配置等。</p>
+<ul>
+<li>
+<p><strong>底线</strong>：官方底层库（特别是 WiFi 和蓝牙库）在初始化时需要占用一定的 NVS 空间。<strong>最小不要低于 12KB，通常标准推荐值为 16KB（<code>0x4000</code>）。</strong></p>
+</li>
+<li>
+<p><strong>扩展</strong>：如果你要在代码里用 <code>Preferences</code> 库保存大量的个人设置、长字符串，可以酌情增加到 <code>20KB</code> (<code>0x5000</code>) 或更大。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>规则四：APP 程序区“看菜下饭，强迫对称”</strong></p>
+<p>存放代码的区域（<code>factory</code>, <code>ota_0</code>, <code>ota_1</code>）是最占空间的部分。</p>
+<ul>
+<li>
+<p><strong>看菜下饭</strong>：大小取决于你写的代码编译出来有多大。通常引入了 WiFi、蓝牙、显示屏驱动后，固件轻松突破 800KB。所以一般给 <strong>1MB（<code>0x100000</code>）起步</strong>。如果是非常庞大的项目，可能需要分 1.5MB 甚至 2MB。</p>
+</li>
+<li>
+<p><strong>强迫对称</strong>：如果你使用了 OTA 升级，<strong><code>ota_0</code> 和 <code>ota_1</code> 的大小必须完全一致！</strong> 而且它们的大小，决定了你未来能够升级的最大固件体积。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>规则五：文件系统（SPIFFS/FAT）“兜底捡漏”</strong></p>
+<p>像 <code>spiffs</code> 或 <code>littlefs</code> 这样的文件系统，对大小没有特定要求（只要满足规则一的 4KB 对齐即可）。</p>
+<ul>
+<li><strong>规则</strong>：通常把它放在分区表的<strong>最后一行</strong>，大小就是 <strong>“整块芯片总容量 - 其它所有分区占用的容量”</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>假设你手里有一块全新的 Flash 芯片，你可以按照以下 <strong>4 步走</strong>来分配：</p>
+<ol>
+<li>
+<p><strong>先扣除系统预留开销</strong>：芯片最开头有约 <strong>36KB</strong> 的空间是被引导程序（Bootloader）和分区表本身占用的。这部分你看不见，但算总账时要扣掉（0x0000-0x9000）。</p>
+</li>
+<li>
+<p><strong>分配固定小分区</strong>：写上 <code>nvs</code> (16KB)、<code>otadata</code> (8KB)、<code>phy_init</code> (4KB)。这三个一共占 28KB。</p>
+</li>
+<li>
+<p><strong>分配程序大头（App）</strong>：评估你的代码有多大。假设是 4MB 芯片带 OTA，你分给 <code>ota_0</code> 1.2MB，<code>ota_1</code> 1.2MB。（总共用掉 2.4MB）。</p>
+</li>
+<li>
+<p><strong>把剩下的都给文件系统（Data）</strong>：</p>
+<ul>
+<li>
+<p>芯片总容量 - Bootloader预留 - 小分区 - App分区 = 剩下的给 <code>spiffs</code>。</p>
+</li>
+<li>
+<p><em>(注意：偏移量 Offset 全部留空，让系统自动从上到下紧凑排列计算即可。)</em></p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>需要注意的是，ESP32规定所有 <code>Type</code> 为 <code>app</code>（可执行代码）的分区，它的起始地址（Offset）必须是 64KB（十六进制 <code>0x10000</code>）的整数倍（64字节对齐）。因此上面计算spiffs大小的公式算出来的结果会偏大。需要根据实际情况调小一点。</p>
+</blockquote>
+<p>补充：如果你想把bootloader的存储空间改大一点，只需要更改分区表的起始地址，默认为0x8000。比如改为0x10000，由于分区表默认占4字节，因此分区表的末地址为0x11000，那么更改后芯片开头就被预留了68KB空间。此时重新计算并分配spiffs的空间。</p>
+<h2 id="5-自定义组件和cmake修改"><a class="markdownIt-Anchor" href="#5-自定义组件和cmake修改"></a> 5. 自定义组件和cmake修改</h2>
+<p>ESP-IDF 的核心设计思想就是<strong>组件化 (Component-based)</strong>。系统自带的 FreeRTOS、Wi-Fi、蓝牙，全都是一个个独立的组件。 我们自己写的业务逻辑代码（比如 LED 驱动、传感器读取、MQTT 通信等），最好也抽离成独立的组件。这种方式代码解耦度极高，以后甚至可以直接复制到别的项目里用。</p>
+<p>假设你要写一个专门控制 LED 的模块，你的目录结构应该变成这样：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">hello_world<span class="token operator">/</span>
+├── CMakeLists<span class="token punctuation">.</span><span class="token function">txt</span>      <span class="token punctuation">(</span>项目级<span class="token punctuation">)</span>
+├── components<span class="token operator">/</span>         <span class="token operator">&lt;</span><span class="token operator">--</span> <span class="token number">1.</span> 在项目根目录下手动建一个 components 文件夹 <span class="token punctuation">(</span>名字必须是这个<span class="token punctuation">)</span>
+│   └── led_ctrl<span class="token operator">/</span>       <span class="token operator">&lt;</span><span class="token operator">--</span> <span class="token number">2.</span> 你的新模块文件夹
+│       ├── CMakeLists<span class="token punctuation">.</span>txt <span class="token operator">&lt;</span><span class="token operator">--</span> <span class="token number">3.</span> 为这个模块新建一个专属的 CMake 文件
+│       ├── led_ctrl<span class="token punctuation">.</span>c
+│       └── include<span class="token operator">/</span>       <span class="token operator">&lt;</span><span class="token operator">--</span> <span class="token number">4.</span> 习惯上把头文件单独放一个 include 文件夹
+│           └── led_ctrl<span class="token punctuation">.</span>h
+├── main<span class="token operator">/</span>
+│   ├── CMakeLists<span class="token punctuation">.</span>txt  
+│   └── main<span class="token punctuation">.</span>c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>第 1 步：编写模块专属的 CMake</strong> 在 <code>led_ctrl</code> 文件夹里，新建一个 <code>CMakeLists.txt</code>，里面只需要写这一句：</p>
+<pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token function">idf_component_register</span><span class="token punctuation">(</span>SRCS <span class="token string">"led_ctrl.c"</span>
+                       INCLUDE_DIRS <span class="token string">"include"</span>
+                       REQUIRES driver<span class="token punctuation">)</span> <span class="token comment"># 如果你的LED代码用到了GPIO，就需要依赖底层的 driver 组件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><em>注：<code>REQUIRES</code> 是声明依赖，如果不写，这部分代码就找不到 ESP32 底层的系统函数。</em></p>
+<p><strong>第 2 步：在 main 中引入</strong> 因为你把 <code>led_ctrl</code> 放进了 <code>components</code> 文件夹，ESP-IDF 的 CMake 不同寻常，<strong>它在编译时会自动扫描根目录下的 <code>components</code> 文件夹，并把它注册进系统</strong>。 所以你不需要去修改最外层项目的 CMake，只需要在 <code>main.c</code> 里直接使用即可：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 在 main.c 中直接包含即可，CMake 会自动找到它</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"led_ctrl.h"</span> </span>
+
+<span class="token keyword">void</span> <span class="token function">app_main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// 调用 led_ctrl.c 里的函数</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="6-api"><a class="markdownIt-Anchor" href="#6-api"></a> 6. API</h2>
+<p>——<a target="_blank" rel="noopener" href="https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-reference/index.html">请参阅官方文档</a></p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约2.8k字。于2026/04/05首次发布，最后更新于2026/04/08。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85espidf"><span class="toc-text"> 1. 安装ESPIDF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-cli%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text"> 2. CLI常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-sdk%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text"> 3. SDK的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%86%E5%8C%BA%E8%A1%A8%E8%AF%A6%E8%A7%A3"><span class="toc-text"> 4. 分区表详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%AE%B9%E9%87%8F%E6%80%8E%E4%B9%88%E7%AE%97"><span class="toc-text"> 4.1 容量怎么算？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%88%86%E5%8C%BA%E8%A1%A8%E5%90%84%E5%88%97%E5%90%AB%E4%B9%89"><span class="toc-text"> 4.2 分区表各列含义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E5%88%86%E5%8C%BA%E8%A7%A3%E6%9E%90"><span class="toc-text"> 4.3 分区解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-subtype%E7%9A%84%E5%AE%98%E6%96%B9%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="toc-text"> 4.4 subtype的官方命名规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E6%95%B0%E6%8D%AE%E5%88%86%E9%85%8D%E8%A7%84%E5%88%99"><span class="toc-text"> 4.5 数据分配规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E5%92%8Ccmake%E4%BF%AE%E6%94%B9"><span class="toc-text"> 5. 自定义组件和cmake修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-api"><span class="toc-text"> 6. API</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    </body>
+
+</html>
+
