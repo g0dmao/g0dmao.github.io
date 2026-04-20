@@ -124,10 +124,10 @@ td {
 }
 
 /* 5. 代码块：致敬 DOS/早期终端的硬核感 */
-/* pre {
+pre {
     background-color: #000000;
     color: #00FF00;
-    border: 3px inset #808080;
+    /*border: 3px inset #808080;*/
     padding: 10px;
     overflow-x: auto;
     font-family: "Courier New", Courier, monospace;
@@ -147,7 +147,7 @@ pre code {
     color: inherit;
     border: none;
     padding: 0;
-} */
+}
 
 /* 6. 引用块 / Blockquote */
 blockquote {
@@ -195,6 +195,14 @@ ul, ol {
 
 li {
     margin-bottom: 5px;
+}
+
+img {
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin: .75rem 0;
+    border: 0;
 }
 
 .a_container {
