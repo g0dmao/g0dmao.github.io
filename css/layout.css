@@ -1,52 +1,202 @@
-/* retro-text.css
-   目标：老式文本网页风格（90s 文本感），但保留现代可访问性。
-   使用：把此文件引入 <head>，或复制到你的主样式里。
-*/
+/* * ==========================================
+ * Y2K / HTML 2.0 Retro Theme
+ * ==========================================
+ */
 
-/* ========== 配置变量（便于快速定制） ========== */
-:root{
-  --bg: rgb(241,229,201);            /* 页面背景 */
-  --text: #111111;          /* 主文本颜色 */
-  --link: #0000ee;          /* 经典蓝链接 */
-  --link-visited: #551a8b;  /* 访问过的链接颜色 */
-  --muted: #666666;        /* 次要文字 */
-  --hr: #cccccc;           /* 分割线 */
-  --other: darkcyan;
-  --measure: 70ch;         /* 理想行长 (字符数) */
-  --base-size: 16px;       /* 基准字体大小 */
-  --line-height: 1.6;      /* 行高 */
-  --container-pad: 20px;   /* 页面左右内边距 */
-  --max-width: calc(var(--measure) + 4rem);
-  --mono: "Fira Code", "Consolas", "Courier New", monospace; /* 等宽字体 */
-  --serif: Georgia, "Times New Roman", Times, serif;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  --kicker-size: 0.92rem;
+/* 1. 基础页面设置：经典的 Windows 95 灰背景与衬线字体 */
+body {
+    background-color: rgb(241,229,201);
+    color: #000000;
+    font-family: "Times New Roman", Times, serif;
+    line-height: 1.2;
+    margin: 20px auto;
+    max-width: 800px; /* 限制一下宽度适应现代屏幕，但保留古早味 */
+    padding: 10px;
+    font-size: 16px;
 }
 
-/* ========== 基本重置（轻量） ========== */
-* { box-sizing: border-box; }
-html,body { height:100%; }
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family: var(--sans);
-  font-size:var(--base-size);
-  line-height:var(--line-height);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding: 0;
+/* 2. 标题排版：居中、下划线与早期网页的层级感 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Times New Roman", Times, serif;
+    clear: both;
 }
 
-/* 链接保留老式下划线语义（可选），但做得更温和 */
-a {
-  color:var(--link);
-  text-decoration: underline;
+/* H1: 页面主标题 - 居中，加粗双下划线，留出足够的上下空间 */
+h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 4px double #000000;
+    margin-top: 0.8em;
+    margin-bottom: 1em;
+    padding-bottom: 10px;
 }
-a:visited { color:var(--link-visited); }
-/* a:focus, a:hover { text-decoration: none; outline: 2px solid rgba(0,0,0,0.08); outline-offset: 2px; } */
 
-/* ========== 页面容器与布局 ========== */
+/* H2: 核心章节标题 - 借用 Win95 窗口标题栏风格，形成绝对的视觉阻断 */
+h2 {
+    font-size: 1.6em;
+    font-weight: bold;
+    background-color: #000080; /* Win95 经典标题栏深蓝 */
+    color: #FFFFFF;
+    padding: 4px 10px;
+    margin-top: 1.8em; /* 重点：大幅拉开与上一段正文的距离 */
+    margin-bottom: 0.8em;
+    border: 2px outset #EEEEEE; /* 增加一点立体边框，强化“色块”感 */
+}
+
+/* H3: 次级子标题 - 经典深红色 + 3D凹陷下划线 */
+h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #800000; /* 经典深红/枣红色，千禧年常用醒目色 */
+    border-bottom: 2px inset #C0C0C0;
+    padding-bottom: 5px;
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
+}
+
+/* H4: 小节标题 - 加入早期网页常用的字符引导，避免与正文混淆 */
+h4 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+/* 利用伪元素插入复古的 ASCII 箭头，强行制造层级感 */
+h4::before {
+    content: "► ";
+    color: #000080;
+    font-size: 0.9em;
+}
+
+/* 调整正文段落，配合标题的间距 */
+p {
+    margin-top: 0;
+    margin-bottom: 1.2em;
+    font-size: 16px;
+    line-height: 1.5; /* 稍微放大一点行高，防止大段文字太闷 */
+}
+
+/* 3. 超链接：HTML 2.0 灵魂三原色 */
+a:link {
+    color: #0000EE;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #551A8B;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #FF0000;
+    cursor: help; /* 鼠标悬停变成问号，千禧年网页常见恶趣味 */
+}
+
+a:active {
+    color: #FF0000;
+    text-decoration: underline;
+}
+
+/* 4. 表格：厚重的 3D 边框效果 (Outset/Inset) */
+table {
+    border-collapse: separate;
+    border-spacing: 2px;
+    border: 4px outset #EEEEEE;
+    background-color: #DFDFDF;
+    margin: 15px 0;
+    width: 100%;
+}
+
+th {
+    background-color: #C0C0C0;
+    border: 2px outset #EEEEEE;
+    padding: 5px;
+    font-weight: bold;
+}
+
+td {
+    border: 2px inset #EEEEEE;
+    padding: 5px;
+    background-color: #FFFFFF;
+}
+
+/* 5. 代码块：致敬 DOS/早期终端的硬核感 */
+/* pre {
+    background-color: #000000;
+    color: #00FF00;
+    border: 3px inset #808080;
+    padding: 10px;
+    overflow-x: auto;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+}
+
+code {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #E0E0E0;
+    color: #A00000;
+    padding: 0 3px;
+    border: 1px solid #808080;
+}
+
+pre code {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 0;
+} */
+
+/* 6. 引用块 / Blockquote */
+blockquote {
+    border-left: 5px solid #000080;
+    background-color: #E0E0E0;
+    padding: 10px 15px;
+    margin: 15px 20px;
+    font-style: italic;
+}
+
+/* 7. 表单与按钮：Windows 9x 立体风格 */
+button, input[type="button"], input[type="submit"] {
+    background-color: #C0C0C0;
+    border: 3px outset #FFFFFF;
+    padding: 2px 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000000;
+}
+
+button:active, input[type="button"]:active, input[type="submit"]:active {
+    border: 3px inset #FFFFFF;
+}
+
+input[type="text"], textarea {
+    border: 2px inset #FFFFFF;
+    background-color: #FFFFFF;
+    padding: 2px;
+    font-family: "Courier New", Courier, monospace;
+}
+
+/* 8. 分割线：古早味的 3D 阴影线 */
+hr {
+    border: 0;
+    height: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+    margin: 20px 0;
+}
+
+/* 9. 列表 */
+ul, ol {
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
 .a_container {
     display: flex;
     align-items: flex-start;
@@ -66,41 +216,6 @@ a:visited { color:var(--link-visited); }
   overflow: visible;
 }
 
-#article {
-
-    width: 90%;
-    height: 100%;
-    padding: 20px;
-    h1,
-    h2,
-    h3,
-    h4 {
-        font-weight: 700;
-        margin-top: 2.2rem;
-        margin-bottom: 1rem;
-        line-height: 1.4;
-        letter-spacing: 0.5px;
-        color: var(--headline_color);
-    }
-
-    h1 {
-    font-size: 1.9rem;
-    padding-bottom: .3rem;
-    }
-    h2 {
-    font-size: 1.6rem;
-    padding-bottom: .2rem;
-    font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif 4', serif;
-    }
-    h3 {
-    font-size: 1.3rem;
-    padding-bottom: .1rem;
-    }
-    h4 {
-    font-size: 1.1rem;
-    }
-}
-
 .categories{
   margin-top:20px;
   width: 10%;
@@ -111,83 +226,25 @@ a:visited { color:var(--link-visited); }
   }
 }
 
-p { margin: 0 0 1rem 0; }
+#article {
 
-/* 元信息（如时间、作者） */
-.meta { color:var(--muted); font-size:0.95rem; margin-bottom:1rem; }
-
-/* ========== 列表、表格、引用 ========== */
-ul, ol { margin: 0 0 1rem 1.25rem; }
-li { margin: 0.25rem 0; }
-
-blockquote {
-  margin: 1rem 0;
-  padding-left: 0.8rem;
-  border-left: 3px solid var(--other);
-  color: var(--muted);
-  background: transparent;
+    width: 90%;
+    height: 100%;
+    padding: 20px;
 }
 
-/* 极简表格：纯文本感 */
-table {
-  width:100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.98rem;
+.header {
+    background-color: #000080; /* 经典深蓝 */
+    border: 5px outset #DFDFDF;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 30px;
 }
-th, td {
-  padding: 0.45rem 0.6rem;
-  border-bottom: 1px solid var(--hr);
-  text-align: left;
-}
-
-/* ========== 代码样式（内联与块） ========== */
-code {
-  font-family: var(--mono);
-  font-size: 0.95em;
-  background: #fdf6e3 !important;
-  padding: 0.08rem 0.25rem;
-  border-radius: 3px;
-  color:var(--other);
-}
-pre {
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  background: #fdf6e3 !important;
-  overflow: auto;
-  border: 1px solid var(--hr);
-}
-
-/* ========== 图片（尽量少用） ========== */
-img { display:block; max-width:100%; height:auto; margin: .75rem 0; border: 0; }
-
-/* ========== 水平线 ========== */
-hr { border: none; height:1px; background: var(--hr); margin:1.5rem 0; }
-
-/* ========== 表单与按钮（非常基础） ========== */
-/* input, textarea, select {
-  font: inherit;
-  border:1px solid var(--hr);
-  padding: 0.35rem 0.5rem;
-  border-radius: 3px;
-  background: transparent;
-} */
-button { cursor: pointer; }
-
-/* ========== 小屏响应式（保持单列） ========== */
-/* @media (max-width: 720px) {
-  :root { --base-size: 15px; --container-pad: 14px; --measure: 60ch; }
-  .container { padding: 1.25rem var(--container-pad); }
-  .h1 { font-size:1.4rem; }
-} */
-
-/* ========== 可访问性焦点样式强化 ========== */
-:focus { outline-offset: 3px; }
-
-/* ========== 打印优化（保留文本感） ========== */
-@media print {
-  a { text-decoration: underline; color: #000; }
-  nav, .no-print { display:none; }
-  body { background: #fff; color: #000; }
-  .container { padding: 1in; max-width: 6.5in; }
+.site-title {
+    color: #FFFFFF;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 3em;
+    margin: 0;
+    text-shadow: 2px 2px 0 #000; /* 模拟早期的文字阴影 */
+    letter-spacing: 2px;
 }
