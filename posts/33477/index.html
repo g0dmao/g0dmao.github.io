@@ -11,7 +11,7 @@
                 I-MX6ULL主频与时钟配置实验 - GoDm@&#39;s Blog
             
         </title>
-
+        <link rel="shortcut icon" href="/catface.ico">
         <link rel="stylesheet" href="/css/layout.css">
 
         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
@@ -651,7 +651,7 @@ CCM internal clock generation<br />
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"网络","children":[],"count":2,"path":"网络"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":18,"path":"嵌入式"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"},{"name":"网络","children":[],"count":2,"path":"网络"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -762,6 +762,29 @@ CCM internal clock generation<br />
     font-weight: bold;
 }
 
+.counter-box {
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 5px;
+    background-color: #000;
+    border: 2px inset #808080;
+}
+
+.counter-label {
+    color: #C0C0C0;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.counter-digits {
+    color: #00FF00; /* 荧光绿 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
 /* 具体徽章配色 */
 /*
 .badge-hexo { border-color: #808080; }
@@ -811,9 +834,16 @@ CCM internal clock generation<br />
         </div>
     </div>
 
+    <div class="counter-box">
+        <span class="counter-label">WORD COUNT:</span>
+        <span class="counter-digits">166.2k</span>
+    </div>
+
     <div class="footer-info">
         <p>Copyright &copy; 2025-2026 GoDm@'s Blog</p>
     </div>
+
+
 
 </footer>
 </html>
