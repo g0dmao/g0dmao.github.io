@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>
+            
+                MQTT协议知识整合 - GoDm@&#39;s Blog
+            
+        </title>
+        <link rel="shortcut icon" href="/catface.ico">
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-coy.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <div class="header">
+            <h1 class="site-title">gOdm@'s BLOG</h1>
+        </div>
+        <!-- <pre class="ascii-title">
+          ____           ____                  ____            ____    _
+         / ___|   ___   |  _ \   _ __ ___     / __ \   ___    | __ )  | |   ___     __ _
+        | |  _   / _ \  | | | | | '_ ` _ \   / / _` | / __|   |  _ \  | |  / _ \   / _` |
+        | |_| | | (_) | | |_| | | | | | | | | | (_| | \__ \   | |_) | | | | (_) | | (_| |
+         \____|  \___/  |____/  |_| |_| |_|  \ \__,_| |___/   |____/  |_|  \___/   \__, |
+                                              \____/                               |___/
+        </pre> -->
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">MQTT协议知识整合</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<blockquote>
+<p>本篇参考 EMQ的官方教学文档——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/mqtt-guide">MQTT 教程 2026：从入门到精通 | EMQ</a></p>
+</blockquote>
+<h2 id="1-mqtt概述"><a class="markdownIt-Anchor" href="#1-mqtt概述"></a> 1. MQTT概述</h2>
+<h3 id="11-什么是mqtt"><a class="markdownIt-Anchor" href="#11-什么是mqtt"></a> 1.1. 什么是MQTT？</h3>
+<p>MQTT（Message Queuing Telemetry Transport）是一种轻量级、基于发布-订阅模式的消息传输协议，适用于资源受限的设备和低带宽、高延迟或不稳定的网络环境。它在物联网应用中广受欢迎，能够实现传感器、执行器和其它设备之间的高效通信。</p>
+<h3 id="12-mqtt的部分特点"><a class="markdownIt-Anchor" href="#12-mqtt的部分特点"></a> 1.2. MQTT的部分特点</h3>
+<ul>
+<li>
+<p><strong>安全通信</strong></p>
+<p>MQTT 提供传输层安全（TLS）和安全套接层（SSL）加密功能。此外，MQTT 还通过用户名/密码凭证或客户端证书提供身份验证和授权机制，以保护网络及其资源的访问。</p>
+</li>
+<li>
+<p><strong>连续、有状态的会话</strong></p>
+<p>MQTT 提供了客户端与 Broker 之间保持有状态会话的能力，这使得系统即使在断开连接后也能记住订阅和未传递的消息。此外，客户端还可以在建立连接时指定一个保活间隔，这会促使 Broker 定期检查连接状态。如果连接中断，Broker 会储存未传递的消息（根据 QoS 级别确定），并在客户端重新连接时尝试传递它们。</p>
+</li>
+<li>
+<p><strong>发送者与订阅者解耦</strong></p>
+<p>通过采用发布-订阅模式，MQTT 实现了发送者和接收者的解耦，从而有效地减少了网络流量和资源使用。</p>
+</li>
+</ul>
+<h2 id="2-mqtt的工作原理"><a class="markdownIt-Anchor" href="#2-mqtt的工作原理"></a> 2. MQTT的工作原理</h2>
+<p>MQTT 是基于发布-订阅模式的通信协议，由 MQTT 客户端通过主题（Topic）发布或订阅消息，通过 MQTT Broker 集中管理消息路由，并依据预设的服务质量等级(QoS)确保端到端消息传递可靠性。</p>
+<h3 id="21-mqtt客户端"><a class="markdownIt-Anchor" href="#21-mqtt客户端"></a> 2.1. MQTT客户端</h3>
+<p>任何运行MQTT 客户端库的应用或设备都是 MQTT 客户端。</p>
+<h3 id="22-mqtt-serverbroker"><a class="markdownIt-Anchor" href="#22-mqtt-serverbroker"></a> 2.2. MQTT Server/Broker</h3>
+<p>MQTT Server 是负责处理客户端请求的关键组件，包括建立连接、断开连接、订阅和取消订阅等操作，<strong>同时还负责消息的转发</strong>。</p>
+<h3 id="23-发布-订阅模式"><a class="markdownIt-Anchor" href="#23-发布-订阅模式"></a> 2.3. 发布-订阅模式</h3>
+<p>不同于客户端-服务器模式，它将发送消息的客户端（发布者）和接收消息的客户端（订阅者）进行了解耦。发布者和订阅者之间没有直接连接，而是通过 MQTT Server 来负责消息的路由和分发。</p>
+<h3 id="24-主题topic"><a class="markdownIt-Anchor" href="#24-主题topic"></a> 2.4. 主题（Topic）</h3>
+<p>MQTT 协议根据主题来转发消息。</p>
+<h3 id="25-qos"><a class="markdownIt-Anchor" href="#25-qos"></a> 2.5. QoS</h3>
+<p>MQTT 提供了三种服务质量（QoS），在不同网络环境下保证消息的可靠性。</p>
+<ul>
+<li>QoS 0：消息最多传送一次。如果当前客户端不可用，它将丢失这条消息。</li>
+<li>QoS 1：消息至少传送一次。</li>
+<li>QoS 2：消息只传送一次。</li>
+</ul>
+<h2 id="3-mqtt的工作流程"><a class="markdownIt-Anchor" href="#3-mqtt的工作流程"></a> 3. MQTT的工作流程</h2>
+<ol>
+<li>
+<p><strong>客户端使用 TCP/IP 协议与 Broker 建立连接</strong>，可以选择使用 TLS/SSL 加密来实现安全通信。客户端提供认证信息，并指定会话类型（Clean Session 或 Persistent Session）。</p>
+</li>
+<li>
+<p><strong>客户端既可以向特定主题发布消息，也可以订阅主题以接收消息</strong>。当客户端发布消息时，它会将消息发送给 MQTT Broker；而当客户端订阅消息时，它会接收来自Broker转发的与订阅主题相关的消息。</p>
+</li>
+<li>
+<p><strong>MQTT Broker 接收发布的消息</strong>，并将这些消息转发给订阅了对应主题的客户端。它根据 QoS 等级确保消息可靠传递，并根据会话类型为断开连接的客户端存储消息。</p>
+</li>
+</ol>
+<h2 id="4-mqtt的特性"><a class="markdownIt-Anchor" href="#4-mqtt的特性"></a> 4. MQTT的特性</h2>
+<h3 id="41-主题topic与通配符"><a class="markdownIt-Anchor" href="#41-主题topic与通配符"></a> 4.1. 主题（topic）与通配符</h3>
+<p>更多内容请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/advanced-features-of-mqtt-topics">MQTT 主题与通配符（Topics &amp; Wildcards）入门手册 | EMQ</a></p>
+<h4 id="411-主题"><a class="markdownIt-Anchor" href="#411-主题"></a> 4.1.1. 主题</h4>
+<p>MQTT 主题本质上是一个 UTF-8 编码的字符串，是 MQTT 协议进行消息路由的基础。MQTT 主题类似 URL 路径，使用斜杠 <code>/</code> 进行分层：</p>
+<pre class="line-numbers language-none"><code class="language-none">chat&#x2F;room&#x2F;1
+sensor&#x2F;10&#x2F;temperature
+sensor&#x2F;+&#x2F;temperature
+sensor&#x2F;#
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="412-特殊主题"><a class="markdownIt-Anchor" href="#412-特殊主题"></a> 4.1.2. 特殊主题</h4>
+<ol>
+<li>
+<p>以 <code>$SYS/</code> 开头的主题为系统主题。系统主题主要用于获取MQTT 服务器自身运行状态、消息统计、客户端上下线事件等数据。目前，MQTT 协议暂未明确规定 <code>$SYS/</code> 主题标准，但大多数 MQTT 服务器都遵循该<a target="_blank" rel="noopener" href="https://github.com/mqtt/mqtt.org/wiki/SYS-Topics">标准建议</a>。</p>
+</li>
+<li>
+<p>以 <code>$share</code> 开头的共享订阅主题。这是MQTT5.0引入的新特性，请参见——</p>
+</li>
+</ol>
+<h4 id="413-通配符"><a class="markdownIt-Anchor" href="#413-通配符"></a> 4.1.3. 通配符</h4>
+<p>MQTT 主题通配符包含单层通配符 <code>+</code> 及多层通配符 <code>#</code>，主要用于客户端一次订阅多个主题。</p>
+<ul>
+<li>
+<p>加号 (“+” U+002B) 是用于单个层级匹配的通配符。</p>
+  <pre class="line-numbers language-none"><code class="language-none">+ 有效
+sensor&#x2F;+ 有效
+sensor&#x2F;+&#x2F;temperature 有效
+sensor+ 无效（没有占据整个层级）
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果客户端订阅了主题 <code>sensor/+/temperature</code>，将会收到以下主题的消息：</p>
+  <pre class="line-numbers language-none"><code class="language-none">sensor&#x2F;1&#x2F;temperature
+sensor&#x2F;2&#x2F;temperature
+...
+sensor&#x2F;n&#x2F;temperature
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而不会匹配：</p>
+  <pre class="line-numbers language-none"><code class="language-none">sensor&#x2F;temperature
+sensor&#x2F;bedroom&#x2F;1&#x2F;temperature
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>井字符号（“#” U+0023）是递归的匹配。它必须占据整个层级并且<strong>必须是主题的最后一个字符。</strong></p>
+  <pre class="line-numbers language-none"><code class="language-none"># 有效，匹配所有主题
+sensor&#x2F;# 有效
+sensor&#x2F;bedroom# 无效（没有占据整个层级）
+sensor&#x2F;#&#x2F;temperature 无效（不是主题最后一个字符）
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果客户端订阅主题 <code>senser/#</code>，它将会收到以下主题的消息：</p>
+  <pre class="line-numbers language-none"><code class="language-none">sensor
+sensor&#x2F;temperature
+sensor&#x2F;1&#x2F;temperature
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h3 id="42-qos"><a class="markdownIt-Anchor" href="#42-qos"></a> 4.2. QoS</h3>
+<p>更多内容请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/introduction-to-mqtt-qos">MQTT QoS 0、1、2 解析：快速入门指南 | EMQ</a></p>
+<p>引入QoS解决在不同场景下对可靠消息传递的要求。比如有些不需要那么严格但要求效率，有些则需保证数据的可靠性。</p>
+<p>MQTT 中的 QoS 指的是发布者与订阅者之间消息传递的保证级别。它提供三个服务级别：</p>
+<ul>
+<li><strong>QoS 0 – 最多交付一次</strong></li>
+<li><strong>QoS 1 – 至少交付一次</strong></li>
+<li><strong>QoS 2 – 只交付一次</strong></li>
+</ul>
+<p>使用 QoS 0 可能丢失消息，使用 QoS 1 可以保证收到消息，但消息可能重复，使用 QoS 2 可以保证消息既不丢失也不重复。<strong>QoS 等级从低到高，不仅意味着消息可靠性的提升，也意味着传输复杂程度的提升。</strong></p>
+<p>大部分情况下 Broker 向订阅者转发消息时都会维持原始的 QoS 不变。不过也有一些例外的情况，根据订阅者的订阅要求，消息的 QoS 等级可能会在转发的时候发生降级。</p>
+<p>例如，订阅者在订阅时要求 Broker 可以向其转发的消息的最大 QoS 等级为 QoS 1，那么后续所有 QoS 2 消息都会降级至 QoS 1 转发给此订阅者，而所有 QoS 0 和 QoS 1 消息则会保持原始的 QoS 等级转发。</p>
+<h4 id="421-qos-0-最多传一次"><a class="markdownIt-Anchor" href="#421-qos-0-最多传一次"></a> 4.2.1. QoS 0 - 最多传一次</h4>
+<p>QoS 0 消息即发即弃，不需要等待确认，不需要存储和重传。类比UDP。所以在网络不稳定的情况下会出现丢包的问题。</p>
+<ul>
+<li>
+<p><strong>适用场景</strong></p>
+<p>QoS 0 的缺点是可能会丢失消息，不过优点是投递的效率较高。</p>
+<p>所以我们通常选择使用 QoS 0 传输一些高频且不那么重要的数据，比如传感器数据，周期性更新，即使遗漏几个周期的数据也可以接受。</p>
+</li>
+</ul>
+<h4 id="422-qos-1-至少传一次"><a class="markdownIt-Anchor" href="#422-qos-1-至少传一次"></a> 4.2.2. QoS 1 - 至少传一次</h4>
+<p>QoS 1 加入了应答与重传机制，发送方只有在收到接收方的 PUBACK 报文以后，才能认为消息投递成功，在此之前，发送方需要存储该 PUBLISH 报文（发布报文）以便下次重传。</p>
+<p>重传时报文中的 DUP 标志会被设置为 1，已表示这是一个重传的报文。但是接收方并不能因此判断曾经是否接收过这个消息。比如下面两种情况：</p>
+<ol>
+<li>接收方收到了报文，但发送方由于没有收到 PUBACK 报文而重传了 PUBLISH 报文。</li>
+<li>接收方没有接收到报文。</li>
+</ol>
+<p>由于我们无法区分这两种情况，所以只能让接收方将这些 PUBLISH 报文都当作全新的消息来处理。因此当我们使用 QoS 1 时，<strong>消息的重复在协议层面上是无法避免的。</strong></p>
+<ul>
+<li>
+<p><strong>适用场景</strong></p>
+<p>QoS 1 可以保证消息到达，所以适合传输一些较为重要的数据，比如下达关键指令、更新重要的有实时性要求的状态等。</p>
+<p>但因为 QoS 1 还可能会导致消息重复，所以当我们选择使用 QoS 1 时，还需要在业务层面能够处理消息的重复，或者能够允许消息的重复。</p>
+</li>
+</ul>
+<blockquote>
+<p>如何为QoS1去重？一个比较常用且简单的方法是，在每个 PUBLISH 报文的 Payload（实际的数据内容） 中都带上一个时间戳或者一个单调递增的计数，这样上层业务就可以根据当前收到消息中的时间戳或计数是否大于自己上一次接收的消息中的时间戳或计数来判断这是否是一个新消息。</p>
+</blockquote>
+<h4 id="423-qos-2-只传一次"><a class="markdownIt-Anchor" href="#423-qos-2-只传一次"></a> 4.2.3. QoS 2 - 只传一次</h4>
+<p>QoS 2 解决了 QoS 0、1 消息可能丢失或者重复的问题，<strong>但相应地，它也带来了最复杂的交互流程和最高的开销。</strong> 每一次的 QoS 2 消息投递，都要求发送方与接收方进行至少两次请求/响应流程。</p>
+<p>具体流程可参见前面的链接。这里篇幅原因不详说 <s>其实是自己也没明白</s></p>
+<ul>
+<li>
+<p><strong>适用场景</strong></p>
+<p>QoS 2 既可以保证消息到达，也可以保证消息不会重复，但传输成本最高。如果我们不愿意自行实现去重方案，并且能够接受 QoS 2 带来的额外开销，那么 QoS 2 将是一个合适的选择。</p>
+</li>
+</ul>
+<h3 id="43-保留消息retained"><a class="markdownIt-Anchor" href="#43-保留消息retained"></a> 4.3. 保留消息（Retained）</h3>
+<p>更多内容请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt5-features-retain-message">MQTT 保留消息是什么？如何使用？ | EMQ</a></p>
+<h4 id="431-什么是"><a class="markdownIt-Anchor" href="#431-什么是"></a> 4.3.1. 什么是？</h4>
+<p>发布者发布消息时，如果 Retained 标记被设置为 true，则该消息即是 MQTT 中的保留消息（Retained Message）。MQTT 服务器会为每个主题存储最新一条保留消息，以方便消息发布后才上线的客户端在订阅主题时仍可以接收到该消息。</p>
+<h4 id="432-何时用"><a class="markdownIt-Anchor" href="#432-何时用"></a> 4.3.2. 何时用？</h4>
+<p>发布-订阅模式，订阅者无法主动向发布者请求消息。订阅者何时收到消息完全依赖于发布者何时发布消息，这在某些场景中就产生了不便。</p>
+<p>借助保留消息，新的订阅者能够立即获取最近的状态，而不需要等待无法预期的时间，例如：</p>
+<ul>
+<li>智能家居设备的状态只有在变更时才会上报，但是控制端需要在上线后就能获取到设备的状态；</li>
+<li>传感器上报数据的间隔太长，但是订阅者需要在订阅后立即获取到最新的数据；</li>
+<li>传感器的版本号、序列号等不会经常变更的属性，可在上线后发布一条保留消息告知后续的所有订阅者。</li>
+</ul>
+<p>需要注意的是，在保留消息发布前订阅主题，将不会收到保留消息。<strong>需要待保留消息发布后，重新订阅该主题，才会收到保留消息。</strong> 可通过消息中的保留标志位判断是否是保留消息。</p>
+<h4 id="433-保留多久怎么删"><a class="markdownIt-Anchor" href="#433-保留多久怎么删"></a> 4.3.3. 保留多久？怎么删？</h4>
+<p>保留消息虽然存储在服务端中，但它<strong>并不属于会话的一部分</strong>。因此即使会话已经结束，保留消息也不一定被删除。删除保留消息有以下几种方式：</p>
+<ul>
+<li>客户端往某个主题发送一个 Payload 为空的保留消息，服务端就会删除这个主题下的保留消息；</li>
+<li>在 MQTT 服务器上删除，比如 EMQX MQTT 服务器提供了在 Dashboard 上删除保留消息的功能；</li>
+</ul>
+<h4 id="434-mqtt-50-对保留消息的改进"><a class="markdownIt-Anchor" href="#434-mqtt-50-对保留消息的改进"></a> 4.3.4. MQTT 5.0 对保留消息的改进</h4>
+<p>MQTT 5.0 新增了消息过期间隔属性，发布时可使用该属性设置消息的过期时间，不管消息是否为保留消息，都将会在过期时间后自动被删除。具体介绍请参见本节头部链接。</p>
+<h3 id="44-遗嘱消息will"><a class="markdownIt-Anchor" href="#44-遗嘱消息will"></a> 4.4. 遗嘱消息（Will）</h3>
+<p>更多内容请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/use-of-mqtt-will-message">遗嘱消息（Will Message）介绍与示例 | MQTT 5.0 特性详解 | EMQ</a></p>
+<h4 id="441-什么是"><a class="markdownIt-Anchor" href="#441-什么是"></a> 4.4.1. 什么是？</h4>
+<p>在 MQTT 中，客户端可以在连接时在服务端中注册一个遗嘱消息，与普通消息类似，我们可以设置遗嘱消息的主题、有效载荷等等。当该客户端意外断开连接，服务端就会向其他订阅了相应主题的客户端发送此遗嘱消息。这些接收者也因此可以及时地采取行动，例如向用户发送通知、切换备用设备等等。</p>
+<p>借助遗嘱消息，订阅者可以感知到发布者是否保持活跃，根据不同情况做出不同反应。</p>
+<p>客户端正常下线的情况是发送一个 Reason Code 为 0x00 的 DISCONNECT 报文然后关闭网络连接，服务端不会发布遗嘱消息。只要连接在服务端没有收到 Reason Code 为 0x00 的 DISCONNECT 报文的情况下关闭，那么服务端都需要发送遗嘱消息。</p>
+<p>遗嘱消息总是在客户端“死亡”后被发布，在某种意义上，它也是客户端发出的最后一个消息。</p>
+<h4 id="442-使用技巧"><a class="markdownIt-Anchor" href="#442-使用技巧"></a> 4.4.2. 使用技巧</h4>
+<ul>
+<li>
+<p><strong>与保留消息一起使用</strong></p>
+<p>服务端一旦发布了遗嘱消息，就会将它从会话中删除。如果关心此遗嘱消息的客户端不在线，那么它就错过了这条遗嘱消息。</p>
+<p>为了避免这种情况，我们可以将遗嘱消息设置为保留消息，这样遗嘱消息在被发布后，还会以保留消息的形式存储在服务端中，客户端可以在任何时候获取这条遗嘱消息。</p>
+<p>如果更进一步，我们还可以实现对指定客户端的状态监控。</p>
+<p>让客户端 <code>myclient</code> 在每次连接时都指定一个主题为 <code>myclient/status</code>，有效载荷为 <code>offline</code> 并且设置了 Will Retain 标志的遗嘱消息。每当连接成功，就向主题 <code>myclient/status</code> 发布一个有效载荷为 <code>online</code> 的保留消息。这样，我们就可以随时订阅主题 <code>myclient/status</code>，来获取客户端 <code>myclient</code> 的最新状态。</p>
+</li>
+</ul>
+<h4 id="443-mqtt-50-对遗嘱消息的改进"><a class="markdownIt-Anchor" href="#443-mqtt-50-对遗嘱消息的改进"></a> 4.4.3. MQTT 5.0 对遗嘱消息的改进</h4>
+<p>很多时候，网络连接的中断是短暂的，所以客户端往往能够重新连接并继续之前的会话。这导致遗嘱消息可能被频繁地且无意义地发送。</p>
+<p>所以 MQTT 5.0 专门为遗嘱消息增加了一个 Will Delay Interval 属性，这个属性决定了服务端将在网络连接关闭后延迟多久发布遗嘱消息，并以秒为单位。</p>
+<p>具体介绍请参见本节头部链接。</p>
+<h3 id="45-持久会话与clean-session"><a class="markdownIt-Anchor" href="#45-持久会话与clean-session"></a> 4.5. 持久会话与Clean Session</h3>
+<p>更多内容请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt-session">MQTT 持久会话与 Clean Session 详解 | EMQ</a></p>
+<h4 id="451-持久会话"><a class="markdownIt-Anchor" href="#451-持久会话"></a> 4.5.1. 持久会话</h4>
+<p>MQTT 客户端与服务器的连接可能随时会因为网络波动及资源限制而异常断开。为了解决网络连接断开对通信造成的影响，MQTT 协议提供了持久会话功能。</p>
+<p>MQTT 客户端在发起到服务器的连接时，可以设置是否创建一个持久会话。持久会话会保存一些重要的数据，以使会话能在多个网络连接中继续。持久会话主要有以下三个作用：</p>
+<ul>
+<li><strong>避免因网络中断导致需要反复订阅带来的额外开销。</strong></li>
+<li>避免错过离线期间的消息。</li>
+<li>确保 QoS 1 和 QoS 2 的消息质量保证不被网络中断影响。（QoS 0 由于其特性并不在此列）</li>
+</ul>
+<h4 id="452-持久会话能存储的数据"><a class="markdownIt-Anchor" href="#452-持久会话能存储的数据"></a> 4.5.2. 持久会话能存储的数据</h4>
+<p><strong>客户端中存储的会话数据</strong>：</p>
+<ul>
+<li>已发送给服务端，但是还没有完成确认的 QoS 1 与 QoS 2 消息。</li>
+<li>从服务端收到的，但是还没有完成确认的 QoS 2 消息。</li>
+</ul>
+<p><strong>服务端中存储的会话数据</strong>：</p>
+<ul>
+<li>会话是否存在，即使会话状态其余部分为空。</li>
+<li>已发送给客户端，但是还没有完成确认的 QoS 1 与 QoS 2 消息。</li>
+<li>等待传输给客户端的 QoS 0 消息（可选），QoS 1 与 QoS 2 消息。</li>
+<li>从客户端收到的，但是还没有完成确认的 QoS 2 消息，遗嘱消息和遗嘱延时间隔。</li>
+</ul>
+<h4 id="453-使用clean-session开启持久会话"><a class="markdownIt-Anchor" href="#453-使用clean-session开启持久会话"></a> 4.5.3. 使用Clean Session开启持久会话</h4>
+<p>Clean Session 是用来控制会话状态生命周期的标志位，为 <code>true</code> 时表示创建一个新的会话，在客户端断开连接时，会话将自动销毁。为 <code>false</code> 时表示创建一个持久会话，在客户端断开连接后会话仍然保持，直到会话超时注销。</p>
+<blockquote>
+<p><strong>注意：</strong> 持久会话能被恢复的前提是客户端使用固定的 Client ID 再次连接，如果 Client ID 是动态的，那么连接成功后将会创建一个新的持久会话。</p>
+</blockquote>
+<h4 id="454-会话会保留多久"><a class="markdownIt-Anchor" href="#454-会话会保留多久"></a> 4.5.4. 会话会保留多久？</h4>
+<p>MQTT 3.1.1 没有规定持久会话应该在什么时候过期，如果仅从协议层面理解的话，这个持久会话应该永久存在。但在实际场景中这并不现实，因为它会非常占用服务端的资源，所以服务端通常不会完全遵循协议来实现，而是向用户提供一个全局配置来限制会话的过期时间。</p>
+<p>当客户端确定不再需要会话时，可使用 Clean Session 为 true 进行重连，重连成功后再断开连接。如果是 MQTT 5.0 则可在断开连接时直接设置 Session Expiry Interval 为 0，表示连接断开后会话即失效。（见后文）</p>
+<h4 id="455-mqtt-50-对会话的改进"><a class="markdownIt-Anchor" href="#455-mqtt-50-对会话的改进"></a> 4.5.5. MQTT 5.0 对会话的改进</h4>
+<p>MQTT 5.0 提供了 Clean Start 和 Session Expiry Interval 这两个连接字段来控制会话的生命周期。以避免永久保留持久会话。</p>
+<ul>
+<li>
+<p>Clean Start</p>
+<ul>
+<li><strong>为 0 ：</strong> 如果服务端存在与客户端连接时指定的 Client ID 关联的会话，那么它必须使用这个会话来恢复通信。如若不存在关联的对话，服务端创建一个全新对话并让客户端以此会话连接。</li>
+<li><strong>为 1 ：</strong> 客户端和服务端必须丢弃任何已存在的会话，并开始一个全新的会话。</li>
+</ul>
+</li>
+<li>
+<p>Session Expiry Interval</p>
+<ul>
+<li><strong>没有指定此属性或者设置为 0</strong>，表示会话将在网络连接断开时立即结束。</li>
+<li><strong>设置为一个大于 0 的值</strong>，则表示会话将在网络连接断开的多少秒之后过期。</li>
+<li><strong>设置为 0xFFFFFFFF</strong>，即 Session Expiry Interval 属性能够设置的最大值时，表示会话永不过期。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-mqtt-50-的新特性"><a class="markdownIt-Anchor" href="#5-mqtt-50-的新特性"></a> 5. MQTT 5.0 的新特性</h2>
+<h3 id="51-请求响应requestresponse"><a class="markdownIt-Anchor" href="#51-请求响应requestresponse"></a> 5.1. 请求/响应（Request/Response）</h3>
+<p>可以实现订阅端对发布端的响应（类似函数的return）。解决了发布端无法知道对端执行结果/是否收到包的问题</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt5-request-response">请求 / 响应 (Request / Response) 介绍与示例 | MQTT 5.0 特性详解 | EMQ</a></p>
+<h3 id="52-用户属性user-properties"><a class="markdownIt-Anchor" href="#52-用户属性user-properties"></a> 5.2. 用户属性（User Properties）</h3>
+<p>一种自定义属性，允许用户向 MQTT 消息添加自己的元数据，传输额外的自定义信息以扩充更多应用场景。让用户可以扩展标准协议。</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt5-user-properties">用户属性 - MQTT 5.0 新特性 | EMQ</a></p>
+<h3 id="53-主题别名topic-alias"><a class="markdownIt-Anchor" href="#53-主题别名topic-alias"></a> 5.3. 主题别名（Topic alias）</h3>
+<p>将主题长度较长且常用的主题名缩减为一个双字节整数来降低发布消息时的带宽消耗。</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt5-topic-alias">主题别名 - MQTT 5.0 新特性 | EMQ</a></p>
+<h3 id="54-payload-format-indicator-和-content-type"><a class="markdownIt-Anchor" href="#54-payload-format-indicator-和-content-type"></a> 5.4. Payload Format Indicator 和 Content Type</h3>
+<p>Payload Format Indicator用于指定报文有效载荷的格式。如果 Payload Format Indicator 的值为 0 或者没有指定这个属性，表示当前有效载荷是未指定的字节流；而如果这个属性的值为 1，则表示当前有效载荷是 UTF-8 编码的字符数据。</p>
+<p>Content Type 的值是一个 UTF-8 编码的字符串，用来描述应用消息的内容，这可以帮助接收端了解如何解析应用消息的有效载荷。例如，消息的内容是一个 JSON 对象，那么 Content Type 可以被设置为 “json”。这个字符串的具体内容完全由发送端和接收端决定，服务端不会验证这个属性，只负责将这个属性原封不动地转发给订阅者。</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/mqtt5-new-features-payload-format-indicator-and-content-type">Payload Format Indicator 和 Content Type 介绍与示例 ｜ MQTT 5.0 特性详解 | EMQ</a></p>
+<h3 id="55-共享订阅shared-sub"><a class="markdownIt-Anchor" href="#55-共享订阅shared-sub"></a> 5.5. 共享订阅（Shared Sub）</h3>
+<p>当多个客户端共享一个订阅时，服务端会把消息一个一个送给订阅者，而不是一次性同时送给订阅者。就像串行和并发的区别。</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/blog/introduction-to-mqtt5-protocol-shared-subscription">共享订阅介绍与示例 | MQTT 5.0 特性详解 | EMQ</a></p>
+<hr />
+<h3 id="56-更多"><a class="markdownIt-Anchor" href="#56-更多"></a> 5.6. 更多</h3>
+<p>不想写了。。。</p>
+<p>请参见——<a target="_blank" rel="noopener" href="https://www.emqx.com/zh/mqtt-guide">MQTT 教程 2026：从入门到精通 | EMQ</a></p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约5.4k字。于2026/04/21首次发布，最后更新于2026/04/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-mqtt%E6%A6%82%E8%BF%B0"><span class="toc-text"> 1. MQTT概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E4%BB%80%E4%B9%88%E6%98%AFmqtt"><span class="toc-text"> 1.1. 什么是MQTT？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-mqtt%E7%9A%84%E9%83%A8%E5%88%86%E7%89%B9%E7%82%B9"><span class="toc-text"> 1.2. MQTT的部分特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-mqtt%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text"> 2. MQTT的工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#21-mqtt%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text"> 2.1. MQTT客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#22-mqtt-serverbroker"><span class="toc-text"> 2.2. MQTT Server&#x2F;Broker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="toc-text"> 2.3. 发布-订阅模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%B8%BB%E9%A2%98topic"><span class="toc-text"> 2.4. 主题（Topic）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-qos"><span class="toc-text"> 2.5. QoS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-mqtt%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text"> 3. MQTT的工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-mqtt%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-text"> 4. MQTT的特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%B8%BB%E9%A2%98topic%E4%B8%8E%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="toc-text"> 4.1. 主题（topic）与通配符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-qos"><span class="toc-text"> 4.2. QoS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E4%BF%9D%E7%95%99%E6%B6%88%E6%81%AFretained"><span class="toc-text"> 4.3. 保留消息（Retained）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E9%81%97%E5%98%B1%E6%B6%88%E6%81%AFwill"><span class="toc-text"> 4.4. 遗嘱消息（Will）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E6%8C%81%E4%B9%85%E4%BC%9A%E8%AF%9D%E4%B8%8Eclean-session"><span class="toc-text"> 4.5. 持久会话与Clean Session</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-mqtt-50-%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7"><span class="toc-text"> 5. MQTT 5.0 的新特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E8%AF%B7%E6%B1%82%E5%93%8D%E5%BA%94requestresponse"><span class="toc-text"> 5.1. 请求&#x2F;响应（Request&#x2F;Response）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E7%94%A8%E6%88%B7%E5%B1%9E%E6%80%A7user-properties"><span class="toc-text"> 5.2. 用户属性（User Properties）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E4%B8%BB%E9%A2%98%E5%88%AB%E5%90%8Dtopic-alias"><span class="toc-text"> 5.3. 主题别名（Topic alias）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#54-payload-format-indicator-%E5%92%8C-content-type"><span class="toc-text"> 5.4. Payload Format Indicator 和 Content Type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#55-%E5%85%B1%E4%BA%AB%E8%AE%A2%E9%98%85shared-sub"><span class="toc-text"> 5.5. 共享订阅（Shared Sub）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#56-%E6%9B%B4%E5%A4%9A"><span class="toc-text"> 5.6. 更多</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <style>
+
+/* ==========================================
+ * Retro Footer & 88x31 Badges
+ * ==========================================
+ */
+
+.retro-footer {
+    background-color: #f1E5C9;
+    padding: 20px 0;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    color: #000;
+    margin-top: 50px;
+}
+
+/* 复古 3D 分割线 */
+.retro-hr {
+    border: 0;
+    height: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+    margin-bottom: 20px;
+}
+
+/* 徽章容器 */
+.badge-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* 88x31 像素徽章通用样式 */
+.badge-88x31 {
+    width: 88px;
+    height: 31px;
+    border: 2px outset #FFFFFF;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 9px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.badge-88x31 .top {
+    height: 12px;
+    line-height: 12px;
+    background: #000;
+    color: #FFF;
+    text-align: center;
+}
+
+.badge-88x31 .bottom {
+    flex-grow: 1;
+    line-height: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.counter-box {
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 5px;
+    background-color: #000;
+    border: 2px inset #808080;
+}
+
+.counter-label {
+    color: #C0C0C0;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.counter-digits {
+    color: #00FF00; /* 荧光绿 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 具体徽章配色 */
+/*
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #FFD700; color: #000; }
+
+.badge-soc { border-color: #808080; }
+.badge-soc .bottom { background: #000080; color: #FFF; }
+
+.badge-notepad { border-color: #808080; }
+.badge-notepad .bottom { background: #FFF; color: #000; }
+
+.badge-valid { border-color: #808080; }
+.badge-valid .bottom { background: #008000; color: #FFF; }
+*/
+
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #0E83CD; color: #FFFFFF; }
+
+.badge-github { border-color: #808080; }
+.badge-github .bottom { background: #24292E; color: #FFFFFF; }
+
+.badge-design { border-color: #808080; }
+.badge-design .bottom { background: #FFD700; color: #000; }
+
+/* 版权信息 */
+.footer-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+</style>
+<footer class="retro-footer">
+    <hr class="retro-hr">
+
+    <div class="badge-container">
+        <div class="badge-88x31 badge-hexo">
+            <span class="top">POWERED BY</span>
+            <span class="bottom">HEXO</span>
+        </div>
+        <div class="badge-88x31 badge-github">
+            <span class="top">HOSTED ON</span>
+            <span class="bottom">GITHUB</span>
+        </div>
+        <div class="badge-88x31 badge-design">
+            <span class="top">DESIGNED BY</span>
+            <span class="bottom">GODM@</span>
+        </div>
+    </div>
+
+    <div class="counter-box">
+        <span class="counter-label">WORD COUNT:</span>
+        <span class="counter-digits">175.1k</span>
+    </div>
+
+    <div class="footer-info">
+        <p>Copyright &copy; 2025-2026 GoDm@'s Blog</p>
+    </div>
+
+
+
+</footer>
+</html>
+

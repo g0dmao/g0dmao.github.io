@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>
+            
+                STM32：启动流程、bootloader与OTA - GoDm@&#39;s Blog
+            
+        </title>
+        <link rel="shortcut icon" href="/catface.ico">
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-coy.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <div class="header">
+            <h1 class="site-title">gOdm@'s BLOG</h1>
+        </div>
+        <!-- <pre class="ascii-title">
+          ____           ____                  ____            ____    _
+         / ___|   ___   |  _ \   _ __ ___     / __ \   ___    | __ )  | |   ___     __ _
+        | |  _   / _ \  | | | | | '_ ` _ \   / / _` | / __|   |  _ \  | |  / _ \   / _` |
+        | |_| | | (_) | | |_| | | | | | | | | | (_| | \__ \   | |_) | | | | (_) | | (_| |
+         \____|  \___/  |____/  |_| |_| |_|  \ \__,_| |___/   |____/  |_|  \___/   \__, |
+                                              \____/                               |___/
+        </pre> -->
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">STM32：启动流程、bootloader与OTA</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<p>在日常的嵌入式开发中，我们习惯了点击 IDE 里的“Download”按钮，看着进度条走完，然后串口终端里跳出熟悉的日志。这个过程显得理所当然。但当我们脱离开发板，将设备部署到荒郊野外的节点，或者封闭的工业网关中时，靠一根数据线去烧录代码就成了奢望。而OTA（Over-The-Air）升级便显得尤为重要。</p>
+<p>本文我们就从MCU的烧录和启动流程开始，引申到OTA升级。<strong>整体是以STM32-MCU为例讲解。</strong></p>
+<h2 id="1-烧录的本质"><a class="markdownIt-Anchor" href="#1-烧录的本质"></a> 1. 烧录的本质</h2>
+<p>所谓的“烧录”，本质上都是<strong>上位机通过特定的通信协议，去操纵 MCU 内部的一个特定的硬件外设——Flash 控制器（Flash Memory Controller / FMC）</strong>。通过flash控制器，去写入或擦除flash的指定扇区或页。</p>
+<p>以常见的STM32为例，我们最常见的两种烧录方式：</p>
+<ol>
+<li>
+<p><strong>仿真器烧录</strong></p>
+<p>电脑 (USB) <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> ST-Link <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <strong>SWD 协议</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> MCU 内部的 DAP（调试接入端口） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> MCU 的内部硬件总线（AHB） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <strong>Flash 控制器</strong>。</p>
+</li>
+<li>
+<p><strong>串口烧录</strong></p>
+<p>电脑 (USB转串口) <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <strong>UART 协议</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> MCU 的串口外设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> MCU 的 CPU（正在运行 ROM 里的原厂 Bootloader） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> CPU 执行指令操作内部硬件总线 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <strong>Flash 控制器</strong>。</p>
+</li>
+</ol>
+<p><strong>那么，是什么指导着上位机对flash的进行正确操作呢？</strong></p>
+<p>——<code>.hex</code> 或 <code>.bin</code> 文件中的地址映射表。上位机将这些二进制数据按图索骥，精准地写入到 MCU 内部 Flash 的指定扇区（Sector）或页（Page）中。</p>
+<h2 id="2-链接器脚本"><a class="markdownIt-Anchor" href="#2-链接器脚本"></a> 2. 链接器脚本</h2>
+<p><strong>链接器脚本（Linker Script）</strong>，在 GCC 工具链里通常是 <code>.ld</code> 文件，在 Keil 里叫分散加载文件（<code>.sct</code>）。它就是那个地址的 <strong>“规划师”</strong>。</p>
+<p>我们都知道编译器只负责把你的 C 代码翻译成机器指令，但这些指令最终应该放在 Flash 的哪个绝对物理地址？全局变量应该放在 RAM 的哪个位置？这全是链接器（Linker）看着链接脚本来决定的。</p>
+<p>例如最经典的代码分段：</p>
+<ul>
+<li>
+<p><strong><code>.text</code> 段</strong>：存放可执行的机器指令和常量，存放在 Flash 中。</p>
+</li>
+<li>
+<p><strong><code>.data</code> 段</strong>：存放已初始化的全局变量和静态变量。它们的初始值也存放在 Flash 中。</p>
+</li>
+<li>
+<p><strong><code>.bss</code> 段</strong>：存放未初始化的全局变量，它们不需要在 Flash 中占地方，只需要记录长度即可。</p>
+</li>
+</ul>
+<h2 id="3-stm32的boot引脚概述"><a class="markdownIt-Anchor" href="#3-stm32的boot引脚概述"></a> 3. STM32的boot引脚概述</h2>
+<h3 id="31-boot-引脚简介"><a class="markdownIt-Anchor" href="#31-boot-引脚简介"></a> 3.1. boot 引脚简介</h3>
+<p>Boot 引脚（ <code>BOOT0</code> 和 <code>BOOT1</code> 引脚）本质上是硬件级的引导模式选择开关。可以把它理解为电脑主板上的 BIOS 启动项选择（是从硬盘启动，还是从 U 盘启动）。</p>
+<p>我们引用STM32f411的参考手册里对boot引脚的讲解：</p>
+<blockquote>
+<p>The values on the BOOT pins are latched on the 4th rising edge of SYSCLK after a reset. It is up to the user to set the BOOT1 and BOOT0 pins after reset to select the required boot mode.</p>
+<p>BOOT0 is a dedicated pin while BOOT1 is shared with a GPIO pin. Once BOOT1 has been sampled, the corresponding GPIO pin is free and can be used for other purposes.</p>
+<p>The BOOT pins are also resampled when the device exits the Standby mode. Consequently,they must be kept in the required Boot mode configuration when the device is in the Standby mode. After this startup delay is over, the CPU fetches the top-of-stack value from address 0x0000 0000, then starts code execution from the boot memory starting from 0x0000 0004.</p>
+</blockquote>
+<p>大致意思是：</p>
+<p>复位后，BOOT引脚上的值会在SYSCLK的第4个上升沿被锁定。硬件会自动读取这些 Boot 引脚的电平状态。根据读取到的组合，MCU 会在内部进行内存地址重映射，也就是把不同的物理存储介质映射到 CPU 默认的启动地址（通常是 <code>0x00000000</code>）。</p>
+<p>文档还指出，BOOT0是一个专用引脚，而BOOT1则与一个GPIO引脚共享。一旦对BOOT1完成采样，相应的GPIO引脚就空闲了，可用于其他目的。</p>
+<p>在CubeMX中，并没有对BOOT1引脚做标识，还需要通过查参考手册列出的GPIO功能描述才找到，以F411为例，它的BOOT1引脚是PB2。</p>
+<h3 id="32-常见的-boot-引脚电平组合"><a class="markdownIt-Anchor" href="#32-常见的-boot-引脚电平组合"></a> 3.2. 常见的 Boot 引脚电平组合</h3>
+<ul>
+<li>
+<p><strong>从主 Flash 启动（最常见）</strong></p>
+<ul>
+<li>
+<p><strong>配置：</strong> <code>BOOT0 = 0</code> (通常接地), <code>BOOT1 = 任意</code></p>
+</li>
+<li>
+<p><strong>行为：</strong> MCU 将内部的主 Flash（物理地址通常是 <code>0x08000000</code>）映射到 <code>0x00000000</code>。</p>
+</li>
+<li>
+<p><strong>应用：</strong> 设备正常运行你烧录进去的代码。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>从系统存储器启动（System Memory / ROM）</strong></p>
+<ul>
+<li>
+<p><strong>配置：</strong> <code>BOOT0 = 1</code> (接高电平), <code>BOOT1 = 0</code> (接地)</p>
+</li>
+<li>
+<p><strong>行为：</strong> MCU 将内部的一块只读 ROM（物理地址通常在 <code>0x1FFFF000</code> 附近）映射到 <code>0x00000000</code>。这块 ROM 里固化了 ST 出厂前写死的一段 Bootloader 代码。</p>
+</li>
+<li>
+<p><strong>应用：</strong> 俗称 ISP（In-System Programming）下载模式。当你没有仿真器时，可以通过这根线，利用串口甚至 USB，把新的固件直接下载到主 Flash 中。开发板上的一键下载电路（如 CH340 配合 DTR/RTS 引脚）就是利用这个机制自动控制 BOOT0 和 RESET 引脚来实现串口烧录的。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>从内置 SRAM 启动</strong></p>
+<ul>
+<li>
+<p><strong>配置：</strong> <code>BOOT0 = 1</code>, <code>BOOT1 = 1</code></p>
+</li>
+<li>
+<p><strong>行为：</strong> 将内部 RAM（物理地址 <code>0x20000000</code>）映射到起始地址。</p>
+</li>
+<li>
+<p><strong>应用：</strong> 主要用于极端的调试场景。因为 Flash 的擦写寿命有限且擦写速度慢，在进行某些底层算法的高频次调试时，可以将代码直接下载到 RAM 中运行。缺点是掉电即丢失。<strong>这个我了解比较少，用得也比较少，就不讲了</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>“映射”，在我看来也有一点“依赖倒置”的思想在里面，上层CPU只管调用逻辑地址（0x00000000），逻辑地址相当于“接口”，逻辑地址对应的物理地址则由底层的总线矩阵根据不同情况重定向，也就是“接口的底层实现”。哈哈哈。</p>
+</blockquote>
+<h2 id="4-stm32启动流程概述"><a class="markdownIt-Anchor" href="#4-stm32启动流程概述"></a> 4. STM32启动流程概述</h2>
+<h3 id="41-从主flash启动"><a class="markdownIt-Anchor" href="#41-从主flash启动"></a> 4.1. 从主flash启动</h3>
+<p>以常见的 ARM Cortex-M 为例。当系统上电或按下 Reset 按键时，硬件电路产生复位信号，开始进行“开机准备”。这个过程完全由硬件主导，不需要任何软件干预：</p>
+<ol>
+<li>
+<p><strong>取栈顶指针（MSP）</strong>：CPU读取逻辑地址 <code>0x00000000</code>（已被映射到物理地址 <code>0x08000000</code>，下同理） 的第一个 4 字节数据，将其直接赋值给主堆栈指针寄存器（MSP）。这是 C 语言运行的基石——没有栈，就没有函数调用和局部变量。</p>
+</li>
+<li>
+<p><strong>取复位向量（PC）</strong>：接着，内核读取相邻的下一个 4 字节数据（即 <code>0x00000004</code>），将其装载到程序计数器（PC）中。这个地址，就是 <code>Reset_Handler</code>（复位中断服务函数）的入口点。</p>
+</li>
+<li>
+<p><strong>软件接管</strong>：PC 指针跳转到 <code>Reset_Handler</code> 后，软件拿到了控制权。启动代码（由汇编编写的.s文件）开始执行：</p>
+<ul>
+<li>
+<p>初始化系统时钟树，以及其他的必需硬件。</p>
+</li>
+<li>
+<p>将 <code>.data</code> 段的数据从 Flash 搬运到 RAM 中。</p>
+</li>
+<li>
+<p>将 <code>.bss</code> 段所在的 RAM 区域全部清零。</p>
+</li>
+<li>
+<p>最后，执行一条跳转指令：<code>BL main</code>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>至此，系统正式进入到我们熟悉的 <code>main()</code> 函数。</p>
+<blockquote>
+<p>根据我们前面讲的地址映射，可以轻松推断出——在MCU中，text段的内容通常不会被加载到ram中，而是一直在主flash中，CPU可以从flash中直接取指，就地执行。</p>
+</blockquote>
+<p>在整个过程中我们需要注意两点，</p>
+<ol>
+<li>
+<p>在整个过程中首地址（<code>0x00000000</code>）及其下一个地址（<code>0x00000004</code>）有着绝对固定的意义，是绝对的核心。</p>
+</li>
+<li>
+<p>第一个软件程序通过复位中断服务函数得到执行。</p>
+</li>
+</ol>
+<h3 id="42-从rom启动"><a class="markdownIt-Anchor" href="#42-从rom启动"></a> 4.2. 从ROM启动</h3>
+<p>与从主flash启动的流程基本相似。只不过通过复位中断函数执行的代码变成了ROM中固化好的bootloader代码。</p>
+<p>这段bootloader程序会初始化芯片上的串口（比如 STM32 默认是 USART1）。然后进入一个死循环，安静地监听串口，等待上位机（如STM32CubeProgrammer）发来特定的握手指令。一旦握手成功，上位机通过串口把你的 <code>.bin</code> 文件发过来，这段 ROM 里的程序就会接收这些数据，并帮你把它们写入到<strong>主 Flash</strong> 中。然后你再重新从主flash启动。</p>
+<p>有些时候我们不小心把 SWD/JTAG 调试引脚给复用成了普通 GPIO，导致仿真器连不上，在这样的情况下，我们就无法下载程序到flash里了，也就是芯片被锁住了，或者叫”变砖了“，此时我们就可以靠从ROM启动，重新烧录代码，实现救砖。</p>
+<h2 id="5-ota升级的本质"><a class="markdownIt-Anchor" href="#5-ota升级的本质"></a> 5. OTA升级的本质</h2>
+<p>OTA升级的本质就是，从网络上下载固件到flash的指定位置，并把旧固件替换为新固件的过程。</p>
+<p>这之中有两个问题——</p>
+<ol>
+<li>位置如何指定？怎么保证我不会访问到不该访问的地方，比如存放text段的地方？</li>
+<li>把旧固件替换成新固件的过程怎么实现？正在运行的旧固件总不可能自己把自己给替换了吧？就好像你不可能自己给自己做换脑手术一样。</li>
+</ol>
+<p>解决第一个问题，我们引入了flash分区机制，把flash划分为多个区，并给每个区指定合适的大小，这样它们的地址也就固定了。哪个区，做什么事，也就明明白白，且不会越界访问。一种极简且稳妥的划分方式是：</p>
+<ul>
+<li>
+<p><strong>Bootloader 区</strong>：存放在 Flash 的最起始位置（例如前 32KB）。</p>
+</li>
+<li>
+<p><strong>App 区（运行区）</strong>：存放当前正在执行的主程序。</p>
+</li>
+<li>
+<p><strong>Download 区（下载区/备份区）</strong>：用于暂存从网络接收到的新固件。</p>
+</li>
+<li>
+<p><strong>Data 区</strong>：存放升级标志位、设备配置等掉电不可丢失的信息。</p>
+</li>
+</ul>
+<p>这个bootloader，就是为了解决第二个问题而存在的，既然你自己不能给自己做换脑手术，那就找个手术医生来帮你做。我们在前面也提到了在ROM里的bootloader，但它实现不了我们想要的逻辑，也不能编程。</p>
+<h2 id="6-如何使用自定义的bootloader启动"><a class="markdownIt-Anchor" href="#6-如何使用自定义的bootloader启动"></a> 6. 如何使用自定义的bootloader启动？</h2>
+<p>bootloader实际上可以看作是一个独立的工程，拥有一套完整的底层启动代码，自己的程序段全部集中在bootloader区里。</p>
+<p>也就是这样的：</p>
+<ul>
+<li>
+<p>当建立 <strong>Bootloader 工程</strong>时，工程里包含了一个启动文件（如 <code>startup_stm32f411xe.s</code>），里面定义了一个 <code>Reset_Handler</code>。</p>
+</li>
+<li>
+<p>当建立 <strong>App 工程</strong>时，工程里同样包含了一个启动文件，里面也有一个 <code>Reset_Handler</code>。</p>
+</li>
+</ul>
+<p>所以我们的MCU里运行了两套工程，我们先运行bootloader工程，它的作用是<strong>检查与跳转</strong>。 它会读取 Data 区的标志位，判断 Download 区是否有一份校验通过（CRC 或数字签名验证）的新固件。如果有，它就负责擦除 App 区，把新固件搬运过去。如果没有，或者搬运完成，它就要启动 App工程。</p>
+<p><strong>想让MCU上电后启动bootloader工程，很简单，正常把bootloader工程的hex文件烧录进flash不就行了吗。</strong></p>
+<p>那APP工程咋办呢，通过前面说的链接脚本重新在flash中指定一个位置烧录进去啊。如下：</p>
+<p>对于 Bootloader 工程，它占据的是系统上电后的默认位置。它的链接脚本几乎不需要怎么修改，和普通裸机程序一样：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;* Bootloader_Flash.ld 的 MEMORY 区域定义 *&#x2F;
+MEMORY
+&#123;
+  RAM (xrw)      : ORIGIN &#x3D; 0x20000000, LENGTH &#x3D; 128K
+  &#x2F;* Bootloader 独占 Flash 的最前面，假设分配 32KB 的空间 *&#x2F;
+  FLASH (rx)     : ORIGIN &#x3D; 0x08000000, LENGTH &#x3D; 32K  
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对于 App 工程，我们就必须修改链接脚本，让它“挪个窝”。假设我们把 App 放在偏移 32KB（<code>0x08008000</code>）的位置：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;* App_Flash.ld 的 MEMORY 区域定义 *&#x2F;
+MEMORY
+&#123;
+  RAM (xrw)      : ORIGIN &#x3D; 0x20000000, LENGTH &#x3D; 128K
+  &#x2F;* App 的 Flash 起始地址必须向后偏移，让出前 32KB *&#x2F;
+  FLASH (rx)     : ORIGIN &#x3D; 0x08008000, LENGTH &#x3D; 256K &#x2F;* 假设 App 区大小为 256KB *&#x2F;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>由于bootloader鸠占鹊巢把APP的位置霸占了，APP就不能按照正常流程启动，唤醒APP的任务只能落到bootloader身上了。</strong> 仿照第四节的主flash启动原理，我们使用软件模拟出硬件逻辑就好了。</p>
+<ol>
+<li>
+<p><strong>关闭一切干扰,清理现场</strong></p>
+<p>在跳转前，必须全局屏蔽中断（<code>__disable_irq()</code>），关闭所有 Bootloader 中使用过的外设（定时器、串口等），并清除挂起的中断标志。绝对不能让 Bootloader 的中断请求在 App 运行时突然触发，那将是灾难性的 HardFault。</p>
+</li>
+<li>
+<p><strong>重设堆栈指针</strong></p>
+<p>从 App 在 Flash 中的起始地址（例如 <code>APP_ADDRESS</code>）读取出它的栈顶指针，并写入 MSP 寄存器。</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">__set_MSP</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>__IO <span class="token class-name">uint32_t</span><span class="token operator">*</span><span class="token punctuation">)</span> APP_ADDRESS<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>重定位中断向量表 (VTOR)</strong></p>
+<p>这是重中之重。默认情况下，中断向量表的起始基地址是 <code>0x08000000</code> （没错，就是存放MSP的位置，中断向量表又不在基地址放任何东西，所以两者并不冲突，对吧？）。中断发生时，内核会使用起始基地址 <code>0x08000000</code> +偏移的方式寻找中断服务函数地址，但 <code>0x08000000</code> 是 Bootloader 的地盘。我们必须修改系统控制块（SCB）中的向量表偏移寄存器（VTOR），指定新的中断向量表的起始基地址。</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c">SCB<span class="token operator">-></span>VTOR <span class="token operator">=</span> APP_ADDRESS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>启动App工程</strong></p>
+<p>读取 <code>APP_ADDRESS + 4</code> 的内容（即 App 的 <code>Reset_Handler</code> 地址），将其转换为函数指针，然后调用它。</p>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">uint32_t</span> app_entry <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>__IO <span class="token class-name">uint32_t</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>APP_ADDRESS <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>app_reset_handler<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">)</span>app_entry<span class="token punctuation">;</span>
+<span class="token function">app_reset_handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 魔丸降世</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<h2 id="7-实现一个简单的ota升级项目"><a class="markdownIt-Anchor" href="#7-实现一个简单的ota升级项目"></a> 7. 实现一个简单的OTA升级项目</h2>
+<p>本文我们简单概述了OTA的实现原理，至于OTA的具体实现和开发流程，请听下回分解。</p>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约3.5k字。于2026/04/28首次发布，最后更新于2026/04/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%83%A7%E5%BD%95%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 1. 烧录的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%93%BE%E6%8E%A5%E5%99%A8%E8%84%9A%E6%9C%AC"><span class="toc-text"> 2. 链接器脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-stm32%E7%9A%84boot%E5%BC%95%E8%84%9A%E6%A6%82%E8%BF%B0"><span class="toc-text"> 3. STM32的boot引脚概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-boot-%E5%BC%95%E8%84%9A%E7%AE%80%E4%BB%8B"><span class="toc-text"> 3.1. boot 引脚简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B8%B8%E8%A7%81%E7%9A%84-boot-%E5%BC%95%E8%84%9A%E7%94%B5%E5%B9%B3%E7%BB%84%E5%90%88"><span class="toc-text"> 3.2. 常见的 Boot 引脚电平组合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-stm32%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="toc-text"> 4. STM32启动流程概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BB%8E%E4%B8%BBflash%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.1. 从主flash启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BB%8Erom%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.2. 从ROM启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-ota%E5%8D%87%E7%BA%A7%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 5. OTA升级的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84bootloader%E5%90%AF%E5%8A%A8"><span class="toc-text"> 6. 如何使用自定义的bootloader启动？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84ota%E5%8D%87%E7%BA%A7%E9%A1%B9%E7%9B%AE"><span class="toc-text"> 7. 实现一个简单的OTA升级项目</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <style>
+
+/* ==========================================
+ * Retro Footer & 88x31 Badges
+ * ==========================================
+ */
+
+.retro-footer {
+    background-color: #f1E5C9;
+    padding: 20px 0;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    color: #000;
+    margin-top: 50px;
+}
+
+/* 复古 3D 分割线 */
+.retro-hr {
+    border: 0;
+    height: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+    margin-bottom: 20px;
+}
+
+/* 徽章容器 */
+.badge-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* 88x31 像素徽章通用样式 */
+.badge-88x31 {
+    width: 88px;
+    height: 31px;
+    border: 2px outset #FFFFFF;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 9px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.badge-88x31 .top {
+    height: 12px;
+    line-height: 12px;
+    background: #000;
+    color: #FFF;
+    text-align: center;
+}
+
+.badge-88x31 .bottom {
+    flex-grow: 1;
+    line-height: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.counter-box {
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 5px;
+    background-color: #000;
+    border: 2px inset #808080;
+}
+
+.counter-label {
+    color: #C0C0C0;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.counter-digits {
+    color: #00FF00; /* 荧光绿 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 具体徽章配色 */
+/*
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #FFD700; color: #000; }
+
+.badge-soc { border-color: #808080; }
+.badge-soc .bottom { background: #000080; color: #FFF; }
+
+.badge-notepad { border-color: #808080; }
+.badge-notepad .bottom { background: #FFF; color: #000; }
+
+.badge-valid { border-color: #808080; }
+.badge-valid .bottom { background: #008000; color: #FFF; }
+*/
+
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #0E83CD; color: #FFFFFF; }
+
+.badge-github { border-color: #808080; }
+.badge-github .bottom { background: #24292E; color: #FFFFFF; }
+
+.badge-design { border-color: #808080; }
+.badge-design .bottom { background: #FFD700; color: #000; }
+
+/* 版权信息 */
+.footer-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+</style>
+<footer class="retro-footer">
+    <hr class="retro-hr">
+
+    <div class="badge-container">
+        <div class="badge-88x31 badge-hexo">
+            <span class="top">POWERED BY</span>
+            <span class="bottom">HEXO</span>
+        </div>
+        <div class="badge-88x31 badge-github">
+            <span class="top">HOSTED ON</span>
+            <span class="bottom">GITHUB</span>
+        </div>
+        <div class="badge-88x31 badge-design">
+            <span class="top">DESIGNED BY</span>
+            <span class="bottom">GODM@</span>
+        </div>
+    </div>
+
+    <div class="counter-box">
+        <span class="counter-label">WORD COUNT:</span>
+        <span class="counter-digits">175.1k</span>
+    </div>
+
+    <div class="footer-info">
+        <p>Copyright &copy; 2025-2026 GoDm@'s Blog</p>
+    </div>
+
+
+
+</footer>
+</html>
+
