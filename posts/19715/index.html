@@ -287,9 +287,8 @@
 </li>
 </ul>
 <p>所以我们的MCU里运行了两套工程，我们先运行bootloader工程，它的作用是<strong>检查与跳转</strong>。 它会读取 Data 区的标志位，判断 Download 区是否有一份校验通过（CRC 或数字签名验证）的新固件。如果有，它就负责擦除 App 区，把新固件搬运过去。如果没有，或者搬运完成，它就要启动 App工程。</p>
-<p><strong>想让MCU上电后启动bootloader工程，很简单，正常把bootloader工程的hex文件烧录进flash不就行了吗。</strong></p>
-<p>那APP工程咋办呢，通过前面说的链接脚本重新在flash中指定一个位置烧录进去啊。如下：</p>
-<p>对于 Bootloader 工程，它占据的是系统上电后的默认位置。它的链接脚本几乎不需要怎么修改，和普通裸机程序一样：</p>
+<p><strong>我们可以利用链接脚本将两套工程指定位置烧录进flash并实现共存。</strong> 如下：</p>
+<p>对于 Bootloader 工程，它占据的是系统上电后的默认位置。它的链接脚本几乎不需要怎么修改，只需修改分配的flash空间，和普通裸机程序一样：</p>
 <pre class="line-numbers language-none"><code class="language-none">&#x2F;* Bootloader_Flash.ld 的 MEMORY 区域定义 *&#x2F;
 MEMORY
 &#123;
@@ -309,33 +308,78 @@ MEMORY
 <ol>
 <li>
 <p><strong>关闭一切干扰,清理现场</strong></p>
-<p>在跳转前，必须全局屏蔽中断（<code>__disable_irq()</code>），关闭所有 Bootloader 中使用过的外设（定时器、串口等），并清除挂起的中断标志。绝对不能让 Bootloader 的中断请求在 App 运行时突然触发，那将是灾难性的 HardFault。</p>
+<p>在跳转前，必须全局屏蔽中断（<code>__disable_irq()</code>），关闭所有 Bootloader 中使用过的外设（定时器、串口等），并清除挂起的中断标志。绝对不能让 Bootloader 的中断请求在 App 运行时突然触发。再提一嘴，除了关闭外设，最好再清理 NVIC 的中断使能寄存器和中断挂起寄存器（可以通过将ICER和ICPR置1清除这两个寄存器。）以避免App重新开启中断时bootloader工程的中断状态给继承了。</p>
 </li>
 <li>
 <p><strong>重设堆栈指针</strong></p>
 <p>从 App 在 Flash 中的起始地址（例如 <code>APP_ADDRESS</code>）读取出它的栈顶指针，并写入 MSP 寄存器。</p>
- <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">__set_MSP</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>__IO <span class="token class-name">uint32_t</span><span class="token operator">*</span><span class="token punctuation">)</span> APP_ADDRESS<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+ <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">__set_CONTROL</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//保持特权模式</span>
+<span class="token function">__set_MSP</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>__IO <span class="token class-name">uint32_t</span><span class="token operator">*</span><span class="token punctuation">)</span> APP_ADDRESS<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 </li>
 <li>
 <p><strong>重定位中断向量表 (VTOR)</strong></p>
-<p>这是重中之重。默认情况下，中断向量表的起始基地址是 <code>0x08000000</code> （没错，就是存放MSP的位置，中断向量表又不在基地址放任何东西，所以两者并不冲突，对吧？）。中断发生时，内核会使用起始基地址 <code>0x08000000</code> +偏移的方式寻找中断服务函数地址，但 <code>0x08000000</code> 是 Bootloader 的地盘。我们必须修改系统控制块（SCB）中的向量表偏移寄存器（VTOR），指定新的中断向量表的起始基地址。</p>
+<p>这是重中之重。默认情况下，中断向量表的起始基地址是 <code>0x08000000</code> （没错，就是存放MSP的位置，MSP就是中断向量表的一部分）。中断发生时，内核会使用起始基地址 <code>0x08000000</code> +偏移的方式寻找中断服务函数地址，但 <code>0x08000000</code> 是 Bootloader 的地盘。我们必须修改系统控制块（SCB）中的向量表偏移寄存器（VTOR），指定新的中断向量表的起始基地址。</p>
  <pre class="line-numbers language-c" data-language="c"><code class="language-c">SCB<span class="token operator">-></span>VTOR <span class="token operator">=</span> APP_ADDRESS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 </li>
 <li>
 <p><strong>启动App工程</strong></p>
-<p>读取 <code>APP_ADDRESS + 4</code> 的内容（即 App 的 <code>Reset_Handler</code> 地址），将其转换为函数指针，然后调用它。</p>
+<p>读取 <code>APP_ADDRESS + 4</code> 的内容（即 App 的 <code>Reset_Handler</code> 地址），将其转换为函数指针，然后调用它。<strong>同时注意在App里重新使能中断。</strong></p>
  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token class-name">uint32_t</span> app_entry <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>__IO <span class="token class-name">uint32_t</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>APP_ADDRESS <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>app_reset_handler<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">)</span>app_entry<span class="token punctuation">;</span>
 <span class="token function">app_reset_handler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 魔丸降世</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 </li>
 </ol>
-<h2 id="7-实现一个简单的ota升级项目"><a class="markdownIt-Anchor" href="#7-实现一个简单的ota升级项目"></a> 7. 实现一个简单的OTA升级项目</h2>
+<h2 id="7-传输固件到stm32的通信方案选择"><a class="markdownIt-Anchor" href="#7-传输固件到stm32的通信方案选择"></a> 7. 传输固件到STM32的通信方案选择</h2>
+<p>直觉上，我们平时用各种 Wi-Fi 模块或者 4G/Cat.1 模块，大部分都是通过 AT 指令，也就是串口（UART）来和主控通信的。但是并不一定都用串口。到底用什么接口将网络数据送进 STM32，取决于<strong>网络芯片的类型、数据吞吐量需求，以及 STM32 本身的外设资源</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>通信方案</th>
+<th>优点</th>
+<th>缺点</th>
+<th>常见芯片</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UART</td>
+<td>通用、省事、简单</td>
+<td>慢</td>
+<td>ESP8266</td>
+</tr>
+<tr>
+<td>SPI</td>
+<td>快</td>
+<td></td>
+<td>ESP32（SPI slave）</td>
+</tr>
+<tr>
+<td>SDIO</td>
+<td>极快、可多线并行传输</td>
+<td>底层驱动复杂</td>
+<td>一些高性能的 Wi-Fi/蓝牙芯片，比如 AP6212。</td>
+</tr>
+<tr>
+<td>CAN</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>PHY芯片+自带以太网MAC层的STM32</td>
+<td>无需专门的网络芯片、直接内存访问</td>
+<td></td>
+<td>LAN8720</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-实现一个简单的ota升级项目"><a class="markdownIt-Anchor" href="#8-实现一个简单的ota升级项目"></a> 8. 实现一个简单的OTA升级项目</h2>
 <p>本文我们简单概述了OTA的实现原理，至于OTA的具体实现和开发流程，请听下回分解。</p>
 
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约3.5k字。于2026/04/28首次发布，最后更新于2026/04/28。 </p>
+<p>共计约3.7k字。于2026/04/28首次发布，最后更新于2026/05/04。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -369,7 +413,7 @@ MEMORY
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%83%A7%E5%BD%95%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 1. 烧录的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%93%BE%E6%8E%A5%E5%99%A8%E8%84%9A%E6%9C%AC"><span class="toc-text"> 2. 链接器脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-stm32%E7%9A%84boot%E5%BC%95%E8%84%9A%E6%A6%82%E8%BF%B0"><span class="toc-text"> 3. STM32的boot引脚概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-boot-%E5%BC%95%E8%84%9A%E7%AE%80%E4%BB%8B"><span class="toc-text"> 3.1. boot 引脚简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B8%B8%E8%A7%81%E7%9A%84-boot-%E5%BC%95%E8%84%9A%E7%94%B5%E5%B9%B3%E7%BB%84%E5%90%88"><span class="toc-text"> 3.2. 常见的 Boot 引脚电平组合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-stm32%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="toc-text"> 4. STM32启动流程概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BB%8E%E4%B8%BBflash%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.1. 从主flash启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BB%8Erom%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.2. 从ROM启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-ota%E5%8D%87%E7%BA%A7%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 5. OTA升级的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84bootloader%E5%90%AF%E5%8A%A8"><span class="toc-text"> 6. 如何使用自定义的bootloader启动？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84ota%E5%8D%87%E7%BA%A7%E9%A1%B9%E7%9B%AE"><span class="toc-text"> 7. 实现一个简单的OTA升级项目</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%83%A7%E5%BD%95%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 1. 烧录的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%93%BE%E6%8E%A5%E5%99%A8%E8%84%9A%E6%9C%AC"><span class="toc-text"> 2. 链接器脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-stm32%E7%9A%84boot%E5%BC%95%E8%84%9A%E6%A6%82%E8%BF%B0"><span class="toc-text"> 3. STM32的boot引脚概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-boot-%E5%BC%95%E8%84%9A%E7%AE%80%E4%BB%8B"><span class="toc-text"> 3.1. boot 引脚简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%B8%B8%E8%A7%81%E7%9A%84-boot-%E5%BC%95%E8%84%9A%E7%94%B5%E5%B9%B3%E7%BB%84%E5%90%88"><span class="toc-text"> 3.2. 常见的 Boot 引脚电平组合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-stm32%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="toc-text"> 4. STM32启动流程概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E4%BB%8E%E4%B8%BBflash%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.1. 从主flash启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E4%BB%8Erom%E5%90%AF%E5%8A%A8"><span class="toc-text"> 4.2. 从ROM启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-ota%E5%8D%87%E7%BA%A7%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text"> 5. OTA升级的本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84bootloader%E5%90%AF%E5%8A%A8"><span class="toc-text"> 6. 如何使用自定义的bootloader启动？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E4%BC%A0%E8%BE%93%E5%9B%BA%E4%BB%B6%E5%88%B0stm32%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="toc-text"> 7. 传输固件到STM32的通信方案选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84ota%E5%8D%87%E7%BA%A7%E9%A1%B9%E7%9B%AE"><span class="toc-text"> 8. 实现一个简单的OTA升级项目</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -422,7 +466,7 @@ MEMORY
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1],["2026-05-06",1],["2026-05-08",1],["2026-05-17",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -541,14 +585,14 @@ MEMORY
                     monthlyChart.setOption({
                         xAxis: { 
                             type: 'category', 
-                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04"], 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04","2026-05"], 
                             axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
                         },
                         yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8,3],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -677,7 +721,7 @@ MEMORY
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"English","children":[],"count":3,"path":"English"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -862,7 +906,7 @@ MEMORY
 
     <div class="counter-box">
         <span class="counter-label">WORD COUNT:</span>
-        <span class="counter-digits">175.1k</span>
+        <span class="counter-digits">181.7k</span>
     </div>
 
     <div class="footer-info">
