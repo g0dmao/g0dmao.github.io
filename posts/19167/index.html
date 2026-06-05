@@ -20,6 +20,8 @@
 
         <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-coy.min.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" rel="stylesheet" />
+
         <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <!-- hexo injector head_end start --><style>/* 布局样式 */
 .hexo-tips-layout {
@@ -117,7 +119,7 @@
 <hr />
 <p>*<em><strong>AI生成内容</strong></em></p>
 <hr />
-<h2 id="一-前置准备与核心说明"><a class="markdownIt-Anchor" href="#一-前置准备与核心说明"></a> 一、前置准备与核心说明</h2>
+<h2 id="1-一-前置准备与核心说明"><a class="markdownIt-Anchor" href="#1-一-前置准备与核心说明"></a> 1. 一、前置准备与核心说明</h2>
 <ol>
 <li><strong>环境要求</strong>：已完成ESP-IDF开发环境搭建（优先推荐VS Code + ESP-IDF插件），已创建并正确打开ESP-IDF项目（必须打开包含顶层<code>CMakeLists.txt</code>和<code>main</code>文件夹的项目根目录）。</li>
 <li><strong>核心特性</strong>
@@ -128,15 +130,15 @@
 </ul>
 </li>
 </ol>
-<h2 id="二-vs-code环境-打开配置编辑器主流图形化方式"><a class="markdownIt-Anchor" href="#二-vs-code环境-打开配置编辑器主流图形化方式"></a> 二、VS Code环境 打开配置编辑器（主流图形化方式）</h2>
+<h2 id="2-二-vs-code环境-打开配置编辑器主流图形化方式"><a class="markdownIt-Anchor" href="#2-二-vs-code环境-打开配置编辑器主流图形化方式"></a> 2. 二、VS Code环境 打开配置编辑器（主流图形化方式）</h2>
 <p>提供3种稳定打开方式，新手优先使用命令面板方式：</p>
 <ol>
 <li><strong>方式1：命令面板（通用无差异）</strong> 按下<code>Ctrl+Shift+P</code>（Windows/Linux）/<code>Cmd+Shift+P</code>（Mac）调出命令面板，输入<code>ESP-IDF: SDK Configuration Editor</code>，选中并回车，等待几秒加载完成（首次加载会解析项目Kconfig配置文件）。</li>
 <li><strong>方式2：左侧ESP-IDF面板</strong> 点击VS Code左侧活动栏的乐鑫ESP-IDF图标，打开插件面板，在顶部区域找到「SDK Configuration Editor」选项，点击即可打开。</li>
 <li><strong>方式3：底部状态栏快捷入口</strong> 查看VS Code底部状态栏，找到ESP-IDF区域的<strong>齿轮图标（SDK Config）</strong>，点击一键打开。</li>
 </ol>
-<h2 id="三-编辑器界面结构与基础操作"><a class="markdownIt-Anchor" href="#三-编辑器界面结构与基础操作"></a> 三、编辑器界面结构与基础操作</h2>
-<h3 id="31-核心界面布局"><a class="markdownIt-Anchor" href="#31-核心界面布局"></a> 3.1 核心界面布局</h3>
+<h2 id="3-三-编辑器界面结构与基础操作"><a class="markdownIt-Anchor" href="#3-三-编辑器界面结构与基础操作"></a> 3. 三、编辑器界面结构与基础操作</h2>
+<h3 id="31-核心界面布局"><a class="markdownIt-Anchor" href="#31-核心界面布局"></a> 3.1. 核心界面布局</h3>
 <table>
 <thead>
 <tr>
@@ -163,15 +165,15 @@
 </tr>
 </tbody>
 </table>
-<h3 id="32-基础操作规则"><a class="markdownIt-Anchor" href="#32-基础操作规则"></a> 3.2 基础操作规则</h3>
+<h3 id="32-基础操作规则"><a class="markdownIt-Anchor" href="#32-基础操作规则"></a> 3.2. 基础操作规则</h3>
 <ul>
 <li>复选框：勾选=启用功能（对应宏设为<code>y</code>），取消勾选=禁用（对应宏设为<code>n</code>）。</li>
 <li>下拉框：点击展开可选值，选择与硬件/需求匹配的参数（如Flash大小、CPU主频）。</li>
 <li>输入框：直接输入数值（如栈大小、波特率）或字符串（如自定义分区表路径）。</li>
 <li>帮助查看：鼠标悬停在配置项上，会弹出官方完整说明，包含功能、取值范围、依赖关系、注意事项。</li>
 </ul>
-<h2 id="四-核心高频配置项-分步详解新手必配"><a class="markdownIt-Anchor" href="#四-核心高频配置项-分步详解新手必配"></a> 四、核心高频配置项 分步详解（新手必配）</h2>
-<h3 id="41-基础硬件与烧录配置serial-flasher-config"><a class="markdownIt-Anchor" href="#41-基础硬件与烧录配置serial-flasher-config"></a> 4.1 基础硬件与烧录配置（Serial flasher config）</h3>
+<h2 id="4-四-核心高频配置项-分步详解新手必配"><a class="markdownIt-Anchor" href="#4-四-核心高频配置项-分步详解新手必配"></a> 4. 四、核心高频配置项 分步详解（新手必配）</h2>
+<h3 id="41-基础硬件与烧录配置serial-flasher-config"><a class="markdownIt-Anchor" href="#41-基础硬件与烧录配置serial-flasher-config"></a> 4.1. 基础硬件与烧录配置（Serial flasher config）</h3>
 <p>项目创建后首个必须核对的配置，直接决定烧录成功率和芯片启动稳定性。</p>
 <ul>
 <li>
@@ -193,7 +195,7 @@
 <p><strong>Monitor baud rate</strong>：串口监视器波特率，必须与代码中UART日志输出波特率一致，行业通用默认值115200。</p>
 </li>
 </ul>
-<h3 id="42-分区表配置partition-table"><a class="markdownIt-Anchor" href="#42-分区表配置partition-table"></a> 4.2 分区表配置（Partition Table）</h3>
+<h3 id="42-分区表配置partition-table"><a class="markdownIt-Anchor" href="#42-分区表配置partition-table"></a> 4.2. 分区表配置（Partition Table）</h3>
 <p>决定Flash空间的分配规则，直接影响固件、OTA、数据存储的可用空间。</p>
 <ul>
 <li>
@@ -214,7 +216,7 @@
 </ol>
 </li>
 </ul>
-<h3 id="43-系统核心设置esp-system-settings"><a class="markdownIt-Anchor" href="#43-系统核心设置esp-system-settings"></a> 4.3 系统核心设置（ESP System Settings）</h3>
+<h3 id="43-系统核心设置esp-system-settings"><a class="markdownIt-Anchor" href="#43-系统核心设置esp-system-settings"></a> 4.3. 系统核心设置（ESP System Settings）</h3>
 <p>芯片运行的核心参数，直接影响性能、功耗、内存管理。</p>
 <ul>
 <li><strong>CPU frequency</strong>：CPU主频，ESP32系列默认240MHz（最高性能），可选择160MHz/80MHz，降低主频可显著降低功耗，适合低功耗电池项目。</li>
@@ -223,15 +225,15 @@
 <li><strong>Main task stack size</strong>：主任务（app_main）栈大小，默认8192字节，若主任务中使用大数组、深度递归、复杂函数调用，出现栈溢出报错时，需调大该值。</li>
 <li><strong>SPIRAM 相关配置</strong>：若开发板带外部PSRAM（如ESP32-WROVER系列），必须开启「Enable SPI RAM support」，否则无法使用外部内存；同时可配置WiFi/LWIP优先从PSRAM分配内存，缓解内部RAM压力。</li>
 </ul>
-<h3 id="44-引导程序配置bootloader-config"><a class="markdownIt-Anchor" href="#44-引导程序配置bootloader-config"></a> 4.4 引导程序配置（Bootloader config）</h3>
+<h3 id="44-引导程序配置bootloader-config"><a class="markdownIt-Anchor" href="#44-引导程序配置bootloader-config"></a> 4.4. 引导程序配置（Bootloader config）</h3>
 <p>芯片启动引导相关设置，新手仅需关注基础日志配置，安全加密相关量产时再配置。</p>
 <ul>
 <li><strong>Bootloader log verbosity</strong>：Bootloader日志级别，默认Info，调试启动问题时改为Debug，发布产品时改为Warning/Error，减少日志输出，加快启动速度。</li>
 <li><strong>Bootloader optimized for</strong>：优化方向，默认平衡模式，可选择<code>Size</code>（减小Bootloader体积）或<code>Speed</code>（加快启动速度）。</li>
 </ul>
-<h3 id="45-组件配置component-config"><a class="markdownIt-Anchor" href="#45-组件配置component-config"></a> 4.5 组件配置（Component config）</h3>
+<h3 id="45-组件配置component-config"><a class="markdownIt-Anchor" href="#45-组件配置component-config"></a> 4.5. 组件配置（Component config）</h3>
 <p>ESP-IDF最核心的配置分类，包含所有内置组件的功能开关、参数配置，几乎所有外设、协议栈、中间件的配置都在这里。</p>
-<h4 id="451-freertos-配置"><a class="markdownIt-Anchor" href="#451-freertos-配置"></a> 4.5.1 FreeRTOS 配置</h4>
+<h4 id="451-freertos-配置"><a class="markdownIt-Anchor" href="#451-freertos-配置"></a> 4.5.1. FreeRTOS 配置</h4>
 <p>路径：Component config → FreeRTOS</p>
 <ul>
 <li><strong>Idle task stack size</strong>：空闲任务栈大小，出现空闲任务栈溢出报错时调大。</li>
@@ -239,7 +241,7 @@
 <li><strong>Use vTaskTicklessIdle for low power</strong>：低功耗Tickless空闲模式，电池供电的低功耗项目必须开启，可大幅降低待机功耗。</li>
 <li><strong>Stack overflow check</strong>：栈溢出检测，调试阶段建议开启，可快速定位栈溢出的问题代码。</li>
 </ul>
-<h4 id="452-日志输出配置"><a class="markdownIt-Anchor" href="#452-日志输出配置"></a> 4.5.2 日志输出配置</h4>
+<h4 id="452-日志输出配置"><a class="markdownIt-Anchor" href="#452-日志输出配置"></a> 4.5.2. 日志输出配置</h4>
 <p>路径：Component config → Log output</p>
 <ul>
 <li><strong>Default log verbosity</strong>：全局默认日志级别，从低到高为：Error &lt; Warning &lt; Info &lt; Debug &lt; Verbose。
@@ -251,7 +253,7 @@
 <li><strong>Maximum log verbosity</strong>：编译进固件的最大日志级别，低于该级别的日志不会被编译进固件，发布版设为Info可显著减小固件体积。</li>
 <li><strong>Use ANSI terminal colors in log</strong>：日志彩色输出，默认开启，串口监视器中不同级别日志用颜色区分，可读性更强。</li>
 </ul>
-<h4 id="453-wifi-配置"><a class="markdownIt-Anchor" href="#453-wifi-配置"></a> 4.5.3 WiFi 配置</h4>
+<h4 id="453-wifi-配置"><a class="markdownIt-Anchor" href="#453-wifi-配置"></a> 4.5.3. WiFi 配置</h4>
 <p>路径：Component config → Wi-Fi</p>
 <ul>
 <li><strong>WiFi log verbosity</strong>：WiFi模块日志级别，调试WiFi连接、断连问题时改为Debug。</li>
@@ -259,7 +261,7 @@
 <li><strong>WiFi TX power</strong>：WiFi发射功率，默认20dBm（最大值），低功耗项目可降低功率，减少功耗和干扰。</li>
 <li><strong>WiFi NVS flash</strong>：开启WiFi配置NVS存储，默认开启，开启后可自动保存SSID和密码，重启后无需重新配网。</li>
 </ul>
-<h4 id="454-蓝牙ble-配置"><a class="markdownIt-Anchor" href="#454-蓝牙ble-配置"></a> 4.5.4 蓝牙/BLE 配置</h4>
+<h4 id="454-蓝牙ble-配置"><a class="markdownIt-Anchor" href="#454-蓝牙ble-配置"></a> 4.5.4. 蓝牙/BLE 配置</h4>
 <p>路径：Component config → Bluetooth</p>
 <ul>
 <li>首先勾选「Bluetooth」启用蓝牙功能，然后选择蓝牙模式：BLE（低功耗蓝牙）、Classic Bluetooth（经典蓝牙）、Dual Mode（双模）。</li>
@@ -267,14 +269,14 @@
 <li><strong>BLE MTU size</strong>：BLE最大传输单元，默认23字节，大数据传输时可上调至512字节，提升传输速度。</li>
 <li><strong>BLE Controller stack</strong>：蓝牙协议栈，默认推荐NimBLE（体积小、功耗低，专为BLE优化），也可选择Bluedroid（支持经典蓝牙+BLE双模）。</li>
 </ul>
-<h4 id="455-lwip-网络协议栈配置"><a class="markdownIt-Anchor" href="#455-lwip-网络协议栈配置"></a> 4.5.5 LWIP 网络协议栈配置</h4>
+<h4 id="455-lwip-网络协议栈配置"><a class="markdownIt-Anchor" href="#455-lwip-网络协议栈配置"></a> 4.5.5. LWIP 网络协议栈配置</h4>
 <p>路径：Component config → LWIP 所有TCP/IP、Socket、HTTP、MQTT等网络通信的底层配置，核心项：</p>
 <ul>
 <li><strong>TCP send/receive buffer size</strong>：TCP发送/接收缓冲区大小，大文件传输、高速通信时调大，低内存项目可适当调小。</li>
 <li><strong>TCP maximum segment size (MSS)</strong>：TCP最大报文段长度，默认1460（以太网标准值），非特殊需求不建议修改。</li>
 <li><strong>DHCP client options</strong>：DHCP客户端配置，可调整IP获取超时时间、重试次数，优化弱网环境下的配网成功率。</li>
 </ul>
-<h3 id="46-编译器选项配置compiler-options"><a class="markdownIt-Anchor" href="#46-编译器选项配置compiler-options"></a> 4.6 编译器选项配置（Compiler options）</h3>
+<h3 id="46-编译器选项配置compiler-options"><a class="markdownIt-Anchor" href="#46-编译器选项配置compiler-options"></a> 4.6. 编译器选项配置（Compiler options）</h3>
 <ul>
 <li><strong>Optimization level</strong>：编译器优化等级
 <ul>
@@ -285,8 +287,8 @@
 <li><strong>Enable C++ exceptions</strong>：C<ins>异常支持，默认关闭，使用C</ins>开发且用到try/catch异常机制时必须开启。</li>
 <li><strong>Enable stack smashing protection</strong>：栈溢出保护，调试阶段建议开启，可检测并上报栈溢出问题。</li>
 </ul>
-<h2 id="五-配置的保存-生效与版本管理"><a class="markdownIt-Anchor" href="#五-配置的保存-生效与版本管理"></a> 五、配置的保存、生效与版本管理</h2>
-<h3 id="51-保存配置"><a class="markdownIt-Anchor" href="#51-保存配置"></a> 5.1 保存配置</h3>
+<h2 id="5-五-配置的保存-生效与版本管理"><a class="markdownIt-Anchor" href="#5-五-配置的保存-生效与版本管理"></a> 5. 五、配置的保存、生效与版本管理</h2>
+<h3 id="51-保存配置"><a class="markdownIt-Anchor" href="#51-保存配置"></a> 5.1. 保存配置</h3>
 <ul>
 <li>
 <p>基础保存：修改完成后，点击编辑器右上角/底部的<strong>Save</strong>按钮（软盘图标），编辑器会自动将配置写入项目根目录的<code>sdkconfig</code>文件，同时自动处理配置项的依赖关系。</p>
@@ -298,17 +300,17 @@
 </blockquote>
 </li>
 </ul>
-<h3 id="52-配置生效规则"><a class="markdownIt-Anchor" href="#52-配置生效规则"></a> 5.2 配置生效规则</h3>
+<h3 id="52-配置生效规则"><a class="markdownIt-Anchor" href="#52-配置生效规则"></a> 5.2. 配置生效规则</h3>
 <ul>
 <li>普通配置修改：保存后，<strong>必须重新编译项目</strong>，配置才会生效（配置宏在编译阶段被处理）。</li>
 <li>特殊配置修改（分区表、Bootloader、Flash核心参数）：保存后，必须先执行<code>Full Clean</code>全量清理，再全量编译，最后全量烧录（包含Bootloader、分区表、app固件），否则配置不生效，甚至导致芯片无法启动。</li>
 </ul>
-<h3 id="53-配置重置"><a class="markdownIt-Anchor" href="#53-配置重置"></a> 5.3 配置重置</h3>
+<h3 id="53-配置重置"><a class="markdownIt-Anchor" href="#53-配置重置"></a> 5.3. 配置重置</h3>
 <ul>
 <li>若配置混乱，点击编辑器的<strong>Reset</strong>按钮，一键恢复当前ESP-IDF版本对应芯片的出厂默认配置。</li>
 <li>也可直接删除项目根目录的<code>sdkconfig</code>文件，重新打开编辑器，会自动生成全新的默认配置文件。</li>
 </ul>
-<h2 id="六-命令行配置方式idfpy-menuconfig全环境兼容"><a class="markdownIt-Anchor" href="#六-命令行配置方式idfpy-menuconfig全环境兼容"></a> 六、命令行配置方式（<a target="_blank" rel="noopener" href="http://idf.py">idf.py</a> menuconfig，全环境兼容）</h2>
+<h2 id="6-六-命令行配置方式idfpy-menuconfig全环境兼容"><a class="markdownIt-Anchor" href="#6-六-命令行配置方式idfpy-menuconfig全环境兼容"></a> 6. 六、命令行配置方式（<a target="_blank" rel="noopener" href="http://idf.py">idf.py</a> menuconfig，全环境兼容）</h2>
 <p>若不使用VS Code，或在Linux/服务器环境开发，可使用官方原生字符界面配置工具，与图形化编辑器的配置项完全一致，底层共用同一套Kconfig系统。</p>
 <ol>
 <li>
@@ -363,7 +365,7 @@
 <p>保存与生效：按S键保存配置，回车确认，按Q退出后，重新编译项目即可生效，规则与图形化完全一致。</p>
 </li>
 </ol>
-<h2 id="七-常见问题与排查方案"><a class="markdownIt-Anchor" href="#七-常见问题与排查方案"></a> 七、常见问题与排查方案</h2>
+<h2 id="7-七-常见问题与排查方案"><a class="markdownIt-Anchor" href="#7-七-常见问题与排查方案"></a> 7. 七、常见问题与排查方案</h2>
 <ol>
 <li>
 <p><strong>编辑器一直加载，无法打开</strong></p>
@@ -393,7 +395,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="八-代码中使用配置的示例"><a class="markdownIt-Anchor" href="#八-代码中使用配置的示例"></a> 八、代码中使用配置的示例</h2>
+<h2 id="8-八-代码中使用配置的示例"><a class="markdownIt-Anchor" href="#8-八-代码中使用配置的示例"></a> 8. 八、代码中使用配置的示例</h2>
 <p>所有配置项都会生成对应的<code>CONFIG_</code>宏，可直接在代码中调用，实现配置与代码联动：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"sdkconfig.h"</span></span>
@@ -414,7 +416,7 @@
         <hr style="margin: 50px; background: #111111">
 
 <div class="meta" style="text-align: end; font-size: small;">
-<p>共计约3.6k字。于2026/04/05首次发布，最后更新于2026/04/08。 </p>
+<p>共计约3.6k字。于2026/04/05首次发布，最后更新于2026/05/25。 </p>
 
     <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
 
@@ -448,7 +450,7 @@
 </style>
 
 <div id="bar">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E4%B8%8E%E6%A0%B8%E5%BF%83%E8%AF%B4%E6%98%8E"><span class="toc-text"> 一、前置准备与核心说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-vs-code%E7%8E%AF%E5%A2%83-%E6%89%93%E5%BC%80%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%BB%E6%B5%81%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text"> 二、VS Code环境 打开配置编辑器（主流图形化方式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89-%E7%BC%96%E8%BE%91%E5%99%A8%E7%95%8C%E9%9D%A2%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-text"> 三、编辑器界面结构与基础操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%A0%B8%E5%BF%83%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"><span class="toc-text"> 3.1 核心界面布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C%E8%A7%84%E5%88%99"><span class="toc-text"> 3.2 基础操作规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-%E6%A0%B8%E5%BF%83%E9%AB%98%E9%A2%91%E9%85%8D%E7%BD%AE%E9%A1%B9-%E5%88%86%E6%AD%A5%E8%AF%A6%E8%A7%A3%E6%96%B0%E6%89%8B%E5%BF%85%E9%85%8D"><span class="toc-text"> 四、核心高频配置项 分步详解（新手必配）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%9F%BA%E7%A1%80%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%83%A7%E5%BD%95%E9%85%8D%E7%BD%AEserial-flasher-config"><span class="toc-text"> 4.1 基础硬件与烧录配置（Serial flasher config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%88%86%E5%8C%BA%E8%A1%A8%E9%85%8D%E7%BD%AEpartition-table"><span class="toc-text"> 4.2 分区表配置（Partition Table）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%B3%BB%E7%BB%9F%E6%A0%B8%E5%BF%83%E8%AE%BE%E7%BD%AEesp-system-settings"><span class="toc-text"> 4.3 系统核心设置（ESP System Settings）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AEbootloader-config"><span class="toc-text"> 4.4 引导程序配置（Bootloader config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E7%BB%84%E4%BB%B6%E9%85%8D%E7%BD%AEcomponent-config"><span class="toc-text"> 4.5 组件配置（Component config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9%E9%85%8D%E7%BD%AEcompiler-options"><span class="toc-text"> 4.6 编译器选项配置（Compiler options）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BF%9D%E5%AD%98-%E7%94%9F%E6%95%88%E4%B8%8E%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-text"> 五、配置的保存、生效与版本管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-text"> 5.1 保存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88%E8%A7%84%E5%88%99"><span class="toc-text"> 5.2 配置生效规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E9%85%8D%E7%BD%AE%E9%87%8D%E7%BD%AE"><span class="toc-text"> 5.3 配置重置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8Fidfpy-menuconfig%E5%85%A8%E7%8E%AF%E5%A2%83%E5%85%BC%E5%AE%B9"><span class="toc-text"> 六、命令行配置方式（idf.py menuconfig，全环境兼容）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8E%92%E6%9F%A5%E6%96%B9%E6%A1%88"><span class="toc-text"> 七、常见问题与排查方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB-%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 八、代码中使用配置的示例</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%80-%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E4%B8%8E%E6%A0%B8%E5%BF%83%E8%AF%B4%E6%98%8E"><span class="toc-text"> 1. 一、前置准备与核心说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BA%8C-vs-code%E7%8E%AF%E5%A2%83-%E6%89%93%E5%BC%80%E9%85%8D%E7%BD%AE%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%BB%E6%B5%81%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text"> 2. 二、VS Code环境 打开配置编辑器（主流图形化方式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%89-%E7%BC%96%E8%BE%91%E5%99%A8%E7%95%8C%E9%9D%A2%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C"><span class="toc-text"> 3. 三、编辑器界面结构与基础操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%A0%B8%E5%BF%83%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"><span class="toc-text"> 3.1. 核心界面布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C%E8%A7%84%E5%88%99"><span class="toc-text"> 3.2. 基础操作规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9B%9B-%E6%A0%B8%E5%BF%83%E9%AB%98%E9%A2%91%E9%85%8D%E7%BD%AE%E9%A1%B9-%E5%88%86%E6%AD%A5%E8%AF%A6%E8%A7%A3%E6%96%B0%E6%89%8B%E5%BF%85%E9%85%8D"><span class="toc-text"> 4. 四、核心高频配置项 分步详解（新手必配）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%9F%BA%E7%A1%80%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%83%A7%E5%BD%95%E9%85%8D%E7%BD%AEserial-flasher-config"><span class="toc-text"> 4.1. 基础硬件与烧录配置（Serial flasher config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%88%86%E5%8C%BA%E8%A1%A8%E9%85%8D%E7%BD%AEpartition-table"><span class="toc-text"> 4.2. 分区表配置（Partition Table）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%B3%BB%E7%BB%9F%E6%A0%B8%E5%BF%83%E8%AE%BE%E7%BD%AEesp-system-settings"><span class="toc-text"> 4.3. 系统核心设置（ESP System Settings）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#44-%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AEbootloader-config"><span class="toc-text"> 4.4. 引导程序配置（Bootloader config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#45-%E7%BB%84%E4%BB%B6%E9%85%8D%E7%BD%AEcomponent-config"><span class="toc-text"> 4.5. 组件配置（Component config）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#46-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9%E9%85%8D%E7%BD%AEcompiler-options"><span class="toc-text"> 4.6. 编译器选项配置（Compiler options）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BA%94-%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BF%9D%E5%AD%98-%E7%94%9F%E6%95%88%E4%B8%8E%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-text"> 5. 五、配置的保存、生效与版本管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="toc-text"> 5.1. 保存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88%E8%A7%84%E5%88%99"><span class="toc-text"> 5.2. 配置生效规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#53-%E9%85%8D%E7%BD%AE%E9%87%8D%E7%BD%AE"><span class="toc-text"> 5.3. 配置重置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%85%AD-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8Fidfpy-menuconfig%E5%85%A8%E7%8E%AF%E5%A2%83%E5%85%BC%E5%AE%B9"><span class="toc-text"> 6. 六、命令行配置方式（idf.py menuconfig，全环境兼容）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E4%B8%83-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8E%92%E6%9F%A5%E6%96%B9%E6%A1%88"><span class="toc-text"> 7. 七、常见问题与排查方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%85%AB-%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-text"> 8. 八、代码中使用配置的示例</span></a></li></ol>
     <br>
     <div style="text-align: center;width: 200px;">
         <a href="/" style="text-decoration: none;">
@@ -501,7 +503,7 @@
                         return result;
                     };
 
-                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1],["2026-05-06",1],["2026-05-08",1],["2026-05-17",1]]);
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1],["2026-05-06",1],["2026-05-08",1],["2026-05-17",1],["2026-05-24",1],["2026-05-25",1],["2026-05-27",1],["2026-05-28",1]]);
                     const years = Object.keys(groupedData).reverse();
 
                     var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
@@ -627,7 +629,7 @@
                         series: [{
                             name: 'Articles',
                             type: 'line',
-                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8,3],
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8,7],
                             smooth: true,
                             lineStyle: { color: '#FF9A8B', width: 2 },
                             itemStyle: { color: '#FF9A8B' },
@@ -756,7 +758,7 @@
                         },
                         series: [{
                             type: 'tree',
-                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":3,"path":"项目管理"},{"name":"English","children":[],"count":3,"path":"English"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":4,"path":"项目管理"},{"name":"English","children":[],"count":4,"path":"English"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"AI","children":[],"count":2,"path":"AI"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
                             initialTreeDepth: -1,
                             top: '5%',
                             bottom: '10%',
@@ -941,7 +943,7 @@
 
     <div class="counter-box">
         <span class="counter-label">WORD COUNT:</span>
-        <span class="counter-digits">181.7k</span>
+        <span class="counter-digits">189.5k</span>
     </div>
 
     <div class="footer-info">

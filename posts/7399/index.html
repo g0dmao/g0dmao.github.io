@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>
+            
+                How to Use ClaudeCode for VSCODE - GoDm@&#39;s Blog
+            
+        </title>
+        <link rel="shortcut icon" href="/catface.ico">
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-coy.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" rel="stylesheet" />
+
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <div class="header">
+            <h1 class="site-title">gOdm@'s BLOG</h1>
+        </div>
+        <!-- <pre class="ascii-title">
+          ____           ____                  ____            ____    _
+         / ___|   ___   |  _ \   _ __ ___     / __ \   ___    | __ )  | |   ___     __ _
+        | |  _   / _ \  | | | | | '_ ` _ \   / / _` | / __|   |  _ \  | |  / _ \   / _` |
+        | |_| | | (_) | | |_| | | | | | | | | | (_| | \__ \   | |_) | | | | (_) | | (_| |
+         \____|  \___/  |____/  |_| |_| |_|  \ \__,_| |___/   |____/  |_|  \___/   \__, |
+                                              \____/                               |___/
+        </pre> -->
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">How to Use ClaudeCode for VSCODE</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-为什么使用cc-for-vscode"><a class="markdownIt-Anchor" href="#1-为什么使用cc-for-vscode"></a> 1. 为什么使用CC for VSCODE？</h2>
+<p>因为VSCDOE是我最常用的IDE，把 AI agent 与自己的开发环境融合当然是最理想的使用情况了。并且 CC for VSCODE 不仅代码审查更方便，还集成了 CC CLI，，鱼和熊掌兼得，有什么理由不用呢？</p>
+<h2 id="2-安装-cc-for-vscode"><a class="markdownIt-Anchor" href="#2-安装-cc-for-vscode"></a> 2. 安装 CC for VSCODE</h2>
+<p>在 VSCODE 中安装 CC for VSCODE。</p>
+<p>安装完成后提示登陆，大陆地区不太好注册 CC 的账号。因此只能使用第三方APIkey。</p>
+<p><img src="Snipaste_2026-05-27_16-25-12.png" alt="" /></p>
+<h2 id="3-获取第三方大模型apideepseekv4"><a class="markdownIt-Anchor" href="#3-获取第三方大模型apideepseekv4"></a> 3. 获取第三方大模型API：DeepSeekV4</h2>
+<p>最具性价比的算力提供商。</p>
+<p>完成注册后，直接充值然后创建API-key即可。</p>
+<p>这里是官方文档——<a target="_blank" rel="noopener" href="https://api-docs.deepseek.com/zh-cn/">DeepSeek API Docs</a></p>
+<p><img src="Snipaste_2026-05-27_17-00-14.png" alt="" /></p>
+<h2 id="4-cc-switchall-in-one"><a class="markdownIt-Anchor" href="#4-cc-switchall-in-one"></a> 4. CC Switch：All in one</h2>
+<p>现代 AI 编程依赖于 Claude Code、Codex、Gemini CLI、OpenCode 和 OpenClaw 等 CLI 工具——但每个工具都有自己的配置格式。切换 API 供应商意味着手动编辑 JSON、TOML 或 <code>.env</code> 文件，而在多个工具之间缺乏一个统一管理 MCP, SKILLS 的方式。</p>
+<p><strong>CC Switch</strong> 为你提供一个桌面应用来管理所有五个 CLI 工具。无需手动编辑配置文件，你将获得一个可视化界面，一键将供应商导入应用，一键在不同的供应商之间进行切换，内置 50+ 供应商预设、统一的 MCP, SKILLS 管理以及系统托盘即时切换功能——所有操作都基于可靠的 SQLite 数据库和原子写入机制，保护你的配置不被损坏。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/farion1231/cc-switch">farion1231/cc-switch: A cross-platform desktop All-in-One assistant for Claude Code, Codex, OpenCode, OpenClaw, Gemini CLI &amp; Hermes Agent.</a></p>
+<p><a target="_blank" rel="noopener" href="https://ccswitch.io/zh/">CC Switch 官方网站 - AI 编程工具统一管理平台</a></p>
+<p><img src="Snipaste_2026-05-27_17-57-54.png" alt="" /></p>
+<p>安装完成后，为 Claude Code CLI 添加新的供应商 DeepSeek：</p>
+<p><img src="Snipaste_2026-05-27_17-18-42.png" alt="" /></p>
+<p>请填写你的APIkey</p>
+<p><img src="Snipaste_2026-05-27_17-37-34.png" alt="" /></p>
+<p>这里可能需要一键配置一下然后声明1M上下文：</p>
+<p><img src="Snipaste_2026-05-27_17-23-02.png" alt="" /></p>
+<h3 id="41-兼容wsl"><a class="markdownIt-Anchor" href="#41-兼容wsl"></a> 4.1. 兼容WSL</h3>
+<p>甚至考虑到了WSL用户的使用，这他妈不给star都说不过去，我哭死：</p>
+<p><img src="Snipaste_2026-05-27_17-27-06.png" alt="" /></p>
+<p>直接把配置路径指向你的 WSL 挂载目录即可——我的是 <code>\\wsl.localhost\antiXLinux\home\gdm\.claude</code></p>
+<h3 id="42-可选用量查询"><a class="markdownIt-Anchor" href="#42-可选用量查询"></a> 4.2. 【可选】用量查询</h3>
+<p>你还可以启用用量查询，这样可以直接在 CC Switch 看到自己还有多少余额。</p>
+<p>CC Switch 原生支持调用 DeepSeek 官方 API 的余额查询接口，但为了防止产生不必要的后台网络请求，这项功能对于第三方模型<strong>默认是关闭的</strong>，需要你手动激活。</p>
+<p><img src="Snipaste_2026-05-27_17-50-04.png" alt="" /></p>
+<p>直接选择官方模板，保存即可，这里我设置的是每一个小时查询一次。</p>
+<p><img src="Snipaste_2026-05-27_17-50-35.png" alt="" /></p>
+<h2 id="5-enjoy"><a class="markdownIt-Anchor" href="#5-enjoy"></a> 5. Enjoy！</h2>
+<p>完成上面的配置后，你的 CC for VSCODE 应该就可以正常使用了，无论是在本地Windows，还是WSL环境。</p>
+<p><img src="Snipaste_2026-05-27_17-40-03.png" alt="" /></p>
+<h2 id="6-cc的完全使用指南"><a class="markdownIt-Anchor" href="#6-cc的完全使用指南"></a> 6. CC的完全使用指南</h2>
+<p>建议直接阅读官方文档，文档不长，也不复杂，写得非常清晰。</p>
+<p><a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/overview">Claude Code Docs</a></p>
+<ul>
+<li>
+<p>此章从工作原理角度概述如何使用CC，以及如何使用会话。——<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/how-claude-code-works">Claude Code 如何工作 - Claude Code Docs</a></p>
+<blockquote>
+<p>Claude Code 在您工作时将您的对话保存在本地。每条消息、工具使用和结果都被写入 <code>~/.claude/projects/</code> 下的纯文本 JSONL 文件，这使得<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/how-claude-code-works#undo-changes-with-checkpoints">回退</a>、<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/how-claude-code-works#resume-or-fork-sessions">恢复和分叉</a>会话成为可能。在 Claude 进行代码更改之前，它还会对受影响的文件进行快照，以便您在需要时可以恢复。有关路径、保留和如何清除此数据，请参阅<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/claude-directory#application-data"><code>~/.claude</code> 中的应用数据</a>。</p>
+</blockquote>
+<blockquote>
+<p>Claude 的上下文窗口保存您的对话历史、文件内容、命令输出、<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/memory">CLAUDE.md</a>、<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/memory#auto-memory">自动内存</a>、加载的 skills 和系统说明。当您工作时，上下文填满。Claude 自动压缩，但对话早期的说明可能会丢失。将持久规则放在 <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 中，并运行 <code>/context</code> 以查看什么在占用空间。</p>
+</blockquote>
+<blockquote>
+<p><strong>每个文件编辑都是可逆的。</strong> 在 Claude 编辑任何文件之前，它会对当前内容进行快照。如果出现问题，按两次 <code>Esc</code> 以回退到之前的状态，或要求 Claude 撤销。检查点是会话本地的，独立于 git。它们仅涵盖文件更改。影响远程系统的操作（数据库、API、部署）无法进行检查点，这就是为什么 Claude 在运行具有外部副作用的命令之前询问。</p>
+</blockquote>
+</li>
+<li>
+<p>此章提供如何扩展CC，以及skill、Subagent等扩展的的完全讲解——<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/features-overview#%E6%A6%82%E8%BF%B0">扩展 Claude Code - Claude Code Docs</a></p>
+<blockquote>
+<p><strong>将护栏放在 hooks 中。</strong> <a target="_blank" rel="noopener" href="http://CLAUDE.md">CLAUDE.md</a> 或 skill 中的”永远不要编辑 <code>.env</code>”之类的说明是请求，而不是保证。阻止编辑的 <code>PreToolUse</code> hook 是强制执行。如果规则必须每次都成立，将其作为 hook 而不是提示说明。</p>
+</blockquote>
+<blockquote>
+<p><strong>完全控制skill的加载。</strong> 默认情况下，skill 描述在会话开始时加载，以便 Claude 可以决定何时使用它们。在 skill 的 frontmatter 中设置 <code>disable-model-invocation: true</code> 以将其完全隐藏在 Claude 中，直到您手动调用它。这将 skills 的上下文成本降低到零，您只需自己触发这些 skills。对于您未编写的 skill，在设置中设置 <a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/skills#override-skill-visibility-from-settings"><code>skillOverrides</code></a> 以在不编辑其文件的情况下执行相同操作。</p>
+</blockquote>
+</li>
+<li>
+<p>此章介绍 <code>.claude</code> 文件夹里的内容——<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/claude-directory">探索 .claude 目录 - Claude Code Docs</a></p>
+</li>
+</ul>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约1.4k字。于2026/05/27首次发布，最后更新于2026/05/28。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8cc-for-vscode"><span class="toc-text"> 1. 为什么使用CC for VSCODE？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-cc-for-vscode"><span class="toc-text"> 2. 安装 CC for VSCODE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E7%AC%AC%E4%B8%89%E6%96%B9%E5%A4%A7%E6%A8%A1%E5%9E%8Bapideepseekv4"><span class="toc-text"> 3. 获取第三方大模型API：DeepSeekV4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-cc-switchall-in-one"><span class="toc-text"> 4. CC Switch：All in one</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E5%85%BC%E5%AE%B9wsl"><span class="toc-text"> 4.1. 兼容WSL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E5%8F%AF%E9%80%89%E7%94%A8%E9%87%8F%E6%9F%A5%E8%AF%A2"><span class="toc-text"> 4.2. 【可选】用量查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-enjoy"><span class="toc-text"> 5. Enjoy！</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-cc%E7%9A%84%E5%AE%8C%E5%85%A8%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97"><span class="toc-text"> 6. CC的完全使用指南</span></a></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1],["2026-05-06",1],["2026-05-08",1],["2026-05-17",1],["2026-05-24",1],["2026-05-25",1],["2026-05-27",1],["2026-05-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04","2026-05"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8,7],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":4,"path":"项目管理"},{"name":"English","children":[],"count":4,"path":"English"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"AI","children":[],"count":2,"path":"AI"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <style>
+
+/* ==========================================
+ * Retro Footer & 88x31 Badges
+ * ==========================================
+ */
+
+.retro-footer {
+    background-color: #f1E5C9;
+    padding: 20px 0;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    color: #000;
+    margin-top: 50px;
+}
+
+/* 复古 3D 分割线 */
+.retro-hr {
+    border: 0;
+    height: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+    margin-bottom: 20px;
+}
+
+/* 徽章容器 */
+.badge-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* 88x31 像素徽章通用样式 */
+.badge-88x31 {
+    width: 88px;
+    height: 31px;
+    border: 2px outset #FFFFFF;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 9px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.badge-88x31 .top {
+    height: 12px;
+    line-height: 12px;
+    background: #000;
+    color: #FFF;
+    text-align: center;
+}
+
+.badge-88x31 .bottom {
+    flex-grow: 1;
+    line-height: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.counter-box {
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 5px;
+    background-color: #000;
+    border: 2px inset #808080;
+}
+
+.counter-label {
+    color: #C0C0C0;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.counter-digits {
+    color: #00FF00; /* 荧光绿 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 具体徽章配色 */
+/*
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #FFD700; color: #000; }
+
+.badge-soc { border-color: #808080; }
+.badge-soc .bottom { background: #000080; color: #FFF; }
+
+.badge-notepad { border-color: #808080; }
+.badge-notepad .bottom { background: #FFF; color: #000; }
+
+.badge-valid { border-color: #808080; }
+.badge-valid .bottom { background: #008000; color: #FFF; }
+*/
+
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #0E83CD; color: #FFFFFF; }
+
+.badge-github { border-color: #808080; }
+.badge-github .bottom { background: #24292E; color: #FFFFFF; }
+
+.badge-design { border-color: #808080; }
+.badge-design .bottom { background: #FFD700; color: #000; }
+
+/* 版权信息 */
+.footer-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+</style>
+<footer class="retro-footer">
+    <hr class="retro-hr">
+
+    <div class="badge-container">
+        <div class="badge-88x31 badge-hexo">
+            <span class="top">POWERED BY</span>
+            <span class="bottom">HEXO</span>
+        </div>
+        <div class="badge-88x31 badge-github">
+            <span class="top">HOSTED ON</span>
+            <span class="bottom">GITHUB</span>
+        </div>
+        <div class="badge-88x31 badge-design">
+            <span class="top">DESIGNED BY</span>
+            <span class="bottom">GODM@</span>
+        </div>
+    </div>
+
+    <div class="counter-box">
+        <span class="counter-label">WORD COUNT:</span>
+        <span class="counter-digits">189.5k</span>
+    </div>
+
+    <div class="footer-info">
+        <p>Copyright &copy; 2025-2026 GoDm@'s Blog</p>
+    </div>
+
+
+
+</footer>
+</html>
+

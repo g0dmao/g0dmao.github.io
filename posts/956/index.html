@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html>
+    <head><!-- hexo injector head_begin start --><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script><!-- hexo injector head_begin end -->
+        <!-- 元数据 -->
+        <meta charset="utf-8">
+        <meta name="author" content="GoDm@">
+        <meta name="Description" content="GoDm@'s blog">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
+        <title>
+            
+                git常用命令 - GoDm@&#39;s Blog
+            
+        </title>
+        <link rel="shortcut icon" href="/catface.ico">
+        <link rel="stylesheet" href="/css/layout.css">
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/obsidian.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+        <script> hljs.highlightAll();</script> -->
+
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-coy.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" rel="stylesheet" />
+
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- hexo injector head_end start --><style>/* 布局样式 */
+.hexo-tips-layout {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid;
+    border-left-width: 6px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover {
+    transform: translateX(5px);
+}
+
+.hexo-tips-layout .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: clamp(2em, 2vw, 3em);
+    min-width: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .icon {
+    transform: scale(1.1);
+}
+
+.hexo-tips-layout .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.hexo-tips-layout:hover .content {
+    transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+    .hexo-tips-layout {
+        padding: 1rem;
+    }
+}
+
+/* 为每种类型的提示框添加主题样式 */
+[class^="tips-style-"] {
+    --tips-light-bg: #fff; /* 默认值 */
+    --tips-dark-bg: #333;  /* 默认值 */
+    --tips-border: #000;   /* 默认值 */
+}
+
+/* 主题样式规则 */
+[class^="hexo-tips-"] {
+    border-color: var(--tips-border);
+}
+
+[class^="hexo-tips-"] .icon {
+    color: var(--tips-border);
+}
+
+</style><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="GoDm@'s Blog" type="application/atom+xml">
+</head>
+
+    <body>
+        <div class="header">
+            <h1 class="site-title">gOdm@'s BLOG</h1>
+        </div>
+        <!-- <pre class="ascii-title">
+          ____           ____                  ____            ____    _
+         / ___|   ___   |  _ \   _ __ ___     / __ \   ___    | __ )  | |   ___     __ _
+        | |  _   / _ \  | | | | | '_ ` _ \   / / _` | / __|   |  _ \  | |  / _ \   / _` |
+        | |_| | | (_) | | |_| | | | | | | | | | (_| | \__ \   | |_) | | | | (_) | | (_| |
+         \____|  \___/  |____/  |_| |_| |_|  \ \__,_| |___/   |____/  |_|  \___/   \__, |
+                                              \____/                               |___/
+        </pre> -->
+        <!--文章详情页-->
+<div class="meta" style="margin: auto;">
+    <h1 style="text-align: center;">git常用命令</h1>
+</div>
+
+<div class="a_container">
+    <div id="article">
+        <details>
+<summary>版权信息</summary>
+<div class="admonition warning"><p class="admonition-title">warning</p><p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+</div>
+</details>
+<hr />
+<h2 id="1-初次使用git"><a class="markdownIt-Anchor" href="#1-初次使用git"></a> 1. 初次使用git</h2>
+<h3 id="11-必需配置如何修改配置信息"><a class="markdownIt-Anchor" href="#11-必需配置如何修改配置信息"></a> 1.1. 必需配置+如何修改配置信息</h3>
+<p>请配置好 user 和 email。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"your name"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"you email"</span>
+<span class="token comment"># 设置默认分支名为main而不是master</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> init.defaultBranch main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用 <code>--global</code> 选项以修改全局配置文件。如若省略 <code>--global</code>，则修改仓库配置文件。</p>
+<p>配置文件应用优先级： 仓库 &gt; 全局 &gt; 系统。</p>
+<h3 id="12-查看git的配置信息"><a class="markdownIt-Anchor" href="#12-查看git的配置信息"></a> 1.2. 查看git的配置信息</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看所有配置信息</span>
+<span class="token function">git</span> config <span class="token parameter variable">--list</span>
+
+<span class="token comment"># 查看系统级配置信息</span>
+<span class="token function">git</span> config <span class="token parameter variable">--system</span> <span class="token parameter variable">--list</span>
+
+<span class="token comment"># 查看用户级/全局配置信息</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> <span class="token parameter variable">--list</span>
+
+<span class="token comment"># 查看仓库级配置信息</span>
+<span class="token function">git</span> config <span class="token parameter variable">--local</span> <span class="token parameter variable">--list</span>
+
+<span class="token comment"># e.g. 如果想要查看指定配置项</span>
+<span class="token function">git</span> config user.name
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="2-开始在项目中使用版本管理"><a class="markdownIt-Anchor" href="#2-开始在项目中使用版本管理"></a> 2. 开始在项目中使用版本管理</h2>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> init<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="3-将更改提交到暂存区"><a class="markdownIt-Anchor" href="#3-将更改提交到暂存区"></a> 3. 将更改提交到暂存区</h2>
+<h3 id="31-提交"><a class="markdownIt-Anchor" href="#31-提交"></a> 3.1. 提交</h3>
+<p>将所有更改提交到暂存区，也可指定单个文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="32-撤回提交"><a class="markdownIt-Anchor" href="#32-撤回提交"></a> 3.2. 撤回提交</h3>
+<p>如果想要撤回提交到暂存区的更改（更改保留，只是从暂存区撤回）：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 移除单个文件</span>
+<span class="token function">git</span> restore <span class="token parameter variable">--staged</span> <span class="token operator">&lt;</span>文件名<span class="token operator">></span>
+
+<span class="token comment"># 移除特定文件夹下的所有文件</span>
+<span class="token function">git</span> restore <span class="token parameter variable">--staged</span> <span class="token operator">&lt;</span>文件夹名<span class="token operator">></span>/
+
+<span class="token comment"># 移除暂存区里的所有文件（一键清空暂存区）</span>
+<span class="token function">git</span> restore <span class="token parameter variable">--staged</span> <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>--staged</code> 确保仅仅把文件从暂存区里撤出来，而<strong>不会</strong>修改工作区里写好的代码。</p>
+<blockquote>
+<p><strong>使用 git restore 一定要加 <code>--staged</code>，除非完全理解后果。</strong></p>
+</blockquote>
+<h3 id="33-在提交时永久排除一些文件文件夹"><a class="markdownIt-Anchor" href="#33-在提交时永久排除一些文件文件夹"></a> 3.3. 在提交时永久排除一些文件/文件夹</h3>
+<ol>
+<li>
+<p>在项目根目录下创建 <code>.gitignore</code> 文本文件</p>
+</li>
+<li>
+<p>编辑它，e.g.：</p>
+ <pre class="line-numbers language-none"><code class="language-none"># 忽略所有的 .log 结尾的文件
+*.log
+
+# 忽略整个 node_modules 文件夹（注意末尾的斜杠）
+node_modules&#x2F;
+
+# 忽略 build 目录下的所有文件，但不包括 build&#x2F;readme.txt
+build&#x2F;
+!build&#x2F;readme.txt
+
+# 仅忽略根目录下的 config.ini 文件，但不影响子目录中的同名文件
+&#x2F;config.ini<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p><strong>如果你在配置 <code>.gitignore</code> 之前，某些文件已经通过 <code>git add</code> 提交到了 Git 版本库中，那么仅仅修改 <code>.gitignore</code> 是无效的。</strong></p>
+<p>要使 <code>.gitignore</code> 重新生效，你需要先将这些文件从 Git 的“追踪缓存”中移除：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 移除单个已追踪的文件（保留本地物理文件）</span>
+<span class="token function">git</span> <span class="token function">rm</span> <span class="token parameter variable">--cached</span> <span class="token operator">&lt;</span>文件路径<span class="token operator">></span>
+
+<span class="token comment"># 移除整个已追踪的文件夹（保留本地物理文件夹）</span>
+<span class="token function">git</span> <span class="token function">rm</span> <span class="token parameter variable">-r</span> <span class="token parameter variable">--cached</span> <span class="token operator">&lt;</span>文件夹路径<span class="token operator">></span>
+
+<span class="token function">git</span> <span class="token function">add</span> .gitignore
+
+<span class="token comment"># 然后提交这次清理操作</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"chore: 停止追踪指定文件并更新 .gitignore"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>--cached</code> 确保该文件仅仅是从 Git 的版本控制系统中被移除，而<strong>不会</strong>从你的电脑硬盘上被物理删除。</p>
+<h2 id="4-正式提交更改"><a class="markdownIt-Anchor" href="#4-正式提交更改"></a> 4. 正式提交更改</h2>
+<h3 id="41-提交更改"><a class="markdownIt-Anchor" href="#41-提交更改"></a> 4.1. 提交更改</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> commit <span class="token parameter variable">-m</span> ”提交描述“<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在提交时，请规范提交描述。</p>
+<h3 id="42-提交描述规范"><a class="markdownIt-Anchor" href="#42-提交描述规范"></a> 4.2. 提交描述规范</h3>
+<p>采用<strong>约定式提交 (Conventional Commits)</strong>。</p>
+<ol>
+<li>
+<p><strong>提交结构</strong></p>
+<p>提交结构包含三个部分：<strong>Header</strong>、<strong>Body</strong> 和 <strong>Footer</strong>。</p>
+ <pre class="line-numbers language-none"><code class="language-none">&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+&#x2F;&#x2F; 空一行
+&lt;body&gt;
+&#x2F;&#x2F; 空一行
+&lt;footer&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p><strong>Header 规范（必填）</strong></p>
+<p><code>scope</code> 用于说明本次提交影响的模块或文件范围，建议使用英文。</p>
+<ul>
+<li>
+<p><em>示例：</em> <code>kernel</code>、<code>sensor</code>、<code>gui</code>、<code>i2c</code>、<code>build</code>。</p>
+</li>
+<li>
+<p>如果是跨模块的全局修改，可以省略或写 <code>*</code>。</p>
+</li>
+</ul>
+<h4 id="subject必填用于对本次提交的简短描述建议使用英文要求"><a class="markdownIt-Anchor" href="#subject必填用于对本次提交的简短描述建议使用英文要求"></a> <code>subject</code>（必填）用于对本次提交的简短描述，建议使用英文，要求：</h4>
+<ul>
+<li>
+<p><strong>动词开头</strong>：建议使用一般现在时（例如用 <code>implement</code> 而不是 <code>implemented</code>，用 <code>add</code> 而不是 <code>added</code>）。</p>
+</li>
+<li>
+<p><strong>不加标点</strong>：结尾不需要加句号（<code>.</code>）。</p>
+</li>
+<li>
+<p><strong>言简意赅</strong>：控制在 50 个字符以内。</p>
+</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><strong>类型标识</strong></th>
+<th><strong>含义</strong></th>
+<th><strong>场景示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>feat</code></strong></td>
+<td><strong>新增功能 (Feature)</strong></td>
+<td>新增一个硬件驱动、实现一个新的调度算法</td>
+</tr>
+<tr>
+<td><strong><code>fix</code></strong></td>
+<td><strong>修复 Bug</strong></td>
+<td>修复内存泄漏、修复中断响应延迟问题</td>
+</tr>
+<tr>
+<td><strong><code>refactor</code></strong></td>
+<td><strong>代码重构</strong></td>
+<td>剥离传感器解析逻辑（不涉及新增功能或修复bug）</td>
+</tr>
+<tr>
+<td><strong><code>docs</code></strong></td>
+<td><strong>文档更新</strong></td>
+<td>更新 README、修改代码注释</td>
+</tr>
+<tr>
+<td><strong><code>style</code></strong></td>
+<td><strong>代码格式</strong></td>
+<td>调整缩进、空格、格式化（不影响代码运行的逻辑）</td>
+</tr>
+<tr>
+<td><strong><code>perf</code></strong></td>
+<td><strong>性能优化</strong></td>
+<td>优化上下文切换效率、降低 CPU 占用</td>
+</tr>
+<tr>
+<td><strong><code>test</code></strong></td>
+<td><strong>测试相关</strong></td>
+<td>增加或更新单元测试</td>
+</tr>
+<tr>
+<td><strong><code>chore</code></strong></td>
+<td><strong>构建或工具变动/杂项</strong></td>
+<td>修改 CMakeLists.txt、更新依赖库或打包脚本</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>
+<p><strong>Body 与 Footer 规范（选填）</strong></p>
+<ul>
+<li>
+<p><code>Body</code>（详细描述）： 补充说明本次修改的动机、具体的底层实现逻辑，以及与修改前行为的对比。适合逻辑复杂的底层系统开发。</p>
+</li>
+<li>
+<p><code>Footer</code>（页脚）： 主要用于两种情况：</p>
+<ol>
+<li>
+<p><strong>不兼容变动 (BREAKING CHANGE)：</strong> 如果当前代码与上一版本不兼容（例如修改了核心 API 接口），必须在 Footer 处标明，并说明迁移方法。</p>
+</li>
+<li>
+<p><strong>关闭 Issue：</strong> 例如 <code>Closes #123, Closes #124</code>。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>一些示例</strong></p>
+<p>示例1：新增核心功能</p>
+ <pre class="line-numbers language-none"><code class="language-none">feat(scheduler): implement PendSV context switching mechanism<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>示例2：基于设计原则的代码重构（包含 Body）</p>
+ <pre class="line-numbers language-none"><code class="language-none">refactor(sensor): decouple SCD41 and SHT30 logic from main loop
+
+Apply Dependency Inversion Principle to separate hardware-
+specific reading logic from the central data hub. This makes 
+adding new I2C sensors in the future plug-and-play.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>示例3：构建工具调整</p>
+ <pre class="line-numbers language-none"><code class="language-none">chore(build): update CMake to output all binaries to bin directory<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>示例4：破坏性更新 (Breaking Change)</p>
+ <pre class="line-numbers language-none"><code class="language-none">feat(api): redesign the sensor module registration interface
+
+BREAKING CHANGE: The &#96;register_sensor()&#96; function now requires
+a priority argument. Existing device drivers must be updated 
+to pass the new parameter.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<h3 id="43-管理已提交的更改"><a class="markdownIt-Anchor" href="#43-管理已提交的更改"></a> 4.3. 管理已提交的更改</h3>
+<p>使用 <code>rebase</code> 命令管理已提交的更改。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> rebase <span class="token parameter variable">-i</span> HEAD~n`<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>n 是你想回顾的最近几次提交数，它会打开一个类似文本编辑器的界面。like this:</p>
+<pre class="line-numbers language-none"><code class="language-none">pick 111111 fiix: 拼写错误的提交说明 
+pick 222222 fix: 修复了中断问题 
+pick 333333 feat: 最新的功能
+
+# Rebase ... (下面是一大堆注释说明)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>注意，这里的顺序和 <code>git log</code> 是<strong>相反的</strong>。最上面的是最旧的提交，最下面的是最新的。</p>
+</blockquote>
+<p>找到你想修改的记录，更改开头的指令，常用的指令：</p>
+<ul>
+<li>
+<p><strong><code>pick</code> (保留)：</strong> 什么都不做，保留该提交</p>
+</li>
+<li>
+<p><strong><code>Squash</code>（合并）：</strong> 把几个零碎提交，<strong>合并到前一个提交</strong></p>
+</li>
+<li>
+<p><strong><code>Reword</code>（改写）：</strong> 修改某次提交的描述信息（Commit Message）</p>
+</li>
+<li>
+<p><strong><code>Drop</code>（删除）：</strong> 删除提交记录</p>
+</li>
+</ul>
+<p><strong>这是一个重写提交描述的例子：</strong></p>
+<ol>
+<li>编辑指令</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">reword 111111 fiix: 拼写错误的提交说明 
+reword 222222 fix: 修复了中断问题 
+pick 333333 feat: 最新的功能
+
+# Rebase ... (下面是一大堆注释说明)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>
+<p>编辑好后，保存并退出当前编辑器</p>
+</li>
+<li>
+<p>上一个编辑器关掉，Git 会立刻为你<strong>打开第二个编辑界面</strong>。这个界面是你要修改的那个提交的提交描述。</p>
+</li>
+<li>
+<p>修改提交描述完成后，保存并退出当前编辑器</p>
+</li>
+<li>
+<p>Git 会为你打开下一个你想要修改的提交的提交描述编辑界面</p>
+</li>
+<li>
+<p>重复步骤4，直到你想修改的所有提交记录全部修改完成</p>
+</li>
+</ol>
+<p><strong>这是一个合并提交的例子：</strong></p>
+<ol>
+<li>
+<p>编辑指令</p>
+ <pre class="line-numbers language-none"><code class="language-none">pick 111111 fiix: 拼写错误的提交说明 
+squash 222222 fix: 修复了中断问题 
+squash 333333 feat: 最新的功能
+
+# Rebase ... (下面是一大堆注释说明)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>编辑好后，保存并退出当前编辑器</p>
+</li>
+</ol>
+<p>（如果有冲突，处理冲突）</p>
+<ol start="3">
+<li>上一个编辑器关掉，Git 会立刻为你<strong>打开第二个编辑界面</strong>。这个界面要求你为合并提交写一个新的提交描述</li>
+</ol>
+<p>（此时如果意识到自己合并错了，想要放弃合并，新开一个终端，运行 <code>git rebase --abort</code> 命令）</p>
+<ol start="4">
+<li>
+<p>编辑好后，保存并退出当前编辑器</p>
+</li>
+<li>
+<p>最终结果：提交记录 <code>222222</code> 和 <code>333333</code> 消失，所有修改都并入了 <code>111111</code>。</p>
+</li>
+</ol>
+<p>（如果想要撤回已合并的提交，请使用 <code>git reflog</code> + <code>git reset --hard HEAD@&#123;n&#125;</code> 或 <code>git reset --hard &lt;hash&gt;</code> ）</p>
+<h2 id="5-分支的管理"><a class="markdownIt-Anchor" href="#5-分支的管理"></a> 5. 分支的管理</h2>
+<h3 id="51-切换分支"><a class="markdownIt-Anchor" href="#51-切换分支"></a> 5.1. 切换分支</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> checkout <span class="token operator">&lt;</span>分支名<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="52-重命名当前分支"><a class="markdownIt-Anchor" href="#52-重命名当前分支"></a> 5.2. 重命名当前分支</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> branch <span class="token parameter variable">-m</span> <span class="token operator">&lt;</span>name<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="6-版本管理"><a class="markdownIt-Anchor" href="#6-版本管理"></a> 6. 版本管理</h2>
+<h3 id="61-查看历史版本"><a class="markdownIt-Anchor" href="#61-查看历史版本"></a> 6.1. 查看历史版本</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> log <span class="token parameter variable">--oneline</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="62-回退版本"><a class="markdownIt-Anchor" href="#62-回退版本"></a> 6.2. 回退版本</h3>
+<ol>
+<li>
+<p>回退，同时删除提交记录</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> reset <span class="token parameter variable">--soft</span> HEAD^    <span class="token comment">#回退到上一个版本</span>
+<span class="token function">git</span> reset <span class="token parameter variable">--mixed</span> HEAD~n  <span class="token comment">#回退到前n个版本</span>
+<span class="token function">git</span> reset <span class="token parameter variable">--hard</span>  <span class="token operator">&lt;</span>hash<span class="token operator">></span>  <span class="token comment">#使用hash值指定版本 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>--soft</code>：回退掉的那些版本的修改全部都会保留在“暂存区”（Staging Area）中。你可以重新修改并再次 commit。</li>
+<li><code>--mixed</code>：修改会保留在“工作区”（Working Directory）中，表现为未暂存的文件。</li>
+<li><code>--hard</code>：<strong>非必要不要使用！</strong> 将项目完全恢复到某个版本提交时的状态，之后所有的更改全部丢弃，且无法找回。<strong>执行前请务必确认并理解后果。建议执行前先使用<code>git stash</code></strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>禁止在多人协作中使用 <code>git reset</code> 回退版本！除非完全理解后果</strong></p>
+</blockquote>
+<ol start="2">
+<li>
+<p>重新提交一个记录，用于撤销某版本的更改</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> revert <span class="token operator">&lt;</span>hash<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+ <pre class="line-numbers language-none"><code class="language-none">
+
+A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;(F)HEAD
+
+想回退到C版本，即撤销D版本的修改。
+
+git revert D
+
+A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F-&gt;(D&#39;)HEAD
+
+D&#39;撤销了D所做的所有更改
+
+因为是直接撤销D的改动，如果E、F版本依赖或覆盖了D的代码，则需要解决来自E、F的版本冲突，才能成功提交 D‘
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+
+        <hr style="margin: 50px; background: #111111">
+
+<div class="meta" style="text-align: end; font-size: small;">
+<p>共计约2.4k字。于2026/05/28首次发布，最后更新于2026/05/30。 </p>
+
+    <p>本文章为博主原创文章。遵循 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-sa/4.0/">CC 4.0 BY-SA</a> 版权协议，转载请附上原文出处链接和本声明。</p>
+
+
+
+
+
+
+</div>
+
+    </div>
+
+    
+<style>
+    #bar{
+        width: 10%;
+        position: sticky;
+        top: 30px;
+        ol{
+            width: 400px;
+            list-style-type: circle;
+            margin: 0;
+        }
+    }
+    #back-to-top{
+            opacity: 0;
+        }
+        #back-to-top.show{
+            opacity: 1;
+        }
+</style>
+
+<div id="bar">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8git"><span class="toc-text"> 1. 初次使用git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%BF%85%E9%9C%80%E9%85%8D%E7%BD%AE%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="toc-text"> 1.1. 必需配置+如何修改配置信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E6%9F%A5%E7%9C%8Bgit%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="toc-text"> 1.2. 查看git的配置信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BC%80%E5%A7%8B%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-text"> 2. 开始在项目中使用版本管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%86%E6%9B%B4%E6%94%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E6%9A%82%E5%AD%98%E5%8C%BA"><span class="toc-text"> 3. 将更改提交到暂存区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#31-%E6%8F%90%E4%BA%A4"><span class="toc-text"> 3.1. 提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#32-%E6%92%A4%E5%9B%9E%E6%8F%90%E4%BA%A4"><span class="toc-text"> 3.2. 撤回提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#33-%E5%9C%A8%E6%8F%90%E4%BA%A4%E6%97%B6%E6%B0%B8%E4%B9%85%E6%8E%92%E9%99%A4%E4%B8%80%E4%BA%9B%E6%96%87%E4%BB%B6%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-text"> 3.3. 在提交时永久排除一些文件&#x2F;文件夹</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%AD%A3%E5%BC%8F%E6%8F%90%E4%BA%A4%E6%9B%B4%E6%94%B9"><span class="toc-text"> 4. 正式提交更改</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#41-%E6%8F%90%E4%BA%A4%E6%9B%B4%E6%94%B9"><span class="toc-text"> 4.1. 提交更改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#42-%E6%8F%90%E4%BA%A4%E6%8F%8F%E8%BF%B0%E8%A7%84%E8%8C%83"><span class="toc-text"> 4.2. 提交描述规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#43-%E7%AE%A1%E7%90%86%E5%B7%B2%E6%8F%90%E4%BA%A4%E7%9A%84%E6%9B%B4%E6%94%B9"><span class="toc-text"> 4.3. 管理已提交的更改</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%88%86%E6%94%AF%E7%9A%84%E7%AE%A1%E7%90%86"><span class="toc-text"> 5. 分支的管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#51-%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF"><span class="toc-text"> 5.1. 切换分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#52-%E9%87%8D%E5%91%BD%E5%90%8D%E5%BD%93%E5%89%8D%E5%88%86%E6%94%AF"><span class="toc-text"> 5.2. 重命名当前分支</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="toc-text"> 6. 版本管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#61-%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E7%89%88%E6%9C%AC"><span class="toc-text"> 6.1. 查看历史版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E5%9B%9E%E9%80%80%E7%89%88%E6%9C%AC"><span class="toc-text"> 6.2. 回退版本</span></a></li></ol></li></ol>
+    <br>
+    <div style="text-align: center;width: 200px;">
+        <a href="/" style="text-decoration: none;">
+            <button id="back-to-index" title="back to home">Home</button>
+        </a>
+        <button id="back-to-top" title="back to top">Top</button>
+    </div>
+</div>
+
+<script>
+    const backToTop = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+    });
+
+    backToTop.addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    });
+</script>
+
+</div>
+
+
+    <script src="/vendor/js/echarts.min.js"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const heatmapChartDom = document.getElementById('heatmapChart');
+                if(heatmapChartDom){
+                    const heatmapChart = echarts.init(heatmapChartDom, 'light');
+                    const cellSize = 15;
+
+                    const groupByYear = (data) => {
+                        const result = {};
+                        data.forEach(([date, value]) => {
+                            const [year] = date.split('-').map(Number);
+                            if (!result[year]) {
+                                result[year] = [];
+                            }
+                            result[year].push([date, value]);
+                        });
+                        return result;
+                    };
+
+                    const groupedData = groupByYear([["2025-01-18",3],["2025-01-19",3],["2025-01-21",1],["2025-02-06",1],["2025-02-22",1],["2025-03-01",1],["2025-03-07",1],["2025-03-09",2],["2025-03-10",1],["2025-03-12",1],["2025-03-17",1],["2025-03-22",2],["2025-04-04",1],["2025-04-05",1],["2025-04-06",1],["2025-04-10",1],["2025-06-07",1],["2025-06-11",3],["2025-06-12",1],["2025-06-14",3],["2025-06-18",2],["2025-06-30",1],["2025-07-14",1],["2025-07-28",1],["2025-08-06",1],["2025-08-11",1],["2025-08-24",1],["2025-08-25",1],["2025-09-07",3],["2025-09-09",2],["2025-09-10",1],["2025-09-12",1],["2025-09-15",1],["2025-09-18",1],["2025-09-27",1],["2025-09-28",3],["2025-09-29",2],["2025-10-09",1],["2025-10-10",1],["2025-10-14",1],["2025-10-22",1],["2025-10-23",1],["2025-10-28",2],["2025-10-29",1],["2025-10-31",1],["2025-11-02",2],["2025-11-11",1],["2025-11-19",1],["2025-11-23",1],["2025-11-24",1],["2025-11-25",2],["2025-11-28",1],["2025-12-02",1],["2025-12-08",4],["2025-12-13",1],["2025-12-16",1],["2025-12-19",1],["2026-03-08",1],["2026-03-12",1],["2026-03-14",4],["2026-03-17",1],["2026-03-19",1],["2026-03-20",1],["2026-03-24",1],["2026-03-26",2],["2026-03-28",1],["2026-04-03",1],["2026-04-05",2],["2026-04-12",1],["2026-04-15",1],["2026-04-20",1],["2026-04-21",1],["2026-04-28",1],["2026-05-06",1],["2026-05-08",1],["2026-05-17",1],["2026-05-24",1],["2026-05-25",1],["2026-05-27",1],["2026-05-28",1]]);
+                    const years = Object.keys(groupedData).reverse();
+
+                    var initYear = parseInt(heatmapChartDom.getAttribute('year')) || new Date().getFullYear();
+                    const minYear = years[years.length - 1];
+                    const maxYear = years[0];
+                    if (initYear < minYear || initYear > maxYear) {
+                        initYear = maxYear;
+                    }
+                    console.log('[hexo-graph]generateHeatmapChart|initYear:', initYear, 'minYear:', minYear, 'maxYear:', maxYear);
+
+                    heatmapChart.setOption({
+                        grid: {},
+                        tooltip: {
+                            position: 'top',
+                            formatter: params => `${params.value[0]}: ${params.value[1]} Articles`
+                        },
+                        calendar: {
+                            top: '10%',
+                            range: initYear,
+                            cellSize: cellSize,
+                            splitLine: { lineStyle: { color: '#101418', width: 4 } },
+                            itemStyle: { borderWidth: 4, borderColor: '#101418', color: '#1e1e1e'},
+                            dayLabel: { show: false },
+                            monthLabel: { show: true ,color: '#7b7b7b'},
+                            yearLabel: { show: false },
+
+
+                        },
+
+                        visualMap: {
+                            show: true,
+                            right: '8%',
+                            bottom: '5%',
+                            type: 'piecewise',
+                            orient: 'horizontal',
+                            text: ['More', 'Less'],
+                            min: 0,
+                            max: Math.max(...groupedData[initYear].map(item => item[1])),
+                            inRange: { color: ["#663300","#994c00","#cc6600","#ff9933"] },
+
+                        },
+                        legend: {
+                            type: 'scroll',
+                            icon: 'none',
+                            data: years,
+                            orient: 'vertical',
+                            top: '5%',
+                            right: 'right',
+                            itemWidth: 20,
+                            itemHeight: 20,
+                            itemGap: 10,
+                            pageIconSize: 10,
+                            pageTextStyle: { fontSize: 14,},
+                            selectedMode: 'single',
+
+                        },
+                        series: years.map(year => ({
+                            type: 'heatmap',
+                            coordinateSystem: 'calendar',
+                            data: groupedData[year],
+                            name: year,
+                            emphasis: {
+                                disabled: true,
+                            },
+                            silent: year !== initYear,
+                        })),
+                    });
+
+                    // init selected year
+                    heatmapChart.dispatchAction({
+                        type: 'legendSelect',
+                        name: initYear,
+                    });
+
+                    heatmapChart.on('legendselectchanged', function(params) {
+                        console.log('[hexo-graph]generateHeatmapChart|legendselectchanged:', params);
+                        const selectedYear = Object.keys(params.selected).find(key => params.selected[key]);
+                        if (selectedYear && groupedData[selectedYear]) {
+                            heatmapChart.setOption({
+                                calendar: {
+                                    range: selectedYear,
+                                },
+                                visualMap: {
+                                    max: Math.max(...groupedData[selectedYear].map(item => item[1])),
+                                },
+                                series: years.map(year => ({
+                                    type: 'heatmap',
+                                    coordinateSystem: 'calendar',
+                                    data: groupedData[year],
+                                    name: year,
+                                    emphasis: {
+                                        disabled: true,
+                                    },
+                                    silent: year !== selectedYear,
+                                })),
+                            });
+                        }
+                    });
+
+                    heatmapChart.on('click', function (params) {
+                        if (params.componentType === 'series') {
+                            const [year, month] = params.value[0].split('-');
+                            window.location.href = '/archives/' + year + '/' + month;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const monthlyChartDom = document.getElementById('monthlyChart');
+                if(monthlyChartDom){
+                    const monthlyChart = echarts.init(monthlyChartDom, 'light');
+                    monthlyChart.setOption({
+                        xAxis: { 
+                            type: 'category', 
+                            data: ["2025-01","2025-02","2025-03","2025-04","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-03","2026-04","2026-05"], 
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ccc' } } },
+                        series: [{
+                            name: 'Articles',
+                            type: 'line',
+                            data: [7,2,9,4,11,2,4,15,9,9,8,13,8,7],
+                            smooth: true,
+                            lineStyle: { color: '#FF9A8B', width: 2 },
+                            itemStyle: { color: '#FF9A8B' },
+                            areaStyle: { color: 'rgba(84, 112, 198, 0.4)' },
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                position: 'top',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            }
+                        }]
+                    });
+
+                    monthlyChart.on('click', function (params) {
+                        const [year, month] = params.name.split('-');
+                        window.location.href = '/archives/' + year + '/' + month;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tagsChartDom = document.getElementById('tagsChart');
+                if(tagsChartDom){
+                    const tagsChart = echarts.init(tagsChartDom, 'light');
+                    tagsChart.setOption({
+                        tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+                        series: [{
+                            type: 'pie',
+                            radius: '60%',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}],
+                            label: {
+                                position: 'outside',
+                                formatter: '{b} {c} ({d}%)',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif',
+                                color: '#7b7b7b',
+                            },
+                            color: ["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC949","#AF7AA1","#FF9DA7"],
+                            labelLine: { show: true }
+                        }],
+                        legend: {
+                            bottom: '0',
+                            left: 'center',
+                            data: [{"name":"Linux","value":30},{"name":"嵌入式","value":15},{"name":"python","value":7},{"name":"STM32","value":6},{"name":"CubeMX","value":5},{"name":"摄影基础","value":5},{"name":"学习笔记","value":5},{"name":"内核","value":4}].map(tag => tag.name),
+                            textStyle: { fontSize: 14, fontWeight: 'bold', fontFamily: 'Microsoft YaHei, SimSun, serif',color: '#7b7b7b',}
+                        }
+                    });
+
+                    tagsChart.on('click', function (params) {
+                        window.location.href = '/tags/' + params.name;
+                    });
+                }
+            })
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesChartDom = document.getElementById('categoriesChart');
+                if(categoriesChartDom){
+                    const categoriesChart = echarts.init(categoriesChartDom, 'light');
+                    categoriesChart.setOption({
+                        xAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#7b7b7b' } } },
+                        yAxis: {
+                            type: 'category',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.name).reverse(),
+                            axisLabel: { fontSize: 14, fontWeight: 'bold', color: '#7b7b7b', fontFamily: 'Microsoft YaHei, SimSun, serif' }
+                        },
+                        series: [{
+                            name: 'Category Count',
+                            type: 'bar',
+                            data: [{"name":"Linux","value":33},{"name":"嵌入式","value":19},{"name":"记录","value":15},{"name":"内核编程","value":12},{"name":"python","value":9}].map(category => category.value).reverse(),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: params => params.value,
+                                fontSize: 14,
+                                color: '#7b7b7b',
+                                fontWeight: 'bold',
+                                fontFamily: 'Microsoft YaHei, SimSun, serif'
+                            },
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: '#4C8C99' },
+                                    { offset: 1, color: '#F9B5E2' }
+                                ])
+                            }
+                        }]
+                    });
+
+                    categoriesChart.on('click', function (params) {
+                        window.location.href = '/categories/' + params.name;
+                    });
+                }
+            });
+        </script>
+    
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const categoriesTreeChartDom = document.getElementById('categoriesTreeChart');
+                if(categoriesTreeChartDom){
+                    const treeChart = echarts.init(categoriesTreeChartDom, 'light');
+                    treeChart.setOption({
+                        title: {
+                            text: '操作提示：单击展开分类，双击进入具体分类页面',
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#999',
+                                fontWeight: 'normal'
+                            },
+                            bottom: 0,
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            triggerOn: 'mousemove'
+                        },
+                        series: [{
+                            type: 'tree',
+                            data: [{"name":"Categories","children":[{"name":"嵌入式","children":[{"name":"程序架构","children":[],"count":8,"path":"嵌入式/程序架构"},{"name":"配置功能","children":[],"count":6,"path":"嵌入式/配置功能"},{"name":"PCB","children":[],"count":2,"path":"嵌入式/PCB"},{"name":"OTA升级","children":[],"count":1,"path":"嵌入式/OTA升级"},{"name":"通信协议","children":[],"count":2,"path":"嵌入式/通信协议"}],"count":19,"path":"嵌入式"},{"name":"项目管理","children":[],"count":4,"path":"项目管理"},{"name":"English","children":[],"count":4,"path":"English"},{"name":"RTOS","children":[],"count":5,"path":"RTOS"},{"name":"记录","children":[],"count":15,"path":"记录"},{"name":"AI","children":[],"count":2,"path":"AI"},{"name":"阅读","children":[],"count":1,"path":"阅读"},{"name":"Linux","children":[{"name":"内核编程","children":[],"count":12,"path":"Linux/内核编程"},{"name":"入门","children":[],"count":7,"path":"Linux/入门"},{"name":"设备驱动程序","children":[],"count":6,"path":"Linux/设备驱动程序"},{"name":"WSL2","children":[],"count":2,"path":"Linux/WSL2"},{"name":"系统移植","children":[],"count":6,"path":"Linux/系统移植"}],"count":33,"path":"Linux"},{"name":"网络","children":[],"count":3,"path":"网络"},{"name":"python","children":[],"count":9,"path":"python"},{"name":"开发日记","children":[],"count":2,"path":"开发日记"},{"name":"其他","children":[],"count":4,"path":"其他"},{"name":"摄影学习","children":[],"count":5,"path":"摄影学习"}],"count":0,"path":""}],
+                            initialTreeDepth: -1,
+                            top: '5%',
+                            bottom: '10%',
+                            left: '0%',
+                            right: '0%',
+                            symbolSize: 15,
+                            layout: 'orthogonal',
+                            orient: 'TB',
+                            itemStyle: {
+                                color: '#60A5FA',
+                                borderColor: '#60A5FA'
+                            },
+                            label: {
+                                position: 'bottom',
+                                verticalAlign: 'middle',
+                                align: 'center',
+                                fontSize: 14,
+                                distance: 28,
+                                color: '#cacaca',
+                                formatter: function(params) {
+                                    return params.data.name + (params.data.count ? ' (' + params.data.count + ')' : '');
+                                }
+                            },
+                            leaves: {
+                                label: {
+                                    position: 'top',
+                                    verticalAlign: 'middle',
+                                    align: 'center'
+                                }
+                            },
+                            emphasis: {
+                                focus: 'descendant'
+                            },
+                            expandAndCollapse: true
+                        }]
+                    });
+
+                    treeChart.on('dblclick', function (params) {
+                        if (params.data && params.data.path) {
+                            window.location.href = '/categories/' + params.data.path;
+                        }
+                    });
+                }
+            });
+        </script>
+    
+    </body>
+    <style>
+
+/* ==========================================
+ * Retro Footer & 88x31 Badges
+ * ==========================================
+ */
+
+.retro-footer {
+    background-color: #f1E5C9;
+    padding: 20px 0;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    color: #000;
+    margin-top: 50px;
+}
+
+/* 复古 3D 分割线 */
+.retro-hr {
+    border: 0;
+    height: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+    margin-bottom: 20px;
+}
+
+/* 徽章容器 */
+.badge-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+/* 88x31 像素徽章通用样式 */
+.badge-88x31 {
+    width: 88px;
+    height: 31px;
+    border: 2px outset #FFFFFF;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 9px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.badge-88x31 .top {
+    height: 12px;
+    line-height: 12px;
+    background: #000;
+    color: #FFF;
+    text-align: center;
+}
+
+.badge-88x31 .bottom {
+    flex-grow: 1;
+    line-height: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.counter-box {
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 5px;
+    background-color: #000;
+    border: 2px inset #808080;
+}
+
+.counter-label {
+    color: #C0C0C0;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: Arial, sans-serif;
+}
+
+.counter-digits {
+    color: #00FF00; /* 荧光绿 */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* 具体徽章配色 */
+/*
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #FFD700; color: #000; }
+
+.badge-soc { border-color: #808080; }
+.badge-soc .bottom { background: #000080; color: #FFF; }
+
+.badge-notepad { border-color: #808080; }
+.badge-notepad .bottom { background: #FFF; color: #000; }
+
+.badge-valid { border-color: #808080; }
+.badge-valid .bottom { background: #008000; color: #FFF; }
+*/
+
+.badge-hexo { border-color: #808080; }
+.badge-hexo .bottom { background: #0E83CD; color: #FFFFFF; }
+
+.badge-github { border-color: #808080; }
+.badge-github .bottom { background: #24292E; color: #FFFFFF; }
+
+.badge-design { border-color: #808080; }
+.badge-design .bottom { background: #FFD700; color: #000; }
+
+/* 版权信息 */
+.footer-info p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+</style>
+<footer class="retro-footer">
+    <hr class="retro-hr">
+
+    <div class="badge-container">
+        <div class="badge-88x31 badge-hexo">
+            <span class="top">POWERED BY</span>
+            <span class="bottom">HEXO</span>
+        </div>
+        <div class="badge-88x31 badge-github">
+            <span class="top">HOSTED ON</span>
+            <span class="bottom">GITHUB</span>
+        </div>
+        <div class="badge-88x31 badge-design">
+            <span class="top">DESIGNED BY</span>
+            <span class="bottom">GODM@</span>
+        </div>
+    </div>
+
+    <div class="counter-box">
+        <span class="counter-label">WORD COUNT:</span>
+        <span class="counter-digits">189.5k</span>
+    </div>
+
+    <div class="footer-info">
+        <p>Copyright &copy; 2025-2026 GoDm@'s Blog</p>
+    </div>
+
+
+
+</footer>
+</html>
+
