@@ -1,6 +1,14 @@
-# 更新日志（自2025.08）
+> [!NOTE]  
+> Blog 现已迁移至 [blog.godmao.cc](https://blog.godmao.cc/) .
+> 此站不再更新，留个纪念，或许以后会回来。
+
+# ~~更新日志（自2025.08）~~
 
 ## 2026
+
+- 10.12
+
+  - 🪦迁移 Blog 至 [blog.godmao.cc](https://blog.godmao.cc/)
 
 - 04.20
   
